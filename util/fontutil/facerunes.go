@@ -52,8 +52,6 @@ func (fr *FaceRunes) GlyphAdvance(ru rune) (advance fixed.Int26_6, ok bool) {
 	return fr.Face.GlyphAdvance(ru)
 }
 
-//----------
-
 func (fr *FaceRunes) replace(ru0 rune) (rune, fixed.Int26_6, bool) {
 	switch ru0 {
 	case '\t':

@@ -21,14 +21,11 @@ package drawer4
 //	return info
 //}
 
-////----------
-
+//
 //type RuneInfo struct {
 //	lineStart bool
 //	penBounds mathutil.RectangleIntf
 //}
-
-//----------
 
 //func frameInfo(d *Drawer, offset int) *Frame {
 //	fr := NewFrame()
@@ -75,5 +72,3 @@ package drawer4
 //		})
 //	return fr
 //}
-
-//----------

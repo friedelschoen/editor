@@ -26,8 +26,6 @@ func ParseTxtar(src []byte, filename string) *Archive {
 	return ar
 }
 
-//----------
-
 type Archive struct {
 	Tar      *txtar.Archive
 	Filename string // for errors
@@ -37,10 +35,6 @@ type Archive struct {
 func (ar *Archive) Error(err error, i int) error {
 	return fmt.Errorf("%s:%d: %w", ar.Filename, ar.Lines[i]+1, err)
 }
-
-//----------
-//----------
-//----------
 
 func RunArchive2(t *testing.T, ar *Archive,
 	fn func(t2 *testing.T, name string, input, output []byte) error,
@@ -106,10 +100,6 @@ func RunArchive(t *testing.T, ar *Archive, filesExts []string,
 		}
 	}
 }
-
-//----------
-//----------
-//----------
 
 func countLines(b []byte) int {
 	return bytes.Count(b, []byte("\n"))

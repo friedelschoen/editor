@@ -9,8 +9,6 @@ import (
 
 type MFn = pscan.MFn
 
-//----------
-
 type ResLocParser struct {
 	parseMu sync.Mutex // allow .Parse() to be used concurrently
 
@@ -62,8 +60,6 @@ func (p *ResLocParser) Init() {
 		return pos, nil
 	}
 
-	//----------
-
 	nameSyms := func(except ...rune) MFn {
 		rs := nameRunes(except...)
 		return sc.W.RuneOneOf(rs)
@@ -84,8 +80,6 @@ func (p *ResLocParser) Init() {
 			}
 		}
 	}
-
-	//----------
 
 	// ex: "/a/b.txt"
 	// ex: "/a/b.txt:12:3"
@@ -124,8 +118,6 @@ func (p *ResLocParser) Init() {
 		sc.W.Optional(sc.W.Or(cOffset, cLineCol)),
 	)
 
-	//----------
-
 	// ex: "file:///a/b.txt:12"
 	// no escape sequence for scheme, used to be '\\' but better to avoid conflicts with platforms that use '\\' as escape; could always use encoding (ex: %20 for ' ')
 	schEscRu := '\\'    // fixed
@@ -155,8 +147,6 @@ func (p *ResLocParser) Init() {
 		sc.W.Optional(cLineCol),
 	)
 
-	//----------
-
 	// ex: "\"/a/b.txt\""
 	dquote := sc.W.Rune('"') // double quote
 	dquotedFile := sc.W.And(
@@ -164,8 +154,6 @@ func (p *ResLocParser) Init() {
 		p.vk.path.WKeepValue(sc.W.StringValue(cPath)),
 		dquote,
 	)
-
-	//----------
 
 	// ex: "\"/a/b.txt\", line 23"
 	pyLineTagS := ", line "
@@ -177,8 +165,6 @@ func (p *ResLocParser) Init() {
 		),
 	)
 
-	//----------
-
 	// ex: "/a/b.txt: line 23"
 	shellLineTagS := ": line "
 	shellFile := sc.W.And(
@@ -189,8 +175,6 @@ func (p *ResLocParser) Init() {
 		),
 	)
 
-	//----------
-
 	p.fn.location = sc.W.Or(
 		// ensure values are reset at each attempt
 		sc.W.And(resetVks, schFile),
@@ -199,9 +183,6 @@ func (p *ResLocParser) Init() {
 		sc.W.And(resetVks, shellFile),
 		sc.W.And(resetVks, cFile),
 	)
-
-	//----------
-	//----------
 
 	revNames := sc.W.Loop(
 		sc.W.Or(
@@ -282,10 +263,6 @@ func (p *ResLocParser) Parse(src []byte, index int) (*ResLoc, error) {
 
 	return rl, nil
 }
-
-//----------
-//----------
-//----------
 
 // all syms except letters and digits
 var syms = "_-~.%@&?!=#+:^(){}[]<>\\/ "

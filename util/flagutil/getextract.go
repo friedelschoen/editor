@@ -4,8 +4,6 @@ import (
 	"strings"
 )
 
-//----------
-
 func ExtractFlagBool(args []string, name string) (bool, []string, bool) {
 	v, poss, ok := GetFlagValue(args, name, true)
 	if !ok {
@@ -24,8 +22,6 @@ func ExtractFlagString(args []string, name string) (string, []string, bool) {
 	return v, args, true
 }
 
-//----------
-
 func GetFlagBool(args []string, name string) bool {
 	v, _, ok := GetFlagValue(args, name, true)
 	if ok && (v == "" || v == "true") {
@@ -38,8 +34,6 @@ func GetFlagString(args []string, name string) (string, bool) {
 	v, _, ok := GetFlagValue(args, name, false)
 	return v, ok
 }
-
-//----------
 
 func GetFlagValue(args []string, name string, isBool bool) (string, []int, bool) {
 	noSpacedValue := map[string]bool{name: isBool}
@@ -64,8 +58,6 @@ func GetFlagValue(args []string, name string, isBool bool) (string, []int, bool)
 	return "", nil, false
 }
 
-//----------
-
 func simplifyBoolValue(v string) (string, bool) {
 	a := strings.Split("1,0,t,f,T,F,true,false,TRUE,FALSE,True,False", ",")
 	for i, v2 := range a {
@@ -89,8 +81,6 @@ func removePositions(poss []int, a []string) []string {
 	return a
 }
 
-//----------
-
 //func SplitArgsAtDoubleDash(args []string) ([]string, []string) {
 //	for i, a := range args {
 //		if a == "--" {
@@ -108,5 +98,3 @@ func removePositions(poss []int, a []string) []string {
 //	}
 //	return args, nil
 //}
-
-//----------

@@ -16,8 +16,6 @@ import (
 	"strings"
 )
 
-//----------
-
 func PrintAstFile(w io.Writer, fset *token.FileSet, astFile *ast.File) error {
 	// TODO: without tabwidth set, it won't output the source correctly
 
@@ -34,8 +32,6 @@ func PrintAstFile(w io.Writer, fset *token.FileSet, astFile *ast.File) error {
 	return cfg.Fprint(w, fset, astFile)
 }
 
-//----------
-
 // frame callers
 
 func Printfc(skip int, f string, args ...any) {
@@ -45,8 +41,6 @@ func Sprintfc(skip int, f string, args ...any) string {
 	h := CallerFileLine(1)
 	return fmt.Sprintf(h+f, args...)
 }
-
-//----------
 
 func CallerFileLine(skip int) string {
 	pc, _, _, ok := runtime.Caller(1 + skip)
@@ -59,8 +53,6 @@ func CallerFileLine(skip int) string {
 	}
 	return "?:?: "
 }
-
-//----------
 
 func SprintFnStack(skip int) string {
 	buf := &strings.Builder{}
@@ -86,8 +78,6 @@ func SprintFnStack(skip int) string {
 	return buf.String()
 }
 
-//----------
-
 func TodoErrorStr(s string) error {
 	return TodoErrorSkip(1, s)
 }
@@ -109,8 +99,6 @@ func TodoErrorSkip(skip int, args ...any) error {
 	return errors.New(fmt.Sprint(args2...))
 }
 
-//----------
-
 func Logf(f string, args ...any) {
 	LogSkipf(1, f, args...)
 }
@@ -127,8 +115,6 @@ func LogSkip(skip int, args ...any) {
 	fmt.Print(args2...)
 }
 
-//----------
-
 func Hashable(v any) bool {
 	k := reflect.TypeOf(v).Kind()
 	return true &&
@@ -138,8 +124,6 @@ func Hashable(v any) bool {
 		k != reflect.Map &&
 		k != reflect.Func
 }
-
-//----------
 
 func Trace(n int) (string, int, string) {
 	pc, file, line, ok := runtime.Caller(n + 1)
@@ -154,8 +138,6 @@ func Trace(n int) (string, int, string) {
 
 	return file, line, fn.Name()
 }
-
-//----------
 
 func FuncName(f any) string {
 	p := reflect.ValueOf(f).Pointer()
@@ -180,13 +162,9 @@ func runtimeSimpleName(name string) string {
 	return u
 }
 
-//----------
-
 func JoinPathLists(w ...string) string {
 	return strings.Join(w, string(os.PathListSeparator))
 }
-
-//----------
 
 func ParseFuncDecl(name, src string) (*ast.FuncDecl, error) {
 	src2 := "package tmp\n" + src
@@ -209,8 +187,6 @@ func ParseFuncDecl(name, src string) (*ast.FuncDecl, error) {
 	}
 	return fd, nil
 }
-
-//----------
 
 // go test -cpuprofile cpu.prof -memprofile mem.prof
 // go tool pprof cpu.prof

@@ -37,8 +37,6 @@ func (c *Cursor) iter2() {
 
 func (c *Cursor) End() {}
 
-//----------
-
 func (c *Cursor) draw() {
 	// pen bounds
 	penb := c.d.iters.runeR.penBoundsRect()
@@ -92,8 +90,6 @@ func (c *Cursor) draw2(dr image.Rectangle, col color.Color) {
 	r2 = r2.Intersect(bounds)
 	imageutil.FillRectangle(img, r2, col)
 }
-
-//----------
 
 type CursorDelay struct {
 	penb image.Rectangle

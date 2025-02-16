@@ -20,8 +20,6 @@ type TerminalFilter struct {
 	}
 }
 
-//----------
-
 func NewTerminalFilter(erow *ERow) *TerminalFilter {
 	tio := NewERowTermIO(erow)
 	return NewTerminalFilter2(tio, erow)
@@ -33,8 +31,6 @@ func NewTerminalFilter2(tio TerminalIO, erow *ERow) *TerminalFilter {
 	tf.tio.Init(tf)
 	return tf
 }
-
-//----------
 
 func (tf *TerminalFilter) Write(p []byte) (int, error) {
 	if tf.erow != nil && tf.erow.terminalOpt.filter {
@@ -54,8 +50,6 @@ func (tf *TerminalFilter) Read(p []byte) (int, error) {
 func (tf *TerminalFilter) Close() error {
 	return tf.tio.Close()
 }
-
-//----------
 
 func (tf *TerminalFilter) filter(p []byte) {
 	tf.p.src = append(tf.p.src, p...)
@@ -88,8 +82,6 @@ func (tf *TerminalFilter) filter(p []byte) {
 	}
 }
 
-//----------
-
 func (tf *TerminalFilter) nextRune() (rune, error) { return tf.readRune(false) }
 func (tf *TerminalFilter) peekRune() (rune, error) { return tf.readRune(true) }
 
@@ -111,8 +103,6 @@ func (tf *TerminalFilter) advance() {
 func (tf *TerminalFilter) value() []byte {
 	return tf.p.src[tf.p.start:tf.p.i]
 }
-
-//----------
 
 func (tf *TerminalFilter) stParseDefault() error {
 	ru, err := tf.nextRune()
@@ -152,8 +142,6 @@ func (tf *TerminalFilter) stParseDefault() error {
 	}
 	return nil
 }
-
-//----------
 
 func (tf *TerminalFilter) stParseEsc() error {
 	ru, err := tf.nextRune()
@@ -199,8 +187,6 @@ func (tf *TerminalFilter) stParseEsc() error {
 	return nil
 }
 
-//----------
-
 // csi = Control Sequence Introducer
 func (tf *TerminalFilter) stParseCsi() error {
 	ru, err := tf.nextRune()
@@ -235,8 +221,6 @@ func (tf *TerminalFilter) stParseCsi() error {
 	return nil
 }
 
-//----------
-
 func (tf *TerminalFilter) interpretCSI() error {
 	switch tf.p.csi.final {
 	case 'J': // erase display
@@ -257,8 +241,6 @@ func (tf *TerminalFilter) eraseDisplay() error {
 	return nil
 }
 
-//----------
-
 func (tf *TerminalFilter) stParseOsc() error {
 	ru, err := tf.nextRune()
 	if err != nil {
@@ -272,8 +254,6 @@ func (tf *TerminalFilter) stParseOsc() error {
 	}
 	return nil
 }
-
-//----------
 
 func (tf *TerminalFilter) stParseG0() error { return tf.stParseG(0) }
 func (tf *TerminalFilter) stParseG1() error { return tf.stParseG(1) }
@@ -296,8 +276,6 @@ func (tf *TerminalFilter) stParseG(g int) error {
 	return nil
 }
 
-//----------
-
 func (tf *TerminalFilter) stParseAlignmentTest() error {
 	ru, err := tf.nextRune()
 	if err != nil {
@@ -313,8 +291,6 @@ func (tf *TerminalFilter) stParseAlignmentTest() error {
 	return nil
 }
 
-//----------
-
 func (tf *TerminalFilter) todo(f string, a ...any) {
 	tf.debug("todo: "+f, a...)
 }
@@ -328,13 +304,9 @@ func (tf *TerminalFilter) debug(f string, a ...any) {
 	}
 }
 
-//----------
-
 type tfCsi struct {
 	param    []rune
 	intermid []rune
 	final    rune
 	qMark    bool
 }
-
-//----------

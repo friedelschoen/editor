@@ -15,8 +15,6 @@ func UpdateOrInsertPartCmd(data *Data, cmd, arg string) uoipcResult {
 	return insertCmdPartAtEnd(data, cmd, arg)
 }
 
-//----------
-
 func findLastCmdPart(data *Data, cmd string) (*Part, bool) {
 	found := (*Part)(nil)
 	for _, p := range data.Parts {
@@ -29,8 +27,6 @@ func findLastCmdPart(data *Data, cmd string) (*Part, bool) {
 	}
 	return nil, false
 }
-
-//----------
 
 func updateCmdPartWithArg(part *Part, arg string) uoipcResult {
 	// asssume at least one arg (cmd arg)
@@ -56,8 +52,6 @@ func updateCmdPartWithArg(part *Part, arg string) uoipcResult {
 
 	return res
 }
-
-//----------
 
 func insertCmdPartAtEnd(data *Data, cmd, arg string) uoipcResult {
 	replaceAt := func(pos int, prefix string) uoipcResult {
@@ -87,16 +81,10 @@ func insertCmdPartAtEnd(data *Data, cmd, arg string) uoipcResult {
 	return replaceAt(p2, " | ")
 }
 
-//----------
-
 func insDelStr(s string, i1, i2 int, a string) (string, int) {
 	u := s[:i1] + a + s[i2:]
 	return u, i1 + len(a)
 }
-
-//----------
-//----------
-//----------
 
 type uoipcResult struct {
 	S        string

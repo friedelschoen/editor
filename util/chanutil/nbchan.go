@@ -23,8 +23,6 @@ func NewNBChan2(n int, logS string) *NBChan {
 	return ch
 }
 
-//----------
-
 // Send now if a receiver is watching, or fails (non-blocking) with error.
 func (ch *NBChan) Send(v any) error {
 	select {
@@ -47,8 +45,6 @@ func (ch *NBChan) Receive(timeout time.Duration) (any, error) {
 		return v, nil
 	}
 }
-
-//----------
 
 func (ch *NBChan) NewBufChan(n int) {
 	ch.ch = make(chan any, n)

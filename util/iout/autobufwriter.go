@@ -44,8 +44,6 @@ func (w *AutoBufWriter) Write(p []byte) (int, error) {
 	return n, err
 }
 
-//----------
-
 func (w *AutoBufWriter) autoFlush() {
 	if w.mu.buf.Buffered() == 0 {
 		return

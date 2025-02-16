@@ -6,8 +6,6 @@ import (
 
 type Event any
 
-//----------
-
 type WindowClose struct{}
 type WindowResize struct{ Rect image.Rectangle }
 type WindowExpose struct{ Rect image.Rectangle } // empty = full area
@@ -16,8 +14,6 @@ type WindowInput struct {
 	Point image.Point
 	Event Event
 }
-
-//----------
 
 type MouseEnter struct{}
 type MouseLeave struct{}
@@ -78,8 +74,6 @@ type MouseTripleClick struct {
 	Mods    KeyModifiers
 }
 
-//----------
-
 type KeyDown struct {
 	Point   image.Point
 	KeySym  KeySym
@@ -95,8 +89,6 @@ type KeyUp struct {
 	Buttons MouseButtons
 	Rune    rune
 }
-
-//----------
 
 // drag and drop
 
@@ -128,8 +120,6 @@ const (
 	TextURLListDndT DndType = iota // a list separated by '\n'
 )
 
-//----------
-
 type ClipboardIndex int
 
 const (
@@ -144,7 +134,5 @@ const (
 	CPIPrimary   = CopyPasteIndex(CIPrimary)
 	CPIClipboard = CopyPasteIndex(CIClipboard)
 )
-
-//----------
 
 type Handled bool

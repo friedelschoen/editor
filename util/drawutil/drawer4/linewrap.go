@@ -44,8 +44,6 @@ func (lw *LineWrap) Iter() {
 
 func (lw *LineWrap) End() {}
 
-//----------
-
 func (lw *LineWrap) preLineWrap() bool {
 	// draw only the background, use space rune
 	ru := lw.d.st.runeR.ru // keep state

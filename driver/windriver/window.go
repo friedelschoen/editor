@@ -60,8 +60,6 @@ func NewWindow() (*Window, error) {
 	return win, nil
 }
 
-//----------
-
 func (win *Window) initAndSetupLoop() error {
 	initErr := make(chan error)
 
@@ -139,8 +137,6 @@ func (win *Window) ostInitialize() error {
 	return nil
 }
 
-//----------
-
 // Called from OS thread.
 func (win *Window) ostMsgLoop() {
 	// ensure it is instantiated (avoid garbage collection when going throught windows functions that would make go's gc collect the variable)
@@ -176,14 +172,10 @@ func (win *Window) nextMsg(msg *_Msg) (ok bool, _ error) {
 	return true, nil
 }
 
-//----------
-
 func (win *Window) NextEvent() (event.Event, bool) {
 	ev, ok := <-win.events
 	return ev, ok
 }
-
-//----------
 
 func (win *Window) handleMsg(msg *_Msg) {
 	// not used: virtual keys are translated ondemand (keydown/keyup)
@@ -306,8 +298,6 @@ func (win *Window) handleMsg2(msg *_Msg) uintptr {
 	return defaultMsgHandler(msg)
 }
 
-//----------
-
 func (win *Window) handleAppMsg(id int, msg *_Msg) {
 	req, appData, err := win.readAppMsgReq(id)
 	if err != nil {
@@ -357,8 +347,6 @@ func (win *Window) handleRequest(req event.Request, msg *_Msg) error {
 	}
 }
 
-//----------
-
 func (win *Window) Request(req event.Request) error {
 	// handle now without the appmsg roundtrip (performance)
 	switch r := req.(type) {
@@ -397,8 +385,6 @@ func (win *Window) readAppMsgReq(id int) (event.Request, *AppData, error) {
 	appData := data.(*AppData)
 	return appData.Value.(event.Request), appData, nil
 }
-
-//----------
 
 func (win *Window) keyUpDown(msg *_Msg, up bool) any {
 	p, err := win.ostQueryPointer()
@@ -460,8 +446,6 @@ func (win *Window) mouseButton(msg *_Msg, b event.MouseButton, up bool) any {
 	}
 	return &event.WindowInput{Point: p, Event: ev}
 }
-
-//----------
 
 func (win *Window) ostPaintImg(r image.Rectangle) error {
 	//return win.paintImgWithSetPixel()
@@ -534,8 +518,6 @@ func (win *Window) paintImgWithBitmap(r image.Rectangle) error {
 	return nil
 }
 
-//----------
-
 func (win *Window) buildBitmap(size image.Point) (bmH windows.Handle, bits *byte, _ error) {
 	bmi := _BitmapInfo{
 		BmiHeader: _BitmapInfoHeader{
@@ -595,8 +577,6 @@ func (win *Window) buildBitmap(size image.Point) (bmH windows.Handle, bits *byte
 //	return bm, err
 //}
 
-//----------
-
 func (win *Window) ostResizeImage(r image.Rectangle) error {
 	bmH, bits, err := win.buildBitmap(r.Size())
 	if err != nil {
@@ -616,8 +596,6 @@ func (win *Window) ostResizeImage(r image.Rectangle) error {
 
 	return nil
 }
-
-//----------
 
 func (win *Window) ostSetCursor(c event.Cursor) (err error) {
 	sc := func(cId int) {
@@ -697,8 +675,6 @@ func (win *Window) loadCursor2(c int) (windows.Handle, error) {
 	return cursor, nil
 }
 
-//----------
-
 func (win *Window) ostQueryPointer() (image.Point, error) {
 	csp, err := win.cursorScreenPos()
 	if err != nil {
@@ -718,8 +694,6 @@ func (win *Window) ostWarpPointer(p image.Point) error {
 	}
 	return nil
 }
-
-//----------
 
 func (win *Window) ostGetClipboardData() (string, error) {
 	if !_OpenClipboard(0) {
@@ -753,8 +727,6 @@ func (win *Window) ostGetClipboardData() (string, error) {
 	s := windows.UTF16ToString(buf)
 	return s, nil
 }
-
-//----------
 
 func (win *Window) ostSetClipboardData(s string) error {
 	if !_OpenClipboard(0) {
@@ -792,8 +764,6 @@ func (win *Window) ostSetClipboardData(s string) error {
 	}
 	return nil
 }
-
-//----------
 
 func (win *Window) cursorScreenPos() (image.Point, error) {
 	cp := _Point{}
@@ -839,8 +809,6 @@ func (win *Window) windowScreenPos() (image.Point, error) {
 //	return r.ToImageRectangle(), nil
 //}
 
-//----------
-
 func (win *Window) ostSetWindowName(s string) error {
 	u := UTF16PtrFromString(s)
 	ok := _SetWindowTextW(win.hwnd, u)
@@ -849,8 +817,6 @@ func (win *Window) ostSetWindowName(s string) error {
 	}
 	return nil
 }
-
-//----------
 
 func (win *Window) postAppMsg(v any) error {
 	win.postM.Lock()
@@ -876,8 +842,6 @@ func (win *Window) getAppMsgData(id int) (any, error) {
 	return v, nil
 }
 
-//----------
-
 func (win *Window) ostClose() error {
 	defer win.stopDragDrop()
 	if !_DestroyWindow(win.hwnd) { // sends _WM_DESTROY
@@ -885,8 +849,6 @@ func (win *Window) ostClose() error {
 	}
 	return nil
 }
-
-//----------
 
 func (win *Window) startDragDrop() error {
 	_DragAcceptFiles(win.hwnd, true)
@@ -897,8 +859,6 @@ func (win *Window) stopDragDrop() {
 	_DragAcceptFiles(win.hwnd, false)
 }
 
-//----------
-
 type AppData struct {
 	ReqErr *syncutil.WaitForSet
 	Value  any
@@ -908,20 +868,14 @@ func NewAppData(v any) *AppData {
 	return &AppData{syncutil.NewWaitForSet(), v}
 }
 
-//----------
-
 func defaultMsgHandler(msg *_Msg) uintptr {
 	return _DefWindowProcW(msg.HWnd, msg.Msg, msg.WParam, msg.LParam)
 }
-
-//----------
 
 func paramToPoint(param uint32) image.Point {
 	x, y := unpackLowHigh(param)
 	return image.Point{X: x, Y: y}
 }
-
-//----------
 
 func vkeyRune(vkey uint32, kstate *[256]byte) (rune, bool) {
 	scanCode := _MapVirtualKeyW(vkey, _MAPVK_VK_TO_VSC)
@@ -932,8 +886,6 @@ func vkeyRune(vkey uint32, kstate *[256]byte) (rune, bool) {
 	isDeadKey := v == -1
 	return rune(res), isDeadKey
 }
-
-//----------
 
 func hideConsole() bool {
 	// build notes that affect the console state

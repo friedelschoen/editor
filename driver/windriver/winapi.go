@@ -10,8 +10,6 @@ import (
 	"golang.org/x/sys/windows"
 )
 
-//----------
-
 const (
 	_CW_USEDEFAULT = 0x80000000 - 0x100000000
 
@@ -385,10 +383,6 @@ const (
 
 )
 
-//----------
-//----------
-//----------
-
 type _WndClassExW struct {
 	CbSize        uint32
 	Style         uint32
@@ -492,8 +486,6 @@ type _RgbQuad struct {
 	Reserved byte
 }
 
-//----------
-
 type _Point struct {
 	X, Y int32
 }
@@ -501,8 +493,6 @@ type _Point struct {
 func (p *_Point) ToImagePoint() image.Point {
 	return image.Point{X: int(p.X), Y: int(p.Y)}
 }
-
-//----------
 
 type _Rect struct {
 	left, top, right, bottom int32
@@ -521,8 +511,6 @@ func (r *_Rect) ToImageRectangle() image.Rectangle {
 	return image.Rect(int(r.left), int(r.top), int(r.right), int(r.bottom))
 }
 
-//----------
-
 type _ColorRef uint32 // hex form: 0x00bbggrr
 
 func ColorRefFromImageColor(c color.Color) _ColorRef {
@@ -536,8 +524,6 @@ func ColorRefFromImageColor(c color.Color) _ColorRef {
 func rgbToColorRef(r, g, b byte) _ColorRef {
 	return _ColorRef(r) | _ColorRef(g)<<8 | _ColorRef(b)<<16
 }
-
-//----------
 
 func unpackLowHigh(v uint32) (int, int) {
 	low := uint16(v)
@@ -555,8 +541,6 @@ func UTF16PtrFromString(s string) *uint16 {
 	}
 	return ptr
 }
-
-//----------
 
 // NOTES
 // int -> int32

@@ -21,13 +21,9 @@ func NewXInput(conn *xgb.Conn) (*XInput, error) {
 	return xi, nil
 }
 
-//----------
-
 func (xi *XInput) ReadMapTable() error {
 	return xi.km.ReadTable()
 }
-
-//----------
 
 func (xi *XInput) KeyPress(ev *xproto.KeyPressEvent) *event.WindowInput {
 	p := image.Point{int(ev.EventX), int(ev.EventY)}

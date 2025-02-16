@@ -10,11 +10,7 @@ import (
 	"golang.org/x/sys/windows"
 )
 
-//----------
-
 const EscapeRune = '^'
-
-//----------
 
 func SetupExecCmdSysProcAttr(cmd *exec.Cmd) {
 	cmd.SysProcAttr = &windows.SysProcAttr{
@@ -35,8 +31,6 @@ func KillExecCmd(cmd *exec.Cmd) error {
 	//return c.Run()
 }
 
-//----------
-
 func ShellCmdArgs(args ...string) []string {
 	return append([]string{"cmd", "/C"}, args...)
 }
@@ -44,13 +38,9 @@ func ShellScriptArgs(args ...string) []string {
 	return ShellCmdArgs(args...)
 }
 
-//----------
-
 func ExecName(name string) string {
 	return name + ".exe"
 }
-
-//----------
 
 func FsCaseFilename(filename string) (string, error) {
 	namep, err := syscall.UTF16PtrFromString(filename)

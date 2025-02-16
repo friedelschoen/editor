@@ -50,8 +50,6 @@ func godebugTester(t *testing.T, args []string) error {
 		return nil
 	}
 
-	//----------
-
 	//fn := func() error {
 	pr := func(s string) { // util func
 		fmt.Printf("recv: %v\n", s)
@@ -95,18 +93,12 @@ func godebugTester(t *testing.T, args []string) error {
 	return cmd.Wait()
 }
 
-//----------
-//----------
-//----------
-
 func TestCmd2CtxCancel(t *testing.T) {
 	// max time to run this test
 	timer := time.AfterFunc(1000*time.Millisecond, func() {
 		t.Fatal("test timeout")
 	})
 	defer timer.Stop()
-
-	//----------
 
 	cmd := NewCmd()
 	args := []string{
@@ -134,16 +126,12 @@ func TestCmd2CtxCancel(t *testing.T) {
 	t.Log(err)
 }
 
-//----------
-
 func TestCmd3Reconnect(t *testing.T) {
 	ctx := context.Background()
 	addr := debug.NewAddrI("tcp", ":9158")
 	isServer := true
 
 	running := sync.WaitGroup{}
-
-	//----------
 
 	ctx2, cancel2 := context.WithCancel(ctx)
 	//ctx2 := ctx
@@ -156,8 +144,6 @@ func TestCmd3Reconnect(t *testing.T) {
 		defer running.Done()
 		runServer(t, ctx2, addr, isServer, nClients, nClients*(1+nMsgs))
 	}()
-
-	//----------
 
 	running.Add(1)
 	go func() {
@@ -173,8 +159,6 @@ func TestCmd3Reconnect(t *testing.T) {
 		time.Sleep(1000 * time.Millisecond)
 		cancel2() // stop server
 	}()
-
-	//----------
 
 	running.Wait()
 }
@@ -268,10 +252,6 @@ func runClient(t *testing.T, ctx context.Context, addr debug.Addr, isServer bool
 		t.Fatal(err)
 	}
 }
-
-//----------
-//----------
-//----------
 
 type TestWriter struct {
 	t *testing.T

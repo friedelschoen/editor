@@ -156,8 +156,6 @@ const (
 	KSymMenu
 )
 
-//----------
-
 type KeyModifiers uint16
 
 func (km KeyModifiers) HasAny(m KeyModifiers) bool {
@@ -193,8 +191,6 @@ const (
 	ModAltGr = Mod5
 )
 
-//----------
-
 type MouseButton uint16
 
 const (
@@ -209,8 +205,6 @@ const (
 	ButtonBackward // TODO: rename X1?
 	ButtonForward  // TODO: rename X2?
 )
-
-//----------
 
 type MouseButtons uint16
 

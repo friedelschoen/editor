@@ -19,10 +19,6 @@ type CmdI interface {
 	Wait() error
 }
 
-//----------
-//----------
-//----------
-
 func NewCmdI(cmd *exec.Cmd) CmdI {
 	return NewBasicCmd(cmd)
 }
@@ -41,10 +37,6 @@ func NewCmdIShell(ctx context.Context, args ...string) CmdI {
 	return NewShellCmd(c, true)
 }
 
-//----------
-//----------
-//----------
-
 type BasicCmd struct {
 	cmd *exec.Cmd
 }
@@ -61,10 +53,6 @@ func (c *BasicCmd) Start() error {
 func (c *BasicCmd) Wait() error {
 	return c.cmd.Wait()
 }
-
-//----------
-//----------
-//----------
 
 type ShellCmd struct {
 	CmdI
@@ -91,10 +79,6 @@ func NewShellCmd(cmdi CmdI, scriptArgs bool) *ShellCmd {
 
 	return c
 }
-
-//----------
-//----------
-//----------
 
 // Old note: explanations on possible hangs.
 // https://github.com/golang/go/issues/18874#issuecomment-277280139
@@ -156,10 +140,6 @@ func (c *CtxCmd) printf(f string, args ...any) {
 	}
 	fmt.Fprintf(cmd.Stderr, "# ctxcmd: "+f, args...)
 }
-
-//----------
-//----------
-//----------
 
 func NewNoHangStdinCmd(cmdi CmdI) *NoHangPipeCmd {
 	return &NoHangPipeCmd{CmdI: cmdi, doIn: true}
@@ -238,10 +218,6 @@ func (c *NoHangPipeCmd) CloseStdin() error {
 	return nil
 }
 
-//----------
-//----------
-//----------
-
 // ex: usefull to print something before any cmd output is printed
 type PausedWritersCmd struct {
 	CmdI
@@ -281,10 +257,6 @@ func (c *PausedWritersCmd) unpause() {
 		c.stderr.Unpause()
 	}
 }
-
-//----------
-//----------
-//----------
 
 func RunCmdI(ci CmdI) error {
 	if err := ci.Start(); err != nil {
@@ -336,8 +308,6 @@ func RunCmdICombineStderrErr(c CmdI) ([]byte, error) {
 	}
 	return bout, nil
 }
-
-//----------
 
 func RunCmd(ctx context.Context, dir string, args ...string) ([]byte, error) {
 	return RunCmdStdin(ctx, dir, nil, args...)

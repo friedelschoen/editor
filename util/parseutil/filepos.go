@@ -13,8 +13,6 @@ func (fp *FilePos) HasNoLinecol() bool {
 	return fp.Line == 0
 }
 
-//----------
-
 // Parse fmt: <filename:line?:col?>. Accepts escapes but doesn't unescape.
 //func ParseFilePos(str string) (*FilePos, error) {
 //	rd := iorw.NewStringReaderAt(str)

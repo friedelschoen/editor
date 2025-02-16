@@ -125,8 +125,6 @@ func TestEscape4(t *testing.T) {
 	}
 }
 
-//----------
-
 func TestLoopSep0(t *testing.T) {
 	s := "a,b,c,d,"
 	sc := newTestScanner(s)
@@ -196,8 +194,6 @@ func testLoopSep0F1(sc *Scanner, lastSep bool) MFn {
 	)
 }
 
-//----------
-
 func TestSection1(t *testing.T) {
 	s := "(a(bc)"
 	sc := newTestScanner(s)
@@ -228,8 +224,6 @@ func TestSection2(t *testing.T) {
 func testSectionF1(sc *Scanner) MFn {
 	return sc.W.Section("(", ")", 0, true, 1000, false, sc.M.OneRune)
 }
-
-//----------
 
 func TestInt1(t *testing.T) {
 	s := "123a"
@@ -282,8 +276,6 @@ func TestFloat4(t *testing.T) {
 	}
 }
 
-//----------
-
 func TestSequenceExpand(t *testing.T) {
 	s := "some string with a space"
 	sc := newTestScanner(s)
@@ -306,19 +298,11 @@ func TestSequenceExpand(t *testing.T) {
 	}
 }
 
-//----------
-//----------
-//----------
-
 func newTestScanner(s string) *Scanner {
 	sc := NewScanner()
 	sc.SetSrc([]byte(s))
 	return sc
 }
-
-//----------
-//----------
-//----------
 
 func BenchmarkScan1(b *testing.B) {
 	// usefull for cache tests if implemented

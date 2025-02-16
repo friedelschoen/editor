@@ -88,8 +88,6 @@ func main() {
 	}
 }
 
-//----------
-
 func godebugMain() bool {
 	args := make([]string, len(os.Args))
 	copy(args, os.Args)

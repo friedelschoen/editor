@@ -21,13 +21,9 @@ func NewScanner(rd ReaderAt) *pscan.Scanner {
 	return sc
 }
 
-//----------
-
 func NewStringReaderAt(s string) ReaderAt {
 	return NewBytesReadWriterAt([]byte(s))
 }
-
-//----------
 
 func REqual(r ReaderAt, i, n int, p []byte) (bool, error) {
 	if n != len(p) {
@@ -39,8 +35,6 @@ func REqual(r ReaderAt, i, n int, p []byte) (bool, error) {
 	}
 	return bytes.Equal(b, p), nil
 }
-
-//----------
 
 // Result might not be a copy.
 func ReadFastFull(rd ReaderAt) ([]byte, error) {
@@ -57,8 +51,6 @@ func ReadFullCopy(rd ReaderAt) ([]byte, error) {
 	return iout.CopyBytes(b), nil
 }
 
-//----------
-
 func SetBytes(rw ReadWriterAt, b []byte) error {
 	return rw.OverwriteAt(rw.Min(), rw.Max(), b)
 }
@@ -68,8 +60,6 @@ func SetString(rw ReadWriterAt, s string) error {
 func Append(rw ReadWriterAt, b []byte) error {
 	return rw.OverwriteAt(rw.Max(), 0, b)
 }
-
-//----------
 
 const EndRune = -1
 
@@ -92,8 +82,6 @@ func ReaderIter(r ReaderAt, fn func(i int, ru rune) bool) error {
 	return nil
 }
 
-//----------
-
 func HasPrefix(r ReaderAt, i int, s []byte) bool {
 	if len(s) == 0 {
 		return true
@@ -115,8 +103,6 @@ func HasSuffix(r ReaderAt, i int, s []byte) bool {
 	}
 	return bytes.HasSuffix(b, s)
 }
-
-//----------
 
 // On error, returns best failing index. Use errors.Is(err, io.EOF) to handle limitedreaders.
 func RuneIndexFn(r ReaderAt, i int, truth bool, f func(rune) bool) (index, size int, err error) {
@@ -158,8 +144,6 @@ func RuneLastIndexFn(r ReaderAt, i int, truth bool, f func(rune) bool) (index, s
 	}
 }
 
-//----------
-
 // Returns index where truth was found.
 func ExpandRuneIndexFn(r ReaderAt, i int, truth bool, f func(rune) bool) int {
 	j, _, _ := RuneIndexFn(r, i, truth, f)
@@ -174,8 +158,6 @@ func ExpandRuneLastIndexFn(r ReaderAt, i int, truth bool, f func(rune) bool) int
 	}
 	return j + size
 }
-
-//----------
 
 //func Lines(r ReaderAt, a, b int) (int, int, [][]byte, error) {
 //	ls, err := LineStartIndex(r, a)
@@ -229,8 +211,6 @@ func LineEndIndex(r ReaderAt, i int) (int, bool, error) {
 	return k + size, isNewLine, err
 }
 
-//----------
-
 func isNewline(ru rune) bool { return ru == '\n' }
 
 func NewlineIndex(r ReaderAt, i int) (int, int, error) {
@@ -240,8 +220,6 @@ func NewlineIndex(r ReaderAt, i int) (int, int, error) {
 func NewlineLastIndex(r ReaderAt, i int) (int, int, error) {
 	return RuneLastIndexFn(r, i, true, isNewline)
 }
-
-//----------
 
 // Also used at: selectword, movecursorjump{left,right}
 func IsWordRune(ru rune) bool {

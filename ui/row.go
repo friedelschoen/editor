@@ -57,16 +57,12 @@ func NewRow(col *Column) *Row {
 	return row
 }
 
-//----------
-
 func (row *Row) Close() {
 	row.Col.removeRow(row)
 	row.Col = nil
 	row.sep.Close()
 	row.EvReg.RunCallbacks(RowCloseEventId, &RowCloseEvent{row})
 }
-
-//----------
 
 func (row *Row) OnChildMarked(child widget.Node, newMarks widget.Marks) {
 	// dynamic toolbar
@@ -75,23 +71,17 @@ func (row *Row) OnChildMarked(child widget.Node, newMarks widget.Marks) {
 	}
 }
 
-//----------
-
 func (row *Row) Layout() {
 	ff := row.Toolbar.TreeThemeFontFace()
 	row.ScrollArea.ScrollWidth = UIThemeUtil.GetScrollBarWidth(ff)
 	row.BoxLayout.Layout()
 }
 
-//----------
-
 func (row *Row) OnInputEvent(ev0 any, p image.Point) event.Handled {
 	ev2 := &RowInputEvent{row, ev0}
 	row.EvReg.RunCallbacks(RowInputEventId, ev2)
 	return false
 }
-
-//----------
 
 func (row *Row) NextRow() *Row {
 	u := row.NextSiblingWrapper()
@@ -101,14 +91,10 @@ func (row *Row) NextRow() *Row {
 	return u.(*Row)
 }
 
-//----------
-
 func (row *Row) Maximize() {
 	col := row.Col
 	col.RowsLayout.Spl.MaximizeNode(row)
 }
-
-//----------
 
 func (row *Row) resizeWithMoveToPoint(p *image.Point) {
 	col, ok := row.Col.Cols.PointColumnExtra(p)
@@ -132,8 +118,6 @@ func (row *Row) resizeWithMoveToPoint(p *image.Point) {
 
 	row.Col.RowsLayout.Spl.ResizeWithMove(row, perc)
 }
-
-//----------
 
 func (row *Row) resizeWithPushJump(up bool, p *image.Point) {
 	jump := 40
@@ -163,8 +147,6 @@ func (row *Row) resizeWithPushToPoint(p *image.Point) {
 	col.RowsLayout.Spl.SetPercentWithPush(row, perc)
 }
 
-//----------
-
 func (row *Row) EnsureTextAreaMinimumHeight() {
 	ta := row.TextArea
 
@@ -191,8 +173,6 @@ func (row *Row) EnsureOneToolbarLineYVisible() {
 	row.Col.RowsLayout.Spl.SetSizePercentWithPush(row, perc)
 }
 
-//----------
-
 func (row *Row) SetState(s RowState, v bool) {
 	row.Toolbar.Square.SetState(s, v)
 }
@@ -200,13 +180,9 @@ func (row *Row) HasState(s RowState) bool {
 	return row.Toolbar.Square.HasState(s)
 }
 
-//----------
-
 func (row *Row) PosBelow() *RowPos {
 	return NewRowPos(row.Col, row.NextRow())
 }
-
-//----------
 
 const (
 	RowInputEventId = iota

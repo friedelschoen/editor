@@ -41,7 +41,3 @@ func getTypesInfo(fset *token.FileSet, astFile *ast.File) (*types.Info, error) {
 	_ = pkg
 	return info, nil
 }
-
-//----------
-//----------
-//----------

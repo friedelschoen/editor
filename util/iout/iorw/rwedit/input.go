@@ -15,8 +15,6 @@ func HandleInput(ctx *Ctx, ev any) (event.Handled, error) {
 	return in.handle()
 }
 
-//----------
-
 type Input struct {
 	ctx *Ctx
 	ev  any
@@ -42,8 +40,6 @@ func (in *Input) handle() (event.Handled, error) {
 	return false, nil
 }
 
-//----------
-
 func (in *Input) onMouseDown(ev *event.MouseDown) (event.Handled, error) {
 	switch ev.Button {
 	case event.ButtonLeft:
@@ -61,8 +57,6 @@ func (in *Input) onMouseDown(ev *event.MouseDown) (event.Handled, error) {
 	return false, nil
 }
 
-//----------
-
 func (in *Input) onMouseDragMove(ev *event.MouseDragMove) (event.Handled, error) {
 	if ev.Buttons.Has(event.ButtonLeft) {
 		MoveCursorToPoint(in.ctx, ev.Point, true)
@@ -78,8 +72,6 @@ func (in *Input) onMouseDragEnd(ev *event.MouseDragEnd) (event.Handled, error) {
 	}
 	return false, nil
 }
-
-//----------
 
 func (in *Input) onMouseClick(ev *event.MouseClick) (event.Handled, error) {
 	switch ev.Button {
@@ -115,8 +107,6 @@ func (in *Input) onMouseTripleClick(ev *event.MouseTripleClick) (event.Handled, 
 	}
 	return false, nil
 }
-
-//----------
 
 func (in *Input) onKeyDown(ev *event.KeyDown) (_ event.Handled, err error) {
 	mcl := ev.Mods.ClearLocks()

@@ -41,8 +41,6 @@ func (s *TopShadow) Paint() {
 	imageutil.PaintShadow(s.ctx.Image(), r, s.Height, s.MaxDiff)
 }
 
-//----------
-
 type BottomShadow struct {
 	*BoxLayout
 	Height  int
@@ -68,8 +66,6 @@ func NewBottomShadow(ctx ImageContext, content Node) *BottomShadow {
 	return s
 }
 
-//----------
-
 type BottomShadowPart struct {
 	ENode
 	bs *BottomShadow
@@ -83,5 +79,3 @@ func (s *BottomShadowPart) Measure(hint image.Point) image.Point {
 func (s *BottomShadowPart) Paint() {
 	imageutil.PaintShadow(s.bs.ctx.Image(), s.Bounds, s.bs.Height, s.bs.MaxDiff)
 }
-
-//----------

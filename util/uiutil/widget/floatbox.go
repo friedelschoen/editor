@@ -24,8 +24,6 @@ func NewFloatBox(ml *MultiLayer, content Node) *FloatBox {
 	return fb
 }
 
-//----------
-
 func (fb *FloatBox) Visible() bool {
 	return !fb.HasAnyMarks(MarkForceZeroBounds)
 }
@@ -48,8 +46,6 @@ func (fb *FloatBox) Toggle() {
 		fb.Hide()
 	}
 }
-
-//----------
 
 func (fb *FloatBox) Measure(hint image.Point) image.Point {
 	panic("calling measure on floatbox")

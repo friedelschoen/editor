@@ -15,10 +15,6 @@ func stringifyV3(v any) string {
 	return p.ToString()
 }
 
-//----------
-//----------
-//----------
-
 // note: avoid using fmt.printf to skip triggering *.String()/*.Error(). Allows debugging string/error funcs.
 
 type print3 struct {
@@ -108,8 +104,6 @@ func (p *print3) doValue2(v reflect.Value, depth int) {
 	}
 }
 
-//----------
-
 func (p *print3) doPointer(v reflect.Value, depth int) {
 	if v.IsNil() {
 		p.print("nil")
@@ -166,8 +160,6 @@ func (p *print3) doMap(v reflect.Value, depth int) {
 	}
 }
 
-//----------
-
 func (p *print3) printStructTypeName(v reflect.Value) {
 	//fmt.Printf("printstk\n")
 	printType := false
@@ -190,8 +182,6 @@ func (p *print3) printStructTypeName(v reflect.Value) {
 		p.print(v.Type().Name())
 	}
 }
-
-//----------
 
 func (p *print3) printSliceOrArrayAsString(v reflect.Value) bool {
 	switch v.Type().Elem().Kind() {
@@ -235,8 +225,6 @@ func (p *print3) printSliceOrArrayAsString(v reflect.Value) bool {
 	return false
 }
 
-//----------
-
 func (p *print3) printLoopSep(i int, depth int) bool {
 	if depth >= p.maxDepth {
 		p.print("...")
@@ -251,8 +239,6 @@ func (p *print3) printLoopSep(i int, depth int) bool {
 	}
 	return true
 }
-
-//----------
 
 func (p *print3) printCut(s string) {
 	if len(s) > p.avail {
@@ -270,8 +256,6 @@ func (p *print3) printBytesCut(b []byte) {
 	}
 	p.printBytes(b)
 }
-
-//----------
 
 func (p *print3) print(s string) {
 	n, err := p.buf.WriteString(s)
@@ -293,10 +277,6 @@ func (p *print3) canPrint() bool {
 func (p *print3) ToString() string {
 	return p.buf.String()
 }
-
-//----------
-//----------
-//----------
 
 //func protect(fn func()) {
 //	defer func() {

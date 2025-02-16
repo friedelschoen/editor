@@ -76,20 +76,12 @@ func AnnotationTypeInString(s string) (AnnotationType, string, error) {
 	return at, opt, nil
 }
 
-//----------
-//----------
-//----------
-
 type AnnotationOpt struct {
 	Type    AnnotationType
 	Opt     string
 	Comment *ast.Comment // comment node
 	Node    ast.Node     // node associated to comment (can be nil)
 }
-
-//----------
-//----------
-//----------
 
 func annOptInComment(c *ast.Comment, n ast.Node) (*AnnotationOpt, bool, error) {
 	typ, opt, err := AnnotationTypeInString(c.Text)

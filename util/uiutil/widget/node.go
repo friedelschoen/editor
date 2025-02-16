@@ -39,16 +39,12 @@ type Node interface {
 	OnInputEvent(ev any, p image.Point) event.Handled
 }
 
-//----------
-
 // Doesn't allow embed to be assigned to a Node directly, which prevents a range of programming mistakes. This is the node other widgets should inherit from.
 type ENode struct {
 	EmbedNode
 }
 
 func (ENode) fullNode() {}
-
-//----------
 
 type EmbedNode struct {
 	Bounds  image.Rectangle
@@ -63,8 +59,6 @@ type EmbedNode struct {
 	theme Theme
 }
 
-//----------
-
 func (en *EmbedNode) Embed() *EmbedNode {
 	return en
 }
@@ -73,8 +67,6 @@ func (en *EmbedNode) Embed() *EmbedNode {
 func (en *EmbedNode) SetWrapperForRoot(n Node) {
 	en.Wrapper = n
 }
-
-//----------
 
 // If a node wants its InsertBefore implementation to be used, the wrapper must be set.
 func (en *EmbedNode) Append(nodes ...Node) {
@@ -122,8 +114,6 @@ func (en *EmbedNode) InsertBefore(child Node, next *EmbedNode) {
 	childe.themeChangeCallback()
 }
 
-//----------
-
 func (en *EmbedNode) Remove(child Node) {
 	childe := child.Embed()
 	if childe.Parent != en {
@@ -135,8 +125,6 @@ func (en *EmbedNode) Remove(child Node) {
 
 	en.MarkNeedsLayoutAndPaint()
 }
-
-//----------
 
 // Doesn't use Remove/Insert. So implementing nodes overriding those will not see their functions used.
 func (en *EmbedNode) Swap(u Node) {
@@ -162,13 +150,9 @@ func (en *EmbedNode) Swap(u Node) {
 	}
 }
 
-//----------
-
 func (en *EmbedNode) ChildsLen() int {
 	return en.childs.Len()
 }
-
-//----------
 
 func elemEmbed(e *list.Element) *EmbedNode {
 	if e == nil {
@@ -183,8 +167,6 @@ func elemWrapper(e *list.Element) Node {
 	return e.Value.(*EmbedNode).Wrapper
 }
 
-//----------
-
 func (en *EmbedNode) FirstChild() *EmbedNode {
 	return elemEmbed(en.childs.Front())
 }
@@ -198,8 +180,6 @@ func (en *EmbedNode) PrevSibling() *EmbedNode {
 	return elemEmbed(en.elem.Prev())
 }
 
-//----------
-
 func (en *EmbedNode) FirstChildWrapper() Node {
 	return elemWrapper(en.childs.Front())
 }
@@ -212,8 +192,6 @@ func (en *EmbedNode) NextSiblingWrapper() Node {
 func (en *EmbedNode) PrevSiblingWrapper() Node {
 	return elemWrapper(en.elem.Prev())
 }
-
-//----------
 
 func (en *EmbedNode) Iterate(f func(*EmbedNode) bool) {
 	for e := en.childs.Front(); e != nil; e = e.Next() {
@@ -244,8 +222,6 @@ func (en *EmbedNode) IterateWrappersReverse(f func(Node) bool) {
 	}
 }
 
-//----------
-
 // Iterate2 family functions: iterate all without break possibility.
 
 func (en *EmbedNode) Iterate2(f func(*EmbedNode)) {
@@ -269,8 +245,6 @@ func (en *EmbedNode) IterateWrappersReverse2(f func(Node)) {
 	}
 }
 
-//----------
-
 func (en *EmbedNode) ChildsWrappers() []Node {
 	w := []Node{}
 	en.IterateWrappers2(func(c Node) {
@@ -278,8 +252,6 @@ func (en *EmbedNode) ChildsWrappers() []Node {
 	})
 	return w
 }
-
-//----------
 
 func (en *EmbedNode) HasAnyMarks(m Marks) bool {
 	return en.marks.HasAny(m)
@@ -298,8 +270,6 @@ func (en *EmbedNode) RemoveMarks(m Marks) {
 	}
 	en.marks.Remove(m)
 }
-
-//----------
 
 func (en *EmbedNode) markUp(m Marks, child Node, childChangedMarks Marks) {
 	old := en.marks
@@ -329,8 +299,6 @@ func (en *EmbedNode) markUp(m Marks, child Node, childChangedMarks Marks) {
 func (en *EmbedNode) OnChildMarked(child Node, newMarks Marks) {
 }
 
-//----------
-
 func (en *EmbedNode) MarkNeedsLayout() {
 	en.AddMarks(MarkNeedsLayout)
 }
@@ -341,8 +309,6 @@ func (en *EmbedNode) MarkNeedsLayoutAndPaint() {
 	en.AddMarks(MarkNeedsLayout | MarkNeedsPaint)
 }
 
-//----------
-
 func (en *EmbedNode) TreeNeedsPaint() bool {
 	return en.HasAnyMarks(MarkNeedsPaint | MarkChildNeedsPaint)
 }
@@ -350,8 +316,6 @@ func (en *EmbedNode) TreeNeedsPaint() bool {
 func (en *EmbedNode) TreeNeedsLayout() bool {
 	return en.HasAnyMarks(MarkNeedsLayout | MarkChildNeedsLayout)
 }
-
-//----------
 
 func (en *EmbedNode) Measure(hint image.Point) image.Point {
 	var max image.Point
@@ -361,8 +325,6 @@ func (en *EmbedNode) Measure(hint image.Point) image.Point {
 	})
 	return max
 }
-
-//----------
 
 func (en *EmbedNode) LayoutMarked() {
 	if en.HasAnyMarks(MarkNeedsLayout) {
@@ -416,8 +378,6 @@ func (en *EmbedNode) ChildsLayoutTree() {
 	})
 }
 
-//----------
-
 func (en *EmbedNode) PaintMarked() image.Rectangle {
 	u := image.Rectangle{}
 	if en.HasAnyMarks(MarkNeedsPaint) {
@@ -459,13 +419,9 @@ func (en *EmbedNode) ChildsPaintTree() {
 	})
 }
 
-//----------
-
 func (en *EmbedNode) OnInputEvent(ev any, p image.Point) event.Handled {
 	return false
 }
-
-//----------
 
 func (en *EmbedNode) SetTheme(t Theme) {
 	defer en.themeChangeCallback()
@@ -478,8 +434,6 @@ func (en *EmbedNode) SetTheme(t Theme) {
 func (en *EmbedNode) Theme() *Theme {
 	return &en.theme
 }
-
-//----------
 
 func (en *EmbedNode) ThemePalette() Palette {
 	return en.theme.Palette
@@ -505,8 +459,6 @@ func (en *EmbedNode) SetThemePaletteNamePrefix(prefix string) {
 
 	en.theme.SetPaletteNamePrefix(prefix)
 }
-
-//----------
 
 func (en *EmbedNode) TreeThemePaletteColor(name string) color.Color {
 	if c, ok := en.treeThemePaletteColor2(name); ok {
@@ -538,8 +490,6 @@ func (en *EmbedNode) treeThemePaletteColor2(name string) (color.Color, bool) {
 	return nil, false
 }
 
-//----------
-
 func (en *EmbedNode) SetThemeFontFace(ff *fontutil.FontFace) {
 	defer en.themeChangeCallback()
 	defer en.MarkNeedsLayout()
@@ -556,8 +506,6 @@ func (en *EmbedNode) TreeThemeFontFace() *fontutil.FontFace {
 	return fontutil.DefaultFontFace()
 }
 
-//----------
-
 func (en *EmbedNode) themeChangeCallback() {
 	if en.Wrapper != nil {
 		en.Wrapper.OnThemeChange()
@@ -569,8 +517,6 @@ func (en *EmbedNode) themeChangeCallback() {
 
 func (en *EmbedNode) OnThemeChange() {
 }
-
-//----------
 
 type Marks uint16
 
@@ -591,8 +537,6 @@ func (m Marks) HasAny(u Marks) bool { return m.Mask(u) > 0 }
 //	m |= u
 //	return m ^ old
 //}
-
-//----------
 
 const (
 	MarkNeedsPaint Marks = 1 << iota

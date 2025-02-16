@@ -26,15 +26,11 @@ func NewHistory(maxLen int) *History {
 	return h
 }
 
-//----------
-
 func (h *History) Append(edits *Edits) { h.hlist.Append(edits, h.maxLen) }
 func (h *History) Clear()              { h.hlist.Clear() }
 func (h *History) ClearUndones()       { h.hlist.ClearUndones() }
 
 //func (h *History) MergeNDoneBack(n int) { h.hlist.MergeNDoneBack(n) }
-
-//----------
 
 func (h *History) UndoRedo(redo, peek bool) (*Edits, bool) {
 	// the call to undo could be inside an undogroup, use the original list; usually this is ok since the only operations should be undo/redo, but if other write operations are done while on this undogroup, there could be undefined behaviour (programmer responsability)
@@ -52,8 +48,6 @@ func (h *History) UndoRedo(redo, peek bool) (*Edits, bool) {
 		return hl.Undo(peek)
 	}
 }
-
-//----------
 
 func (h *History) BeginUndoGroup(c rwedit.SimpleCursor) {
 	h.ugroup.Lock()
@@ -104,8 +98,6 @@ func (h *History) EndUndoGroup(c rwedit.SimpleCursor) {
 	h.ugroup.ohlist = nil
 }
 
-//----------
-
 type HList struct {
 	list   *list.List
 	undone *list.Element
@@ -115,16 +107,12 @@ func NewHList() *HList {
 	return &HList{list: list.New()}
 }
 
-//----------
-
 func (hl *HList) DoneBack() *list.Element {
 	if hl.undone != nil {
 		return hl.undone.Prev()
 	}
 	return hl.list.Back()
 }
-
-//----------
 
 func (hl *HList) Append(edits *Edits, maxLen int) {
 	if edits.Empty() {
@@ -135,8 +123,6 @@ func (hl *HList) Append(edits *Edits, maxLen int) {
 	hl.clearOlds(maxLen)
 	tryToMergeLastTwoEdits(hl) // simplify history
 }
-
-//----------
 
 func (hl *HList) Undo(peek bool) (*Edits, bool) {
 	u := hl.DoneBack()
@@ -159,8 +145,6 @@ func (hl *HList) Redo(peek bool) (*Edits, bool) {
 	}
 	return u.Value.(*Edits), true
 }
-
-//----------
 
 func (hl *HList) Clear() {
 	hl.list = list.New()
@@ -185,8 +169,6 @@ func (hl *HList) clearOlds(maxLen int) {
 		hl.list.Remove(e)
 	}
 }
-
-//----------
 
 func (hl *HList) mergeToDoneBack(elem *list.Element) {
 	for hl.mergeNextNotUndone(elem) {
@@ -217,8 +199,6 @@ func (hl *HList) mergeNextNotUndone(elem *list.Element) bool {
 //	}
 //	hl.mergeToDoneBack(e)
 //}
-
-//----------
 
 func (hl *HList) NDoneBack(n int) ([]*Edits, []*list.Element) {
 	b := hl.DoneBack()

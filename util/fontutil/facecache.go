@@ -65,8 +65,6 @@ func (fc *FaceCache) Kern(r0, r1 rune) fixed.Int26_6 {
 	return k
 }
 
-//----------
-
 type GlyphCache struct {
 	dr      image.Rectangle
 	mask    image.Image
@@ -87,8 +85,6 @@ func NewGlyphCache(face font.Face, ru rune) *GlyphCache {
 	return &GlyphCache{dr, mask, maskp, adv, ok}
 }
 
-//----------
-
 type GlyphAdvanceCache struct {
 	advance fixed.Int26_6
 	ok      bool
@@ -98,8 +94,6 @@ func NewGlyphAdvanceCache(face font.Face, ru rune) *GlyphAdvanceCache {
 	adv, ok := face.GlyphAdvance(ru) // only one can run at a time
 	return &GlyphAdvanceCache{adv, ok}
 }
-
-//----------
 
 type GlyphBoundsCache struct {
 	bounds  fixed.Rectangle26_6
@@ -112,8 +106,6 @@ func NewGlyphBoundsCache(face font.Face, ru rune) *GlyphBoundsCache {
 	return &GlyphBoundsCache{bounds, adv, ok}
 }
 
-//----------
-
 func kernIndex(r0, r1 rune) string {
 	return string([]rune{r0, ',', r1})
 }
@@ -122,8 +114,6 @@ func NewKernCache(face font.Face, r0, r1 rune) fixed.Int26_6 {
 	return face.Kern(r0, r1) // only one can run at a time
 }
 
-//----------
-
 func copyMask(mask image.Image) image.Image {
 	alpha := *(mask.(*image.Alpha)) // copy structure
 	pix := make([]uint8, len(alpha.Pix))
@@ -131,8 +121,6 @@ func copyMask(mask image.Image) image.Image {
 	alpha.Pix = pix
 	return &alpha
 }
-
-//----------
 
 //func copyMask2(mask image.Image) (image.Image, []byte) {
 //	alpha := *(mask.(*image.Alpha)) // copy structure

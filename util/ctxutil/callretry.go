@@ -61,8 +61,6 @@ func Call(ctx context.Context, prefix string, fn func() error, lateFn func(error
 	}
 }
 
-//----------
-
 func Retry(ctx context.Context, retryPause time.Duration, prefix string, fn func() error, lateFn func(error)) error {
 	var err error
 	for {
@@ -80,8 +78,6 @@ func Retry(ctx context.Context, retryPause time.Duration, prefix string, fn func
 		}
 	}
 }
-
-//----------
 
 type cdata struct {
 	t time.Time

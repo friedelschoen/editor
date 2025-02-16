@@ -8,8 +8,6 @@ import (
 	"github.com/jmigpin/editor/util/parseutil"
 )
 
-//----------
-
 type Registration struct {
 	Language string
 	Exts     []string
@@ -49,8 +47,6 @@ func (reg *Registration) HasOptional(s string) bool {
 func (reg *Registration) String() string {
 	return stringifyRegistration(reg)
 }
-
-//----------
 
 func parseRegistration(s string) (*Registration, error) {
 	fields, err := parseutil.ParseFields(s, ',')
@@ -106,8 +102,6 @@ func stringifyRegistration(reg *Registration) string {
 	return strings.Join(u, ",")
 }
 
-//----------
-
 func RegistrationExamples() []string {
 	return []string{
 		GoplsRegistration(false, false, false),
@@ -118,8 +112,6 @@ func RegistrationExamples() []string {
 		"python,.py,stdio,pylsp,\"stderr nogotoimpl\"",
 	}
 }
-
-//----------
 
 func GoplsRegistration(stderr bool, tcp bool, trace bool) string {
 	cmd := osutil.ExecName("gopls")

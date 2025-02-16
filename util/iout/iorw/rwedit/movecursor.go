@@ -18,8 +18,6 @@ func MoveCursorToPoint(ctx *Ctx, p image.Point, sel bool) {
 	}
 }
 
-//----------
-
 func MoveCursorLeft(ctx *Ctx, sel bool) error {
 	ci := ctx.C.Index()
 	_, size, err := iorw.ReadLastRuneAt(ctx.RW, ci)
@@ -45,8 +43,6 @@ func MoveCursorRight(ctx *Ctx, sel bool) error {
 	return nil
 }
 
-//----------
-
 func MoveCursorUp(ctx *Ctx, sel bool) {
 	p := ctx.Fns.GetPoint(ctx.C.Index())
 	p.Y -= ctx.Fns.LineHeight() - 1
@@ -60,8 +56,6 @@ func MoveCursorDown(ctx *Ctx, sel bool) {
 	i := ctx.Fns.GetIndex(p)
 	ctx.C.UpdateSelection(sel, i)
 }
-
-//----------
 
 func MoveCursorJumpLeft(ctx *Ctx, sel bool) error {
 	i, err := jumpLeftIndex(ctx)
@@ -79,8 +73,6 @@ func MoveCursorJumpRight(ctx *Ctx, sel bool) error {
 	ctx.C.UpdateSelection(sel, i)
 	return nil
 }
-
-//----------
 
 //func MoveCursorJumpUp(ctx *Ctx, sel bool) error {
 //	return moveCursorJumpUpDown(ctx, sel, MoveCursorUp)
@@ -125,8 +117,6 @@ func MoveCursorJumpRight(ctx *Ctx, sel bool) error {
 //	return nil
 //}
 
-//----------
-
 func jumpLeftIndex(ctx *Ctx) (int, error) {
 	rd := ctx.LocalReader(ctx.C.Index())
 	i, size, err := iorw.RuneLastIndexFn(rd, ctx.C.Index(), true, edgeOfNextWordOrNewline())
@@ -144,8 +134,6 @@ func jumpRightIndex(ctx *Ctx) (int, error) {
 	}
 	return i, nil
 }
-
-//----------
 
 func edgeOfNextWordOrNewline() func(rune) bool {
 	first := true

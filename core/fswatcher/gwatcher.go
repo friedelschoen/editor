@@ -33,8 +33,6 @@ func NewGWatcher(w Watcher) *GWatcher {
 	return gw
 }
 
-//----------
-
 func (gw *GWatcher) OpMask() *Op {
 	return gw.w.OpMask()
 }
@@ -42,8 +40,6 @@ func (gw *GWatcher) OpMask() *Op {
 func (gw *GWatcher) Close() error {
 	return gw.w.Close()
 }
-
-//----------
 
 func (gw *GWatcher) Events() <-chan any {
 	return gw.events
@@ -73,8 +69,6 @@ func (gw *GWatcher) handleEv(ev *Event) {
 	}
 }
 
-//----------
-
 func (gw *GWatcher) Add(name string) error {
 	if err := gw.normalize(&name); err != nil {
 		return err
@@ -95,8 +89,6 @@ func (gw *GWatcher) Add(name string) error {
 
 	return nil
 }
-
-//----------
 
 func (gw *GWatcher) Remove(name string) error {
 	if err := gw.normalize(&name); err != nil {
@@ -122,8 +114,6 @@ func (gw *GWatcher) Remove(name string) error {
 
 	return nil
 }
-
-//----------
 
 func (gw *GWatcher) review(name string) error {
 	if err := gw.normalize(&name); err != nil {
@@ -151,8 +141,6 @@ func (gw *GWatcher) review(name string) error {
 	return nil
 }
 
-//----------
-
 func (gw *GWatcher) modify(name string) error {
 	if err := gw.normalize(&name); err != nil {
 		return err
@@ -170,8 +158,6 @@ func (gw *GWatcher) modify(name string) error {
 
 	return nil
 }
-
-//----------
 
 func (gw *GWatcher) split(name string) []string {
 	u := strings.Split(name, string(os.PathSeparator))
@@ -192,8 +178,6 @@ func (gw *GWatcher) normalize(name *string) error {
 	*name = u
 	return nil
 }
-
-//----------
 
 type Node struct {
 	name   string
@@ -218,8 +202,6 @@ func (n *Node) delete() {
 		delete(n.parent.childs, n.name)
 	}
 }
-
-//----------
 
 func (n *Node) visit(v []string, create, visSubChilds, depthFirst bool, fn func(*Node)) {
 	if depthFirst {
@@ -249,8 +231,6 @@ func (n *Node) visit(v []string, create, visSubChilds, depthFirst bool, fn func(
 	c.visit(v[1:], create, visSubChilds, depthFirst, fn)
 }
 
-//----------
-
 func (n *Node) add(v []string, fn func(*Node)) {
 	n.visit(v, true, false, false, fn)
 }
@@ -264,16 +244,12 @@ func (n *Node) modify(v []string, fn func(*Node)) {
 	n.visit(v, false, false, false, fn)
 }
 
-//----------
-
 func (n *Node) path() string {
 	if n.parent == nil {
 		return n.name
 	}
 	return filepath.Join(n.parent.path(), n.name)
 }
-
-//----------
 
 func (n *Node) SprintFlatTree() string {
 	s := fmt.Sprintf("{%s:", n.name)

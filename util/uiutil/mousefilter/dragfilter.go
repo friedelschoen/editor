@@ -65,8 +65,6 @@ func (dragf *DragFilter) end(ev *event.MouseUp) {
 	}
 }
 
-//----------
-
 func (dragf *DragFilter) emitEv(ev any, p image.Point) {
 	dragf.emitEvFn(ev, p)
 }

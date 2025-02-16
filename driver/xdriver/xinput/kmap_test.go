@@ -48,8 +48,6 @@ func TestKMapLookup1(t *testing.T) {
 	}
 }
 
-//----------
-
 func getKMap(t *testing.T) (*KMap, *xgb.Conn, error) {
 	display := os.Getenv("DISPLAY")
 	conn, err := xgb.NewConnDisplay(display)

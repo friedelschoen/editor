@@ -9,16 +9,14 @@ package iorw
 //	return &RWLocked{ReadWriter: rw}
 //}
 
-////----------
-
+//
 //func (rw *RWLocked) Overwrite(i, n int, p []byte) error {
 //	rw.Lock()
 //	defer rw.Unlock()
 //	return rw.ReadWriter.Overwrite(i, n, p)
 //}
 
-////----------
-
+//
 //func (rw *RWLocked) ReadRuneAt(i int) (ru rune, size int, err error) {
 //	rw.RLock()
 //	defer rw.RUnlock()

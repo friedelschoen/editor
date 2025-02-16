@@ -35,8 +35,6 @@ func BenchmarkDrawBGRA(b *testing.B) {
 	}
 }
 
-//----------
-
 func TestComplimentRgba(t *testing.T) {
 	v, expect := 0xff6699, 0x66ffcc
 	c2 := RgbaFromInt(v)

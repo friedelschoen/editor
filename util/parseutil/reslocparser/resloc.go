@@ -28,8 +28,6 @@ func NewResLoc() *ResLoc {
 	return &ResLoc{Offset: -1}
 }
 
-//----------
-
 func (rl *ResLoc) ClearFilename1() string {
 	s := rl.Path
 
@@ -71,8 +69,6 @@ func (rl *ResLoc) Stringify1() string {
 	return rl.ToLinecolString()
 }
 
-//----------
-
 func (rl *ResLoc) ToLinecolString() string {
 	s := rl.ClearFilename1()
 	if rl.Line > 0 {
@@ -88,8 +84,6 @@ func (rl *ResLoc) ToOffsetString() string {
 	return s
 }
 
-//----------
-
 func (rl *ResLoc) offsetToString() string {
 	return fmt.Sprintf(":o=%d", rl.Offset)
 }
@@ -100,8 +94,6 @@ func (rl *ResLoc) linecolToString() string {
 	}
 	return s
 }
-
-//----------
 
 //func (rl *ResLoc) ToString() string {
 //	return rl.ToString2(false)

@@ -34,8 +34,6 @@ func NewAnnotatorSet(fset *token.FileSet) *AnnotatorSet {
 	return annset
 }
 
-//----------
-
 func (annset *AnnotatorSet) AnnotateAstFile(astFile *ast.File, ti *types.Info, nat map[ast.Node]AnnotationType, testModeMainFunc bool) (*Annotator, error) {
 
 	filename, err := nodeFilename(annset.fset, astFile)
@@ -60,8 +58,6 @@ func (annset *AnnotatorSet) AnnotateAstFile(astFile *ast.File, ti *types.Info, n
 	return ann, nil
 }
 
-//----------
-
 func (annset *AnnotatorSet) insertTestMain(astFile *ast.File) error {
 	// TODO: detect if used imports are already imported with another name (os,testing)
 
@@ -83,8 +79,6 @@ func (annset *AnnotatorSet) insertTestMain(astFile *ast.File) error {
 
 	return nil
 }
-
-//----------
 
 func (annset *AnnotatorSet) annotatorFileData(filename string) (*debug.AnnotatorFileData, error) {
 	annset.afds.Lock()
@@ -115,8 +109,6 @@ func (annset *AnnotatorSet) annotatorFileData(filename string) (*debug.Annotator
 	return afd, nil
 }
 
-//----------
-
 func (annset *AnnotatorSet) buildConfigAfdEntries() string {
 	u := []string{}
 	for _, afd := range annset.afds.order {
@@ -131,10 +123,6 @@ func (annset *AnnotatorSet) buildConfigAfdEntries() string {
 	}
 	return strings.Join(u, ",")
 }
-
-//----------
-//----------
-//----------
 
 type AnnSetDebugOpt struct {
 	PkgPath   string
@@ -152,10 +140,6 @@ func newAnnSetDebugOpt() *AnnSetDebugOpt {
 		VarPrefix: "Σ", // will have integer appended
 	}
 }
-
-//----------
-//----------
-//----------
 
 func sourceHash(b []byte) []byte {
 	h := sha1.New()

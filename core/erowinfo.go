@@ -70,8 +70,6 @@ func readERowInfoOrNew(ed *Editor, name string) *ERowInfo {
 	return info
 }
 
-//----------
-
 func (info *ERowInfo) readFileInfo() {
 	if isSpecialName(info.name) {
 		return
@@ -103,8 +101,6 @@ func (info *ERowInfo) readFileInfo() {
 	}
 }
 
-//----------
-
 func (info *ERowInfo) IsSpecial() bool {
 	return isSpecialName(info.name)
 }
@@ -129,8 +125,6 @@ func (info *ERowInfo) FileInfoErr() error {
 	return info.fiErr
 }
 
-//----------
-
 func (info *ERowInfo) Name() string {
 	return info.name
 }
@@ -144,8 +138,6 @@ func (info *ERowInfo) Dir() string {
 	}
 	return filepath.Dir(info.Name())
 }
-
-//----------
 
 func (info *ERowInfo) editedHashNeedsUpdate() {
 	info.fileData.edited.updated = false
@@ -166,8 +158,6 @@ func (info *ERowInfo) updateEditedHash() {
 	}
 	info.setEditedHash(bytesHash(b), len(b))
 }
-
-//----------
 
 func (info *ERowInfo) setEditedHash(hash []byte, size int) {
 	info.fileData.edited.size = size
@@ -202,8 +192,6 @@ func (info *ERowInfo) updateFsHashIfNeeded() {
 		info.readFsFile()
 	}
 }
-
-//----------
 
 func (info *ERowInfo) AddERow(erow *ERow) {
 	// sanity check
@@ -255,8 +243,6 @@ func (info *ERowInfo) FirstERow() (*ERow, bool) {
 	return nil, false
 }
 
-//----------
-
 func (info *ERowInfo) ReloadFile() error {
 	b, err := info.readFsFile()
 	if err != nil {
@@ -271,8 +257,6 @@ func (info *ERowInfo) ReloadFile() error {
 
 	return nil
 }
-
-//----------
 
 // Save file and update rows.
 func (info *ERowInfo) SaveFile() error {
@@ -332,8 +316,6 @@ func (info *ERowInfo) SaveFile() error {
 	return nil
 }
 
-//----------
-
 func (info *ERowInfo) readFsFile() ([]byte, error) {
 	b, err := ioutil.ReadFile(info.Name())
 	if err != nil {
@@ -370,8 +352,6 @@ func (info *ERowInfo) saveFsFile(b []byte) error {
 	return nil
 }
 
-//----------
-
 // Should be called under UI goroutine.
 func (info *ERowInfo) UpdateDiskEvent() {
 	info.readFileInfo()
@@ -379,8 +359,6 @@ func (info *ERowInfo) UpdateDiskEvent() {
 		info.updateFsHashIfNeeded()
 	}
 }
-
-//----------
 
 func (info *ERowInfo) EqualToBytesHash(size int, hash []byte) bool {
 	erow0, ok := info.FirstERow()
@@ -394,8 +372,6 @@ func (info *ERowInfo) EqualToBytesHash(size int, hash []byte) bool {
 	return bytes.Equal(hash, info.fileData.edited.hash)
 }
 
-//----------
-
 func (info *ERowInfo) HasRowState(st ui.RowState) bool {
 	erow0, ok := info.FirstERow()
 	if !ok {
@@ -403,8 +379,6 @@ func (info *ERowInfo) HasRowState(st ui.RowState) bool {
 	}
 	return erow0.Row.HasState(st)
 }
-
-//----------
 
 func (info *ERowInfo) UpdateEditedRowState() {
 	if !info.IsFileButNotDir() {
@@ -467,8 +441,6 @@ func (info *ERowInfo) UpdateActiveRowState(erow *ERow) {
 	info.updateRowState(erow, ui.RowStateActive, true)
 }
 
-//----------
-
 func (info *ERowInfo) updateRowsStates(state ui.RowState, v bool) {
 	// update this info rows state
 	for _, erow := range info.ERows {
@@ -487,8 +459,6 @@ func (info *ERowInfo) updateRowState(erow *ERow, state ui.RowState, v bool) {
 	}
 }
 
-//----------
-
 func (info *ERowInfo) SetRowsBytes(b []byte) {
 	if !info.IsFileButNotDir() {
 		return
@@ -498,8 +468,6 @@ func (info *ERowInfo) SetRowsBytes(b []byte) {
 		erow0.Row.TextArea.SetBytes(b)
 	}
 }
-
-//----------
 
 func (info *ERowInfo) HandleRWEvWrite2(erow *ERow, ev *iorw.RWEvWrite2) {
 	if !info.IsFileButNotDir() {
@@ -516,8 +484,6 @@ func (info *ERowInfo) HandleRWEvWrite2(erow *ERow, ev *iorw.RWEvWrite2) {
 	info.UpdateEditedRowState()
 }
 
-//----------
-
 func (info *ERowInfo) setRWFromMaster(erow *ERow) {
 	for _, e := range info.ERows {
 		if e == erow {
@@ -528,8 +494,6 @@ func (info *ERowInfo) setRWFromMaster(erow *ERow) {
 
 	info.UpdateEditedRowState()
 }
-
-//----------
 
 func (info *ERowInfo) newCmdCtx() (context.Context, context.CancelFunc) {
 	info.cmd.Lock()
@@ -551,13 +515,9 @@ func (info *ERowInfo) cancelCmd2() {
 	}
 }
 
-//----------
-
 func isSpecialName(name string) bool {
 	return name[0] == '+'
 }
-
-//----------
 
 func bytesHash(b []byte) []byte {
 	h := sha1.New()

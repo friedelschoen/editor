@@ -23,8 +23,6 @@ func newRuleIndex() *RuleIndex {
 	return ri
 }
 
-//----------
-
 func (ri *RuleIndex) set(name string, r Rule) error {
 	if ri.deref.once {
 		return fmt.Errorf("calling set after dereference")
@@ -65,8 +63,6 @@ func (ri *RuleIndex) delete(name string) {
 	delete(ri.m, name)
 }
 
-//----------
-
 func (ri *RuleIndex) setDefRule(name string, r Rule) error {
 	r2 := &DefRule{name: name}
 	r2.setOnlyChild(r)
@@ -84,8 +80,6 @@ func (ri *RuleIndex) setSingletonRule(r *SingletonRule) error {
 	return ri.set(r.name, r)
 }
 
-//----------
-
 func (ri *RuleIndex) setProcRuleFn(name string, fn ProcRuleFn) error {
 	if _, ok := ri.pm[name]; ok {
 		return fmt.Errorf("already defined: %v", name)
@@ -93,8 +87,6 @@ func (ri *RuleIndex) setProcRuleFn(name string, fn ProcRuleFn) error {
 	ri.pm[name] = fn
 	return nil
 }
-
-//----------
 
 func (ri *RuleIndex) derefRules() error {
 	if ri.deref.once {
@@ -105,8 +97,6 @@ func (ri *RuleIndex) derefRules() error {
 	ri.deref.err = err
 	return err
 }
-
-//----------
 
 func (ri *RuleIndex) startRule(name string) (*DefRule, error) {
 	if r, ok := ri.m[name]; ok {
@@ -136,8 +126,6 @@ func (ri *RuleIndex) startRule(name string) (*DefRule, error) {
 	}
 	return nil, fmt.Errorf("start rule not found: %q", name)
 }
-
-//----------
 
 //godebug:annotateoff
 func (ri *RuleIndex) String() string {

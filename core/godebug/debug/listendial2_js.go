@@ -18,10 +18,6 @@ func listen2(ctx context.Context, addr Addr) (Listener, error) {
 	return nil, fmt.Errorf("not supported")
 }
 
-//----------
-//----------
-//----------
-
 func dial2(ctx context.Context, addr Addr) (Conn, error) {
 	// TODO: ctx
 
@@ -33,8 +29,6 @@ func dial2(ctx context.Context, addr Addr) (Conn, error) {
 
 	return newWsConn(addr, ws)
 }
-
-//----------
 
 type WsConn struct {
 	addr    Addr
@@ -49,8 +43,6 @@ func newWsConn(addr Addr, ws js.Value) (*WsConn, error) {
 
 	openCh := make(chan any, 1)
 	openDone := false
-
-	//----------
 
 	jsEvListen(ws, "error", jsFuncOf2(func(args []js.Value) {
 		//jsLog(args)
@@ -75,8 +67,6 @@ func newWsConn(addr Addr, ws js.Value) (*WsConn, error) {
 		wsc.readCh <- b
 	}))
 
-	//----------
-
 	v := <-openCh
 	switch t := v.(type) {
 	case error:
@@ -85,8 +75,6 @@ func newWsConn(addr Addr, ws js.Value) (*WsConn, error) {
 
 	return wsc, nil
 }
-
-//----------
 
 func (wsc *WsConn) Read(b []byte) (int, error) {
 	if len(b) <= wsc.readBuf.Len() {
@@ -126,8 +114,6 @@ func (wsc *WsConn) RemoteAddr() Addr {
 	return wsc.addr
 }
 
-//----------
-
 func (wsc *WsConn) SetDeadline(time.Time) error {
 	return fmt.Errorf("setdeadline: todo")
 }
@@ -137,10 +123,6 @@ func (wsc *WsConn) SetReadDeadline(time.Time) error {
 func (wsc *WsConn) SetWriteDeadline(time.Time) error {
 	return fmt.Errorf("setwritedeadline: todo")
 }
-
-//----------
-//----------
-//----------
 
 func arrayBufferToBytes(arrBuf js.Value) []byte {
 	// js arraybuffer to js array
@@ -156,8 +138,6 @@ func bytesToJsArray(b []byte) js.Value {
 	js.CopyBytesToJS(jsArr, b)
 	return jsArr
 }
-
-//----------
 
 // simplifies to not need to return a value
 func jsFuncOf2(fn func(args []js.Value)) js.Func {
@@ -176,13 +156,9 @@ func jsFuncOf2Release(fn func(args []js.Value)) js.Func {
 	return fn2
 }
 
-//----------
-
 func jsEvListen(v js.Value, evName string, fn js.Func) {
 	v.Call("addEventListener", evName, fn)
 }
-
-//----------
 
 func jsLog(args ...any) {
 	js.Global().Get("console").Call("log", args...)

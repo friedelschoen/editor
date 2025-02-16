@@ -68,8 +68,6 @@ func (gdm *GoDebugManager) RunAsync(startCtx context.Context, erow *ERow, args [
 	return nil
 }
 
-//----------
-
 func (gdm *GoDebugManager) CancelAndClear() {
 	gdm.gdi.Lock()
 	defer gdm.gdi.Unlock()
@@ -82,8 +80,6 @@ func (gdm *GoDebugManager) cancelAndWaitAndClear2() {
 		gdm.gdi.gdi = nil
 	}
 }
-
-//----------
 
 func (gdm *GoDebugManager) SelectAnnotation(rowPos *ui.RowPos, ev *ui.RootSelectAnnotationEvent) {
 	gdm.gdi.Lock()
@@ -127,18 +123,12 @@ func (gdm *GoDebugManager) Trace() error {
 	return gdm.gdi.gdi.trace()
 }
 
-//----------
-
 func (gdm *GoDebugManager) Printf(format string, args ...any) {
 	gdm.ed.Messagef("godebug: "+format, args...)
 }
 func (gdm *GoDebugManager) printError(err error) {
 	gdm.ed.Errorf("godebug: %w", err)
 }
-
-//----------
-//----------
-//----------
 
 type GoDebugInstance struct {
 	ctx    context.Context
@@ -190,8 +180,6 @@ func (gdi *GoDebugInstance) cancelAndWaitAndClear() {
 	gdi.clearAnnotations()
 }
 
-//----------
-
 func (gdi *GoDebugInstance) runCmd(ctx context.Context, erow *ERow, args []string, w io.Writer) error {
 	cmd := godebug.NewCmd()
 
@@ -219,8 +207,6 @@ func (gdi *GoDebugInstance) runCmd(ctx context.Context, erow *ERow, args []strin
 	return cmd.Wait()
 }
 
-//----------
-
 func (gdi *GoDebugInstance) selectAnnotation(rowPos *ui.RowPos, ev *ui.RootSelectAnnotationEvent) {
 	if err := gdi.selectAnnotation2(ev); err != nil {
 		//gdi.gdm.printError(err)
@@ -247,8 +233,6 @@ func (gdi *GoDebugInstance) selectAnnotation2(ev *ui.RootSelectAnnotationEvent) 
 		return fmt.Errorf("todo: %#v", ev)
 	}
 }
-
-//----------
 
 func (gdi *GoDebugInstance) selectERowAnnotation(erow *ERow, ev *ui.TextAreaSelectAnnotationEvent) {
 	showLine, err := gdi.selectERowAnnotation2(erow, ev)
@@ -282,8 +266,6 @@ func (gdi *GoDebugInstance) selectERowAnnotation2(erow *ERow, ev *ui.TextAreaSel
 	}
 }
 
-//----------
-
 func (gdi *GoDebugInstance) annotationFind(s string) error {
 	_, ok := gdi.di.selectedAnnFind(s)
 	if !ok {
@@ -292,8 +274,6 @@ func (gdi *GoDebugInstance) annotationFind(s string) error {
 	gdi.updateAnnotationsAndShowLine(nil, gdi.gdm.ed.GoodRowPos())
 	return nil
 }
-
-//----------
 
 func (gdi *GoDebugInstance) trace() error {
 	msgs := gdi.di.trace()
@@ -312,8 +292,6 @@ func (gdi *GoDebugInstance) trace() error {
 	gdi.gdm.Printf("trace (%d entries):\n%v", len(msgs), sb.String())
 	return nil
 }
-
-//----------
 
 func (gdi *GoDebugInstance) printIndex(erow *ERow, annIndex, offset int) {
 	msg, ok := gdi.di.annMsg(erow.Info.Name(), annIndex)
@@ -339,8 +317,6 @@ func (gdi *GoDebugInstance) printIndexAllPrevious(erow *ERow, annIndex, offset i
 	}
 	gdi.gdm.Printf("annotations (%d entries):\n%v", len(msgs), sb.String())
 }
-
-//----------
 
 func (gdi *GoDebugInstance) messagesLoop(cmd *godebug.Cmd) error {
 
@@ -385,8 +361,6 @@ func (gdi *GoDebugInstance) messagesLoop(cmd *godebug.Cmd) error {
 		})
 	}
 
-	//----------
-
 	for {
 		checkUI()
 
@@ -418,8 +392,6 @@ func (gdi *GoDebugInstance) handleMsg(msg any, cmd *godebug.Cmd) error {
 	}
 }
 
-//----------
-
 func (gdi *GoDebugInstance) updateAnnotations() {
 	gdi.gdm.ed.UI.RunOnUIGoRoutine(func() {
 		gdi.updateAnnotations2()
@@ -435,15 +407,11 @@ func (gdi *GoDebugInstance) updateAnnotationsAndShowLine(preferedERow *ERow, row
 	})
 }
 
-//----------
-
 func (gdi *GoDebugInstance) updateAnnotations2() {
 	for _, info := range gdi.gdm.ed.ERowInfos() {
 		gdi.updateInfoAnnotations2(info)
 	}
 }
-
-//----------
 
 func (gdi *GoDebugInstance) clearAnnotations() {
 	gdi.gdm.ed.UI.RunOnUIGoRoutine(func() {
@@ -459,8 +427,6 @@ func (gdi *GoDebugInstance) clearInfoAnnotations2(info *ERowInfo) {
 		gdi.setAnnotations(erow, false, -1, nil)
 	}
 }
-
-//----------
 
 func (gdi *GoDebugInstance) updateInfoAnnotations(info *ERowInfo) {
 	gdi.gdm.ed.UI.RunOnUIGoRoutine(func() {
@@ -485,13 +451,9 @@ func (gdi *GoDebugInstance) updateInfoAnnotations2(info *ERowInfo) {
 	}
 }
 
-//----------
-
 func (gdi *GoDebugInstance) setAnnotations(erow *ERow, on bool, selIndex int, entries *drawer4.AnnotationGroup) {
 	gdi.gdm.ed.SetAnnotations(EareqGoDebug, erow.Row.TextArea, on, selIndex, entries)
 }
-
-//----------
 
 func (gdi *GoDebugInstance) showSelectedLine(preferedERow *ERow, rowPos *ui.RowPos) {
 	if err := gdi.showSelectedLine2(preferedERow, rowPos); err != nil {
@@ -526,8 +488,6 @@ func (gdi *GoDebugInstance) showSelectedLine2(preferedERow *ERow, rowPos *ui.Row
 	return nil
 }
 
-//----------
-
 func (gdi *GoDebugInstance) openArrivalIndexERow() {
 	_, filename, ok := gdi.di.selectedArrivalIndexFilename()
 	if !ok {
@@ -542,10 +502,6 @@ func (gdi *GoDebugInstance) openArrivalIndexERow() {
 	}
 	OpenFileERow(gdi.gdm.ed, conf)
 }
-
-//----------
-//----------
-//----------
 
 // GoDebug data Index
 type GDDataIndex struct {
@@ -578,8 +534,6 @@ func NewGDDataIndex(gdi *GoDebugInstance) *GDDataIndex {
 	return di
 }
 
-//----------
-
 func (di *GDDataIndex) FilesIndex(name string) (int, bool) {
 	name = di.FilesIndexKey(name)
 	v, ok := di.filesIndexM[name]
@@ -591,8 +545,6 @@ func (di *GDDataIndex) FilesIndexKey(name string) string {
 	}
 	return name
 }
-
-//----------
 
 // TODO: rename: this is a reset that keeps the same headers
 func (di *GDDataIndex) reset() {
@@ -613,8 +565,6 @@ func (di *GDDataIndex) resetArrivalIndex() {
 	di.lastArrivalIndex = -1
 	di.selected.arrivalIndex = di.lastArrivalIndex
 }
-
-//----------
 
 func (di *GDDataIndex) handleFilesDataMsg(fdm *debug.FilesDataMsg) error {
 	di.Lock()
@@ -677,8 +627,6 @@ func (di *GDDataIndex) handleOffsetMsg_noLock(u *debug.OffsetMsg) error {
 
 	return nil
 }
-
-//----------
 
 func (di *GDDataIndex) annMsg(filename string, annIndex int) (*GDOffsetMsg, bool) {
 	di.RLock()
@@ -809,8 +757,6 @@ func (di *GDDataIndex) msgIndexFileMsg_noLock(filename string, msgIndex int) (*G
 	return file, file.msgs[msgIndex], true
 }
 
-//----------
-
 func (di *GDDataIndex) selectFirst() error {
 	di.Lock()
 	defer di.Unlock()
@@ -871,8 +817,6 @@ func (di *GDDataIndex) selectNext() error {
 	return nil
 }
 
-//----------
-
 func (di *GDDataIndex) findSelectedAndUpdateAnnEntries(info *ERowInfo) (entries *drawer4.AnnotationGroup, selMsgIndex int, edited bool, fileFound bool) {
 	di.Lock()
 	defer di.Unlock()
@@ -903,8 +847,6 @@ func (di *GDDataIndex) findSelectedAndUpdateAnnEntries_noLock(findex int) (int, 
 	}
 	return selMsg, selFound
 }
-
-//----------
 
 func (di *GDDataIndex) selectedMsg() (*GDOffsetMsg, string, int, bool, error) {
 	di.RLock()
@@ -950,8 +892,6 @@ func (di *GDDataIndex) selectedMsg_noLock() (*GDOffsetMsg, error) {
 	return m.arrivals[stepIndex], nil
 }
 
-//----------
-
 func (di *GDDataIndex) updateFileEdited_noLock(info *ERowInfo, findex int) bool {
 	afd := di.afds[findex]
 	edited := !info.EqualToBytesHash(int(afd.FileSize), afd.FileHash)
@@ -968,8 +908,6 @@ func (di *GDDataIndex) isFileEdited(filename string) bool {
 	}
 	return di.filesEdited[findex]
 }
-
-//----------
 
 func (di *GDDataIndex) selectedArrivalIndexFilename() (int, string, bool) {
 	return di.arrivalIndexFilename(di.selected.arrivalIndex)
@@ -994,8 +932,6 @@ func (di *GDDataIndex) filenameIsIndexed(filename string) bool {
 	_, ok := di.filesIndexM[filename]
 	return ok
 }
-
-//----------
 
 func (di *GDDataIndex) trace() []*GDOffsetMsg {
 	di.RLock()
@@ -1034,10 +970,6 @@ func (di *GDDataIndex) trace() []*GDOffsetMsg {
 
 	return res
 }
-
-//----------
-//----------
-//----------
 
 type GDFileMsgs struct {
 	msgs []*GDMsg // [msgIndex] annotations received
@@ -1089,10 +1021,6 @@ func (file *GDFileMsgs) findSelectedAndUpdateAnnEntries(arrivalIndex int) (int, 
 	return selMsg, selMsgStep, found
 }
 
-//----------
-//----------
-//----------
-
 type GDMsg struct {
 	arrivals []*GDOffsetMsg // [arrivalIndex] annotations received
 }
@@ -1113,10 +1041,6 @@ func (u *GDMsg) findIndex(arrivalIndex int) (int, bool, bool) {
 	}
 	return k, eqK, foundK
 }
-
-//----------
-//----------
-//----------
 
 type GDOffsetMsg struct {
 	arrivalIndex int

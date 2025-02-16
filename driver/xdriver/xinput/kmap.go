@@ -32,8 +32,6 @@ func NewKMap(conn *xgb.Conn) (*KMap, error) {
 	return km, nil
 }
 
-//----------
-
 func (km *KMap) ReadTable() error {
 	si := xproto.Setup(km.conn)
 	count := byte(si.MaxKeycode - si.MinKeycode + 1)
@@ -55,8 +53,6 @@ func (km *KMap) ReadTable() error {
 
 	return nil
 }
-
-//----------
 
 func (km *KMap) KeysymTable() string {
 	// some symbols are not present, like "~" and "^", and their X11 constant is present instead
@@ -80,15 +76,11 @@ func (km *KMap) KeysymTable() string {
 	return o
 }
 
-//----------
-
 func (km *KMap) keysymRow(keycode xproto.Keycode) []xproto.Keysym {
 	y := int(keycode - km.si.MinKeycode)
 	width := int(km.reply.KeysymsPerKeycode) // usually ~7
 	return km.reply.Keysyms[y*width : y*width+width]
 }
-
-//----------
 
 func (km *KMap) printKeysyms(keycode xproto.Keycode) {
 	keysyms := km.keysymRow(keycode)
@@ -110,14 +102,10 @@ func (km *KMap) printKeysyms(keycode xproto.Keycode) {
 	}
 }
 
-//----------
-
 func isKeypad(ks xproto.Keysym) bool {
 	return (0xFF80 <= ks && ks <= 0xFFBD) ||
 		(0x11000000 <= ks && ks <= 0x1100FFFF)
 }
-
-//----------
 
 // xproto.Keycode is a physical key.
 // xproto.Keysym is the encoding of a symbol on the cap of a key.
@@ -178,8 +166,6 @@ func (km *KMap) keysym(krow []xproto.Keysym, m uint16) xproto.Keysym {
 	}
 	return ks1
 }
-
-//----------
 
 func (km *KMap) Lookup(keycode xproto.Keycode, kmods uint16) (event.KeySym, rune) {
 	// keysym

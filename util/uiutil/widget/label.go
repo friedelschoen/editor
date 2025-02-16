@@ -17,8 +17,6 @@ func NewLabel(ctx ImageContext) *Label {
 	return l
 }
 
-//----------
-
 func (l *Label) OnThemeChange() {
 	bg := l.TreeThemePaletteColor("text_bg")
 	// using l.SetThemePaletteColor() will lead to callback loop

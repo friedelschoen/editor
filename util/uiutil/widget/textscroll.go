@@ -8,7 +8,6 @@ type TextScroll struct {
 	*Text
 }
 
-//----------
 // Implement widget.Scrollable
 
 func (ts *TextScroll) ScrollOffset() image.Point {

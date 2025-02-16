@@ -17,8 +17,6 @@ func NewFileSetFromBytes(src []byte) *FileSet {
 	return &FileSet{Src: src, Filename: "<bytes>"}
 }
 
-//----------
-
 //func (fset *FileSet) SliceFrom(i int) []byte {
 //	// TODO: implemented for single file only (need node arg?)
 //	return fset.src[i:]
@@ -42,8 +40,6 @@ func (fset *FileSet) NodeInt(node PNode) (int, error) {
 	}
 	return int(v), nil
 }
-
-//----------
 
 func (fset *FileSet) Error(err error) error {
 	if pe, ok := err.(*PosError); ok {

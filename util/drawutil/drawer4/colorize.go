@@ -19,8 +19,6 @@ func (c *Colorize) Iter() {
 
 func (c *Colorize) End() {}
 
-//----------
-
 func (c *Colorize) colorize() {
 	ri := c.d.st.runeR.ri
 	for k, g := range c.d.Opt.Colorize.Groups {
@@ -64,8 +62,6 @@ func (c *Colorize) applyOp(op *ColorizeOp) {
 		}
 	}
 }
-
-//----------
 
 type ColorizeGroup struct {
 	Off bool

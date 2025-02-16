@@ -231,17 +231,11 @@ func TestParseParts18(t *testing.T) {
 	}
 }
 
-//----------
-
 func TestFullParse1(t *testing.T) {
 	s := "a|b|$c=1|d|$e=2 e|$f=\"zz\""
 	d := Parse(s)
 	t.Logf("%v", d)
 }
-
-//----------
-//----------
-//----------
 
 //var benchStr1 = "a|b|$c=1|d|$e=2 e|$f=\"zz\"|"
 //func Benchmark1(b *testing.B) {

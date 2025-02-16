@@ -18,8 +18,6 @@ func ListDir(args *core.InternalCmdArgs) error {
 		return err
 	}
 
-	//----------
-
 	erow, err := args.ERowOrErr()
 	if err != nil {
 		return err

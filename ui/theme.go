@@ -23,8 +23,6 @@ var TextAreaStringsColor color.Color
 
 const separatorWidth = 1 // col/row separators width
 
-//----------
-
 func lightThemeColors(node widget.Node) {
 	pal := lightThemeColorsPal()
 	pal.Merge(rowSquarePalette())
@@ -80,8 +78,6 @@ func lightThemeColorsPal() widget.Palette {
 	return pal
 }
 
-//----------
-
 func acmeThemeColors(node widget.Node) {
 	pal := acmeThemeColorsPal()
 	pal.Merge(rowSquarePalette())
@@ -134,8 +130,6 @@ func acmeThemeColorsPal() widget.Palette {
 	return pal
 }
 
-//----------
-
 func lightInvertedThemeColors(node widget.Node) {
 	fn := newLinearInvertFn()
 	pal := lightThemeColorsPal()
@@ -149,8 +143,6 @@ func lightInvertedThemeColors(node widget.Node) {
 	node.Embed().SetThemePalette(pal)
 }
 
-//----------
-
 func acmeInvertedThemeColors(node widget.Node) {
 	fn := newLinearInvertFn()
 	pal := acmeThemeColorsPal()
@@ -163,10 +155,6 @@ func acmeInvertedThemeColors(node widget.Node) {
 	pal.Merge(userPalette())
 	node.Embed().SetThemePalette(pal)
 }
-
-//----------
-//----------
-//----------
 
 // Palette with user supplied color options that should override themes.
 func userPalette() widget.Palette {
@@ -191,8 +179,6 @@ func userPalette() widget.Palette {
 	return pal
 }
 
-//----------
-
 func rowSquarePalette() widget.Palette {
 	pal := widget.Palette{
 		"rs_active":              cint(0x0),
@@ -208,10 +194,6 @@ func rowSquarePalette() widget.Palette {
 	return pal
 }
 
-//----------
-//----------
-//----------
-
 var ColorThemeCycler cycler = cycler{
 	entries: []cycleEntry{
 		{"light", lightThemeColors},
@@ -221,8 +203,6 @@ var ColorThemeCycler cycler = cycler{
 	},
 }
 
-//----------
-
 var FontThemeCycler cycler = cycler{
 	entries: []cycleEntry{
 		{"regular", regularThemeFont},
@@ -230,8 +210,6 @@ var FontThemeCycler cycler = cycler{
 		{"mono", monoThemeFont},
 	},
 }
-
-//----------
 
 func regularThemeFont(node widget.Node) {
 	loadThemeFont("regular", node)
@@ -242,8 +220,6 @@ func mediumThemeFont(node widget.Node) {
 func monoThemeFont(node widget.Node) {
 	loadThemeFont("mono", node)
 }
-
-//----------
 
 func AddUserFont(filename string) error {
 	// test now if it will load when needed
@@ -262,8 +238,6 @@ func AddUserFont(filename string) error {
 	return nil
 }
 
-//----------
-
 func loadThemeFont(name string, node widget.Node) error {
 	// close previous faces
 	ff0 := node.Embed().TreeThemeFontFace()
@@ -276,8 +250,6 @@ func loadThemeFont(name string, node widget.Node) error {
 	node.Embed().SetThemeFontFace(ff)
 	return nil
 }
-
-//----------
 
 var TTFontOptions truetype.Options
 
@@ -312,8 +284,6 @@ func fontBytes(name string) ([]byte, error) {
 		return ioutil.ReadFile(name)
 	}
 }
-
-//----------
 
 type cycler struct {
 	CurName string
@@ -358,14 +328,10 @@ func (c *cycler) Names() []string {
 	return w
 }
 
-//----------
-
 type cycleEntry struct {
 	name string
 	fn   func(widget.Node)
 }
-
-//----------
 
 var UIThemeUtil uiThemeUtil
 
@@ -394,15 +360,9 @@ func (uitu *uiThemeUtil) ShadowHeight(ff *fontutil.FontFace) int {
 	return int(lh * 2 / 5)
 }
 
-//----------
-//----------
-//----------
-
 func cint(c int) color.RGBA {
 	return imageutil.RgbaFromInt(c)
 }
-
-//----------
 
 func newLinearInvertFn() func(color.Color) color.Color {
 	//return imageutil.NewLinearInvertFn2(0.56, 2.5) // match gimp results

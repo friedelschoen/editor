@@ -45,8 +45,6 @@ func dereferenceRules(ri *RuleIndex) error {
 	return nil
 }
 
-//----------
-
 func replaceRefRules(ri *RuleIndex) error {
 	visit := (visitRuleRefFn)(nil)
 	visit = wrapVisitSeen(func(rref *Rule) error {
@@ -92,8 +90,6 @@ func replaceIfRules(ri *RuleIndex) error {
 		return nil
 	})
 }
-
-//----------
 
 func replaceRulesLevel2(ri *RuleIndex) error {
 	visit := (visitRuleRefFn)(nil)
@@ -191,8 +187,6 @@ func parenToStringRule(r Rule, ptyp parenRType) (*StringRule, error) {
 	}
 	return nil, fmt.Errorf("parenthesis to stringrule: unable to accept stringrule %v to type %q", sr, ptyp)
 }
-
-//----------
 
 // the rule index will not have parenthesis rules after this step, as they will be transformed into defrule with the equivalent id, using and/or rules
 func replaceParenthesisRules(ri *RuleIndex) error {
@@ -344,10 +338,6 @@ func replaceDuplicateRules(ri *RuleIndex) error {
 	})
 }
 
-//----------
-//----------
-//----------
-
 func visitRuleIndexRules(ri *RuleIndex, fn visitRuleRefFn) error {
 	// stable iteration to avoid (if used) unstable parenthesis loop names
 	ks := []string{}
@@ -401,13 +391,7 @@ func wrapVisitSeen(fn visitRuleRefFn) visitRuleRefFn {
 	return fn2
 }
 
-//----------
-
 type visitRuleRefFn func(*Rule) error
-
-//----------
-//----------
-//----------
 
 func replaceFromMap(m map[string]*Rule, id string, rref *Rule) bool {
 	r2, ok := m[id]
@@ -419,8 +403,6 @@ func replaceFromMap(m map[string]*Rule, id string, rref *Rule) bool {
 	m[id] = rref // keep
 	return false // not replaced
 }
-
-//----------
 
 func nodePosErrorf(n PNode, f string, args ...any) error {
 	err := fmt.Errorf(f, args...)

@@ -30,8 +30,6 @@ func NewScrollArea(ctx ImageContext, scrollable ScrollableNode, xbar, ybar bool)
 	return sa
 }
 
-//----------
-
 func (sa *ScrollArea) SetBars(xbar, ybar bool) {
 	if xbar && sa.XBar == nil {
 		sa.XBar = NewScrollBar(sa.ctx, sa)
@@ -54,8 +52,6 @@ func (sa *ScrollArea) SetBars(xbar, ybar bool) {
 	sa.scrollable.SetScrollable(xbar, ybar)
 }
 
-//----------
-
 func (sa *ScrollArea) scrollPageUp()   { sa.scrollPage(true) }
 func (sa *ScrollArea) scrollPageDown() { sa.scrollPage(false) }
 func (sa *ScrollArea) scrollPage(up bool) {
@@ -72,8 +68,6 @@ func (sa *ScrollArea) scrollJump(up bool) {
 	}
 }
 
-//----------
-
 func (sa *ScrollArea) OnChildMarked(child Node, newMarks Marks) {
 	if child == sa.scrollable {
 		if newMarks.HasAny(MarkNeedsLayout) {
@@ -81,8 +75,6 @@ func (sa *ScrollArea) OnChildMarked(child Node, newMarks Marks) {
 		}
 	}
 }
-
-//----------
 
 func (sa *ScrollArea) Measure(hint image.Point) image.Point {
 	// space to reduce due to scrollbars
@@ -133,8 +125,6 @@ func (sa *ScrollArea) Layout() {
 	// ensure scrollable layout is done before the scrollbar since it might be calculated before the scrollable due to child order. The scrollable needs to be aware of its updated bounds to correctly return the viewsize.
 	sa.scrollable.Layout()
 }
-
-//----------
 
 func (sa *ScrollArea) OnInputEvent(ev0 any, p image.Point) event.Handled {
 	switch evt := ev0.(type) {

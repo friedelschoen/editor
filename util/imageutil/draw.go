@@ -21,8 +21,6 @@ func DrawMask(
 	draw.DrawMask(dst, r, src, srcp, mask, maskp, op)
 }
 
-//----------
-
 func DrawUniformMask(
 	dst draw.Image,
 	r image.Rectangle,
@@ -47,13 +45,9 @@ func DrawUniform(dst draw.Image, r image.Rectangle, c color.Color, op draw.Op) {
 	DrawUniformMask(dst, r, c, nil, image.ZP, op)
 }
 
-//----------
-
 func DrawCopy(dst draw.Image, r image.Rectangle, src image.Image) {
 	DrawMask(dst, r, src, image.ZP, nil, image.ZP, draw.Src)
 }
-
-//----------
 
 func FillRectangle(img draw.Image, r image.Rectangle, c color.Color) {
 	DrawUniform(img, r, c, draw.Src)

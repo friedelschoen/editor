@@ -12,8 +12,6 @@ func parseVarRefs(src []byte) ([]*VarRef, error) {
 	return p.parseVarRefs(src)
 }
 
-//----------
-
 var vrp *varRefParser
 
 func getVarRefParser() *varRefParser {
@@ -22,10 +20,6 @@ func getVarRefParser() *varRefParser {
 	}
 	return vrp
 }
-
-//----------
-//----------
-//----------
 
 type varRefParser struct {
 	sc *pscan.Scanner

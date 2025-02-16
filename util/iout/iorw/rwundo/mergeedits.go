@@ -18,8 +18,6 @@ func tryToMergeLastTwoEdits(hl *HList) {
 	}
 }
 
-//----------
-
 func insertConsecutiveLetters(ed1, ed2 *Edits) bool {
 	urs1 := ed1.Entries()
 	prev := urs1[0]
@@ -50,8 +48,6 @@ func insertConsecutiveLetters(ed1, ed2 *Edits) bool {
 	return true
 }
 
-//----------
-
 func consecutiveSpaces(ed1, ed2 *Edits) bool {
 	urs1 := ed1.Entries()
 	prev := urs1[0]
@@ -81,8 +77,6 @@ func consecutiveSpaces(ed1, ed2 *Edits) bool {
 	}
 	return true
 }
-
-//----------
 
 func urIsLetterInsert(ur *UndoRedo) bool {
 	if ur.IsInsertOnly() {

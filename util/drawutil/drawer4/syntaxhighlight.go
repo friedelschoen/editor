@@ -18,8 +18,6 @@ func updateSyntaxHighlightOps(d *Drawer) {
 	d.Opt.SyntaxHighlight.Group.Ops = sh.do()
 }
 
-//----------
-
 func shDone(d *Drawer) bool {
 	if !d.Opt.SyntaxHighlight.On {
 		d.Opt.SyntaxHighlight.Group.Ops = nil
@@ -43,8 +41,6 @@ func shDone(d *Drawer) bool {
 //	d.opt.parenthesisH.updated = true
 //	return false
 //}
-
-//----------
 
 type SyntaxHighlight struct {
 	d   *Drawer
@@ -81,8 +77,6 @@ func (sh *SyntaxHighlight) do() []*ColorizeOp {
 
 	return sh.ops
 }
-
-//----------
 
 func (sh *SyntaxHighlight) parseComment(pos int) (int, error) {
 	for _, c := range sh.d.Opt.SyntaxHighlight.Comment.Defs {
@@ -130,8 +124,6 @@ func (sh *SyntaxHighlight) parseComment2(pos int, c *drawutil.SyntaxHighlightCom
 	}
 }
 
-//----------
-
 func (sh *SyntaxHighlight) parseString(pos int) (int, error) {
 	if p2, err := sh.sc.M.Or(pos,
 		sh.sc.W.StringSection("\"", '\\', true, sh.pad, false),
@@ -150,8 +142,6 @@ func (sh *SyntaxHighlight) parseString(pos int) (int, error) {
 		return p2, nil
 	}
 }
-
-//----------
 
 //func (sh *SyntaxHighlight) parseParenthesis(pos int) (int, error) {
 //	if v, p2, err := sh.sc.M.RuneValue(pos,
@@ -247,10 +237,7 @@ func (sh *SyntaxHighlight) parseString(pos int) (int, error) {
 //	sh.d.Opt.ParenthesisHighlight.Group.Ops = ops
 //}
 
-////----------
-////----------
-////----------
-
+//////
 //type parensPos struct {
 //	ru  rune
 //	pos int

@@ -40,8 +40,6 @@ func listen2(ctx context.Context, addr Addr) (Listener, error) {
 	return ln2, nil
 }
 
-//----------
-
 func (ln *Listener2) Accept() (Conn, error) {
 	conn, err := ln.Listener.Accept()
 	if err != nil {
@@ -89,8 +87,6 @@ func (ln *Listener2) acceptAuto(conn net.Conn) (Conn, error) {
 	return pc, nil
 }
 
-//----------
-
 func (ln *Listener2) Close() error {
 	// handle accept() canceling
 	ln.mu.Lock()
@@ -103,10 +99,6 @@ func (ln *Listener2) Close() error {
 	return ln.Listener.Close()
 }
 
-//----------
-//----------
-//----------
-
 type PeekedConn struct {
 	net.Conn
 	peeker *bufio.Reader
@@ -115,8 +107,6 @@ type PeekedConn struct {
 func (c *PeekedConn) Read(b []byte) (int, error) {
 	return c.peeker.Read(b)
 }
-
-//----------
 
 func isHTTPRequest(data []byte) bool {
 	methods := []string{
@@ -131,10 +121,6 @@ func isHTTPRequest(data []byte) bool {
 	}
 	return false
 }
-
-//----------
-//----------
-//----------
 
 func dial2(ctx context.Context, addr Addr) (Conn, error) {
 	network := addr.Network()

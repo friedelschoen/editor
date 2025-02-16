@@ -39,8 +39,6 @@ func NewContextFloatBox(root *Root) *ContextFloatBox {
 	return cfb
 }
 
-//----------
-
 func (cfb *ContextFloatBox) SetStrClearHistory(s string) {
 	if s == "" {
 		s = "No content provided."
@@ -48,15 +46,11 @@ func (cfb *ContextFloatBox) SetStrClearHistory(s string) {
 	cfb.TextArea.SetStrClearHistory(s)
 }
 
-//----------
-
 func (cfb *ContextFloatBox) Layout() {
 	ff := cfb.TextArea.TreeThemeFontFace()
 	cfb.sa.ScrollWidth = UIThemeUtil.GetScrollBarWidth(ff)
 	cfb.FloatBox.Layout()
 }
-
-//----------
 
 func (cfb *ContextFloatBox) OnInputEvent(ev any, p image.Point) event.Handled {
 	switch ev.(type) {
@@ -67,8 +61,6 @@ func (cfb *ContextFloatBox) OnInputEvent(ev any, p image.Point) event.Handled {
 	}
 	return true
 }
-
-//----------
 
 func (cfb *ContextFloatBox) AutoClose(ev any, p image.Point) {
 	if cfb.Visible() && !p.In(cfb.Bounds) {
@@ -84,8 +76,6 @@ func (cfb *ContextFloatBox) AutoClose(ev any, p image.Point) {
 	}
 }
 
-//----------
-
 func (cfb *ContextFloatBox) Toggle() {
 	visible := cfb.Visible()
 	if !visible {
@@ -94,8 +84,6 @@ func (cfb *ContextFloatBox) Toggle() {
 		cfb.Hide()
 	}
 }
-
-//----------
 
 func (cfb *ContextFloatBox) SetRefPointToTextAreaCursor(ta *TextArea) {
 	p := ta.GetPoint(ta.CursorIndex())
@@ -106,8 +94,6 @@ func (cfb *ContextFloatBox) SetRefPointToTextAreaCursor(ta *TextArea) {
 		cfb.RefPoint.X -= cfb.sa.ScrollWidth
 	}
 }
-
-//----------
 
 func (cfb *ContextFloatBox) FindTextAreaUnderPointer() (*TextArea, bool) {
 	// pointer position

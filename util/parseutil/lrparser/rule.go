@@ -18,16 +18,10 @@ type Rule interface {
 	String() string
 }
 
-//----------
-//----------
-//----------
-
 // common rule
 type CmnRule struct {
 	childs2 []Rule
 }
-
-//----------
 
 func (r *CmnRule) addChilds(r2 ...Rule) {
 	r.childs2 = append(r.childs2, r2...)
@@ -39,8 +33,6 @@ func (r *CmnRule) setOnlyChild(r2 Rule) {
 	r.childs2 = r.childs2[:0]
 	r.addChilds(r2)
 }
-
-//----------
 
 //godebug:annotateoff
 func (r *CmnRule) iterChildRefs(fn func(index int, ref *Rule) error) error {
@@ -54,10 +46,6 @@ func (r *CmnRule) iterChildRefs(fn func(index int, ref *Rule) error) error {
 func (r *CmnRule) childs() []Rule {
 	return r.childs2
 }
-
-//----------
-//----------
-//----------
 
 // definition rule
 // (1 child)
@@ -92,8 +80,6 @@ func (r *DefRule) String() string {
 var defRuleStartSym = "^"   // used in grammar
 var defRuleNoPrintSym = "§" // used in grammar
 
-//----------
-
 // reference to a rule // replaced in dereference phase
 // (0 childs)
 type RefRule struct {
@@ -111,8 +97,6 @@ func (r *RefRule) id() string {
 func (r *RefRule) String() string {
 	return r.id()
 }
-
-//----------
 
 // (n childs as a sequence, not productions)
 type AndRule struct {
@@ -135,8 +119,6 @@ func (r *AndRule) String() string {
 	return r.id()
 }
 
-//----------
-
 // (n childs)
 type OrRule struct {
 	BasicPNode
@@ -158,8 +140,6 @@ func (r *OrRule) String() string {
 	return r.id()
 }
 
-//----------
-
 // replaced in dereference phase
 // (3 childs: [conditional,then,else])
 type IfRule struct {
@@ -175,8 +155,6 @@ func (r *IfRule) id() string {
 func (r *IfRule) String() string {
 	return r.id()
 }
-
-//----------
 
 // To be used in src code and then found by IfRule; the value is observed when building the contentparser, not at parse time
 // (0 childs)
@@ -195,8 +173,6 @@ func (r *BoolRule) id() string {
 func (r *BoolRule) String() string {
 	return r.id()
 }
-
-//----------
 
 // parenthesis, ex: (aaa (bbb|ccc))
 // replaced by defrules at ruleindex
@@ -221,8 +197,6 @@ func (r *ParenRule) id() string {
 func (r *ParenRule) String() string {
 	return r.id()
 }
-
-//----------
 
 // (0 childs)
 type StringRule struct {
@@ -257,8 +231,6 @@ func (r *StringRule) id() string {
 func (r *StringRule) String() string {
 	return r.id()
 }
-
-//----------
 
 func (sr1 *StringRule) intersect(sr2 *StringRule) (bool, error) {
 	switch sr1.typ {
@@ -316,8 +288,6 @@ func (r *StringRule) intersectRanges(rrs []RuneRange) bool {
 	return false
 }
 
-//----------
-
 func (r *StringRule) parse(ps *PState) error {
 	if p2, err := r.parse2(ps.Pos, ps.Sc); err != nil {
 		return err
@@ -350,8 +320,6 @@ func (r *StringRule) parse2(pos int, sc *pscan.Scanner) (int, error) {
 	}
 }
 
-//----------
-
 // processor function call rule: allows processing rules at compile time. Ex: string operations.
 // (0 childs)
 type ProcRule struct {
@@ -370,8 +338,6 @@ func (r *ProcRule) id() string {
 func (r *ProcRule) String() string {
 	return r.id()
 }
-
-//----------
 
 // (0 childs)
 type FuncRule struct {
@@ -394,8 +360,6 @@ func (r *FuncRule) id() string {
 func (r *FuncRule) String() string {
 	return r.id()
 }
-
-//----------
 
 // (0 childs)
 type SingletonRule struct {
@@ -421,10 +385,6 @@ var nilRule = newSingletonRule("nil", true)
 // special start rule to know start/end (not a terminal)
 var startRule = newSingletonRule("^^^", false)
 
-//----------
-//----------
-//----------
-
 // parenthesis rule type
 type parenRType rune
 
@@ -440,8 +400,6 @@ const (
 	parenRTStrOrRange parenRType = '-' // individual runes: range
 	parenRTStrMid     parenRType = '~' // sequence: middle match
 )
-
-//----------
 
 // string rule type
 type stringRType byte
@@ -508,10 +466,6 @@ func (args ProcRuleArgs) MergedStringRule(i int) (*StringRule, error) {
 	return sr, nil
 }
 
-//----------
-//----------
-//----------
-
 type RuleSet map[Rule]struct{}
 
 func (rs RuleSet) set(r Rule) {
@@ -554,8 +508,6 @@ func (rs RuleSet) String() string {
 	}
 	return fmt.Sprintf("[%v]", strings.Join(u, ","))
 }
-
-//----------
 
 func sortRuleSetForParse(rset RuleSet) []Rule {
 	// integer/string for sorting
@@ -603,10 +555,6 @@ func sortRuleSetForParse(rset RuleSet) []Rule {
 	return x
 }
 
-//----------
-//----------
-//----------
-
 func sortRules(w []Rule) {
 	sort.Slice(w, func(a, b int) bool {
 		ra, rb := w[a], w[b]
@@ -640,10 +588,6 @@ func sortRulesValue(r Rule) (int, string) {
 	// productions
 	return 4, id
 }
-
-//----------
-//----------
-//----------
 
 //godebug:annotateoff
 func ruleProductions(r Rule) []Rule {
@@ -718,8 +662,6 @@ func ruleProdCanReverse(r Rule) bool {
 //	return vis(r0)
 //}
 
-//----------
-
 func mergeStringRules(r Rule) (*StringRule, error) {
 	switch t := r.(type) {
 	case *StringRule:
@@ -770,8 +712,6 @@ func mergeStringRules(r Rule) (*StringRule, error) {
 	}
 }
 
-//----------
-
 func reverseRulesCopy(w []Rule) []Rule {
 	u := make([]Rule, len(w))
 	copy(u, w)
@@ -786,24 +726,14 @@ func reverseRules(w []Rule) {
 	}
 }
 
-//----------
-
 func walkRuleChilds(rule Rule, fn func(*Rule) error) error {
 	return rule.iterChildRefs(func(index int, ref *Rule) error {
 		return fn(ref)
 	})
 }
 
-//----------
-//----------
-//----------
-
 // TODO: rename
 type PStateParseFn func(ps *PState) error
-
-//----------
-//----------
-//----------
 
 //type RuleProductions []RuleSequence
 
@@ -816,8 +746,7 @@ type PStateParseFn func(ps *PState) error
 //	return fmt.Sprintf("[%v]", u)
 //}
 
-////----------
-
+//
 //type RuleSequence []Rule
 
 //func (rs RuleSequence) String() string {

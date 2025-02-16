@@ -36,8 +36,6 @@ type Client struct {
 	}
 }
 
-//----------
-
 func NewClientTCP(ctx context.Context, addr string, li *LangInstance) (*Client, error) {
 	dialer := net.Dialer{Timeout: 5 * time.Second}
 	conn, err := dialer.DialContext(ctx, "tcp", addr)
@@ -47,8 +45,6 @@ func NewClientTCP(ctx context.Context, addr string, li *LangInstance) (*Client, 
 	cli := NewClientIO(ctx, conn, li)
 	return cli, nil
 }
-
-//----------
 
 func NewClientIO(ctx context.Context, rwc io.ReadWriteCloser, li *LangInstance) *Client {
 	cli := &Client{li: li}
@@ -87,8 +83,6 @@ func NewClientIO(ctx context.Context, rwc io.ReadWriteCloser, li *LangInstance) 
 	return cli
 }
 
-//----------
-
 func (cli *Client) Wait() error {
 	cli.readLoopWait.Wait()
 	return nil
@@ -103,8 +97,6 @@ func (cli *Client) sendClose() error {
 	}
 	return me.Result()
 }
-
-//----------
 
 func (cli *Client) Call(ctx context.Context, method string, args, reply any) error {
 	lspResp := &Response{}
@@ -136,8 +128,6 @@ func (cli *Client) Call(ctx context.Context, method string, args, reply any) err
 	// decode result
 	return decodeJsonRaw(lspResp.Result, reply)
 }
-
-//----------
 
 func (cli *Client) onNotificationMessage(msg *NotificationMessage) {
 	// Msgs like:
@@ -181,8 +171,6 @@ func (cli *Client) onUnexpectedServerReply(resp *Response) {
 		}
 	}
 }
-
-//----------
 
 func (cli *Client) Initialize(ctx context.Context) error {
 	opt, err := cli.initializeParams()
@@ -281,8 +269,6 @@ func (cli *Client) readServerCapabilities(caps any) {
 	}
 }
 
-//----------
-
 func (cli *Client) ShutdownRequest() error {
 	// https://microsoft.github.io/language-server-protocol/specification#shutdown
 
@@ -308,8 +294,6 @@ func (cli *Client) ExitNotification() error {
 	err := cli.Call(ctx, "noreply:exit", nil, nil)
 	return err
 }
-
-//----------
 
 func (cli *Client) TextDocumentDidOpen(ctx context.Context, filename, text string, version int) error {
 	// https://microsoft.github.io/language-server-protocol/specification#textDocument_didOpen
@@ -384,8 +368,6 @@ func (cli *Client) TextDocumentDidSave(ctx context.Context, filename string, tex
 	return cli.Call(ctx, "noreply:textDocument/didSave", opt, nil)
 }
 
-//----------
-
 func (cli *Client) TextDocumentDefinition(ctx context.Context, filename string, pos Position) (*Location, error) {
 	// https://microsoft.github.io/language-server-protocol/specification#textDocument_definition
 
@@ -406,8 +388,6 @@ func (cli *Client) TextDocumentDefinition(ctx context.Context, filename string, 
 	}
 	return result[0], nil // first result only
 }
-
-//----------
 
 func (cli *Client) TextDocumentImplementation(ctx context.Context, filename string, pos Position) (*Location, error) {
 	// https://microsoft.github.io/language-server-protocol/specification#textDocument_implementation
@@ -430,8 +410,6 @@ func (cli *Client) TextDocumentImplementation(ctx context.Context, filename stri
 	return result[0], nil // first result only
 }
 
-//----------
-
 func (cli *Client) TextDocumentCompletion(ctx context.Context, filename string, pos Position) (*CompletionList, error) {
 	// https://microsoft.github.io/language-server-protocol/specification#textDocument_completion
 
@@ -452,8 +430,6 @@ func (cli *Client) TextDocumentCompletion(ctx context.Context, filename string, 
 	return &result, nil
 }
 
-//----------
-
 func (cli *Client) TextDocumentDidOpenVersion(ctx context.Context, filename string, b []byte) error {
 
 	cli.lock.Lock()
@@ -469,8 +445,6 @@ func (cli *Client) TextDocumentDidOpenVersion(ctx context.Context, filename stri
 	return cli.TextDocumentDidOpen(ctx, filename, string(b), v)
 }
 
-//----------
-
 //func (cli *Client) WorkspaceDidChangeWorkspaceFolders(ctx context.Context, added, removed []*WorkspaceFolder) error {
 //	opt := &DidChangeWorkspaceFoldersParams{}
 //	opt.Event = &WorkspaceFoldersChangeEvent{}
@@ -479,8 +453,6 @@ func (cli *Client) TextDocumentDidOpenVersion(ctx context.Context, filename stri
 //	err := cli.Call(ctx, "noreply:workspace/didChangeWorkspaceFolders", opt, nil)
 //	return err
 //}
-
-//----------
 
 //func (cli *Client) UpdateWorkspaceFolder(ctx context.Context, dir string) error {
 //	if !cli.serverCapabilities.workspace.folders {
@@ -511,8 +483,6 @@ func (cli *Client) TextDocumentDidOpenVersion(ctx context.Context, filename stri
 //	return cli.Call(ctx, "noreply:workspace/didChangeConfiguration", opt, nil)
 //}
 
-//----------
-
 func (cli *Client) TextDocumentRename(ctx context.Context, filename string, pos Position, newName string) (*WorkspaceEdit, error) {
 	//// Commented: try it anyway
 	//if !cli.serverCapabilities.rename {
@@ -531,8 +501,6 @@ func (cli *Client) TextDocumentRename(ctx context.Context, filename string, pos 
 	err = cli.Call(ctx, "textDocument/rename", opt, &result)
 	return &result, err
 }
-
-//----------
 
 func (cli *Client) TextDocumentPrepareCallHierarchy(ctx context.Context, filename string, pos Position) ([]*CallHierarchyItem, error) {
 	opt := &CallHierarchyPrepareParams{}
@@ -562,8 +530,6 @@ func (cli *Client) CallHierarchyCalls(ctx context.Context, typ CallHierarchyCall
 	err := cli.Call(ctx, method, opt, &result)
 	return result, err
 }
-
-//----------
 
 func (cli *Client) TextDocumentReferences(ctx context.Context, filename string, pos Position) ([]*Location, error) {
 	opt := &ReferenceParams{}

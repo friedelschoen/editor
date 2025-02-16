@@ -12,10 +12,6 @@ import (
 
 var encDecReg = newEncDecRegistry()
 
-//----------
-//----------
-//----------
-
 // encode/decode, id/type, registry
 type EncDecRegistry struct {
 	idc      EncDecRegId
@@ -57,13 +53,7 @@ func (reg *EncDecRegistry) newId(typ reflect.Type) EncDecRegId {
 	return id
 }
 
-//----------
-
 type EncDecRegId byte
-
-//----------
-//----------
-//----------
 
 var encDecHeader = []byte{3, 7} // just to avoid matching random bytes
 
@@ -97,10 +87,6 @@ func decode(r io.Reader, v any, logger Logger) error {
 
 }
 
-//----------
-//----------
-//----------
-
 type Encoder struct {
 	w   io.Writer
 	reg *EncDecRegistry
@@ -116,8 +102,6 @@ type Decoder struct {
 	Logger
 }
 
-//----------
-
 func newEncoder(w io.Writer, reg *EncDecRegistry) *Encoder {
 	enc := &Encoder{w: w, reg: reg}
 	enc.Prefix = "enc: "
@@ -129,8 +113,6 @@ func newDecoder(r io.Reader, reg *EncDecRegistry) *Decoder {
 	return dec
 }
 
-//----------
-
 func (enc *Encoder) sliceLen(n int) error {
 	return enc.writeBinary(uint16(n))
 }
@@ -141,8 +123,6 @@ func (dec *Decoder) sliceLen(v *int) error {
 	return err
 }
 
-//----------
-
 func (enc *Encoder) id(id EncDecRegId) error {
 	return enc.writeBinary(id)
 }
@@ -151,8 +131,6 @@ func (dec *Decoder) id() (EncDecRegId, error) {
 	err := dec.readBinary(&id)
 	return id, err
 }
-
-//----------
 
 func (enc *Encoder) id2(v reflect.Value) error {
 	typ := concreteType(v)
@@ -169,8 +147,6 @@ func (dec *Decoder) id2(id EncDecRegId) (reflect.Type, error) {
 	}
 	return typ, nil
 }
-
-//----------
 
 func (enc *Encoder) reflect(v any) error {
 	// log encoded bytes at the end
@@ -222,8 +198,6 @@ func (dec *Decoder) reflect(v any) error {
 
 	return dec.reflect2(vv)
 }
-
-//----------
 
 func (enc *Encoder) reflect2(v reflect.Value) error {
 	enc.logf("reflect2: %v\n", v.Type())
@@ -419,8 +393,6 @@ func (dec *Decoder) reflect2(v reflect.Value) error {
 	}
 }
 
-//----------
-
 func (enc *Encoder) writeBinary(v any) error {
 	if err := binary.Write(enc.w, binary.BigEndian, v); err != nil {
 		//return enc.errorf("writeBinary(%T): %w", v, err) // DEBUG
@@ -436,18 +408,12 @@ func (dec *Decoder) readBinary(v any) error {
 	return nil
 }
 
-//----------
-//----------
-//----------
-
 func wrapErrorWithType(err error, v any) error {
 	if err != nil {
 		return fmt.Errorf("%w (%T)", err, v)
 	}
 	return nil
 }
-
-//----------
 
 func concreteType(v reflect.Value) reflect.Type {
 	// NOTE: this can't be done directly with reflect.Type because interface type doesn't have a t.elem(), only the interface value does

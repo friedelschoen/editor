@@ -45,15 +45,11 @@ func (rw *RWEvents) OverwriteAt(i, n int, p []byte) error {
 	return nil
 }
 
-//----------
-
 const (
 	RWEvIdWrite    = iota // ev=RWEvWrite
 	RWEvIdWrite2          // ev=RWEvWrite2
 	RWEvIdPreWrite        // ev=RWEvPreWrite
 )
-
-//----------
 
 type RWEvWrite struct {
 	Index int

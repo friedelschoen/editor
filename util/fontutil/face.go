@@ -9,8 +9,7 @@ package fontutil
 //	return f3
 //}
 
-////----------
-
+//
 //func GetTestFace() font.Face {
 //	ttf := goregular.TTF
 //	f, err := truetype.Parse(ttf)

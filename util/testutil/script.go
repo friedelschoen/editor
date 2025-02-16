@@ -46,8 +46,6 @@ func NewScript(args []string) *Script {
 	return &Script{Args: args}
 }
 
-//----------
-
 func (scr *Script) log(t *testing.T, s string) {
 	t.Helper()
 	if u := scr.locationInfo(); u != "" {
@@ -61,16 +59,12 @@ func (scr *Script) logf(t *testing.T, f string, args ...any) {
 	scr.log(t, fmt.Sprintf(f, args...))
 }
 
-//----------
-
 func (scr *Script) error(err error) error {
 	if s := scr.locationInfo(); s != "" {
 		return fmt.Errorf("%v%w", s, err)
 	}
 	return err
 }
-
-//----------
 
 func (scr *Script) locationInfo() string {
 	// add filename line info
@@ -84,8 +78,6 @@ func (scr *Script) locationInfo() string {
 	}
 	return u
 }
-
-//----------
 
 func (scr *Script) Run(t *testing.T) {
 	t.Helper()
@@ -242,8 +234,6 @@ func (scr *Script) runScript(t *testing.T, filename string, ar *txtar.Archive) e
 	return scanner.Err()
 }
 
-//----------
-
 func (scr *Script) splitArgs(s string) []string {
 	quoted := false
 	escape := false
@@ -263,8 +253,6 @@ func (scr *Script) splitArgs(s string) []string {
 	})
 	return a
 }
-
-//----------
 
 func (scr *Script) collectOutput(t *testing.T, fn func() error) error {
 	curDir, _ := os.Getwd()
@@ -291,14 +279,10 @@ func (scr *Script) collectOutput(t *testing.T, fn func() error) error {
 	return err
 }
 
-//----------
-
 func (scr *Script) writeToTmp(filename string, data []byte) error {
 	filename2 := filepath.Join(scr.workDir, filename)
 	return iout.MkdirAllWriteFile(filename2, data, 0o644)
 }
-
-//----------
 
 func (scr *Script) icExec(t *testing.T, args []string) error {
 	args = args[1:] // drop "exec"
@@ -323,8 +307,6 @@ func (scr *Script) icExec(t *testing.T, args []string) error {
 	})
 }
 
-//----------
-
 func (scr *Script) icUCmd(t *testing.T, args []string) error {
 	args = args[1:] // drop "cmd"
 	cmd, ok := scr.ucmds[args[0]]
@@ -335,8 +317,6 @@ func (scr *Script) icUCmd(t *testing.T, args []string) error {
 		return cmd.Fn(t, args)
 	})
 }
-
-//----------
 
 func (scr *Script) icContains(t *testing.T, args []string) error {
 	args = args[1:] // drop "contains"
@@ -393,8 +373,6 @@ func (scr *Script) icContainsRegexp(t *testing.T, args []string) error {
 	return nil
 }
 
-//----------
-
 func (scr *Script) icSetEnv(t *testing.T, args []string) error {
 	args = args[1:] // drop "setenv"
 	if len(args) != 1 && len(args) != 2 {
@@ -417,8 +395,6 @@ func (scr *Script) icSetEnv(t *testing.T, args []string) error {
 	return nil
 }
 
-//----------
-
 func (scr *Script) icFail(t *testing.T, args []string) error {
 	t.Helper()
 	args = args[1:] // drop "fail"
@@ -437,8 +413,6 @@ func (scr *Script) icFail(t *testing.T, args []string) error {
 	return nil
 }
 
-//----------
-
 func (scr *Script) icChangeDir(t *testing.T, args []string) error {
 	args = args[1:] // drop "cd"
 	if len(args) != 1 {
@@ -447,8 +421,6 @@ func (scr *Script) icChangeDir(t *testing.T, args []string) error {
 	dir := args[0]
 	return os.Chdir(dir)
 }
-
-//----------
 
 func (scr *Script) lastCmdContent(name string) ([]byte, bool) {
 	switch name {
@@ -462,10 +434,6 @@ func (scr *Script) lastCmdContent(name string) ([]byte, bool) {
 	return nil, false
 }
 
-//----------
-//----------
-//----------
-
 type ScriptCmd struct {
 	Name string
 	Fn   func(t *testing.T, args []string) error
@@ -478,10 +446,6 @@ func mapScriptCmds(w []*ScriptCmd) map[string]*ScriptCmd {
 	}
 	return m
 }
-
-//----------
-//----------
-//----------
 
 func fixFilepathsForCurDir(b []byte, curDir string) []byte {
 	// NOTE: when there is a compilation problem on the annotated files, the filepaths error are relative to the tmp running dir, which is not the script call dir

@@ -8,22 +8,16 @@ type Watcher interface {
 	Close() error
 }
 
-//----------
-
 type Event struct {
 	Op   Op
 	Name string
 }
-
-//----------
 
 type Op uint16
 
 func (op Op) HasAny(op2 Op) bool { return op&op2 != 0 }
 func (op *Op) Add(op2 Op)        { *op |= op2 }
 func (op *Op) Remove(op2 Op)     { *op &^= op2 }
-
-//----------
 
 const (
 	Attrib Op = 1 << iota

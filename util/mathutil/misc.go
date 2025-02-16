@@ -12,8 +12,6 @@ func RoundFloat64(val float64, precision uint) float64 {
 	return math.Round(val*ratio) / ratio
 }
 
-//----------
-
 // TODO: remove
 func LimitFloat64(v float64, min, max float64) float64 {
 	if v < min {
@@ -43,8 +41,6 @@ func Limit[T constraints.Ordered](v, min, max T) T {
 	return v
 }
 
-//----------
-
 func Min[T constraints.Ordered](s ...T) T {
 	m := s[0]
 	for _, v := range s[1:] {
@@ -63,8 +59,6 @@ func Max[T constraints.Ordered](s ...T) T {
 	}
 	return m
 }
-
-//----------
 
 func GenDigitsStr(n int) string {
 	const src = "0123456789"

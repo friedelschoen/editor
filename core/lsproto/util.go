@@ -19,8 +19,6 @@ import (
 	"github.com/jmigpin/editor/util/parseutil"
 )
 
-//----------
-
 var logger0 = log.New(os.Stdout, "", log.Lshortfile)
 
 func verboseLog() bool {
@@ -51,8 +49,6 @@ func logJson(prefix string, v any) {
 	logger0.Output(2, fmt.Sprintf("%v%v", prefix, string(b)))
 }
 
-//----------
-
 func encodeJson(a any) ([]byte, error) {
 	buf := &bytes.Buffer{}
 	enc := json.NewEncoder(buf)
@@ -71,8 +67,6 @@ func decodeJson(r io.Reader, a any) error {
 func decodeJsonRaw(raw json.RawMessage, a any) error {
 	return json.Unmarshal(raw, a)
 }
-
-//----------
 
 func Utf16Column(rd iorw.ReaderAt, lineStartOffset, utf8Col int) (int, error) {
 	b, err := rd.ReadFastAt(lineStartOffset, utf8Col)
@@ -103,8 +97,6 @@ func Utf8Column(rd iorw.ReaderAt, lineStartOffset, utf16Col int) (int, error) {
 
 	return nthChar, nil
 }
-
-//----------
 
 func OffsetToPosition(rd iorw.ReaderAt, offset int) (Position, error) {
 	l, c, err := parseutil.IndexLineColumn(rd, offset)
@@ -158,8 +150,6 @@ func RangeToOffsetLen(rd iorw.ReaderAt, rang *Range) (int, int, error) {
 	return offset, length, nil
 }
 
-//----------
-
 func JsonGetPath(v any, path string) (any, error) {
 	args := strings.Split(path, ".")
 	return jsonGetPath2(v, args)
@@ -187,8 +177,6 @@ func jsonGetPath2(v any, args []string) (any, error) {
 	return nil, fmt.Errorf("unhandled type: %T (arg=%v)", v, arg)
 }
 
-//----------
-
 func UrlToAbsFilename(url string) (string, error) {
 	return parseutil.UrlToAbsFilename(url)
 }
@@ -202,8 +190,6 @@ func AbsFilenameToUrl(filename string) (string, error) {
 	}
 	return parseutil.AbsFilenameToUrl(filename)
 }
-
-//----------
 
 type ManagerCallHierarchyCalls struct {
 	item  *CallHierarchyItem
@@ -268,8 +254,6 @@ func ManagerCallHierarchyCallsToString(mcalls []*ManagerCallHierarchyCalls, typ 
 	return w, nil
 }
 
-//----------
-
 func LocationsToString(locations []*Location, baseDir string) (string, error) {
 	type loc2 struct { // for sorting
 		a    string
@@ -312,8 +296,6 @@ func LocationsToString(locations []*Location, baseDir string) (string, error) {
 	return string(buf.Bytes()), nil
 }
 
-//----------
-
 func CompletionListToString(clist *CompletionList) []string {
 	res := []string{}
 	for _, ci := range clist.Items {
@@ -340,8 +322,6 @@ func CompletionListToString(clist *CompletionList) []string {
 	return res
 }
 
-//----------
-
 func PatchTextEdits(src []byte, edits []*TextEdit) ([]byte, error) {
 	sortTextEdits(edits)
 	res := bytes.Buffer{} // resulting patched src
@@ -367,5 +347,3 @@ func sortTextEdits(edits []*TextEdit) {
 			(p1.Line == p2.Line && p1.Character <= p2.Character)
 	})
 }
-
-//----------

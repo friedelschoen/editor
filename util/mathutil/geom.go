@@ -27,8 +27,6 @@ func (x Intf) String() string {
 	return fixed.Int52_12(x).String()
 }
 
-//----------
-
 type PointIntf struct {
 	X, Y Intf
 }
@@ -59,8 +57,6 @@ func (p PointIntf) ToPointCeil() image.Point {
 func (p PointIntf) ToPointFloor() image.Point {
 	return image.Point{p.X.Floor(), p.Y.Floor()}
 }
-
-//----------
 
 type RectangleIntf struct {
 	Min, Max PointIntf

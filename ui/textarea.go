@@ -27,8 +27,6 @@ func NewTextArea(ui *UI) *TextArea {
 	return ta
 }
 
-//----------
-
 func (ta *TextArea) OnInputEvent(ev0 any, p image.Point) event.Handled {
 	h := event.Handled(false)
 
@@ -132,8 +130,6 @@ func (ta *TextArea) handleInputEvent2(ev0 any, p image.Point) event.Handled {
 	return false
 }
 
-//----------
-
 func (ta *TextArea) selAnnCurEv(p image.Point, typ TASelAnnType) bool {
 	if d, ok := ta.Drawer.(*drawer4.Drawer); ok {
 		if d.Opt.Annotations.On {
@@ -172,8 +168,6 @@ func (ta *TextArea) selAnnCurEv(p image.Point, typ TASelAnnType) bool {
 //	ta.EvReg.RunCallbacks(TextAreaSelectAnnotationEventId, ev2)
 //}
 
-//----------
-
 func (ta *TextArea) inlineCompleteEv() event.Handled {
 	c := ta.Cursor()
 	if c.HaveSelection() {
@@ -194,8 +188,6 @@ func (ta *TextArea) inlineCompleteEv() event.Handled {
 	return ev2.ReplyHandled
 }
 
-//----------
-
 func (ta *TextArea) PointIndexInsideSelection(p image.Point) bool {
 	c := ta.Cursor()
 	if s, e, ok := c.SelectionIndexes(); ok {
@@ -204,8 +196,6 @@ func (ta *TextArea) PointIndexInsideSelection(p image.Point) bool {
 	}
 	return false
 }
-
-//----------
 
 func (ta *TextArea) Layout() {
 	ta.TextEditX.Layout()
@@ -231,8 +221,6 @@ func (ta *TextArea) setDrawer4Opts() {
 	}
 }
 
-//----------
-
 const (
 	TextAreaCmdEventId = iota
 	TextAreaSelectAnnotationEventId
@@ -241,14 +229,10 @@ const (
 	TextAreaLayoutEventId
 )
 
-//----------
-
 type TextAreaCmdEvent struct {
 	TextArea *TextArea
 	Index    int
 }
-
-//----------
 
 type TextAreaSelectAnnotationEvent struct {
 	TextArea        *TextArea
@@ -256,8 +240,6 @@ type TextAreaSelectAnnotationEvent struct {
 	Offset          int // annotation string click offset
 	Type            TASelAnnType
 }
-
-//----------
 
 type TASelAnnType int
 
@@ -271,8 +253,6 @@ const (
 	TasatPrintPreviousAll
 )
 
-//----------
-
 type TextAreaInlineCompleteEvent struct {
 	TextArea *TextArea
 	Offset   int
@@ -280,15 +260,11 @@ type TextAreaInlineCompleteEvent struct {
 	ReplyHandled event.Handled // allow callbacks to set value
 }
 
-//----------
-
 type TextAreaInputEvent struct {
 	TextArea     *TextArea
 	Event        any
 	ReplyHandled event.Handled
 }
-
-//----------
 
 type TextAreaLayoutEvent struct {
 	TextArea *TextArea

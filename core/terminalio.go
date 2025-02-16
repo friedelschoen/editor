@@ -23,10 +23,6 @@ type TerminalIO interface {
 	Close() error
 }
 
-//----------
-//----------
-//----------
-
 type ERowTermIO struct {
 	erow *ERow
 	tf   *TerminalFilter
@@ -69,8 +65,6 @@ func (tio *ERowTermIO) Close() error {
 	return nil
 }
 
-//----------
-
 func (tio *ERowTermIO) Read(b []byte) (int, error) {
 	tio.input.Lock()
 
@@ -90,8 +84,6 @@ func (tio *ERowTermIO) AddToRead(b []byte) {
 	defer tio.input.Unlock()
 	tio.input.buf.Write(b)
 }
-
-//----------
 
 func (tio *ERowTermIO) WriteOp(op any) error {
 	tio.updateWriteOp(op)
@@ -170,8 +162,6 @@ func (tio *ERowTermIO) appendOp(op any) {
 	}
 }
 
-//----------
-
 func (tio *ERowTermIO) initInput() {
 	ta := tio.erow.Row.TextArea
 	tio.inputReg = ta.EvReg.Add(ui.TextAreaInputEventId, tio.onTextAreaInputEvent)
@@ -185,8 +175,6 @@ func (tio *ERowTermIO) onTextAreaInputEvent(ev0 any) {
 	}
 	ev.ReplyHandled = handled
 }
-
-//----------
 
 func (tio *ERowTermIO) eventToBytes(ev any) ([]byte, event.Handled) {
 	// util funcs

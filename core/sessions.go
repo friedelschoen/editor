@@ -60,8 +60,6 @@ func newSessionsFromZip(zipFilename, filename string) (*Sessions, error) {
 	return decodeSessionsFromJson(rc)
 }
 
-//----------
-
 func (ss *Sessions) saveToPlain(filename string) error {
 	f, err := openToWriteSessionsFile(filename)
 	if err != nil {
@@ -108,8 +106,6 @@ func (ss *Sessions) saveToZip(zipFilename, filename string) error {
 	return nil
 }
 
-//----------
-
 func (ss *Sessions) encodeToJson() ([]byte, error) {
 	buf := &bytes.Buffer{}
 	enc := json.NewEncoder(buf)
@@ -119,10 +115,6 @@ func (ss *Sessions) encodeToJson() ([]byte, error) {
 	}
 	return buf.Bytes(), nil
 }
-
-//----------
-//----------
-//----------
 
 func openToWriteSessionsFile(filename string) (*os.File, error) {
 	flags := os.O_CREATE | os.O_WRONLY | os.O_TRUNC
@@ -137,10 +129,6 @@ func decodeSessionsFromJson(r io.Reader) (*Sessions, error) {
 	}
 	return ss, nil
 }
-
-//----------
-//----------
-//----------
 
 func sessionsFilename() string {
 	return homeFilename(sessionsBasicFilename())
@@ -160,8 +148,6 @@ func homeFilename(filename string) string {
 	home := osutil.HomeEnvVar()
 	return filepath.Join(home, filename)
 }
-
-//----------
 
 type Session struct {
 	Name      string
@@ -234,8 +220,6 @@ func (s *Session) restore(ed *Editor) {
 	}
 }
 
-//----------
-
 type ColumnState struct {
 	StartPercent float64
 	Rows         []*RowState
@@ -251,8 +235,6 @@ func NewColumnState(ed *Editor, col *ui.Column) *ColumnState {
 	}
 	return cstate
 }
-
-//----------
 
 // Used in sessions and reopenrow.
 type RowState struct {
@@ -309,10 +291,6 @@ func (state *RowState) RestorePos(erow *ERow) {
 	erow.Row.TextArea.SetRuneOffset(state.TaOffsetIndex)
 }
 
-//----------
-//----------
-//----------
-
 func SaveSession(ed *Editor, part *toolbarparser.Part) {
 	err := saveSession(ed, part)
 	if err != nil {
@@ -353,8 +331,6 @@ func saveSession(ed *Editor, part *toolbarparser.Part) error {
 	return nil
 }
 
-//----------
-
 func ListSessions(ed *Editor) {
 	ss, err := ed.loadSessions()
 	if err != nil {
@@ -381,8 +357,6 @@ func ListSessions(ed *Editor) {
 	erow.Flash()
 }
 
-//----------
-
 func OpenSession(ed *Editor, part *toolbarparser.Part) {
 	if len(part.Args) != 2 {
 		ed.Errorf("missing session name")
@@ -406,8 +380,6 @@ func OpenSessionFromString(ed *Editor, sessionName string) {
 	}
 	ed.Errorf("session not found: %v", sessionName)
 }
-
-//----------
 
 func DeleteSession(ed *Editor, part *toolbarparser.Part) {
 	err := deleteSession(ed, part)
@@ -439,12 +411,6 @@ func deleteSession(ed *Editor, part *toolbarparser.Part) error {
 	return ed.saveSessions(ss)
 }
 
-//----------
-
 func roundStartPercent(v float64) float64 {
 	return mathutil.RoundFloat64(v, 8)
 }
-
-//----------
-//----------
-//----------

@@ -135,8 +135,6 @@ func testAnnotator2(t *testing.T, name string, in0, out []byte, filename string,
 
 	fail := res != string(out)
 
-	//----------
-
 	// use after flag "--":
 	// ex: go test -run=Annotator/TestAnnotator1.in -- -owout
 	if fail {

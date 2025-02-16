@@ -24,8 +24,6 @@ func OpenImage(filename string) (image.Image, string, error) {
 	return image.Decode(f)
 }
 
-//----------
-
 func ClearImg(img draw.Image) {
 	ClearImg2(img, colornames.Lightgray)
 }
@@ -47,8 +45,6 @@ func GenerateImg(r image.Rectangle, seed int) image.Image {
 	return img
 }
 
-//----------
-
 func SPrintImg(img image.Image) string {
 	//b, _ := imageutil.EncodeToSixel(img)
 	//return string(b)
@@ -65,8 +61,6 @@ func SPrintImgs(imgs ...image.Image) string {
 	}
 	return s
 }
-
-//----------
 
 func CompareImgs(img1, img2 image.Image) error {
 	if img1.Bounds() != img2.Bounds() {
@@ -125,8 +119,6 @@ func CompareImgsOrSavePng(img1 image.Image, filename2 string) error {
 	}
 	return nil
 }
-
-//----------
 
 func DrawPoint(img draw.Image, p image.Point, size int, c color.Color) {
 	r := image.Rect(p.X, p.Y, p.X+size, p.Y+size)

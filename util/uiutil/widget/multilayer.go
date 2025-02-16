@@ -46,15 +46,11 @@ func (ml *MultiLayer) InsertBefore(col Node, next *EmbedNode) {
 	panic("nodes should be inserted into one of the layers directly")
 }
 
-//----------
-
 func (ml *MultiLayer) PaintMarked() image.Rectangle {
 	ml.markAddedRects()
 	ml.markFloatLayers()
 	return ml.ENode.PaintMarked()
 }
-
-//----------
 
 func (ml *MultiLayer) AddMarkRect(r image.Rectangle) {
 	ml.rects.PushBack(&r)
@@ -67,8 +63,6 @@ func (ml *MultiLayer) markAddedRects() {
 	}
 	ml.rects = list.List{}
 }
-
-//----------
 
 func (ml *MultiLayer) markFloatLayers() {
 	ml.IterateWrappers2(func(n Node) {
@@ -89,8 +83,6 @@ func (ml *MultiLayer) markVisibleNodes(fl *FloatLayer) {
 	}
 }
 
-//----------
-
 func (ml *MultiLayer) rectNeedsPaint(r image.Rectangle) bool {
 	found := false
 	ml.IterateWrappers(func(layer Node) bool {
@@ -108,14 +100,10 @@ func (ml *MultiLayer) markRect(callLayer Node, r image.Rectangle) {
 	})
 }
 
-//----------
-
 type BgLayer struct {
 	ENode
 	ml *MultiLayer
 }
-
-//----------
 
 type FloatLayer struct {
 	ENode
@@ -137,8 +125,6 @@ func (fl *FloatLayer) visibleNodes() []Node {
 	return visibleChildNodes(fl)
 }
 
-//----------
-
 func visibleChildNodes(node Node) []Node {
 	z := []Node{}
 	node.Embed().IterateWrappers2(func(child Node) {
@@ -148,8 +134,6 @@ func visibleChildNodes(node Node) []Node {
 	})
 	return z
 }
-
-//----------
 
 func intersectingNodeNeedingPaintExists(node Node, r image.Rectangle) bool {
 	found := false
@@ -166,8 +150,6 @@ func intersectingNodeNeedingPaintExists(node Node, r image.Rectangle) bool {
 	})
 	return found
 }
-
-//----------
 
 func markIntersectingNodesNotNeedingPaint(node Node, r image.Rectangle) image.Rectangle {
 	u := image.Rectangle{}

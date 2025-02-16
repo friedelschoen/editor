@@ -32,8 +32,6 @@ func NewLangInstance(ctx context.Context, lang *LangManager) (*LangInstance, err
 	return li, nil
 }
 
-//----------
-
 func (li *LangInstance) startAndInit(ctx context.Context) error {
 	// start new client/server
 	if err := li.start(ctx); err != nil {
@@ -58,8 +56,6 @@ func (li *LangInstance) start(ctx context.Context) error {
 		return fmt.Errorf("unexpected network: %v", li.lang.Reg.Network)
 	}
 }
-
-//----------
 
 func (li *LangInstance) startClientServerTCP(ctx context.Context) error {
 	// server wrap
@@ -124,8 +120,6 @@ func (li *LangInstance) startClientServerStdio(ctx context.Context) error {
 	li.cli = cli
 	return nil
 }
-
-//----------
 
 func (li *LangInstance) Wait() error {
 	defer li.cancelCtx()

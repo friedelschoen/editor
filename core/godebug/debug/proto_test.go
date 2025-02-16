@@ -8,8 +8,6 @@ import (
 	"testing"
 )
 
-//----------
-
 func TestProto1(t *testing.T) {
 	host := "localhost:8923"
 	addr1 := NewAddrI("tcp", host)
@@ -45,8 +43,6 @@ func testProto1b(t *testing.T, addr1, addr2 Addr, addr1IsServer, continueServing
 	ctx := context.Background()
 	stdout := verboseStdout()
 
-	//----------
-
 	tlogf(t, "addr: %v, %q\n", addr1.Network(), addr1.String())
 
 	go func() {
@@ -74,8 +70,6 @@ func testProto1b(t *testing.T, addr1, addr2 Addr, addr1IsServer, continueServing
 		}
 	}()
 
-	//----------
-
 	exs := &ProtoExecSide{FData: &FilesDataMsg{}}
 	//exs.NoWriteBuffering = true // disable buffer
 	addr2IsServer := !addr1IsServer
@@ -100,8 +94,6 @@ func testProto1b(t *testing.T, addr1, addr2 Addr, addr1IsServer, continueServing
 
 	return err0
 }
-
-//----------
 
 //func TestProto2(t *testing.T) {
 //	ctx := context.Background()
@@ -185,8 +177,7 @@ func testProto1b(t *testing.T, addr1, addr2 Addr, addr1IsServer, continueServing
 //		ch <- 2
 //	}()
 
-//	//----------
-
+//
 //	if v := <-ch; v != 1 {
 //		t.Fatal(v)
 //	}
@@ -224,10 +215,6 @@ func testProto1b(t *testing.T, addr1, addr2 Addr, addr1IsServer, continueServing
 
 //	tlogf(t, "2: out\n")
 //}
-
-//----------
-//----------
-//----------
 
 func tlogf(t *testing.T, f string, args ...any) {
 	if testing.Verbose() {

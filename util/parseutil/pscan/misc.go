@@ -11,8 +11,6 @@ func ContainsRune(rs []rune, ru rune) bool {
 	return false
 }
 
-//----------
-
 func SurroundingString(b []byte, k int, pad int) string {
 	// pad n in each direction for error string
 	i := mathutil.Max(k-pad, 0)

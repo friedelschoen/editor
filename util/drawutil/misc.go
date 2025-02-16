@@ -4,8 +4,6 @@ import (
 	"image"
 )
 
-//----------
-
 // Differs from image.Rectangle.Inset in that it accepts x and y args.
 func RectInset(r image.Rectangle, xn, yn int) image.Rectangle {
 	if r.Dx() < 2*xn {
@@ -24,8 +22,6 @@ func RectInset(r image.Rectangle, xn, yn int) image.Rectangle {
 	}
 	return r
 }
-
-//----------
 
 // Differs from image.Rectangle.Intersect in that it return {r.Min,r.Min} on empty.
 func Intersect(r, s image.Rectangle) image.Rectangle {

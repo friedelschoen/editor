@@ -36,8 +36,6 @@ func (m *DndMan) HandleDrop(hDrop uintptr) (any, bool, error) {
 	return ev, true, nil
 }
 
-//----------
-
 func (m *DndMan) buildPositionEvent(hDrop uintptr, p image.Point) any {
 	//fmt.Printf("reply %v\n", action)
 	types := []event.DndType{event.TextURLListDndT}
@@ -47,8 +45,6 @@ func (m *DndMan) buildPositionEvent(hDrop uintptr, p image.Point) any {
 	}
 	return &event.DndPosition{p, types, appReplyFn}
 }
-
-//----------
 
 func (m *DndMan) buildDropEvent(hDrop uintptr, p image.Point) any {
 	appReqFn := func(typ event.DndType) ([]byte, error) {
@@ -66,15 +62,11 @@ func (m *DndMan) buildDropEvent(hDrop uintptr, p image.Point) any {
 	return &event.DndDrop{p, appReplyFn, appReqFn}
 }
 
-//----------
-
 func (m *DndMan) dropPoint(hDrop uintptr) (bool, image.Point) {
 	p := _Point{}
 	dropped := _DragQueryPoint(hDrop, &p)
 	return dropped, p.ToImagePoint()
 }
-
-//----------
 
 func FilesDropped(hDrop uintptr) []string {
 	// http://delphidabbler.com/articles?article=11

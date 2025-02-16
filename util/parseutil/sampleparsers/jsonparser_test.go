@@ -20,18 +20,12 @@ func TestJsonParser(t *testing.T) {
 	//spew.Dump(v)
 }
 
-//----------
-
 func ParseJson(src []byte) (any, error) {
 	//p := NewJsonParser(src)
 	//return p.parseJson()
 	p := NewJsonParser2()
 	return p.parseJson(src)
 }
-
-//----------
-//----------
-//----------
 
 func BenchmarkJsonParser(b *testing.B) {
 	s := jsonparserInput1

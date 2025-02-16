@@ -76,8 +76,6 @@ func (lang *LangManager) Close() (error, bool) {
 	return nil, false
 }
 
-//----------
-
 func (lang *LangManager) PrintWrapError(err error) {
 	lang.man.Error(lang.WrapError(err))
 }

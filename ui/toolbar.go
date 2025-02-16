@@ -22,8 +22,6 @@ func NewToolbar(ui *UI) *Toolbar {
 	return tb
 }
 
-//----------
-
 func (tb *Toolbar) OnInputEvent(ev any, p image.Point) event.Handled {
 	switch ev.(type) {
 	case *event.KeyDown, *event.KeyUp:

@@ -29,8 +29,6 @@ func NewUndoRedoOverwrite(rw iorw.ReadWriterAt, i, n int, p []byte) (*UndoRedo, 
 	return ur, nil
 }
 
-//----------
-
 func (ur *UndoRedo) Apply(redo bool, w iorw.WriterAt) error {
 	if redo {
 		return w.OverwriteAt(ur.Index, len(ur.D), ur.I)

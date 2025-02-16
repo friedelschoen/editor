@@ -26,8 +26,6 @@ func NewStartPercentLayout() *StartPercentLayout {
 	return spl
 }
 
-//----------
-
 func (spl *StartPercentLayout) Measure(hint image.Point) image.Point {
 	return hint
 }
@@ -68,8 +66,6 @@ func (spl *StartPercentLayout) Layout() {
 	})
 }
 
-//----------
-
 func (spl *StartPercentLayout) InsertBefore(n Node, mark *EmbedNode) {
 	if mark != nil && spl.sp(mark.Wrapper) == 0.0 {
 		// insert after mark
@@ -93,8 +89,6 @@ func (spl *StartPercentLayout) Remove(n Node) {
 	delete(spl.spm, n)
 	spl.ENode.Remove(n)
 }
-
-//----------
 
 // start percent
 func (spl *StartPercentLayout) sp(n Node) float64 {
@@ -131,16 +125,12 @@ func (spl *StartPercentLayout) setsp(n Node, v float64) {
 	spl.MarkNeedsLayout()
 }
 
-//----------
-
 func (spl *StartPercentLayout) size(n Node) float64 {
 	return spl.ep(n) - spl.sp(n)
 }
 func (spl *StartPercentLayout) prevSize(n Node) float64 {
 	return spl.sp(n) - spl.spPrev(n)
 }
-
-//----------
 
 func (spl *StartPercentLayout) Resize(node Node, percent float64) {
 	spl.resize(node, percent)
@@ -175,8 +165,6 @@ func (spl *StartPercentLayout) resize(node Node, percent float64) {
 
 	spl.setsp(node, percent)
 }
-
-//----------
 
 func (spl *StartPercentLayout) ResizeWithMove(node Node, percent float64) {
 	minDir := true
@@ -221,8 +209,6 @@ func (spl *StartPercentLayout) resizeWithMove(node Node, percent float64, minDir
 	return moved
 }
 
-//----------
-
 func (spl *StartPercentLayout) SetPercentWithPush(node Node, percentPos float64) {
 	sp := spl.sp(node)
 	if percentPos > sp {
@@ -234,8 +220,6 @@ func (spl *StartPercentLayout) SetPercentWithPush(node Node, percentPos float64)
 	}
 }
 
-//----------
-
 func (spl *StartPercentLayout) SetSizePercentWithPush(node Node, sizePercent float64) {
 	size := spl.size(node)
 	if size < sizePercent {
@@ -246,8 +230,6 @@ func (spl *StartPercentLayout) SetSizePercentWithPush(node Node, sizePercent flo
 		_ = spl.decStartBy(node, d)
 	}
 }
-
-//----------
 
 func (spl *StartPercentLayout) incStartBy(node Node, percent float64) float64 {
 	if percent < 0.00001 {
@@ -309,8 +291,6 @@ func (spl *StartPercentLayout) decStartBy(node Node, percent float64) float64 {
 	return w + w2
 }
 
-//----------
-
 func (spl *StartPercentLayout) MaximizeNode(node Node) {
 	n := spl.ChildsLen()
 	sp := 0.0
@@ -325,8 +305,6 @@ func (spl *StartPercentLayout) MaximizeNode(node Node) {
 		i++
 	})
 }
-
-//----------
 
 // Used for encoding/decoding only. (Ex: sessions)
 func (spl *StartPercentLayout) SetRawStartPercent(child Node, v float64) {

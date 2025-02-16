@@ -73,8 +73,6 @@ func RunEditor(opt *Options) error {
 	return nil
 }
 
-//----------
-
 func (ed *Editor) init(opt *Options) error {
 	// fs watcher + gwatcher
 	w, err := fswatcher.NewFsnWatcher()
@@ -160,14 +158,10 @@ func (ed *Editor) initPreSaveHooks(opt *Options) {
 	ed.preSaveHooks = opt.PreSaveHooks.regs
 }
 
-//----------
-
 func (ed *Editor) Close() {
 	ed.LSProtoMan.Close()
 	ed.UI.AppendEvent(&editorCloseEv{})
 }
-
-//----------
 
 func (ed *Editor) uiEventLoop() {
 	defer ed.UI.Close()
@@ -202,8 +196,6 @@ func (ed *Editor) uiEventLoop() {
 	}
 }
 
-//----------
-
 func (ed *Editor) fswatcherEventLoop() {
 	for {
 		select {
@@ -230,8 +222,6 @@ func (ed *Editor) handleWatcherEvent(ev *fswatcher.Event) {
 		})
 	}
 }
-
-//----------
 
 func (ed *Editor) Errorf(f string, a ...any) {
 	ed.Error(fmt.Errorf(f, a...))
@@ -269,8 +259,6 @@ func (ed *Editor) Message(s string) {
 	})
 }
 
-//----------
-
 func (ed *Editor) messagesERow() *ERow {
 	erow, isNew := ExistingERowOrNewBasic(ed, "+Messages")
 	if isNew {
@@ -278,8 +266,6 @@ func (ed *Editor) messagesERow() *ERow {
 	}
 	return erow
 }
-
-//----------
 
 func (ed *Editor) ReadERowInfo(name string) *ERowInfo {
 	return readERowInfoOrNew(ed, name)
@@ -323,8 +309,6 @@ func (ed *Editor) DeleteERowInfo(name string) {
 	delete(ed.erowInfos, k)
 }
 
-//----------
-
 func (ed *Editor) ERows() []*ERow {
 	w := []*ERow{}
 	for _, info := range ed.ERowInfos() {
@@ -335,13 +319,9 @@ func (ed *Editor) ERows() []*ERow {
 	return w
 }
 
-//----------
-
 func (ed *Editor) GoodRowPos() *ui.RowPos {
 	return ed.UI.GoodRowPos()
 }
-
-//----------
 
 func (ed *Editor) ActiveERow() (*ERow, bool) {
 	for _, e := range ed.ERows() {
@@ -351,8 +331,6 @@ func (ed *Editor) ActiveERow() (*ERow, bool) {
 	}
 	return nil, false
 }
-
-//----------
 
 func (ed *Editor) setupUIRoot() {
 	ed.setupRootToolbar()
@@ -426,8 +404,6 @@ func (ed *Editor) setupRootMenuToolbar() {
 	tb.SetStrClearHistory(s1)
 }
 
-//----------
-
 func (ed *Editor) updateERowsToolbarsHomeVars() {
 	tb1 := ed.UI.Root.Toolbar.Str()
 	tb2 := ed.UI.Root.MainMenuButton.Toolbar.Str()
@@ -436,8 +412,6 @@ func (ed *Editor) updateERowsToolbarsHomeVars() {
 		erow.UpdateToolbarNameEncoding()
 	}
 }
-
-//----------
 
 func (ed *Editor) setupInitialRows(opt *Options) {
 	if opt.SessionName != "" {
@@ -480,8 +454,6 @@ func (ed *Editor) setupInitialRows(opt *Options) {
 		_ = NewLoadedERowOrNewBasic(info, rowPos)
 	}
 }
-
-//----------
 
 func (ed *Editor) setupTheme(opt *Options) {
 	drawer4.WrapLineRune = rune(opt.WrapLineRune)
@@ -540,8 +512,6 @@ func (ed *Editor) setupTheme(opt *Options) {
 	}
 }
 
-//----------
-
 func (ed *Editor) setupPlugins(opt *Options) error {
 	ed.Plugins = NewPlugins(ed)
 	a := strings.Split(opt.Plugins, ",")
@@ -558,8 +528,6 @@ func (ed *Editor) setupPlugins(opt *Options) error {
 	return nil
 }
 
-//----------
-
 func (ed *Editor) EnsureOneColumn() {
 	if ed.UI.Root.Cols.ColsLayout.Spl.ChildsLen() == 0 {
 		_ = ed.NewColumn()
@@ -574,8 +542,6 @@ func (ed *Editor) NewColumn() *ui.Column {
 	})
 	return col
 }
-
-//----------
 
 func (ed *Editor) handleGlobalShortcuts(ev any) (handled bool) {
 	switch t := ev.(type) {
@@ -615,8 +581,6 @@ func (ed *Editor) handleGlobalShortcuts(ev any) (handled bool) {
 	return false
 }
 
-//----------
-
 // example cmds canceled: openfilename, opensession, ...
 func (ed *Editor) cancelERowsContentCmds() {
 	for _, erow := range ed.ERows() {
@@ -637,8 +601,6 @@ func (ed *Editor) cancelERowInfosCmds() {
 		info.CancelCmd()
 	}
 }
-
-//----------
 
 func (ed *Editor) cancelInfoFloatBox() {
 	ed.ifbw.Cancel()
@@ -752,8 +714,6 @@ func (ed *Editor) lsprotoManAutoComplete(ctx context.Context, ta *ui.TextArea, e
 	return s, nil
 }
 
-//----------
-
 func (ed *Editor) NodeERow(node widget.Node) (*ERow, bool) {
 	for p := node.Embed().Parent; p != nil; p = p.Parent {
 		if r, ok := p.Wrapper.(*ui.Row); ok {
@@ -766,8 +726,6 @@ func (ed *Editor) NodeERow(node widget.Node) (*ERow, bool) {
 	}
 	return nil, false
 }
-
-//----------
 
 func (ed *Editor) RunAsyncBusyCursor(node widget.Node, fn func()) {
 	ed.RunAsyncBusyCursor2(node, func(done func()) { fn(); done() })
@@ -788,8 +746,6 @@ func (ed *Editor) RunAsyncBusyCursor2(node widget.Node, fn func(done func())) {
 	// launch go routine to allow the UI to update the cursor
 	go fn(done)
 }
-
-//----------
 
 func (ed *Editor) SetAnnotations(req EdAnnotationsRequester, ta *ui.TextArea, on bool, selIndex int, entries *drawer4.AnnotationGroup) {
 	// avoid lockup:
@@ -838,8 +794,6 @@ func (ed *Editor) CanModifyAnnotations(req EdAnnotationsRequester, ta *ui.TextAr
 	}
 }
 
-//----------
-
 func (ed *Editor) runPreSaveHooks(ctx context.Context, info *ERowInfo, b []byte) ([]byte, error) {
 	ext := filepath.Ext(info.Name())
 	for _, h := range ed.preSaveHooks {
@@ -869,8 +823,6 @@ func (ed *Editor) runPreSaveHook(ctx context.Context, info *ERowInfo, content []
 
 	return osutil.RunCmdStdin(ctx2, dir, r, cmd2...)
 }
-
-//----------
 
 func (ed *Editor) loadSessions() (*Sessions, error) {
 	return ed.loadSessions2()
@@ -929,10 +881,6 @@ func (ed *Editor) saveSessions2(ss *Sessions) error {
 	}
 }
 
-//----------
-//----------
-//----------
-
 type EdAnnotationsRequester int
 
 const (
@@ -940,8 +888,6 @@ const (
 	EareqGoDebugStart
 	EareqInlineComplete
 )
-
-//----------
 
 type InfoFloatBoxWrap struct {
 	ed   *Editor
@@ -966,7 +912,5 @@ func (ifbw *InfoFloatBoxWrap) Cancel() {
 func (ifbw *InfoFloatBoxWrap) ui() *ui.ContextFloatBox {
 	return ifbw.ed.UI.Root.ContextFloatBox
 }
-
-//----------
 
 type editorCloseEv struct{}

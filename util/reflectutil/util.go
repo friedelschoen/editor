@@ -19,8 +19,6 @@ func InvokeByName(v any, name string, args ...any) ([]reflect.Value, error) {
 	return method.Call(inputs), nil
 }
 
-//----------
-
 // Useful to then call functions based on their type names.
 func TypeNameBase(v any) (string, error) {
 	rv := reflect.Indirect(reflect.ValueOf(v))

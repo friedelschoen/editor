@@ -18,8 +18,6 @@ func newCtx(ann *Annotator) *Ctx {
 	return &Ctx{ann: ann}
 }
 
-//----------
-
 func (ctx *Ctx) withValue(id ctxId, value any) *Ctx {
 	return &Ctx{ctx, id, value, ctx.ann}
 }
@@ -39,8 +37,6 @@ func (ctx *Ctx) withValueMatch(ids []ctxId, match, v any) *Ctx {
 	}
 	return ctx
 }
-
-//----------
 
 func (ctx *Ctx) value(id ctxId) (any, *Ctx, bool) {
 	for c := ctx; c != nil; c = c.pctx {
@@ -68,8 +64,6 @@ func (ctx *Ctx) mustValue(id ctxId) any {
 	}
 	return v
 }
-
-//----------
 
 func (ctx *Ctx) valueMatch(id ctxId, v any) (*Ctx, bool) {
 	ctx2 := ctx
@@ -99,8 +93,6 @@ func (ctx *Ctx) valueMatch3(ids []ctxId, v any) []ctxId {
 	return w
 }
 
-//----------
-
 func (ctx *Ctx) boolean(id ctxId) bool {
 	v, _, ok := ctx.boolean2(id)
 	return ok && v
@@ -113,8 +105,6 @@ func (ctx *Ctx) boolean2(id ctxId) (bool, *Ctx, bool) {
 	return v.(bool), ctx2, true
 }
 
-//----------
-
 func (ctx *Ctx) integer(id ctxId) (int, bool) {
 	v, _, ok := ctx.value(id)
 	if !ok {
@@ -122,8 +112,6 @@ func (ctx *Ctx) integer(id ctxId) (int, bool) {
 	}
 	return v.(int), true
 }
-
-//----------
 
 func (ctx *Ctx) replaceExprs(exprs ...ast.Expr) {
 	if len(exprs) == 1 {
@@ -145,8 +133,6 @@ func (ctx *Ctx) replaceExprs(exprs ...ast.Expr) {
 	*u = exprs
 }
 
-//----------
-
 func (ctx *Ctx) stmtsIter() *StmtsIter {
 	v, _, ok := ctx.value(cidStmtsIter)
 	if !ok {
@@ -155,8 +141,6 @@ func (ctx *Ctx) stmtsIter() *StmtsIter {
 	}
 	return v.(*StmtsIter)
 }
-
-//----------
 
 func (ctx *Ctx) withStmts(stmts *[]ast.Stmt) *Ctx {
 	si := newStmtsIter(ctx, stmts)
@@ -176,8 +160,6 @@ func (ctx *Ctx) replaceStmt(stmt ast.Stmt) {
 	si.replace(stmt)
 }
 
-//----------
-
 func (ctx *Ctx) stmtVisited(stmt ast.Stmt) bool {
 	_, ok := ctx.ann.ctxData.visited[stmt]
 	return ok
@@ -189,8 +171,6 @@ func (ctx *Ctx) setStmtVisited(stmt ast.Stmt, v bool) {
 		delete(ctx.ann.ctxData.visited, stmt)
 	}
 }
-
-//----------
 
 func (ctx *Ctx) getDebugIndex() int {
 	v, _, ok := ctx.value(cidiFixedDebugIndex)
@@ -215,15 +195,11 @@ func (ctx *Ctx) withFixedDebugIndex(fixed bool) *Ctx {
 	return ctx.withValue(cidiFixedDebugIndex, index)
 }
 
-//----------
-
 func (ctx *Ctx) withResetForFuncLit() *Ctx {
 	ctx2 := newCtx(ctx.ann) // full reset
 	ctx2 = ctx2.withNoAnnotationsInstance2(ctx)
 	return ctx2
 }
-
-//----------
 
 func (ctx *Ctx) funcNode() (ast.Node, *ast.FuncType, *ast.BlockStmt) {
 	v2 := ctx.mustValue(cidnFuncNode)
@@ -236,8 +212,6 @@ func (ctx *Ctx) funcNode() (ast.Node, *ast.FuncType, *ast.BlockStmt) {
 		panic("expecting func node")
 	}
 }
-
-//----------
 
 func (ctx *Ctx) withNoAnnotationsInstance() *Ctx {
 	return ctx.withNoAnnotationsInstance2(ctx)
@@ -268,8 +242,6 @@ func (ctx *Ctx) withNoAnnotationsUpdated(node ast.Node) *Ctx {
 	return ctx
 }
 
-//----------
-
 func (ctx *Ctx) panic(v any) error {
 	s := fmt.Sprint(v)
 	if u, ok := ctx.curStmtSrc(); ok {
@@ -297,10 +269,6 @@ func (ctx *Ctx) curStmtSrc() (string, bool) {
 	}
 	return "", false
 }
-
-//----------
-//----------
-//----------
 
 type ctxId int
 
@@ -332,10 +300,6 @@ const (
 	cidnIsLabeledStmtStmt
 	cidnIsCallExprFun
 )
-
-//----------
-//----------
-//----------
 
 type StmtsIter struct {
 	index int // current stmt index

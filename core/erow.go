@@ -40,8 +40,6 @@ type ERow struct {
 	}
 }
 
-//----------
-
 func NewLoadedERow(info *ERowInfo, rowPos *ui.RowPos) (*ERow, error) {
 	switch {
 	case info.IsSpecial():
@@ -68,8 +66,6 @@ func NewLoadedERowOrNewBasic(info *ERowInfo, rowPos *ui.RowPos) *ERow {
 	return erow
 }
 
-//----------
-
 func ExistingERowOrNewLoaded(ed *Editor, name string) (_ *ERow, isNew bool, _ error) {
 	info := ed.ReadERowInfo(name)
 	if erow0, ok := info.FirstERow(); ok {
@@ -95,8 +91,6 @@ func ExistingERowOrNewBasic(ed *Editor, name string) (_ *ERow, isNew bool) {
 	return erow, true
 }
 
-//----------
-
 func NewBasicERow(info *ERowInfo, rowPos *ui.RowPos) *ERow {
 	erow := &ERow{}
 	erow.init(info, rowPos)
@@ -121,8 +115,6 @@ func (erow *ERow) init(info *ERowInfo, rowPos *ui.RowPos) {
 	ev := &PostNewERowEEvent{ERow: erow}
 	erow.Ed.EEvents.emit(PostNewERowEEventId, ev)
 }
-
-//----------
 
 func newLoadedSpecialERow(info *ERowInfo, rowPos *ui.RowPos) (*ERow, error) {
 	// there can be only one instance of a special row
@@ -175,8 +167,6 @@ func newLoadedFileERow(info *ERowInfo, rowPos *ui.RowPos) (*ERow, error) {
 	return erow, nil
 }
 
-//----------
-
 func (erow *ERow) Reload() error {
 	switch {
 	case erow.Info.IsSpecial() && erow.Info.Name() == "+Sessions":
@@ -193,8 +183,6 @@ func (erow *ERow) Reload() error {
 		return errors.New("unexpected type to reload")
 	}
 }
-
-//----------
 
 func (erow *ERow) initHandlers() {
 	row := erow.Row
@@ -322,13 +310,9 @@ func (erow *ERow) initHandlers() {
 	})
 }
 
-//----------
-
 func (erow *ERow) encodedName() string {
 	return erow.Ed.HomeVars.Encode(erow.Info.Name())
 }
-
-//----------
 
 func (erow *ERow) validateToolbarPreWrite(ev *iorw.RWEvPreWrite) error {
 	// current content (pre write) copy
@@ -371,8 +355,6 @@ func (erow *ERow) validateToolbarPreWrite(ev *iorw.RWEvPreWrite) error {
 	return nil
 }
 
-//----------
-
 func (erow *ERow) UpdateToolbarNameEncoding() {
 	str := erow.Row.Toolbar.Str()
 	erow.updateToolbarNameEncoding2(str)
@@ -402,8 +384,6 @@ func (erow *ERow) ToolbarSetStrAfterNameClearHistory(s string) {
 	str := erow.Row.Toolbar.Str()[:arg0.End()] + s
 	erow.Row.Toolbar.SetStrClearHistory(str)
 }
-
-//----------
 
 func (erow *ERow) parseToolbarVars() {
 	vmap := toolbarparser.ParseVars(&erow.TbData)
@@ -472,8 +452,6 @@ func (erow *ERow) setVarFontTheme(s string) error {
 	return nil
 }
 
-//----------
-
 // Not UI safe.
 func (erow *ERow) AppendBytesClearHistory(p []byte) {
 	if err := erow.AppendBytesClearHistory2(p); err != nil {
@@ -501,8 +479,6 @@ func (erow *ERow) AppendBytesClearHistory2(p []byte) error {
 	return nil
 }
 
-//----------
-
 func (erow *ERow) TextAreaReadWriteCloser() io.ReadWriteCloser {
 	if erow.terminalOpt.On() {
 		return NewTerminalFilter(erow)
@@ -529,8 +505,6 @@ func (erow *ERow) TextAreaReadWriteCloser() io.ReadWriteCloser {
 	return io.ReadWriteCloser(&iorwc{rd, wc, wc})
 }
 
-//----------
-
 // UI Safe
 func (erow *ERow) Flash() {
 	p, ok := erow.TbData.PartAtIndex(0)
@@ -541,8 +515,6 @@ func (erow *ERow) Flash() {
 		}
 	}
 }
-
-//----------
 
 func (erow *ERow) MakeIndexVisibleAndFlash(index int) {
 	erow.MakeRangeVisibleAndFlash(index, 0)
@@ -565,8 +537,6 @@ func (erow *ERow) MakeRangeVisibleAndFlash(index int, len int) {
 		erow.Flash()
 	}
 }
-
-//----------
 
 func (erow *ERow) setupSyntaxHighlightAndCommentShortcuts() {
 	// special handling for the toolbar (allow comment shortcut to work in the toolbar to easily disable cmds)
@@ -652,8 +622,6 @@ func (erow *ERow) setupSyntaxHighlightAndCommentShortcuts() {
 	}
 }
 
-//----------
-
 func (erow *ERow) newContentCmdCtx() (context.Context, context.CancelFunc) {
 	erow.cmd.Lock()
 	defer erow.cmd.Unlock()
@@ -672,8 +640,6 @@ func (erow *ERow) cancelContentCmd2() {
 		erow.cmd.cancelContentCmd()
 	}
 }
-
-//----------
 
 func (erow *ERow) newInternalCmdCtx() (context.Context, context.CancelFunc) {
 	erow.cmd.Lock()
@@ -695,8 +661,6 @@ func (erow *ERow) cancelInternalCmd2() {
 	}
 }
 
-//----------
-
 func (erow *ERow) SaveFileBusyCursor() {
 	erow.Ed.RunAsyncBusyCursor(erow.Row, func() {
 		if err := erow.Info.SaveFile(); err != nil {
@@ -704,10 +668,6 @@ func (erow *ERow) SaveFileBusyCursor() {
 		}
 	})
 }
-
-//----------
-//----------
-//----------
 
 type terminalOpt struct {
 	filter    bool

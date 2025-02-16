@@ -54,8 +54,6 @@ func NewTextEditX(uiCtx UIContext) *TextEditX {
 	return te
 }
 
-//----------
-
 func (te *TextEditX) PaintBase() {
 	te.TextEdit.PaintBase()
 	te.iterateFlash()
@@ -66,8 +64,6 @@ func (te *TextEditX) Paint() {
 	te.updateFlashOpt()
 	te.TextEdit.Paint()
 }
-
-//----------
 
 func (te *TextEditX) updateSelectionOpt() {
 	if d, ok := te.Drawer.(*drawer4.Drawer); ok {
@@ -94,8 +90,6 @@ func (te *TextEditX) updateSelectionOpt() {
 		}
 	}
 }
-
-//----------
 
 func (te *TextEditX) FlashLine(index int) {
 	te.startFlash(index, 0, true)
@@ -144,8 +138,6 @@ func (te *TextEditX) flashLineIndexes(offset int) (int, int) {
 	}
 	return s, e
 }
-
-//----------
 
 func (te *TextEditX) iterateFlash() {
 	if !te.flash.line.on && !te.flash.index.on {
@@ -203,15 +195,11 @@ func (te *TextEditX) updateFlashOpt4(d *drawer4.Drawer) {
 	}
 }
 
-//----------
-
 func (te *TextEditX) EnableParenthesisMatch(v bool) {
 	if d, ok := te.Drawer.(*drawer4.Drawer); ok {
 		d.Opt.ParenthesisHighlight.On = v
 	}
 }
-
-//----------
 
 func (te *TextEditX) EnableSyntaxHighlight(v bool) {
 	if d, ok := te.Drawer.(*drawer4.Drawer); ok {
@@ -219,15 +207,11 @@ func (te *TextEditX) EnableSyntaxHighlight(v bool) {
 	}
 }
 
-//----------
-
 func (te *TextEditX) EnableCursorWordHighlight(v bool) {
 	if d, ok := te.Drawer.(*drawer4.Drawer); ok {
 		d.Opt.WordHighlight.On = v
 	}
 }
-
-//----------
 
 func (te *TextEditX) SetCommentStrings(a ...any) {
 	cs := []*drawutil.SyntaxHighlightComment{}
@@ -257,8 +241,6 @@ func (te *TextEditX) SetCommentStrings(a ...any) {
 		opt.Comment.Defs = cs
 	}
 }
-
-//----------
 
 func (te *TextEditX) OnThemeChange() {
 	te.Text.OnThemeChange()

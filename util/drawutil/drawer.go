@@ -52,14 +52,10 @@ type Drawer interface {
 	RangeVisibleOffset(offset, n int, align RangeAlignment) int
 }
 
-//----------
-
 type SyntaxHighlightComment struct {
 	S, E   string // {start,end} sequence
 	IsLine bool   // single line comment (end argument is ignored)
 }
-
-//----------
 
 type RangeAlignment int
 

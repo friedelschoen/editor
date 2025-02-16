@@ -63,5 +63,3 @@ func TestVirtualKeyLookup(t *testing.T) {
 		}
 	}
 }
-
-//----------

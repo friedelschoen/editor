@@ -18,8 +18,6 @@ func NewDndHandler(ed *Editor) *DndHandler {
 	return &DndHandler{ed}
 }
 
-//----------
-
 func (h *DndHandler) OnPosition(ev *event.DndPosition) {
 	// dnd position must receive a reply
 	ev.Reply(h.onPosition2(ev))
@@ -38,8 +36,6 @@ func (h *DndHandler) onPosition2(ev *event.DndPosition) event.DndAction {
 	}
 	return event.DndADeny
 }
-
-//----------
 
 func (h *DndHandler) OnDrop(ev *event.DndDrop) {
 	// The drop event might need to request data (send and then receive an event). To receive that event, the main eventloop can't be blocking with this procedure
@@ -74,8 +70,6 @@ func (h *DndHandler) onDrop2(ev *event.DndDrop) bool {
 	h.handleDroppedURLs(col, &ev.Point, urls)
 	return true
 }
-
-//----------
 
 func (h *DndHandler) columnAtPoint(p *image.Point) (*ui.Column, bool) {
 	for _, col := range h.ed.UI.Root.Cols.Columns() {
@@ -112,8 +106,6 @@ func (h *DndHandler) handleDroppedURL(col *ui.Column, p *image.Point, u *url.URL
 		h.ed.Error(err)
 	}
 }
-
-//----------
 
 func parseAsTextURLList(data []byte) ([]*url.URL, error) {
 	s := string(data)

@@ -86,16 +86,12 @@ func (gp *grammarParser) parseName(pos int) (any, int, error) {
 	return gp.sc.M.StringValue(pos, gp.sc.W.RegexpFromStartCached(u, 100))
 }
 
-//----------
-
 func (gp *grammarParser) parseItemRule(pos int) (any, int, error) {
 	return gp.sc.M.OrValue(pos,
 		gp.parseIfRule,
 		gp.parseOrTreeRule, // precedence tree
 	)
 }
-
-//----------
 
 func (gp *grammarParser) parseIfRule(pos int) (any, int, error) {
 	pos0 := pos
@@ -134,8 +130,6 @@ func (gp *grammarParser) parseIfRule(pos int) (any, int, error) {
 	res.SetPos(pos0, p2)
 	return res, p2, nil
 }
-
-//----------
 
 func (gp *grammarParser) parseOrTreeRule(pos int) (any, int, error) {
 	w := []Rule{}
@@ -184,8 +178,6 @@ func (gp *grammarParser) parseAndTreeRule(pos int) (any, int, error) {
 		return res, p2, nil
 	}
 }
-
-//----------
 
 func (gp *grammarParser) parseBasicItemRule(pos int) (any, int, error) {
 	return gp.sc.M.OrValue(pos,
@@ -288,8 +280,6 @@ func (gp *grammarParser) parseParenRule(pos int) (any, int, error) {
 		return res, p2, nil
 	}
 }
-
-//----------
 
 func (gp *grammarParser) parseOptSpacesOrComments(pos int) (int, error) {
 	return gp.sc.M.Optional(pos, gp.parseSpacesOrComments)

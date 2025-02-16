@@ -15,15 +15,11 @@ var InternalCmds = internalCmds{}
 
 var noERowErr = fmt.Errorf("no active row")
 
-//----------
-
 type internalCmds map[string]*InternalCmd
 
 func (ic *internalCmds) Set(cmd *InternalCmd) {
 	(*ic)[cmd.Name] = cmd
 }
-
-//----------
 
 type InternalCmd struct {
 	Name string
@@ -31,8 +27,6 @@ type InternalCmd struct {
 }
 
 type InternalCmdFn func(args *InternalCmdArgs) error
-
-//----------
 
 type InternalCmdArgs struct {
 	Cmd     *InternalCmd
@@ -53,8 +47,6 @@ func (args *InternalCmdArgs) ERowOrErr() (*ERow, error) {
 	return erow, nil
 }
 
-//----------
-
 func InternalCmdFromRootTb(ed *Editor, tb *ui.Toolbar) {
 	tbdata := toolbarparser.Parse(tb.Str())
 	part, ok := tbdata.PartAtIndex(int(tb.CursorIndex()))
@@ -69,8 +61,6 @@ func InternalCmdFromRootTb(ed *Editor, tb *ui.Toolbar) {
 
 	internalExternalCmd(ed, part, nil)
 }
-
-//----------
 
 func InternalCmdFromRowTb(erow *ERow) {
 	part, ok := erow.TbData.PartAtIndex(int(erow.Row.Toolbar.CursorIndex()))
@@ -135,8 +125,6 @@ func internalCmdFromRowTbFirstPart(erow *ERow, part *toolbarparser.Part) bool {
 	return true
 }
 
-//----------
-
 // erow can be nil (ex: a root toolbar cmd)
 func internalExternalCmd(ed *Editor, part *toolbarparser.Part, optERow *ERow) {
 
@@ -195,8 +183,6 @@ func internalCmd3(ed *Editor, part *toolbarparser.Part, optERow *ERow) (error, b
 	}
 	return cmd.Fn(args), true
 }
-
-//----------
 
 // TODO
 //// feedback node

@@ -24,8 +24,6 @@ func StringifyItemFull(item debug.Item) string {
 	return is.b.String()
 }
 
-//----------
-
 type ItemStringifier struct {
 	b           *strings.Builder
 	valueStrLen int // <0 = full str
@@ -41,8 +39,6 @@ func NewItemStringifier() *ItemStringifier {
 func (is *ItemStringifier) p(s string) {
 	is.b.WriteString(s)
 }
-
-//----------
 
 func (is *ItemStringifier) stringify(item debug.Item) {
 	//log.Printf("stringifyitem: %T", item)
@@ -231,8 +227,6 @@ func (is *ItemStringifier) stringify(item debug.Item) {
 		is.p(fmt.Sprintf("[TODO:stringifyitem:%T,%v]", item, item))
 	}
 }
-
-//----------
 
 func (is *ItemStringifier) pResult(result debug.Item, fn func()) {
 	if result == nil {

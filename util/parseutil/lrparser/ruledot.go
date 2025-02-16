@@ -23,13 +23,9 @@ func newRuleDot(prod, rule Rule, reverse bool) *RuleDot {
 	return rd
 }
 
-//----------
-
 func (rd *RuleDot) sequence() []Rule {
 	return ruleSequence(rd.rule, rd.reverse)
 }
-
-//----------
 
 func (rd *RuleDot) dotRule() (Rule, bool) {
 	if rd.dotAtEnd() {
@@ -56,8 +52,6 @@ func (rd *RuleDot) dotAndAfterRules() []Rule {
 	//}
 	return w[rd.dot:]
 }
-
-//----------
 
 func (rd *RuleDot) advanceDot() (*RuleDot, bool) {
 	if rd.dotAtEnd() {
@@ -87,8 +81,6 @@ func (rd *RuleDot) advanceDotNils() {
 	}
 }
 
-//----------
-
 func (rd *RuleDot) popLen() int {
 	w := rd.sequence()
 	// don't count nils
@@ -102,8 +94,6 @@ func (rd *RuleDot) popLen() int {
 	return k
 }
 
-//----------
-
 func (rd *RuleDot) String() string {
 	rev := ""
 	if rd.reverse {
@@ -111,10 +101,6 @@ func (rd *RuleDot) String() string {
 	}
 	return fmt.Sprintf("{%v%v,%v->%v}", rev, rd.dot, rd.prod.id(), rd.rule.id())
 }
-
-//----------
-//----------
-//----------
 
 type RuleDots []*RuleDot
 
@@ -149,10 +135,6 @@ func (rds RuleDots) String() string {
 	}
 	return strings.TrimSpace(s)
 }
-
-//----------
-//----------
-//----------
 
 func sortRuleDots(w RuleDots) {
 	sort.Slice(w, func(a, b int) bool {

@@ -35,8 +35,6 @@ func taggedVersion(v string, typ string) string {
 	}
 }
 
-//----------
-
 func getBuildInfo() (string, bool) {
 	bi, ok := debug.ReadBuildInfo()
 	if !ok {

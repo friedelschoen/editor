@@ -71,10 +71,6 @@ func TestEncode3(t *testing.T) {
 	}
 }
 
-//----------
-//----------
-//----------
-
 func testEncDec(t *testing.T, v any) (any, []byte, error) {
 	logStdout := verboseStdout()
 	logger := Logger{"test: ", logStdout}

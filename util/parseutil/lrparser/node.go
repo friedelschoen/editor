@@ -32,10 +32,6 @@ func NewPState(src []byte) *PState {
 //	return string(ps.NodeBytes(node))
 //}
 
-//----------
-//----------
-//----------
-
 type RuneRange = pscan.RuneRange
 
 //type RuneRanges = parseutil.RuneRanges
@@ -57,17 +53,11 @@ func (e *PosError) Error() string {
 	//return fmt.Sprintf("%s%s", e.Err, cs)
 }
 
-//----------
-//----------
-//----------
-
 // parse node
 type PNode interface {
 	Pos() int
 	End() int
 }
-
-//----------
 
 func PNodeBytes(node PNode, src []byte) []byte {
 	pos, end := node.Pos(), node.End()
@@ -86,10 +76,6 @@ func PNodePosStr(node PNode) string {
 //func pnodeSrc2(node PNode, fset *FileSet) string {
 //	return string(PNodeBytes(node, fset.Src))
 //}
-
-//----------
-//----------
-//----------
 
 // basic parse node implementation
 type BasicPNode struct {
@@ -114,10 +100,6 @@ func (n *BasicPNode) SrcString(src []byte) string {
 	return string(src[n.pos:n.end])
 }
 
-//----------
-//----------
-//----------
-
 // content parser node
 type CPNode struct {
 	BasicPNode
@@ -136,8 +118,6 @@ func newCPNode2(n1, n2 PNode, r Rule) *CPNode {
 	return newCPNode(n1.Pos(), n2.End(), r)
 }
 
-//----------
-
 func (cpn *CPNode) addChilds(reverse bool, cs ...*CPNode) {
 	if reverse {
 		// wARNING: changes slice order
@@ -152,13 +132,7 @@ func (cpn *CPNode) addChilds(reverse bool, cs ...*CPNode) {
 	}
 }
 
-//----------
-//----------
-//----------
-
 type BuildNodeFn func(*BuildNodeData) error
-
-//----------
 
 type BuildNodeData struct {
 	cpr *cpRun
@@ -193,8 +167,6 @@ func (d *BuildNodeData) ExternalData() any {
 	return d.cpr.externalData
 }
 
-//----------
-
 func (d *BuildNodeData) SprintRuleTree(maxDepth int) string {
 	return SprintNodeTree(d.cpr.ps.Sc.SrcFullFromOffset(), d.cpn, maxDepth)
 }
@@ -203,8 +175,6 @@ func (d *BuildNodeData) PrintRuleTree(maxDepth int) {
 }
 
 // TODO: func to print cpnode.data if present
-
-//----------
 
 func (d *BuildNodeData) ChildsLen() int {
 	return len(d.cpn.childs)
@@ -255,8 +225,6 @@ func (d *BuildNodeData) IsOr(i int) bool {
 	}
 	return false
 }
-
-//----------
 
 func (d *BuildNodeData) ChildLoop(i int, fn BuildNodeFn) error {
 	d2 := d.Child(i)
@@ -333,10 +301,6 @@ func (d *BuildNodeData) ChildLoop2(i int, loopi int, pre, post BuildNodeFn) erro
 	}
 	return vis(d2)
 }
-
-//----------
-//----------
-//----------
 
 // maxdepth=-1 will print all
 func SprintNodeTree(src []byte, node PNode, maxDepth int) string {

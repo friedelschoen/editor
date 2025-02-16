@@ -28,10 +28,6 @@ func (addr *AddrImpl) String() string {
 	return h
 }
 
-//----------
-//----------
-//----------
-
 type ConnFnCloser struct {
 	net.Conn
 	closeFn func() error
@@ -40,10 +36,6 @@ type ConnFnCloser struct {
 func (c *ConnFnCloser) Close() error {
 	return c.closeFn()
 }
-
-//----------
-//----------
-//----------
 
 type Logger struct {
 	Prefix string
@@ -66,10 +58,6 @@ func (l *Logger) errorf(f string, args ...any) error {
 func (l *Logger) error(err error) error {
 	return fmt.Errorf("%v%w", l.Prefix, err)
 }
-
-//----------
-//----------
-//----------
 
 type PrefixWriter struct {
 	writer    io.Writer
@@ -118,10 +106,6 @@ func (p *PrefixWriter) Write(data []byte) (int, error) {
 	}
 	return written, nil
 }
-
-//----------
-//----------
-//----------
 
 const websocketEntryPath = "/editor_debug_ws"
 

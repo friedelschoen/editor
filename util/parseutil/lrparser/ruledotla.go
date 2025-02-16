@@ -27,8 +27,6 @@ func (rdslas RuleDotsLaSet) hasRule(rd RuleDot, r Rule) bool {
 	return rset.has(r)
 }
 
-//----------
-
 func (rdslas RuleDotsLaSet) ruleDots() RuleDots {
 	w := RuleDots{}
 	for rd := range rdslas {
@@ -37,8 +35,6 @@ func (rdslas RuleDotsLaSet) ruleDots() RuleDots {
 	}
 	return w
 }
-
-//----------
 
 func (rdslas RuleDotsLaSet) String() string {
 	rds := RuleDots{}
@@ -55,10 +51,6 @@ func (rdslas RuleDotsLaSet) String() string {
 	}
 	return s
 }
-
-//----------
-//----------
-//----------
 
 //// aka "set of items"
 //type RuleDotLas []*RuleDotLa
@@ -101,10 +93,6 @@ func (rdslas RuleDotsLaSet) String() string {
 //	}
 //	return s
 //}
-
-//----------
-//----------
-//----------
 
 //func rdlaLookahead(rdla *RuleDotLa, rFirst *RulesFirst) {
 //	if rdla.parent == nil { // rdla is the start rule

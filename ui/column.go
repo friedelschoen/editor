@@ -90,8 +90,6 @@ func (col *Column) Layout() {
 	col.BoxLayout.Layout()
 }
 
-//----------
-
 func (col *Column) FirstChildRow() *Row {
 	u := col.RowsLayout.Spl.FirstChildWrapper()
 	if u == nil {
@@ -107,8 +105,6 @@ func (col *Column) LastChildRow() *Row {
 	return u.(*Row)
 }
 
-//----------
-
 func (col *Column) Rows() []*Row {
 	u := make([]*Row, 0, col.RowsLayout.Spl.ChildsLen())
 	col.RowsLayout.Spl.IterateWrappers2(func(c widget.Node) {
@@ -116,8 +112,6 @@ func (col *Column) Rows() []*Row {
 	})
 	return u
 }
-
-//----------
 
 func (col *Column) PointNextRow(p *image.Point) (*Row, bool) {
 	for _, r := range col.Rows() {
@@ -158,8 +152,6 @@ func (col *Column) PointNextRowExtra(p *image.Point) (*Row, bool) {
 	return nil, false
 }
 
-//----------
-
 func (col *Column) resizeToPointWithSwap(p *image.Point) {
 	bounds := col.Cols.Root.Bounds
 	dx := float64(bounds.Dx())
@@ -192,8 +184,6 @@ func (col *Column) resizeWithMoveToPoint(p *image.Point) {
 
 	col.Cols.ColsLayout.Spl.ResizeWithMove(col, perc)
 }
-
-//----------
 
 const (
 	ColumnCloseEventId = iota

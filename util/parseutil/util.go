@@ -19,8 +19,6 @@ import (
 	"golang.org/x/text/unicode/norm"
 )
 
-//----------
-
 // TODO: review
 
 var ExtraRunes = "_-~.%@&?!=#+:^" + "(){}[]<>" + "\\/" + " "
@@ -32,8 +30,6 @@ var excludeResourceRunes = "" +
 // escaped when outputing filenames
 var escapedInFilenames = excludeResourceRunes +
 	":" // note: in windows will give "C^:/"
-
-//----------
 
 func AddEscapes(str string, escape rune, escapeRunes string) string {
 	w := []rune{}
@@ -78,8 +74,6 @@ func RemoveEscapes2(rs []rune, escapable []rune, escape rune) []rune {
 	return res
 }
 
-//----------
-
 func EscapeFilename(str string) string {
 	escape := osutil.EscapeRune
 	mustBeEscaped := escapedInFilenames + string(escape)
@@ -94,8 +88,6 @@ func RemoveFilenameEscapes(f string, escape, pathSep rune) string {
 	}
 	return f
 }
-
-//----------
 
 func CleanMultiplePathSeps(str string, sep rune) string {
 	w := []rune{}
@@ -113,8 +105,6 @@ func CleanMultiplePathSeps(str string, sep rune) string {
 	}
 	return string(w)
 }
-
-//----------
 
 func ExpandIndexesEscape(rd iorw.ReaderAt, index int, truth bool, fn func(rune) bool, escape rune) (int, int) {
 	// ensure the index is not in the middle of an escape
@@ -151,8 +141,6 @@ func expandEscape(sc *pscan.Scanner, i int, truth bool, fn func(rune) bool, esca
 	return p2
 }
 
-//----------
-
 func ImproveExpandIndexEscape(r iorw.ReaderAt, i int, escape rune) int {
 	sc := iorw.NewScanner(r)
 	p2, _ := sc.M.ReverseMode(i, true,
@@ -160,8 +148,6 @@ func ImproveExpandIndexEscape(r iorw.ReaderAt, i int, escape rune) int {
 	)
 	return p2
 }
-
-//----------
 
 // Line/col args are one-based.
 func LineColumnIndex(rd iorw.ReaderAt, line, column int) (int, error) {
@@ -253,8 +239,6 @@ func IndexLineColumn2(b []byte, index int) (int, int) {
 	return line, col
 }
 
-//----------
-
 func DetectEnvVar(str, name string) bool {
 	vstr := "$" + name
 	i := strings.Index(str, vstr)
@@ -278,8 +262,6 @@ func DetectEnvVar(str, name string) bool {
 	return true
 }
 
-//----------
-
 func RunesExcept(runes, except string) string {
 	drop := func(ru rune) rune {
 		if strings.ContainsRune(except, ru) {
@@ -289,8 +271,6 @@ func RunesExcept(runes, except string) string {
 	}
 	return strings.Map(drop, runes)
 }
-
-//----------
 
 // Useful to compare src code lines.
 func TrimLineSpaces(str string) string {
@@ -308,8 +288,6 @@ func TrimLineSpaces2(str string, pre string) string {
 	}
 	return pre + strings.Join(u, "\n"+pre)
 }
-
-//----------
 
 func UrlToAbsFilename(url2 string) (string, error) {
 	u, err := url.Parse(string(url2))
@@ -353,8 +331,6 @@ func AbsFilenameToUrl(filename string) (string, error) {
 	return u.String(), nil // path is escaped
 }
 
-//----------
-
 func SurroundingString(b []byte, k int, pad int) string {
 	// pad n in each direction for error string
 	i := mathutil.Max(k-pad, 0)
@@ -382,8 +358,6 @@ func SurroundingString(b []byte, k int, pad int) string {
 	}
 	return s2
 }
-
-//----------
 
 // unquote string with backslash as escape
 func UnquoteStringBs(s string) (string, error) {
@@ -419,8 +393,6 @@ func IsQuoted(s string) bool {
 	return err == nil
 }
 
-//----------
-
 func ContainsRune(rs []rune, ru rune) bool {
 	for _, ru2 := range rs {
 		if ru2 == ru {
@@ -429,8 +401,6 @@ func ContainsRune(rs []rune, ru rune) bool {
 	}
 	return false
 }
-
-//----------
 
 func ToLowerNoAccents(b []byte) []byte {
 	b = bytes.ToLower(b)

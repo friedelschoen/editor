@@ -38,10 +38,6 @@ func NewProto(ctx context.Context, addr Addr, side ProtoSide, isServer, continue
 	}
 }
 
-//----------
-//----------
-//----------
-
 type ProtoServer struct {
 	ctx             context.Context
 	side            ProtoSide
@@ -99,8 +95,6 @@ func newProtoServer(ctx, connectCtx context.Context, addr Addr, side ProtoSide, 
 	return p, nil
 }
 
-//----------
-
 func (p *ProtoServer) stateLkBcast(fn func()) {
 	p.state.Lock()
 	defer p.state.Unlock()
@@ -112,8 +106,6 @@ func (p *ProtoServer) stateLk(fn func()) {
 	defer p.state.Unlock()
 	fn()
 }
-
-//----------
 
 func (p *ProtoServer) startListening(ctx context.Context, addr Addr) error {
 	ln, err := listen(ctx, addr)
@@ -137,8 +129,6 @@ func (p *ProtoServer) closeListener() error {
 	})
 	return p.ln.closeErr
 }
-
-//----------
 
 func (p *ProtoServer) acceptLoop() {
 	defer p.closeListener()
@@ -190,8 +180,6 @@ func (p *ProtoServer) handleAccepted(conn Conn) {
 		p.state.haveConn = true
 	})
 }
-
-//----------
 
 func (p *ProtoServer) waitForConn(ctx context.Context) error {
 	_, err := p.getPconn(ctx)
@@ -251,8 +239,6 @@ func (p *ProtoServer) closePconn(lockAndBCast bool) error {
 	return err
 }
 
-//----------
-
 func (p *ProtoServer) Read(v any) error {
 	return p.monitorPConnContinueServing(func() (*ProtoConn, bool, error) {
 		pconn, err := p.getPconn(p.ctx)
@@ -289,8 +275,6 @@ func (p *ProtoServer) WriteMsg(m *OffsetMsg) error {
 	})
 }
 
-//----------
-
 func (p *ProtoServer) monitorPConnContinueServing(fn func() (*ProtoConn, bool, error)) error {
 	for {
 		pconn, havePconn, err := fn()
@@ -324,8 +308,6 @@ func (p *ProtoServer) monitorPConnContinueServing(fn func() (*ProtoConn, bool, e
 	}
 }
 
-//----------
-
 // TODO: review
 // - closing just to end cleanly
 // - closing because there was an error that forces close/cleanup
@@ -347,8 +329,6 @@ func (p *ProtoServer) closeWithCause(err error) error {
 	return errors.Join(err1, err2)
 }
 
-//----------
-
 func (p *ProtoServer) wait() error {
 	p.state.Lock()
 	defer p.state.Unlock()
@@ -361,8 +341,6 @@ func (p *ProtoServer) wait() error {
 	return nil
 }
 
-//----------
-
 func (p *ProtoServer) CloseOrWait() error {
 	switch p.side.(type) {
 	case *ProtoEditorSide:
@@ -373,10 +351,6 @@ func (p *ProtoServer) CloseOrWait() error {
 		panic("bad type")
 	}
 }
-
-//----------
-//----------
-//----------
 
 type ProtoClient struct {
 	ctx  context.Context
@@ -427,16 +401,12 @@ func newProtoClient(ctx, connectCtx context.Context, addr Addr, side ProtoSide, 
 	return p, nil
 }
 
-//----------
-
 func (p *ProtoClient) stateLkBcast(fn func()) {
 	p.state.Lock()
 	defer p.state.Unlock()
 	defer p.state.Broadcast()
 	fn()
 }
-
-//----------
 
 func (p *ProtoClient) Read(v any) error {
 	if eds, ok := p.side.(*ProtoEditorSide); ok {
@@ -455,16 +425,12 @@ func (p *ProtoClient) WriteMsg(m *OffsetMsg) error {
 	return p.monitorPconnErr(p.pconn.WriteMsg(m))
 }
 
-//----------
-
 func (p *ProtoClient) monitorPconnErr(err error) error {
 	if err != nil {
 		_ = p.closeWithCause(err)
 	}
 	return err
 }
-
-//----------
 
 func (p *ProtoClient) closeWithCause(err error) error {
 	err1 := error(nil)
@@ -485,8 +451,6 @@ func (p *ProtoClient) closeWithCause(err error) error {
 	return err1
 }
 
-//----------
-
 func (p *ProtoClient) wait() error {
 	p.state.Lock()
 	defer p.state.Unlock()
@@ -495,8 +459,6 @@ func (p *ProtoClient) wait() error {
 	}
 	return nil
 }
-
-//----------
 
 func (p *ProtoClient) CloseOrWait() error {
 	switch p.side.(type) {
@@ -508,10 +470,6 @@ func (p *ProtoClient) CloseOrWait() error {
 		panic("bad type")
 	}
 }
-
-//----------
-//----------
-//----------
 
 type ProtoSide interface {
 	initProto(Conn) (*ProtoConn, error)
@@ -534,10 +492,6 @@ func InitProtoSide(ctx context.Context, side ProtoSide, conn Conn) (*ProtoConn, 
 	}
 	return pconn, nil
 }
-
-//----------
-//----------
-//----------
 
 // debug protocol editor side
 // 1. send request for files data
@@ -606,10 +560,6 @@ func (eds *ProtoEditorSide) readHeaders(v any) (bool, error) {
 	}
 }
 
-//----------
-//----------
-//----------
-
 // debug protocol executable side
 // 1. receive request for files data
 // 2. send files data
@@ -653,10 +603,6 @@ func (exs *ProtoExecSide) initProto(conn Conn) (*ProtoConn, error) {
 	return pconn, nil
 }
 
-//----------
-//----------
-//----------
-
 type ProtoConn struct {
 	conn Conn
 
@@ -687,8 +633,6 @@ func (pconn *ProtoConn) Read(v any) error {
 	return decode(pconn.conn, v, pconn.Logger)
 }
 
-//----------
-
 func (pconn *ProtoConn) Write(v any) error {
 	pconn.w.Lock()
 	defer pconn.w.Unlock()
@@ -706,8 +650,6 @@ func (pconn *ProtoConn) WriteMsg(m *OffsetMsg) error {
 	return pconn.Write(m)
 }
 
-//----------
-
 func (pconn *ProtoConn) Close() error {
 	w := []error{}
 	if pconn.mwb != nil {
@@ -718,10 +660,6 @@ func (pconn *ProtoConn) Close() error {
 	w = append(w, err)
 	return errors.Join(w...)
 }
-
-//----------
-//----------
-//----------
 
 type MsgWriteBuffering struct {
 	pconn         *ProtoConn
@@ -820,8 +758,6 @@ func (wb *MsgWriteBuffering) waitForFlushingDone() error {
 	return wb.mu.firstFlushWriteErr
 }
 
-//----------
-
 func (wb *MsgWriteBuffering) noMoreWritesAndWait() error {
 	wb.mu.Lock()
 	defer wb.mu.Unlock()
@@ -831,9 +767,5 @@ func (wb *MsgWriteBuffering) noMoreWritesAndWait() error {
 	}
 	return nil
 }
-
-//----------
-//----------
-//----------
 
 const Listener2PeekLen = 9

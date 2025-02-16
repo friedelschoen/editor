@@ -17,8 +17,6 @@ type ServerWrap struct {
 	rwc *rwc // just for IO mode (can be nil)
 }
 
-//----------
-
 func StartServerWrapTCP(ctx context.Context, cmdTmpl string, w io.Writer) (*ServerWrap, string, error) {
 	host := "127.0.0.1"
 
@@ -77,8 +75,6 @@ func newServerWrapCommon(ctx context.Context, cmd string) *ServerWrap {
 	return sw
 }
 
-//----------
-
 func (sw *ServerWrap) Wait() error {
 	if sw.rwc != nil { // can be nil if in tcp mode
 		// was set outside cmd, close after cmd.wait
@@ -87,8 +83,6 @@ func (sw *ServerWrap) Wait() error {
 
 	return sw.Cmd.Wait()
 }
-
-//----------
 
 type rwc struct {
 	io.ReadCloser
@@ -101,8 +95,6 @@ func (rwc *rwc) Close() error {
 	me.Add(rwc.WriteCloser.Close())
 	return me.Result()
 }
-
-//----------
 
 func cmdTemplate(cmdTmpl string, host string, port int) (string, string, error) {
 	// build template

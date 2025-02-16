@@ -34,8 +34,6 @@ func AppendEnv(env []string, addEnv []string) []string {
 	return w
 }
 
-//----------
-
 func UnquoteEnvValues(env []string) []string {
 	w := []string{}
 	for _, s := range env {
@@ -52,8 +50,6 @@ func UnquoteEnvValues(env []string) []string {
 	}
 	return w
 }
-
-//----------
 
 func keyValStr(key, value string) string {
 	return fmt.Sprintf("%v=%v", key, value)

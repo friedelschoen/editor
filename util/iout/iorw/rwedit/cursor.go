@@ -16,8 +16,6 @@ type Cursor interface {
 	SelectionIndexesUnsorted() (int, int, bool)
 }
 
-//----------
-
 type SimpleCursor struct {
 	index int
 	sel   struct { // selection
@@ -32,8 +30,6 @@ func (c *SimpleCursor) Set(c2 SimpleCursor) {
 func (c *SimpleCursor) Get() SimpleCursor {
 	return *c
 }
-
-//----------
 
 func (c *SimpleCursor) Index() int {
 	return c.index
@@ -59,13 +55,9 @@ func (c *SimpleCursor) SetIndexSelectionOff(i int) {
 	c.sel.index = 0
 }
 
-//----------
-
 func (c *SimpleCursor) HaveSelection() bool {
 	return c.sel.on && c.sel.index != c.index
 }
-
-//----------
 
 func (c *SimpleCursor) UpdateSelection(on bool, ci int) {
 	if on {
@@ -82,8 +74,6 @@ func (c *SimpleCursor) UpdateSelection(on bool, ci int) {
 		c.SetIndexSelectionOff(ci)
 	}
 }
-
-//----------
 
 // Values returned are sorted
 func (c *SimpleCursor) SelectionIndexes() (int, int, bool) {
@@ -104,8 +94,6 @@ func (c *SimpleCursor) SelectionIndexesUnsorted() (int, int, bool) {
 	return c.sel.index, c.index, true // start/finish (can be finish<start)
 }
 
-//----------
-
 type TriggerCursor struct {
 	*SimpleCursor
 	c        *SimpleCursor
@@ -119,8 +107,6 @@ func NewTriggerCursor(onChange func()) *TriggerCursor {
 	tc.c = c
 	return tc
 }
-
-//----------
 
 func (tc *TriggerCursor) Set(c SimpleCursor) {
 	tmp := tc.copy()
@@ -152,8 +138,6 @@ func (tc *TriggerCursor) UpdateSelection(on bool, ci int) {
 	tc.c.UpdateSelection(on, ci)
 	tc.changed(tmp)
 }
-
-//----------
 
 func (tc *TriggerCursor) copy() SimpleCursor {
 	return *tc.SimpleCursor

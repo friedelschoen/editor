@@ -22,8 +22,6 @@ func (eevs *EEvents) Register(eid EEventId, fn func(any)) *evreg.Regist {
 	return eevs.reg.Add(int(eid), fn)
 }
 
-//----------
-
 type EEventId int
 
 const (

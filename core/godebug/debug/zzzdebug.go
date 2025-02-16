@@ -21,8 +21,6 @@ func init() {
 	}
 }
 
-//----------
-
 // exec side options (set by generated config)
 var exso struct {
 	testing bool // not the same as "godebug test"
@@ -38,10 +36,6 @@ var exso struct {
 	stringifyBytesRunes bool                 // "abc" instead of [97 98 99]
 	filesData           []*AnnotatorFileData // all debug data
 }
-
-//----------
-//----------
-//----------
 
 // exec side: runs before init()s, needed because there could be an Exit() call throught some other init() func, and the initwait must initialize before that to block sending until init is done
 var exs = newExecSide()
@@ -106,10 +100,6 @@ func (exs *execSide) logError(err error) {
 	exs.logf("error: %v\n", err)
 }
 
-//----------
-//----------
-//----------
-
 // Auto-inserted at functions to recover from panics. Don't use.
 func Recover() {
 	//mustBeExecSide() // commented for performance
@@ -164,10 +154,6 @@ func L(fileIndex, debugIndex, offset int, item Item) {
 
 var lineErrOnce sync.Once
 
-//----------
-//----------
-//----------
-
 type InitWait struct {
 	wg   *sync.WaitGroup
 	fast bool
@@ -195,8 +181,6 @@ func (iw *InitWait) afterInitOk(fn func()) {
 func (iw *InitWait) done() {
 	iw.wg.Done()
 }
-
-//----------
 
 func mustBeExecSide() {
 	if !exso.onExecSide {

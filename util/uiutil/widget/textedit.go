@@ -52,8 +52,6 @@ func NewTextEdit(uiCtx UIContext) *TextEdit {
 	return te
 }
 
-//----------
-
 func (te *TextEdit) RW() iorw.ReadWriterAt {
 	// TODO: returning rw with undo/events, differs from SetRW(), workaround is to use te.Text.RW() to get underlying rw
 
@@ -74,8 +72,6 @@ func (te *TextEdit) SetRWFromMaster(m *TextEdit) {
 	te.rwu.History = m.rwu.History
 }
 
-//----------
-
 // Called when the changes are done on this textedit
 func (te *TextEdit) onWrite2(ev any) {
 	e := ev.(*iorw.RWEvWrite2)
@@ -93,20 +89,14 @@ func (te *TextEdit) HandleRWWrite2(ev *iorw.RWEvWrite2) {
 	}
 }
 
-//----------
-
 func (te *TextEdit) EditCtx() *rwedit.Ctx {
 	return te.ctx
 }
-
-//----------
 
 func (te *TextEdit) onCursorChange() {
 	te.Drawer.SetCursorOffset(te.CursorIndex())
 	te.MarkNeedsPaint()
 }
-
-//----------
 
 func (te *TextEdit) Cursor() rwedit.Cursor {
 	return te.ctx.C
@@ -119,8 +109,6 @@ func (te *TextEdit) CursorIndex() int {
 func (te *TextEdit) SetCursorIndex(i int) {
 	te.Cursor().SetIndex(i)
 }
-
-//----------
 
 func (te *TextEdit) Undo() error { return te.undoRedo(false) }
 func (te *TextEdit) Redo() error { return te.undoRedo(true) }
@@ -140,8 +128,6 @@ func (te *TextEdit) ClearUndones() {
 	te.rwu.History.ClearUndones()
 }
 
-//----------
-
 func (te *TextEdit) BeginUndoGroup() {
 	c := te.ctx.C.Get()
 	te.rwu.History.BeginUndoGroup(c)
@@ -151,8 +137,6 @@ func (te *TextEdit) EndUndoGroup() {
 	c := te.ctx.C.Get()
 	te.rwu.History.EndUndoGroup(c)
 }
-
-//----------
 
 func (te *TextEdit) OnInputEvent(ev any, p image.Point) event.Handled {
 	te.BeginUndoGroup()
@@ -164,8 +148,6 @@ func (te *TextEdit) OnInputEvent(ev any, p image.Point) event.Handled {
 	}
 	return handled
 }
-
-//----------
 
 func (te *TextEdit) SetBytes(b []byte) error {
 	te.BeginUndoGroup()
@@ -204,8 +186,6 @@ func (te *TextEdit) AppendBytesClearHistory(b []byte) error {
 	return nil
 }
 
-//----------
-
 func (te *TextEdit) SetStr(str string) error {
 	return te.SetBytes([]byte(str))
 }
@@ -218,14 +198,10 @@ func (te *TextEdit) SetStrClearHistory(str string) error {
 	return te.SetBytesClearHistory([]byte(str))
 }
 
-//----------
-
 func (te *TextEdit) ClearPos() {
 	te.ctx.C.SetIndexSelectionOff(0)
 	te.MakeIndexVisible(0)
 }
-
-//----------
 
 func (te *TextEdit) MakeCursorVisible() {
 	if a, b, ok := te.ctx.C.SelectionIndexes(); ok {
@@ -234,8 +210,6 @@ func (te *TextEdit) MakeCursorVisible() {
 		te.MakeIndexVisible(te.ctx.C.Index())
 	}
 }
-
-//----------
 
 func (te *TextEdit) stableRuneOffset(ev *iorw.RWEvWrite) {
 	// keep offset based scrolling stable

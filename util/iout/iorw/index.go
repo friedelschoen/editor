@@ -13,8 +13,6 @@ import (
 
 // NOTE: considerered golang.org/x/text/search.Matcher but index backwards search is not implemented, as well as some options flexibility
 
-//----------
-
 func Index(r ReaderAt, i int, sep []byte, ignoreCase bool) (int, int, error) {
 	ctx := context.Background()
 	opt := &IndexOpt{IgnoreCase: ignoreCase}
@@ -58,8 +56,6 @@ func indexCtx2(ctx context.Context, r ReaderAt, i int, sep []byte, chunk int, op
 
 	return -1, 0, nil
 }
-
-//----------
 
 func LastIndex(r ReaderAt, i int, sep []byte, ignoreCase bool) (int, int, error) {
 	ctx := context.Background()
@@ -105,8 +101,6 @@ func lastIndexCtx2(ctx context.Context, r ReaderAt, i int, sep []byte, chunk int
 	return -1, 0, nil
 }
 
-//----------
-
 func runIndexFn(indexFn func(s, sep []byte) int, r ReaderAt, i, n int, sep []byte, pfcFn pfcType, opt *IndexOpt) (int, int, error) {
 	p, err := r.ReadFastAt(i, n)
 	if err != nil {
@@ -127,10 +121,6 @@ func runIndexFn(indexFn func(s, sep []byte) int, r ReaderAt, i, n int, sep []byt
 	return -1, 0, nil
 }
 
-//----------
-//----------
-//----------
-
 type IndexOpt struct {
 	IgnoreCase           bool
 	IgnoreCaseDiacritics bool // also lower the case of diacritics (slow)
@@ -140,10 +130,6 @@ type IndexOpt struct {
 func (opt *IndexOpt) IgnoringDiacritics() bool {
 	return opt.IgnoreCaseDiacritics || opt.IgnoreDiacritics
 }
-
-//----------
-//----------
-//----------
 
 type pfcType func([]byte) (result []byte, nSrcBytesRead int, _ error)
 
@@ -166,8 +152,6 @@ func prepareForCompareFn(opt *IndexOpt) pfcType {
 		return transform.Bytes(t, b)
 	}
 }
-
-//----------
 
 type toLowerAscii struct {
 	lowerDiacritics bool
@@ -200,10 +184,6 @@ func (tla *toLowerAscii) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int,
 	return min, min, nil
 }
 
-//----------
-//----------
-//----------
-
 const chunkSize = 32 * 1024
 
 func setupChunkSize(chunkN, sepN int, opt *IndexOpt) (int, error) {
@@ -224,8 +204,6 @@ func setupChunkSize(chunkN, sepN int, opt *IndexOpt) (int, error) {
 	}
 	return cN, nil
 }
-
-//----------
 
 func correctRunesPos(src, norm, sep []byte, j int) (int, int) {
 	// correct j

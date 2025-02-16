@@ -6,8 +6,6 @@ import (
 	"testing"
 )
 
-//----------
-
 func mustNewFsnWatcher(t *testing.T) Watcher {
 	t.Helper()
 	w, err := NewFsnWatcher()
@@ -16,8 +14,6 @@ func mustNewFsnWatcher(t *testing.T) Watcher {
 	}
 	return w
 }
-
-//----------
 
 func TestFsWatcher1(t *testing.T) {
 	tmpDir := tmpDir()

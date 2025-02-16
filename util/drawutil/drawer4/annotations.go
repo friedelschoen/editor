@@ -88,8 +88,6 @@ func (ann *Annotations) End() {
 	}
 }
 
-//----------
-
 func (ann *Annotations) insertAnnotations() {
 	tmp := ann.d.st.runeR                   // keep state
 	defer func() { ann.d.st.runeR = tmp }() // restore state
@@ -203,10 +201,6 @@ func (ann *Annotations) insertSeparatorString(s string) bool {
 	return ann.d.iters.runeR.insertExtraString(s)
 }
 
-//----------
-//----------
-//----------
-
 type AnnotationGroup struct {
 	sync.RWMutex
 	Anns []*Annotation
@@ -223,17 +217,11 @@ func NewAnnotationGroup(n int) *AnnotationGroup {
 	return ag
 }
 
-//----------
-
 type Annotation struct {
 	Offset     int
 	Bytes      []byte
 	NotesBytes []byte // used for arrival index
 }
-
-//----------
-//----------
-//----------
 
 type AnnotationsIndexOf struct {
 	d *Drawer
@@ -251,8 +239,6 @@ func (aio *AnnotationsIndexOf) Iter() {
 }
 
 func (aio *AnnotationsIndexOf) End() {}
-
-//----------
 
 func (aio *AnnotationsIndexOf) iter2() {
 	p := &aio.d.st.annotationsIndexOf.p

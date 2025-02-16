@@ -16,8 +16,6 @@ func NewApplyEvent(cctx CursorContext) *ApplyEvent {
 	return ae
 }
 
-//----------
-
 func (ae *ApplyEvent) Apply(node Node, ev any, p image.Point) {
 	if !ae.drag.dragging {
 		ae.mouseEnterLeave(node, p)
@@ -56,8 +54,6 @@ func (ae *ApplyEvent) Apply(node Node, ev any, p image.Point) {
 	ae.setCursor(node, p)
 }
 
-//----------
-
 func (ae *ApplyEvent) setCursor(node Node, p image.Point) {
 	var c event.Cursor
 	if ae.drag.dragging {
@@ -84,14 +80,10 @@ func (ae *ApplyEvent) treeCursor(node Node, p image.Point) event.Cursor {
 	return c
 }
 
-//----------
-
 func (ae *ApplyEvent) mouseEnterLeave(node Node, p image.Point) {
 	ae.mouseLeave(node, p) // run leave first
 	ae.mouseEnter(node, p)
 }
-
-//----------
 
 func (ae *ApplyEvent) mouseEnter(node Node, p image.Point) event.Handled {
 	ne := node.Embed()
@@ -124,8 +116,6 @@ func (ae *ApplyEvent) mouseEnter(node Node, p image.Point) event.Handled {
 	return h
 }
 
-//----------
-
 func (ae *ApplyEvent) mouseLeave(node Node, p image.Point) event.Handled {
 	ne := node.Embed()
 
@@ -148,8 +138,6 @@ func (ae *ApplyEvent) mouseLeave(node Node, p image.Point) event.Handled {
 
 	return h
 }
-
-//----------
 
 func (ae *ApplyEvent) dragStart(node Node, ev *event.MouseDragStart, p image.Point) {
 	if ae.drag.dragging {
@@ -187,16 +175,12 @@ func (ae *ApplyEvent) findDragNode2(node Node, ev *event.MouseDragStart, p image
 	return found
 }
 
-//----------
-
 func (ae *ApplyEvent) dragMove(ev *event.MouseDragMove, p image.Point) {
 	if !ae.drag.dragging {
 		return
 	}
 	ae.runEv(ae.drag.node, ev, p)
 }
-
-//----------
 
 func (ae *ApplyEvent) dragEnd(ev *event.MouseDragEnd, p image.Point) {
 	if !ae.drag.dragging {
@@ -208,8 +192,6 @@ func (ae *ApplyEvent) dragEnd(ev *event.MouseDragEnd, p image.Point) {
 	ae.runEv(ae.drag.node, ev, p)
 	ae.drag = AEDragState{}
 }
-
-//----------
 
 func (ae *ApplyEvent) depthFirstEv(node Node, ev any, p image.Point) event.Handled {
 	if !p.In(node.Embed().Bounds) {
@@ -236,13 +218,9 @@ func (ae *ApplyEvent) depthFirstEv(node Node, ev any, p image.Point) event.Handl
 	return h
 }
 
-//----------
-
 func (ae *ApplyEvent) runEv(node Node, ev any, p image.Point) event.Handled {
 	return node.OnInputEvent(ev, p)
 }
-
-//----------
 
 type AEDragState struct {
 	dragging bool

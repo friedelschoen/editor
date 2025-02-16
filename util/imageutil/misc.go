@@ -10,8 +10,6 @@ import (
 	"github.com/jmigpin/editor/util/mathutil"
 )
 
-//----------
-
 func MaxPoint(p1, p2 image.Point) image.Point {
 	if p1.X < p2.X {
 		p1.X = p2.X
@@ -30,8 +28,6 @@ func MinPoint(p1, p2 image.Point) image.Point {
 	}
 	return p1
 }
-
-//----------
 
 func RgbaColor(c color.Color) color.RGBA {
 	if u, ok := c.(color.RGBA); ok {
@@ -53,8 +49,6 @@ func convertToRgbaColor(c color.Color) color.RGBA {
 	}
 }
 
-//----------
-
 func RgbaFromInt(u int) color.RGBA {
 	v := u & 0xffffff
 	r := uint8((v << 0) >> 16)
@@ -70,15 +64,11 @@ func RgbaToInt(c color.RGBA) int {
 	return v
 }
 
-//----------
-
 // Ex. usage: editor.xutil.cursors
 func ColorUint16s(c color.Color) (uint16, uint16, uint16, uint16) {
 	r, g, b, a := c.RGBA()
 	return uint16(r << 8), uint16(g << 8), uint16(b << 8), uint16(a)
 }
-
-//----------
 
 func SprintRgb(c color.Color) string {
 	rgba := RgbaColor(c)
@@ -87,8 +77,6 @@ func SprintRgb(c color.Color) string {
 func SprintRgbaHex(c color.Color) string {
 	return fmt.Sprintf("%06x", RgbaToInt(RgbaColor(c)))
 }
-
-//----------
 
 //func Invert(c color.Color) color.Color {
 //	return InvertRgba(RgbaColor(c))
@@ -99,8 +87,6 @@ func SprintRgbaHex(c color.Color) string {
 //func LinearInvert(c color.Color) color.Color {
 //	return LinearInvertRgba(RgbaColor(c))
 //}
-
-//----------
 
 func Invert(c color.RGBA) color.RGBA {
 	c.R = 255 - c.R
@@ -114,8 +100,6 @@ func Invert2(c color.RGBA) color.RGBA {
 	c.B = c.A - c.B
 	return c
 }
-
-//----------
 
 func Complement(c color.RGBA) color.RGBA {
 	c3 := RgbaColor(c)
@@ -134,8 +118,6 @@ func Complement(c color.RGBA) color.RGBA {
 	c2 := color.RGBA{uint8(w[0]), uint8(w[1]), uint8(w[2]), uint8(a)}
 	return c2
 }
-
-//----------
 
 // NOTE: https://www.pyimagesearch.com/2015/10/05/opencv-gamma-correction/
 func NewLinearInvertFn(v1, v2 float64) func(color.RGBA) color.RGBA {
@@ -157,10 +139,6 @@ func NewLinearInvertFn2(v1, v2 float64) func(color.Color) color.Color {
 		return fn(RgbaColor(c))
 	}
 }
-
-//----------
-//----------
-//----------
 
 type GammaTable struct {
 	Table [256]uint8

@@ -29,8 +29,6 @@ func NewInlineComplete(ed *Editor) *InlineComplete {
 	return ic
 }
 
-//----------
-
 func (ic *InlineComplete) Complete(erow *ERow, ev *ui.TextAreaInlineCompleteEvent) bool {
 
 	// early pre-check if filename is supported
@@ -133,8 +131,6 @@ func (ic *InlineComplete) insertCompletions2(comps []string, ta *ui.TextArea) (c
 	return completed, comps2, err
 }
 
-//----------
-
 func (ic *InlineComplete) lsprotoCompletions(ctx context.Context, filename string, ta *ui.TextArea) ([]string, error) {
 	compList, err := ic.ed.LSProtoMan.TextDocumentCompletion(ctx, filename, ta.RW(), ta.CursorIndex())
 	if err != nil {
@@ -154,8 +150,6 @@ func (ic *InlineComplete) lsprotoCompletions(ctx context.Context, filename strin
 	return res, nil
 }
 
-//----------
-
 func (ic *InlineComplete) setAnnotationsMsg(ta *ui.TextArea, s string) {
 	offset := ta.CursorIndex()
 	entries := drawer4.NewAnnotationGroup(1)
@@ -170,8 +164,6 @@ func (ic *InlineComplete) setAnnotations(ta *ui.TextArea, entries *drawer4.Annot
 	}
 	ic.ed.SetAnnotations(EareqInlineComplete, ta, on, -1, entries)
 }
-
-//----------
 
 func (ic *InlineComplete) IsOn(ta *ui.TextArea) bool {
 	ic.mu.Lock()
@@ -188,8 +180,6 @@ func (ic *InlineComplete) setOff(ta *ui.TextArea) {
 		ic.mu.cancel()
 	}
 }
-
-//----------
 
 func (ic *InlineComplete) CancelAndClear() {
 	ic.mu.Lock()
@@ -211,10 +201,6 @@ func (ic *InlineComplete) CancelAndClear() {
 //		}
 //	}
 //}
-
-//----------
-//----------
-//----------
 
 func insertComplete(comps []string, rw iorw.ReadWriterAt, index int) (newIndex int, completed bool, _ []string, _ error) {
 	// build prefix from start of string
@@ -257,8 +243,6 @@ func insertComplete(comps []string, rw iorw.ReadWriterAt, index int) (newIndex i
 
 	return 0, false, comps2, nil
 }
-
-//----------
 
 func expandAndFilter(prefix string, comps []string) (expand string, _ []string) {
 	// find prefix matches (case insensitive)
@@ -319,8 +303,6 @@ func longestCommonPrefix(strs []string) string {
 	//return prefix
 	return strs[0][:len(prefix)] // use original string
 }
-
-//----------
 
 func readLastUntilStart(rd iorw.ReaderAt, index int) (int, string, bool) {
 	sc := iorw.NewScanner(rd)

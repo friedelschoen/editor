@@ -22,8 +22,6 @@ func (m *Match) init(sc *Scanner) {
 	m.cache.regexps = map[string]*regexp.Regexp{}
 }
 
-//----------
-
 // runs in order, even when in reverse mode
 func (m *Match) And(pos int, fns ...MFn) (int, error) {
 	for _, fn := range fns {
@@ -86,8 +84,6 @@ func (m *Match) Optional(pos int, fn MFn) (int, error) {
 	}
 }
 
-//----------
-
 func (m *Match) Byte(pos int, b byte) (int, error) {
 	b2, p2, err := m.sc.ReadByte(pos)
 	if err != nil {
@@ -143,8 +139,6 @@ func (m *Match) OneByte(pos int) (int, error) {
 	_, p2, err := m.sc.ReadByte(pos)
 	return p2, err
 }
-
-//----------
 
 func (m *Match) Rune(pos int, ru rune) (int, error) {
 	ru2, p2, err := m.sc.ReadRune(pos)
@@ -238,8 +232,6 @@ func (m *Match) OneRune(pos int) (int, error) {
 	return p2, err
 }
 
-//----------
-
 func (m *Match) Sequence(pos int, seq string) (int, error) {
 	//return m.RuneSequence(pos, []rune(seq))
 	return m.ByteSequence(pos, []byte(seq))
@@ -247,8 +239,6 @@ func (m *Match) Sequence(pos int, seq string) (int, error) {
 func (m *Match) SequenceMid(pos int, seq string) (int, error) {
 	return m.RuneSequenceMid(pos, []rune(seq))
 }
-
-//----------
 
 func (m *Match) RuneRanges(pos int, rrs ...RuneRange) (int, error) {
 	if ru, p2, err := m.sc.ReadRune(pos); err != nil {
@@ -262,8 +252,6 @@ func (m *Match) RuneRanges(pos int, rrs ...RuneRange) (int, error) {
 		return pos, NoMatchErr
 	}
 }
-
-//----------
 
 // max<=-1 means no upper limit
 func (m *Match) LimitedLoop(pos int, min, max int, fn MFn) (int, error) {
@@ -307,8 +295,6 @@ func (m *Match) NLoop(pos int, n int, fn MFn) (int, error) {
 	}
 	return pos, nil
 }
-
-//----------
 
 func (m *Match) loopSep0(pos int, fn, sep MFn, lastSep bool) (int, error) {
 	if m.sc.Reverse {
@@ -363,8 +349,6 @@ func (m *Match) LoopSepCanHaveLast(pos int, fn, sep MFn) (int, error) {
 	return m.loopSep0(pos, fn, sep, true)
 }
 
-//----------
-
 func (m *Match) PtrFn(pos int, fn *MFn) (int, error) {
 	return (*fn)(pos)
 }
@@ -387,8 +371,6 @@ func (m *Match) Spaces(pos int, includeNL bool, escape rune) (int, error) {
 	))
 }
 
-//----------
-
 func (m *Match) EscapeAny(pos int, escape rune) (int, error) {
 	if escape == 0 {
 		return pos, NoMatchErr
@@ -398,8 +380,6 @@ func (m *Match) EscapeAny(pos int, escape rune) (int, error) {
 		m.OneRune,
 	)
 }
-
-//----------
 
 func (m *Match) ToNLOrErr(pos int, includeNL bool, esc rune) (int, error) {
 	done := false
@@ -419,8 +399,6 @@ func (m *Match) ToNLOrErr(pos int, includeNL bool, esc rune) (int, error) {
 		)),
 	)
 }
-
-//----------
 
 // match opened/closed sections.
 func (m *Match) Section(pos int, open, close string, esc rune, failOnNewline bool, maxLen int, eofClose bool, consumeFn MFn) (int, error) {
@@ -460,8 +438,6 @@ func (m *Match) StringSection(pos int, openclose string, esc rune, failOnNewline
 	return m.Section(pos, openclose, openclose, esc, failOnNewline, maxLen, eofClose, m.OneRune)
 }
 
-//----------
-
 func (m *Match) DoubleQuotedString(pos int, maxLen int) (int, error) {
 	return m.StringSection(pos, "\"", '\\', true, maxLen, false)
 }
@@ -480,8 +456,6 @@ func (m *Match) QuotedString2(pos int, esc rune, maxLen1, maxLen2 int) (int, err
 		m.W.StringSection("`", esc, false, maxLen1, false),
 	)
 }
-
-//----------
 
 func (m *Match) Letter(pos int) (int, error) {
 	return m.RuneFn(pos, unicode.IsLetter)
@@ -532,8 +506,6 @@ func (m *Match) Float(pos int) (int, error) {
 		)),
 	)
 }
-
-//----------
 
 func (m *Match) RegexpFromStart(pos int, res string, cache bool, maxLen int) (int, error) {
 	// TODO: reverse
@@ -616,8 +588,6 @@ func (m *Match) FnTrue(pos int, fn func() bool) (int, error) {
 	return pos, NoMatchErr
 }
 
-//----------
-
 func (m *Match) Eof(pos int) (int, error) {
 	if _, _, err := m.sc.ReadRune(pos); err != nil {
 		if m.sc.Reverse {
@@ -635,8 +605,6 @@ func (m *Match) Eof(pos int) (int, error) {
 func (m *Match) NotEof(p int) (int, error) {
 	return m.MustErr(p, m.Eof)
 }
-
-//----------
 
 func (m *Match) ReverseMode(pos int, reverse bool, fn MFn) (int, error) {
 	tmp := m.sc.Reverse
@@ -770,7 +738,3 @@ func (m *Match) FatalOnError(pos int, s string, fn MFn) (int, error) {
 		return p2, nil
 	}
 }
-
-//----------
-//----------
-//----------

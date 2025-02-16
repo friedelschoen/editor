@@ -16,8 +16,7 @@ package iorw
 //	Len() int
 //}
 
-////----------
-
+//
 //type ReadWriter2 interface {
 //	Reader2
 //	Writer2
@@ -31,14 +30,12 @@ package iorw
 //	Overwrite(del int, p []byte) error // writes len(p)
 //}
 
-////----------
-
+//
 //// TODO
 ////ReadAt(p []byte, i int) (int, error)
 ////WriteAt(p []byte, i int) (n int, err error)
 
-////----------
-
+//
 //type ReadSeeker interface {
 //	Reader2
 //	Seeker
@@ -55,8 +52,7 @@ package iorw
 //	Seeker
 //}
 
-////----------
-
+//
 //type Seek struct {
 //	i int
 //	l Lengther
@@ -90,8 +86,7 @@ package iorw
 //	return s.i
 //}
 
-////----------
-
+//
 //type LimitedSeek struct {
 //	Seeker
 //	start, n int
@@ -124,8 +119,7 @@ package iorw
 //	return s.Seek(abs, SeekStart)
 //}
 
-////----------
-
+//
 //type rs struct {
 //	r ReaderAt
 //	Seeker
@@ -149,8 +143,7 @@ package iorw
 //	return b, err
 //}
 
-////----------
-
+//
 //type ws struct {
 //	w WriterAt
 //	Seeker
@@ -173,8 +166,7 @@ package iorw
 //	return err
 //}
 
-////----------
-
+//
 //type rr struct {
 //	r ReaderAt
 //	Seeker
@@ -199,8 +191,7 @@ package iorw
 //	return ru, size, err
 //}
 
-////----------
-
+//
 //type rrr struct {
 //	r ReaderAt
 //	Seeker
@@ -225,8 +216,7 @@ package iorw
 //	return ru, size, err
 //}
 
-////----------
-
+//
 //type ior struct {
 //	r Reader2
 //}
@@ -244,8 +234,7 @@ package iorw
 //	return copy(p, b), nil
 //}
 
-////----------
-
+//
 //type iow struct {
 //	w Writer2
 //}

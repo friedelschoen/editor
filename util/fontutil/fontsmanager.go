@@ -7,8 +7,6 @@ import (
 	"golang.org/x/image/math/fixed"
 )
 
-//----------
-
 var DPI float64 // default: github.com/golang/freetype/truetype/face.go:31:3
 var FontsMan = NewFontsManager()
 
@@ -25,8 +23,6 @@ func DefaultFontFace() *FontFace {
 	opt := truetype.Options{} // defaults: size=12, dpi=72, ~14px
 	return f.FontFace(opt)
 }
-
-//----------
 
 type FontsManager struct {
 	fontsCache map[string]*Font
@@ -54,8 +50,6 @@ func (fm *FontsManager) Font(ttf []byte) (*Font, error) {
 	fm.fontsCache[string(ttf)] = f
 	return f, nil
 }
-
-//----------
 
 type Font struct {
 	Font       *truetype.Font
@@ -93,8 +87,6 @@ func (f *Font) FontFace2(size float64) *FontFace {
 	opt := truetype.Options{Size: size}
 	return f.FontFace(opt)
 }
-
-//----------
 
 type FontFace struct {
 	Font       *Font

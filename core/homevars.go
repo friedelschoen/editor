@@ -33,8 +33,6 @@ func (hv *HomeVars) ParseToolbarVars(strs []string, caseInsensitive bool) {
 	hv.hvm = toolbarparser.NewHomeVarMap(m, caseInsensitive)
 }
 
-//----------
-
 func (hv *HomeVars) Encode(filename string) string {
 	return hv.hvm.Encode(filename)
 }

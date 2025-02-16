@@ -13,8 +13,6 @@ import (
 	"errors"
 )
 
-//----------
-
 // Implements rpc.ClientCodec
 type JsonCodec struct {
 	OnNotificationMessage   func(*NotificationMessage)
@@ -39,8 +37,6 @@ func NewJsonCodec(rwc io.ReadWriteCloser) *JsonCodec {
 	c.simulatedResp = make(chan any, 4)
 	return c
 }
-
-//----------
 
 func (c *JsonCodec) WriteRequest(req *rpc.Request, data any) error {
 	method := req.ServiceMethod
@@ -99,8 +95,6 @@ func (c *JsonCodec) WriteRequest(req *rpc.Request, data any) error {
 	return nil
 }
 
-//----------
-
 func (c *JsonCodec) ReadLoop() error {
 	for {
 		b, err := c.read()
@@ -115,8 +109,6 @@ func (c *JsonCodec) ReadLoop() error {
 		c.responses <- b
 	}
 }
-
-//----------
 
 // Sets response.Seq to have ReadResponseBody be called with the correct reply variable.
 func (c *JsonCodec) ReadResponseHeader(resp *rpc.Response) error {
@@ -186,8 +178,6 @@ func (c *JsonCodec) ReadResponseBody(reply any) error {
 	}
 	return fmt.Errorf("jsoncodec: reply data not assigned: %v", reply)
 }
-
-//----------
 
 func (c *JsonCodec) read() ([]byte, error) {
 	cl, err := c.readContentLengthHeader() // content length
@@ -261,15 +251,11 @@ func (c *JsonCodec) readContent(length int) ([]byte, error) {
 	return b, err
 }
 
-//----------
-
 func (c *JsonCodec) unexpectedServerReply(resp *Response) {
 	if c.OnUnexpectedServerReply != nil {
 		c.OnUnexpectedServerReply(resp)
 	}
 }
-
-//----------
 
 func (c *JsonCodec) Close() error {
 	c.mu.Lock()
@@ -287,16 +273,10 @@ func (c *JsonCodec) isClosed() bool {
 	return c.mu.closed
 }
 
-//----------
-//----------
-//----------
-
 type readData struct {
 	noReply bool
 	resp    *Response
 }
-
-//----------
 
 func noreplyMethod(method string) (string, bool) {
 	prefix := "noreply:"

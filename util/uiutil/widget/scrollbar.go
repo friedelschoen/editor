@@ -37,8 +37,6 @@ func NewScrollBar(ctx ImageContext, sa *ScrollArea) *ScrollBar {
 	return sb
 }
 
-//----------
-
 func (sb *ScrollBar) scrollPage(up bool) {
 	o := sb.sa.scrollable.ScrollOffset()
 	sy := sb.sa.scrollable.ScrollPageSizeY(up)
@@ -53,16 +51,12 @@ func (sb *ScrollBar) scrollWheel(up bool) {
 	sb.sa.scrollable.SetScrollOffset(o)
 }
 
-//----------
-
 func (sb *ScrollBar) yBoundsSizePad() (int, int, int) {
 	min := 5
 	d := sb.yaxis(sb.Bounds.Size())
 	dpad := mathutil.Max(d-min, 0)
 	return d, dpad, min
 }
-
-//----------
 
 func (sb *ScrollBar) scrollToPoint(p *image.Point) {
 	py := float64(sb.yaxis(p.Sub(sb.pressPad).Sub(sb.Bounds.Min)))
@@ -78,8 +72,6 @@ func (sb *ScrollBar) scrollToPositionPercent(offsetPerc float64) {
 	*sb.yaxisPtr(&offset) = int(offsetPerc*float64(sb.yaxis(size)) + 0.5)
 	sb.sa.scrollable.SetScrollOffset(offset)
 }
-
-//----------
 
 func (sb *ScrollBar) calcPositionAndSize() {
 	pos := sb.sa.scrollable.ScrollOffset()
@@ -108,8 +100,6 @@ func (sb *ScrollBar) calcPositionAndSize() {
 	sb.sizePercent = sp
 }
 
-//----------
-
 func (sb *ScrollBar) OnChildMarked(child Node, newMarks Marks) {
 	// paint scrollbar background if the handle is getting painted
 	if child == sb.Handle {
@@ -118,8 +108,6 @@ func (sb *ScrollBar) OnChildMarked(child Node, newMarks Marks) {
 		}
 	}
 }
-
-//----------
 
 func (sb *ScrollBar) Layout() {
 	r := sb.Bounds
@@ -142,8 +130,6 @@ func (sb *ScrollBar) Paint() {
 	c := sb.TreeThemePaletteColor("scrollbar_bg")
 	imageutil.FillRectangle(sb.ctx.Image(), sb.Bounds, c)
 }
-
-//----------
 
 func (sb *ScrollBar) OnInputEvent(ev any, p image.Point) event.Handled {
 	switch evt := ev.(type) {
@@ -199,8 +185,6 @@ func (sb *ScrollBar) setPressPad(p *image.Point) {
 		sb.pressPad.Y = b.Dy() / 2
 	}
 }
-
-//----------
 
 func (sb *ScrollBar) yaxis(p image.Point) int {
 	if sb.Horizontal {

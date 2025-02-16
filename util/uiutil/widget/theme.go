@@ -7,8 +7,6 @@ import (
 	"github.com/jmigpin/editor/util/imageutil"
 )
 
-//----------
-
 var DefaultPalette = Palette{
 	"text_cursor_fg":             nil, // present but nil uses the current fg
 	"text_fg":                    cint(0x0),
@@ -47,8 +45,6 @@ var DefaultPalette = Palette{
 	"rect":   cint(0xff8000), // helpful color to debug
 }
 
-//----------
-
 type Theme struct {
 	FontFace          *fontutil.FontFace
 	Palette           Palette
@@ -66,8 +62,6 @@ func (t *Theme) ClearIfEmpty() {
 		*t = Theme{}
 	}
 }
-
-//----------
 
 // Can be set to nil to erase.
 func (t *Theme) SetFontFace(ff *fontutil.FontFace) {
@@ -104,8 +98,6 @@ func (t *Theme) SetPaletteNamePrefix(prefix string) {
 	t.ClearIfEmpty()
 }
 
-//----------
-
 type Palette map[string]color.Color
 
 func (pal Palette) Empty() bool {
@@ -117,8 +109,6 @@ func (pal Palette) Merge(p2 Palette) {
 		pal[k] = v
 	}
 }
-
-//----------
 
 func cint(c int) color.RGBA {
 	return imageutil.RgbaFromInt(c)

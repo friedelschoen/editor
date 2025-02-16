@@ -56,8 +56,6 @@ func (dnd *Dnd) setupWindowProperty() error {
 	return cookie.Check()
 }
 
-//----------
-
 // Error could be nil.
 func (dnd *Dnd) OnClientMessage(ev *xproto.ClientMessageEvent) (ev_ any, _ error, ok bool) {
 	if ev.Format != 32 {
@@ -82,8 +80,6 @@ func (dnd *Dnd) OnClientMessage(ev *xproto.ClientMessageEvent) (ev_ any, _ error
 	}
 	return nil, nil, false
 }
-
-//----------
 
 func (dnd *Dnd) onEnter(data []uint32) {
 	dnd.data.hasEnter = true
@@ -117,8 +113,6 @@ func (dnd *Dnd) onEnter(data []uint32) {
 	}
 	dnd.data.enter.eventTypes = u
 }
-
-//----------
 
 func (dnd *Dnd) onPosition(data []uint32) (ev any, _ error) {
 	// must have had a dnd enter event before
@@ -169,8 +163,6 @@ func (dnd *Dnd) positionReply(action event.DndAction) {
 	dnd.sendStatus(dnd.data.enter.win, a, accept)
 }
 
-//----------
-
 func (dnd *Dnd) onDrop(data []uint32) (ev any, _ error) {
 	// must have had a dnd position event before
 	if !dnd.data.hasPosition {
@@ -214,8 +206,6 @@ func (dnd *Dnd) requestDropData(t event.DndType) ([]byte, error) {
 	return dnd.extractData(ev)
 }
 
-//----------
-
 // Called after a request for data.
 func (dnd *Dnd) OnSelectionNotify(ev *xproto.SelectionNotifyEvent) {
 	if !dnd.data.hasDrop {
@@ -231,8 +221,6 @@ func (dnd *Dnd) OnSelectionNotify(ev *xproto.SelectionNotifyEvent) {
 		log.Print(fmt.Errorf("onselectionnotify: %w", err))
 	}
 }
-
-//----------
 
 func (dnd *Dnd) requestData(typ xproto.Atom) {
 	// will get selection-notify event
@@ -286,8 +274,6 @@ func (dnd *Dnd) sendStatus(win xproto.Window, action xproto.Atom, accept bool) {
 	dnd.sendClientMessage(cme)
 }
 
-//----------
-
 func (dnd *Dnd) sendClientMessage(cme *xproto.ClientMessageEvent) {
 	_ = xproto.SendEvent(
 		dnd.conn,
@@ -312,8 +298,6 @@ func (dnd *Dnd) screenToWindowPoint(sp image.Point) (image.Point, error) {
 func (dnd *Dnd) clearData() {
 	dnd.data = DndData{}
 }
-
-//----------
 
 func (dnd *Dnd) getTypeList(win xproto.Window) ([]xproto.Atom, error) {
 	cookie := xproto.GetProperty(
@@ -341,10 +325,6 @@ func (dnd *Dnd) getTypeList(win xproto.Window) ([]xproto.Atom, error) {
 	return atoms, nil
 }
 
-//----------
-//----------
-//----------
-
 type DndData struct {
 	hasEnter    bool
 	hasPosition bool
@@ -363,8 +343,6 @@ type DndData struct {
 		timestamp xproto.Timestamp
 	}
 }
-
-//----------
 
 var DndAtoms struct {
 	XdndAware    xproto.Atom
@@ -386,8 +364,6 @@ var DndAtoms struct {
 
 	XdndSelection xproto.Atom
 }
-
-//----------
 
 var DropTypeAtoms struct {
 	TextURLList xproto.Atom `loadAtoms:"text/uri-list"` // technically, a URL

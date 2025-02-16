@@ -24,8 +24,6 @@ func (dr *DrawRune) Iter() {
 
 func (dr *DrawRune) End() {}
 
-//----------
-
 func (dr *DrawRune) draw() {
 	st := &dr.d.st.drawR
 
@@ -76,8 +74,6 @@ func (dr *DrawRune) draw2(fface *fontutil.FontFace, pen image.Point, ru rune, fg
 
 	imageutil.DrawUniformMask(dr.d.st.drawR.img, gr, fg, mask, maskp, draw.Over)
 }
-
-//----------
 
 type DrawRuneDelay struct {
 	pen   image.Point

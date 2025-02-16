@@ -17,8 +17,6 @@ func ListDirERow(erow *ERow, filepath string, subs, hiddens bool) {
 	})
 }
 
-//----------
-
 func ListDirContext(ctx context.Context, w io.Writer, filepath string, subs, hiddens bool) error {
 	// "../" at the top
 	u := ".." + string(os.PathSeparator)
@@ -88,8 +86,6 @@ func listDirContext(ctx context.Context, w io.Writer, fpath, addedFilepath strin
 	}
 	return nil
 }
-
-//----------
 
 func CompareFileInfos(a, b os.FileInfo) int {
 	an := strings.ToLower(a.Name())

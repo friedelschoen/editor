@@ -37,8 +37,6 @@ func NewText(ctx ImageContext) *Text {
 	return t
 }
 
-//----------
-
 func (t *Text) RW() iorw.ReadWriterAt {
 	return t.rw
 }
@@ -65,8 +63,6 @@ func (t *Text) SetBytes(b []byte) error {
 	return nil
 }
 
-//----------
-
 func (t *Text) Str() string {
 	p, err := t.Bytes()
 	if err != nil {
@@ -79,8 +75,6 @@ func (t *Text) SetStr(str string) error {
 	return t.SetBytes([]byte(str))
 }
 
-//----------
-
 func (t *Text) contentChanged() {
 	t.Drawer.ContentChanged()
 
@@ -88,15 +82,11 @@ func (t *Text) contentChanged() {
 	t.MarkNeedsLayoutAndPaint()
 }
 
-//----------
-
 // implements Scrollable interface.
 func (t *Text) SetScrollable(x, y bool) {
 	t.scrollable.x = x
 	t.scrollable.y = y
 }
-
-//----------
 
 func (t *Text) RuneOffset() int {
 	return t.Drawer.RuneOffset()
@@ -108,8 +98,6 @@ func (t *Text) SetRuneOffset(v int) {
 		t.MarkNeedsLayoutAndPaint()
 	}
 }
-
-//----------
 
 func (t *Text) IndexVisible(offset int) bool {
 	return t.Drawer.RangeVisible(offset, 0)
@@ -125,8 +113,6 @@ func (t *Text) MakeRangeVisible2(offset, n int, align drawutil.RangeAlignment) {
 	t.SetRuneOffset(o)
 }
 
-//----------
-
 func (t *Text) GetPoint(i int) image.Point {
 	return t.Drawer.LocalPointOf(i)
 }
@@ -134,13 +120,9 @@ func (t *Text) GetIndex(p image.Point) int {
 	return t.Drawer.LocalIndexOf(p)
 }
 
-//----------
-
 func (t *Text) LineHeight() int {
 	return t.Drawer.LineHeight()
 }
-
-//----------
 
 func (t *Text) Measure(hint image.Point) image.Point {
 	b := t.Bounds
@@ -150,8 +132,6 @@ func (t *Text) Measure(hint image.Point) image.Point {
 	return imageutil.MinPoint(m, hint)
 }
 
-//----------
-
 func (t *Text) Layout() {
 	if t.Bounds != t.Drawer.Bounds() {
 		t.Drawer.SetBounds(t.Bounds)
@@ -159,16 +139,12 @@ func (t *Text) Layout() {
 	}
 }
 
-//----------
-
 func (t *Text) PaintBase() {
 	imageutil.FillRectangle(t.ctx.Image(), t.Bounds, t.bg)
 }
 func (t *Text) Paint() {
 	t.Drawer.Draw(t.ctx.Image())
 }
-
-//----------
 
 func (t *Text) OnThemeChange() {
 	// word highlight ops (contain fg/bg colors) are cached. A contentchanged() here is the easiest way to invalidate the cache and have all the colors be updated.

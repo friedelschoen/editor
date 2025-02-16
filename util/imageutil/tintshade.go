@@ -18,8 +18,6 @@ func tint(c color.RGBA, v float64) color.Color {
 	return c
 }
 
-//----------
-
 // Turn color darker by v percent (0.0, 1.0).
 func Shade(c color.Color, v float64) color.Color {
 	c2 := RgbaColor(c)
@@ -36,8 +34,6 @@ func shade(c color.RGBA, v float64) color.Color {
 	c.B = uint8(v * float64(c.B))
 	return c
 }
-
-//----------
 
 func TintOrShade(c color.Color, v float64) color.Color {
 	c2 := RgbaColor(c)

@@ -21,7 +21,7 @@ func TestGrammarParser1(t *testing.T) {
 	testGrammarParserMode1(t, in, out)
 }
 func TestGrammarParser2(t *testing.T) {
-	in := `	
+	in := `
 		^S = (a|b|("cd")%)?;
 	`
 	out := `
@@ -42,8 +42,6 @@ func TestGrammarParser3(t *testing.T) {
 	`
 	testGrammarParserMode1(t, in, out)
 }
-
-//----------
 
 func testGrammarParserMode1(t *testing.T, in, out string) {
 	t.Helper()

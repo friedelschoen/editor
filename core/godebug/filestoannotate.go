@@ -151,8 +151,6 @@ func (fa *FilesToAnnotate) initMaps2(pkg *packages.Package) error {
 	return nil
 }
 
-//----------
-
 func (fa *FilesToAnnotate) addFromArgs(ctx context.Context) error {
 	absFilePath := func(s string) string {
 		if !filepath.IsAbs(s) {
@@ -211,8 +209,6 @@ func (fa *FilesToAnnotate) addFromArgs(ctx context.Context) error {
 	return nil
 }
 
-//----------
-
 func (fa *FilesToAnnotate) addFromMain(ctx context.Context) error {
 	for _, pkg := range fa.loadPkgs {
 		for _, filename := range pkg.CompiledGoFiles {
@@ -230,8 +226,6 @@ func (fa *FilesToAnnotate) addFromMain(ctx context.Context) error {
 	}
 	return nil
 }
-
-//----------
 
 func (fa *FilesToAnnotate) addFromSrcDirectives(ctx context.Context) error {
 	for filename, astFile := range fa.filesAsts {
@@ -389,8 +383,6 @@ func (fa *FilesToAnnotate) addFilename(filename string, typ AnnotationType) erro
 	return nil
 }
 
-//----------
-
 func (fa *FilesToAnnotate) addToAnnotate(filename string, typ AnnotationType) {
 	typ0, ok := fa.toAnnotate[filename]
 	add := !ok || typ > typ0
@@ -403,8 +395,6 @@ func (fa *FilesToAnnotate) addToAnnotate(filename string, typ AnnotationType) {
 		}
 	}
 }
-
-//----------
 
 func (fa *FilesToAnnotate) loadPackages(ctx context.Context) ([]*packages.Package, error) {
 
@@ -469,8 +459,6 @@ func (fa *FilesToAnnotate) loadPackages(ctx context.Context) ([]*packages.Packag
 	return pkgs, nil
 }
 
-//----------
-
 // commented: in favor of goutil.FindGoMod
 //func (fa *FilesToAnnotate) GoModFilename() (string, bool) {
 //	for _, pkg := range fa.filesPkgs {
@@ -500,8 +488,6 @@ func (fa *FilesToAnnotate) loadPackages(ctx context.Context) ([]*packages.Packag
 //	return "", false
 //}
 
-//----------
-
 func (fa *FilesToAnnotate) nodePkg(node ast.Node) (*packages.Package, error) {
 	filename, err := nodeFilename(fa.cmd.fset, node)
 	if err != nil {
@@ -521,10 +507,6 @@ func (fa *FilesToAnnotate) pathPkg(path string) (*packages.Package, error) {
 	}
 	return pkg, nil
 }
-
-//----------
-//----------
-//----------
 
 func nodeImportPath(node ast.Node) (string, error) {
 	// ex: direclty at *ast.ImportSpec
@@ -568,8 +550,6 @@ func nodeFilename(fset *token.FileSet, node ast.Node) (string, error) {
 	return tokFile.Name(), nil
 }
 
-//----------
-
 func hashStringN(s string, n int) string {
 	h := md5.New()
 	_, _ = h.Write([]byte(s))
@@ -585,14 +565,10 @@ func hashStringN(s string, n int) string {
 	return s2
 }
 
-//----------
-
 func positionError(fset *token.FileSet, pos token.Pos, err error) error {
 	p := fset.Position(pos)
 	return fmt.Errorf("%v: %w", p, err)
 }
-
-//----------
 
 // TODO: move to goutil?
 func pkgMod(pkg *packages.Package) *packages.Module {

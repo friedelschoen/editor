@@ -45,8 +45,6 @@ func NewAnnotator(fset *token.FileSet, ti *types.Info, dopt *AnnSetDebugOpt) *An
 	return ann
 }
 
-//----------
-
 func (ann *Annotator) AnnotateAstFile(astFile *ast.File) {
 	defer func() { // always run, even on error
 		ann.debugNIndexes = ann.correctDebugIndexes(astFile)
@@ -64,8 +62,6 @@ func (ann *Annotator) AnnotateAstFile(astFile *ast.File) {
 	ann.addImports(astFile)
 }
 
-//----------
-
 func (ann *Annotator) log(args ...any) {
 	//log.Print(args...)
 	s := fmt.Sprint(args...)
@@ -75,9 +71,6 @@ func (ann *Annotator) log(args ...any) {
 func (ann *Annotator) logf(f string, args ...any) {
 	ann.log(fmt.Sprintf(f, args...))
 }
-
-//----------
-//----------
 
 func (ann *Annotator) visFile(ctx *Ctx, file *ast.File) error {
 	ctx = ctx.withNoAnnotationsUpdated(file)
@@ -112,8 +105,6 @@ func (ann *Annotator) visStmt(ctx *Ctx, stmt ast.Stmt) error {
 
 	ctx = ctx.withFixedDebugIndex(true) // each stmt uses a fixed index
 	ctx = ctx.withNoAnnotationsUpdated(stmt)
-
-	//----------
 
 	switch t := stmt.(type) {
 	case *ast.AssignStmt:
@@ -242,9 +233,6 @@ func (ann *Annotator) visSpec(ctx *Ctx, spec ast.Spec) error {
 	}
 }
 
-//----------
-//----------
-
 func (ann *Annotator) visGenDecl(ctx *Ctx, gd *ast.GenDecl) error {
 	// split into individual decls to be able to insert debug lines
 	// TODO: can't split CONST
@@ -307,9 +295,6 @@ func (ann *Annotator) visFuncDecl(ctx *Ctx, fd *ast.FuncDecl) error {
 	return ann.visStmt(ctx, fd.Body)
 }
 
-//----------
-//----------
-
 func (ann *Annotator) visStmts(ctx *Ctx, stmts *[]ast.Stmt) error {
 	ctx = ctx.withNoAnnotationsInstance()
 	ctx = ctx.withFixedDebugIndex(false)
@@ -320,8 +305,6 @@ func (ann *Annotator) visStmts(ctx *Ctx, stmts *[]ast.Stmt) error {
 		return ann.visStmt(ctx, stmt)
 	})
 }
-
-//----------
 
 func (ann *Annotator) visAssignStmt(ctx *Ctx, as *ast.AssignStmt) error {
 	// ex: a,b=c,d
@@ -815,9 +798,6 @@ func (ann *Annotator) visTypeSwitchStmt(ctx *Ctx, tss *ast.TypeSwitchStmt) error
 	return ann.visStmt(ctx, tss.Body)
 }
 
-//----------
-//----------
-
 func (ann *Annotator) visExprs(ctx *Ctx, exprs0 *[]ast.Expr, noExprsPos token.Pos) (DebugExpr, error) {
 	ctx = ctx.withValue(cidnExprs, exprs0)
 	exprs := *exprs0
@@ -858,8 +838,6 @@ func (ann *Annotator) visExprs(ctx *Ctx, exprs0 *[]ast.Expr, noExprsPos token.Po
 
 	return ann.newDebugILOrNilIdent(noExprsPos, w...), nil
 }
-
-//----------
 
 func (ann *Annotator) visBasicLit(ctx *Ctx, bl *ast.BasicLit) (DebugExpr, error) {
 	return ann.resultDE(ctx, bl)
@@ -956,8 +934,6 @@ func (ann *Annotator) visBinaryExprAndOr(ctx *Ctx, be *ast.BinaryExpr) (DebugExp
 	de := ann.newDebugCE("IB", x, opbl, y, result)
 	return de, nil
 }
-
-//----------
 
 func (ann *Annotator) visCallExpr(ctx *Ctx, ce *ast.CallExpr) (DebugExpr, error) {
 
@@ -1187,8 +1163,6 @@ func (ann *Annotator) visSelectorExpr(ctx *Ctx, se *ast.SelectorExpr) (DebugExpr
 		}
 	}
 
-	//----------
-
 	x := DebugExpr(nilIdent(se.X.Pos()))
 	if doX {
 		ctx2 := ctx
@@ -1373,9 +1347,6 @@ func (ann *Annotator) visUnaryExpr(ctx *Ctx, ue *ast.UnaryExpr) (DebugExpr, erro
 	de := ann.newDebugCE("IU", e2, result)
 	return de, nil
 }
-
-//----------
-//----------
 
 func (ann *Annotator) visFieldList(ctx *Ctx, fl *ast.FieldList) (DebugExpr, bool, error) {
 	if fl == nil { // ex: functype.typeparams

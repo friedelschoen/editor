@@ -49,8 +49,6 @@ func (in *Indent) Iter() {
 
 func (in *Indent) End() {}
 
-//----------
-
 func (in *Indent) indent() {
 	// set ident
 	pen := &in.d.st.runeR.pen

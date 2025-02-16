@@ -20,8 +20,6 @@ func newRuleFirstT(ri *RuleIndex, reverse bool) *RuleFirstT {
 	return rf
 }
 
-//----------
-
 func (rf *RuleFirstT) first(r Rule) RuleSet {
 	rset, ok := rf.cache[r]
 	if ok {
@@ -65,8 +63,6 @@ func (rf *RuleFirstT) sequenceFirst(w []Rule) RuleSet {
 	return rset
 }
 
-//----------
-
 func (rf *RuleFirstT) String() string {
 	u := []string{}
 	for _, r := range rf.ri.sorted() {
@@ -77,10 +73,6 @@ func (rf *RuleFirstT) String() string {
 	}
 	return fmt.Sprintf("rulefirst[rev=%v]{\n\t%v\n}", rf.reverse, strings.Join(u, "\n\t"))
 }
-
-//----------
-//----------
-//----------
 
 //type RuleFollow struct {
 //	ri     *RuleIndex

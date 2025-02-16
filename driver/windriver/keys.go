@@ -332,14 +332,10 @@ func runeToEventKeySym(ru rune) event.KeySym {
 //	return 0
 //}
 
-//----------
-
 const (
 	kstateToggleBit = 1
 	kstateDownBit   = 1 << (8 - 1)
 )
-
-//----------
 
 func translateKStateToEventKeyModifiers(kstate *[256]byte) event.KeyModifiers {
 	type pair struct {
@@ -381,8 +377,6 @@ func translateKStateToEventMouseButtons(kstate *[256]byte) event.MouseButtons {
 	return w
 }
 
-//----------
-
 func translateVKeyToEventKeyModifiers(vkey uint32) event.KeyModifiers {
 	type pair struct {
 		a uint32
@@ -421,8 +415,6 @@ func translateVKeyToEventMouseButtons(vkey uint32) event.MouseButtons {
 	}
 	return w
 }
-
-//----------
 
 //type KeyData struct {
 //	Count             int

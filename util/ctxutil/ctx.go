@@ -22,8 +22,6 @@ func (ctx *Ctx) Value(name string) (any, *Ctx) {
 	return nil, nil
 }
 
-//----------
-
 func (ctx *Ctx) ValueBool(name string) bool {
 	v, _ := ctx.Value(name)
 	if v == nil {

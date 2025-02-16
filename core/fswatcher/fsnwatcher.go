@@ -26,8 +26,6 @@ func NewFsnWatcher() (*FsnWatcher, error) {
 	return w, nil
 }
 
-//----------
-
 func (w *FsnWatcher) Close() error {
 	return w.w.Close()
 }
@@ -36,8 +34,6 @@ func (w *FsnWatcher) OpMask() *Op {
 	return &w.opMask
 }
 
-//----------
-
 func (w *FsnWatcher) Add(name string) error {
 	return w.w.Add(name)
 }
@@ -45,13 +41,9 @@ func (w *FsnWatcher) Remove(name string) error {
 	return w.w.Remove(name)
 }
 
-//----------
-
 func (w *FsnWatcher) Events() <-chan any {
 	return w.events
 }
-
-//----------
 
 func (w *FsnWatcher) eventLoop() {
 	for {

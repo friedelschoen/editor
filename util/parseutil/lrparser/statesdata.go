@@ -107,8 +107,6 @@ func (sd *StatesData) build(vd *VerticesData) error {
 	return nil
 }
 
-//----------
-
 func (sd *StatesData) checkActionConflicts(vd *VerticesData) error {
 	me := iout.MultiError{}
 	for _, st := range sd.states {
@@ -147,8 +145,6 @@ func (sd *StatesData) checkActionConflicts(vd *VerticesData) error {
 	}
 	return me.Result()
 }
-
-//----------
 
 func (sd *StatesData) checkStringsConflicts(vd *VerticesData) error {
 	// TODO: anyrune?
@@ -455,8 +451,6 @@ func (sd *StatesData) checkStringsConflicts(vd *VerticesData) error {
 //	return nil
 //}
 
-//----------
-
 //godebug:annotateoff
 func (sd *StatesData) String() string {
 	sb := &strings.Builder{}
@@ -465,10 +459,6 @@ func (sd *StatesData) String() string {
 	}
 	return sb.String()
 }
-
-//----------
-//----------
-//----------
 
 type State struct {
 	id             stateId
@@ -519,19 +509,11 @@ func (st *State) String() string {
 	return s
 }
 
-//----------
-//----------
-//----------
-
 type stateId int
 
 func (sid stateId) String() string {
 	return fmt.Sprintf("state%d", int(sid))
 }
-
-//----------
-//----------
-//----------
 
 type Action any
 

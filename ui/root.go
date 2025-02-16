@@ -65,8 +65,6 @@ func (l *Root) OnChildMarked(child widget.Node, newMarks widget.Marks) {
 	}
 }
 
-//----------
-
 func (l *Root) OnInputEvent(ev0 any, p image.Point) event.Handled {
 	switch ev := ev0.(type) {
 	case *event.KeyDown:
@@ -102,20 +100,14 @@ func (l *Root) OnInputEvent(ev0 any, p image.Point) event.Handled {
 	return false
 }
 
-//----------
-
 func (l *Root) selAnnEv(typ RootSelectAnnotationType) {
 	ev2 := &RootSelectAnnotationEvent{typ}
 	l.EvReg.RunCallbacks(RootSelectAnnotationEventId, ev2)
 }
 
-//----------
-
 const (
 	RootSelectAnnotationEventId = iota
 )
-
-//----------
 
 type RootSelectAnnotationEvent struct {
 	Type RootSelectAnnotationType

@@ -32,8 +32,6 @@ func NewCopy(conn *xgb.Conn, win xproto.Window) (*Copy, error) {
 	return c, nil
 }
 
-//----------
-
 func (c *Copy) Set(i event.ClipboardIndex, str string) error {
 	switch i {
 	case event.CIPrimary:
@@ -64,8 +62,6 @@ func (c *Copy) set(selection xproto.Atom) error {
 
 	return nil
 }
-
-//----------
 
 // Another application is asking for the data
 func (c *Copy) OnSelectionRequest(ev *xproto.SelectionRequestEvent) error {
@@ -110,8 +106,6 @@ func (c *Copy) debugRequest(ev *xproto.SelectionRequestEvent) {
 	log.Printf("cpcopy: non-standard external request for type %v %q\n", ev.Target, name)
 }
 
-//----------
-
 func (c *Copy) transferBytes(ev *xproto.SelectionRequestEvent) error {
 	var b []byte
 	switch ev.Selection {
@@ -153,8 +147,6 @@ func (c *Copy) transferBytes(ev *xproto.SelectionRequestEvent) error {
 		string(sne.Bytes()))
 	return c2.Check()
 }
-
-//----------
 
 // testing: $ xclip -o -target TARGETS -selection primary
 
@@ -204,8 +196,6 @@ func (c *Copy) transferTargets(ev *xproto.SelectionRequestEvent) error {
 	return c2.Check()
 }
 
-//----------
-
 // Another application now owns the selection.
 func (c *Copy) OnSelectionClear(ev *xproto.SelectionClearEvent) {
 	switch ev.Selection {
@@ -215,8 +205,6 @@ func (c *Copy) OnSelectionClear(ev *xproto.SelectionClearEvent) {
 		c.clipboardStr = ""
 	}
 }
-
-//----------
 
 var CopyAtoms struct {
 	Atom      xproto.Atom `loadAtoms:"ATOM"`

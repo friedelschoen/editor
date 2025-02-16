@@ -35,8 +35,6 @@ func (edits *Edits) Append(ur *UndoRedo) {
 	}
 }
 
-//----------
-
 func (edits *Edits) MergeEdits(edits2 *Edits) {
 	// append list
 	for e := edits2.list.Front(); e != nil; e = e.Next() {
@@ -49,8 +47,6 @@ func (edits *Edits) MergeEdits(edits2 *Edits) {
 	}
 	edits.postCursor = edits2.postCursor
 }
-
-//----------
 
 func (edits *Edits) WriteUndoRedo(redo bool, w iorw.WriterAt) (rwedit.SimpleCursor, error) {
 	if redo {
@@ -71,8 +67,6 @@ func (edits *Edits) WriteUndoRedo(redo bool, w iorw.WriterAt) (rwedit.SimpleCurs
 		return edits.preCursor, nil
 	}
 }
-
-//----------
 
 func (edits *Edits) Entries() []*UndoRedo {
 	w := make([]*UndoRedo, edits.list.Len())

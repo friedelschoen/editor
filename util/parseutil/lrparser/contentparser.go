@@ -37,8 +37,6 @@ func newContentParser(opt *CpOpt, ri *RuleIndex) (*ContentParser, error) {
 	return cp, nil
 }
 
-//----------
-
 func (cp *ContentParser) Parse(src []byte, index int) (*BuildNodeData, *cpRun, error) {
 	fset := NewFileSetFromBytes(src)
 	return cp.ParseFileSet(fset, index, nil)
@@ -61,8 +59,6 @@ func (cp *ContentParser) ParseFileSet(fset *FileSet, index int, extData any) (*B
 	d := newBuildNodeData(cpr, cpn)
 	return d, cpr, nil
 }
-
-//----------
 
 func (cp *ContentParser) parse3(cpr *cpRun) (*CPNode, error) {
 	// add initial state to stack
@@ -155,8 +151,6 @@ func (cp *ContentParser) reduce(cpr *cpRun, ar *ActionReduce) error {
 	return cp.buildNode(cpr, ar.prod, cpn)
 }
 
-//----------
-
 func (cp *ContentParser) buildNode(cpr *cpRun, r Rule, cpn *CPNode) error {
 	if cpn.simulated {
 		return nil
@@ -168,8 +162,6 @@ func (cp *ContentParser) buildNode(cpr *cpRun, r Rule, cpn *CPNode) error {
 	d := newBuildNodeData(cpr, cpn)
 	return fn(d)
 }
-
-//----------
 
 func (cp *ContentParser) groupPopped(cpr *cpRun, ar *ActionReduce, pops []*cpsItem) (*CPNode, error) {
 	cpn := cp.groupPopped2(cpr, ar, pops)
@@ -233,8 +225,6 @@ func (cp *ContentParser) propagateSimulatedAndRecover(cpr *cpRun, ar *ActionRedu
 	cpn.SetPos(cpn.Pos(), cpn.Pos()) // clear end (as if empty)
 }
 
-//----------
-
 func (cp *ContentParser) nextParseRule(cpr *cpRun, st *State) (Rule, error) {
 	cpr.logf("rset: %v\n", st.rsetSorted)
 
@@ -257,8 +247,6 @@ func (cp *ContentParser) nextParseRule(cpr *cpRun, st *State) (Rule, error) {
 
 	return nil, err
 }
-
-//----------
 
 func (cp *ContentParser) simulateParseRuleSet(cpr *cpRun, st *State) (Rule, error) {
 	// rule to simulate
@@ -291,8 +279,6 @@ func (cp *ContentParser) simulateParseRuleSet(cpr *cpRun, st *State) (Rule, erro
 
 	return r, nil
 }
-
-//----------
 
 // creates a cpnode in ps
 func (cp *ContentParser) parseRuleSet(cpr *cpRun, rset []Rule) (Rule, error) {
@@ -342,8 +328,6 @@ func (cp *ContentParser) parseRule(ps *PState, r Rule) error {
 	return nil
 }
 
-//----------
-
 func (cp *ContentParser) SetBuildNodeFn(name string, buildFn BuildNodeFn) error {
 	r, ok := cp.vd.rFirst.ri.get(name)
 	if !ok {
@@ -353,10 +337,6 @@ func (cp *ContentParser) SetBuildNodeFn(name string, buildFn BuildNodeFn) error 
 	return nil
 }
 
-//----------
-//----------
-//----------
-
 // content parser options
 type CpOpt struct {
 	StartRule         string // can be empty, will try to get it from grammar
@@ -365,10 +345,6 @@ type CpOpt struct {
 	ShiftOnSRConflict bool
 	Reverse           bool // runs input/rules in reverse (useful to backtrack in the middle of big inputs to then parse normally)
 }
-
-//----------
-//----------
-//----------
 
 type cpRun struct {
 	opt       *CpOpt
@@ -406,10 +382,6 @@ func (cpr *cpRun) Debug(cp *ContentParser) string {
 	)
 }
 
-//----------
-//----------
-//----------
-
 // content parser stack
 type cpStack []*cpsItem
 
@@ -437,18 +409,12 @@ func (stk cpStack) String() string {
 	return fmt.Sprintf("stk{\n\t%v\n}", strings.Join(u, "\n\t"))
 }
 
-//----------
-
 // content parser stack item
 type cpsItem struct {
 	st  *State
 	cpn *CPNode
 	//simulated bool // TODO: move cpn.simulated here
 }
-
-//----------
-//----------
-//----------
 
 func indentStr(t string, u string) string {
 	u = strings.TrimRight(u, "\n")

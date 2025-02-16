@@ -44,8 +44,6 @@ func (wi *PixmapWImage) Close() error {
 	return nil
 }
 
-//----------
-
 func (wi *PixmapWImage) Resize(r image.Rectangle) error {
 	// clear old pixmap
 	if wi.pixCreated {
@@ -73,8 +71,6 @@ func (wi *PixmapWImage) Resize(r image.Rectangle) error {
 	wi.img = imageutil.NewBGRA(&r)
 	return nil
 }
-
-//----------
 
 func (wi *PixmapWImage) Image() draw.Image {
 	return wi.img

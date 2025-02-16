@@ -186,8 +186,6 @@ func (win *Window) initialize() error {
 	return nil
 }
 
-//----------
-
 func (win *Window) Close() (rerr error) {
 	win.close.Lock()
 	defer win.close.Unlock()
@@ -216,8 +214,6 @@ func (win *Window) connClosedPossiblyFromServer() {
 	defer win.close.Unlock()
 	win.close.closed = true
 }
-
-//----------
 
 func (win *Window) NextEvent() (event.Event, bool) {
 	win.close.RLock()
@@ -316,8 +312,6 @@ func (win *Window) nextEvent2() any {
 	return nil
 }
 
-//----------
-
 func (win *Window) Request(req event.Request) error {
 	// requests that need write lock
 	switch req.(type) {
@@ -360,8 +354,6 @@ func (win *Window) Request(req event.Request) error {
 	}
 }
 
-//----------
-
 func (win *Window) setWindowName(str string) error {
 	c1 := xproto.ChangePropertyChecked(
 		win.Conn,
@@ -375,15 +367,11 @@ func (win *Window) setWindowName(str string) error {
 	return c1.Check()
 }
 
-//----------
-
 //func (win *Window) getGeometry() (*xproto.GetGeometryReply, error) {
 //	drawable := xproto.Drawable(win.Window)
 //	cookie := xproto.GetGeometry(win.Conn, drawable)
 //	return cookie.Reply()
 //}
-
-//----------
 
 func (win *Window) image() draw.Image {
 	return win.WImg.Image()
@@ -399,8 +387,6 @@ func (win *Window) resizeImage(r image.Rectangle) error {
 	}
 	return nil
 }
-
-//----------
 
 func (win *Window) warpPointer(p image.Point) error {
 	// warp pointer only if the window has input focus
@@ -431,8 +417,6 @@ func (win *Window) queryPointer() (image.Point, error) {
 	return p, nil
 }
 
-//----------
-
 func (win *Window) setCursor(c event.Cursor) (rerr error) {
 	sc := func(c2 xcursors.Cursor) {
 		rerr = win.Cursors.SetCursor(c2)
@@ -459,8 +443,6 @@ func (win *Window) setCursor(c event.Cursor) (rerr error) {
 	}
 	return
 }
-
-//----------
 
 var Atoms struct {
 	NetWMName  xproto.Atom `loadAtoms:"_NET_WM_NAME"`

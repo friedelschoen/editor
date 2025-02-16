@@ -17,8 +17,6 @@ func OnLoad(ed *core.Editor) {
 	_ = ed.EEvents.Register(core.RowStateChangeEEventId, h.onEvent2)
 }
 
-//----------
-
 type Handler struct {
 	ed *core.Editor
 }

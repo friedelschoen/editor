@@ -12,8 +12,6 @@ import (
 
 var defaultBuildConnectAddr = ":8078"
 
-//----------
-
 type Flags struct {
 	stderr io.Writer
 
@@ -85,8 +83,6 @@ func (fl *Flags) usagePrintAndErr() error {
 	fmt.Fprint(fl.stderr, cmdUsage())
 	return flag.ErrHelp
 }
-
-//----------
 
 func (fl *Flags) parseRunArgs(name string, args []string) error {
 	fs := fl.newFlagSet(name)
@@ -183,8 +179,6 @@ func (fl *Flags) parseConnectArgs(name string, args []string) error {
 	return fs.Parse(args)
 }
 
-//----------
-
 func (fl *Flags) addAddrFlag(fs *flag.FlagSet, def string) {
 	fs.StringVar(&fl.address, "addr", def, "address to transmit debug data")
 }
@@ -260,8 +254,6 @@ func (fl *Flags) addWorkFlag(fs *flag.FlagSet) {
 	fs.BoolVar(&fl.work, "work", false, "print workdir and don't cleanup on exit")
 }
 
-//----------
-
 func (fl *Flags) addTestVFlag(fs *flag.FlagSet) {
 	ff := flagutil.BoolFuncFlag(func(s string) error {
 		u := "-test.v"
@@ -278,8 +270,6 @@ func (fl *Flags) addTestRunFlag(fs *flag.FlagSet) {
 	})
 	fs.Var(ff, "run", "`string` with test name pattern to run")
 }
-
-//----------
 
 func (fl *Flags) newFlagSet(name string) *flag.FlagSet {
 	fs := flag.NewFlagSet(name, flag.ContinueOnError)
@@ -308,10 +298,6 @@ func (fl *Flags) parse(name string, fs *flag.FlagSet, args []string, isBool map[
 
 	return nil
 }
-
-//----------
-//----------
-//----------
 
 func cmdUsage() string {
 	return `Usage:
@@ -344,10 +330,6 @@ Examples:
 	GoDebug connect -network=auto --continueserving
 `
 }
-
-//----------
-//----------
-//----------
 
 func joinMaps(ms ...map[string]bool) map[string]bool {
 	m := map[string]bool{}

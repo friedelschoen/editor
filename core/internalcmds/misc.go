@@ -15,21 +15,15 @@ import (
 	"github.com/jmigpin/editor/util/osutil"
 )
 
-//----------
-
 func Version(args *core.InternalCmdArgs) error {
 	args.Ed.Messagef("version: %v", core.Version())
 	return nil
 }
 
-//----------
-
 func Exit(args *core.InternalCmdArgs) error {
 	args.Ed.Close()
 	return nil
 }
-
-//----------
 
 func SaveSession(args *core.InternalCmdArgs) error {
 	core.SaveSession(args.Ed, args.Part)
@@ -48,8 +42,6 @@ func ListSessions(args *core.InternalCmdArgs) error {
 	return nil
 }
 
-//----------
-
 func NewColumn(args *core.InternalCmdArgs) error {
 	args.Ed.NewColumn()
 	return nil
@@ -62,8 +54,6 @@ func CloseColumn(args *core.InternalCmdArgs) error {
 	erow.Row.Col.Close()
 	return nil
 }
-
-//----------
 
 func CloseRow(args *core.InternalCmdArgs) error {
 	erow, err := args.ERowOrErr()
@@ -86,8 +76,6 @@ func MaximizeRow(args *core.InternalCmdArgs) error {
 	return nil
 }
 
-//----------
-
 func Save(args *core.InternalCmdArgs) error {
 	erow, err := args.ERowOrErr()
 	if err != nil {
@@ -104,8 +92,6 @@ func SaveAllFiles(args *core.InternalCmdArgs) error {
 	}
 	return me.Result()
 }
-
-//----------
 
 func Reload(args *core.InternalCmdArgs) error {
 	erow, err := args.ERowOrErr()
@@ -139,8 +125,6 @@ func ReloadAll(args *core.InternalCmdArgs) error {
 	return me.Result()
 }
 
-//----------
-
 func Stop(args *core.InternalCmdArgs) error {
 	erow, err := args.ERowOrErr()
 	if err != nil {
@@ -150,8 +134,6 @@ func Stop(args *core.InternalCmdArgs) error {
 	return nil
 }
 
-//----------
-
 func Clear(args *core.InternalCmdArgs) error {
 	erow, err := args.ERowOrErr()
 	if err != nil {
@@ -160,8 +142,6 @@ func Clear(args *core.InternalCmdArgs) error {
 	erow.Row.TextArea.SetStrClearHistory("")
 	return nil
 }
-
-//----------
 
 func OpenFilemanager(args *core.InternalCmdArgs) error {
 	dir := ""
@@ -208,8 +188,6 @@ func OpenExternal(args *core.InternalCmdArgs) error {
 	return osutil.OpenExternal(erow.Info.Name())
 }
 
-//----------
-
 func GoDebug(args *core.InternalCmdArgs) error {
 	args2 := args.Part.ArgsUnquoted()
 
@@ -253,8 +231,6 @@ func GoDebugTrace(args *core.InternalCmdArgs) error {
 	return args.Ed.GoDebug.Trace()
 }
 
-//----------
-
 func ColorTheme(args *core.InternalCmdArgs) error {
 	ui.ColorThemeCycler.Cycle(args.Ed.UI.Root)
 	args.Ed.UI.Root.MarkNeedsLayoutAndPaint()
@@ -265,8 +241,6 @@ func FontTheme(args *core.InternalCmdArgs) error {
 	args.Ed.UI.Root.MarkNeedsLayoutAndPaint()
 	return nil
 }
-
-//----------
 
 func FontRunes(args *core.InternalCmdArgs) error {
 	var u string
@@ -282,8 +256,6 @@ func FontRunes(args *core.InternalCmdArgs) error {
 	args.Ed.Messagef("%s", u)
 	return nil
 }
-
-//----------
 
 func LSProtoCloseAll(args *core.InternalCmdArgs) error {
 	return args.Ed.LSProtoMan.Close()

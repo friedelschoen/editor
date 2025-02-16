@@ -187,7 +187,7 @@ func TestVerticesData2(t *testing.T) {
 	testRulesToVerticesMode1(t, grammar, expect)
 }
 func TestVerticesData3(t *testing.T) {
-	grammar := `		
+	grammar := `
 		^id = id "a" | "a";
 	`
 	expect := `
@@ -209,7 +209,7 @@ func TestVerticesData3(t *testing.T) {
 	testRulesToVerticesMode1(t, grammar, expect)
 }
 func TestVerticesData4(t *testing.T) {
-	grammar := `		
+	grammar := `
 		^id = id "b" "a" | "a";
 	`
 	expect := `
@@ -234,8 +234,8 @@ func TestVerticesData4(t *testing.T) {
 	testRulesToVerticesMode1(t, grammar, expect)
 }
 func TestVerticesData5(t *testing.T) {
-	grammar := `		
-		^id = "a" id | "a";		
+	grammar := `
+		^id = "a" id | "a";
 	`
 	expect := `
 		vertex0:
@@ -374,8 +374,6 @@ func TestVerticesData8(t *testing.T) {
 	testRulesToVerticesMode1(t, grammar, expect)
 }
 
-//----------
-
 //func TestVerticesData9(t *testing.T) {
 //	grammar := `
 //		^S = (s1)%
@@ -407,10 +405,6 @@ func TestVerticesData8(t *testing.T) {
 //	`
 //	testRulesToVerticesMode1(t, grammar, expect)
 //}
-
-//----------
-//----------
-//----------
 
 func testRulesToVerticesMode1(t *testing.T, grammar, expect string) {
 	t.Helper()

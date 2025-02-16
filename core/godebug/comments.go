@@ -58,8 +58,6 @@ type CommentWithNode struct {
 	Node    ast.Node
 }
 
-//----------
-
 //func annOptNodesMap2(fset *token.FileSet, astFile *ast.File, opts []*AnnotationOpt) map[*AnnotationOpt]ast.Node {
 //	m := map[*AnnotationOpt]ast.Node{}
 //	if len(opts) == 0 {
@@ -108,8 +106,6 @@ type CommentWithNode struct {
 
 //	return m
 //}
-
-//----------
 
 //// commented: attaches to previous comments
 //func annOptNodesMap1(fset *token.FileSet, astFile *ast.File, opts []*AnnotationOpt) map[*AnnotationOpt]ast.Node {

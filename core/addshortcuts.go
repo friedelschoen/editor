@@ -20,8 +20,6 @@ func AddReloadShortcut(erow *ERow) {
 	updateToolbarPartCmd2(erow, "Reload", true)
 }
 
-//----------
-
 // Search/add toolbar command and warps the pointer to it. Also inserts selected text as argument if available.
 func updateToolbarPartCmd(erow *ERow, cmd string) {
 	updateToolbarPartCmd2(erow, cmd, false)

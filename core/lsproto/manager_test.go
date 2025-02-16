@@ -47,10 +47,6 @@ func TestStruct1(t *testing.T) {
 
 }
 
-//----------
-//----------
-//----------
-
 func TestScripts(t *testing.T) {
 	log.SetFlags(0)
 	//log.SetPrefix("lsptester: ")
@@ -92,8 +88,6 @@ func TestScripts(t *testing.T) {
 	scr.Run(t)
 }
 
-//----------
-
 func lspSourceCursor(t *testing.T, args []string, man *Manager) error {
 	args = args[1:] // remove cmd string
 	if len(args) != 3 {
@@ -125,8 +119,6 @@ func lspSourceCursor(t *testing.T, args []string, man *Manager) error {
 
 	return nil
 }
-
-//----------
 
 func lspDefinition(t *testing.T, args []string, man *Manager) error {
 	args = args[1:] // remove cmd string
@@ -165,8 +157,6 @@ func lspDefinition(t *testing.T, args []string, man *Manager) error {
 	return nil
 }
 
-//----------
-
 func lspCompletion(t *testing.T, args []string, man *Manager) error {
 	args = args[1:] // remove cmd string
 	if len(args) != 2 {
@@ -204,8 +194,6 @@ func lspCompletion(t *testing.T, args []string, man *Manager) error {
 	fmt.Printf("%v", w)
 	return nil
 }
-
-//----------
 
 func lspRename(t *testing.T, args []string, man *Manager) error {
 	args = args[1:] // remove cmd string
@@ -253,8 +241,6 @@ func lspRename(t *testing.T, args []string, man *Manager) error {
 	return nil
 }
 
-//----------
-
 func lspReferences(t *testing.T, args []string, man *Manager) error {
 	args = args[1:] // remove cmd string
 	if len(args) != 2 {
@@ -298,8 +284,6 @@ func lspReferences(t *testing.T, args []string, man *Manager) error {
 	return nil
 }
 
-//----------
-
 func lspCallHierarchy(t *testing.T, args []string, man *Manager) error {
 	args = args[1:] // remove cmd string
 	if len(args) != 2 {
@@ -342,10 +326,6 @@ func lspCallHierarchy(t *testing.T, args []string, man *Manager) error {
 	return nil
 }
 
-//----------
-//----------
-//----------
-
 func newTestManager(t *testing.T) *Manager {
 	t.Helper()
 
@@ -387,8 +367,6 @@ func newTestManager(t *testing.T) *Manager {
 	return man
 }
 
-//----------
-
 func getIntArgPossiblyFromEnv(val string) (int, error) {
 	// read offset (allow offset from env var)
 	envValue := os.Getenv(val)
@@ -399,8 +377,6 @@ func getIntArgPossiblyFromEnv(val string) (int, error) {
 	u, err := strconv.ParseInt(val, 10, 32)
 	return int(u), err
 }
-
-//----------
 
 func sourceCursor(t *testing.T, src string, nth int) (int, string) {
 	src2, index, err := testutil.SourceCursor("●", src, nth)

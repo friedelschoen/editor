@@ -46,8 +46,6 @@ func GoEnv2(dir string) ([]string, error) {
 	return env, nil
 }
 
-//----------
-
 func GoRoot() string {
 	// doesn't work well in windows
 	//return runtime.GOROOT()
@@ -62,8 +60,6 @@ func GoPath() []string {
 func GoVersion() (string, error) {
 	return GetGoVersion(GoEnv(""))
 }
-
-//----------
 
 func GetGoRoot(env []string) string {
 	return osutil.GetEnv(env, "GOROOT")

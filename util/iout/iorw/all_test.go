@@ -40,8 +40,6 @@ func TestRW1(t *testing.T) {
 	}
 }
 
-//----------
-
 func TestIndex1(t *testing.T) {
 	s := ""
 	for i := 0; i < 10; i++ {
@@ -212,8 +210,6 @@ func TestPrepareForCompare(t *testing.T) {
 	}
 }
 
-//----------
-
 func BenchmarkPrepareForCompare(b *testing.B) {
 	pfcFn := prepareForCompareFn(&IndexOpt{IgnoreCase: true, IgnoreDiacritics: true})
 	benchmarkPrepareForCompare2(b, pfcFn)
@@ -232,8 +228,6 @@ func benchmarkPrepareForCompare2(b *testing.B, pfcFn pfcType) {
 		_ = p
 	}
 }
-
-//----------
 
 func TestRuneLastIndex1(t *testing.T) {
 	s := "a\n0123\nb"
@@ -284,8 +278,6 @@ func TestExpandLastIndex1(t *testing.T) {
 	}
 }
 
-//----------
-
 func TestWordAtIndex(t *testing.T) {
 	s := "abc f"
 	rw := NewStringReaderAt(s)
@@ -294,8 +286,6 @@ func TestWordAtIndex(t *testing.T) {
 		t.Fatalf("%v %v %v", w, i, err)
 	}
 }
-
-//----------
 
 func TestLineStartIndex(t *testing.T) {
 	s := "0123456789"

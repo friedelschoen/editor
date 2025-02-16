@@ -52,8 +52,6 @@ func dabs(a, b int) int {
 	return d
 }
 
-//------------
-
 func TestHSV1(t *testing.T) {
 	u := []any{
 		MakeHSV(0, 0, 20),

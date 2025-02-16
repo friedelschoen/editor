@@ -58,8 +58,6 @@ func TestParseDeclVar4(t *testing.T) {
 	}
 }
 
-//----------
-
 func TestEncode1(t *testing.T) {
 	vm := VarMap{
 		"~":  "/a/b/c",
@@ -94,8 +92,6 @@ func TestDecode1(t *testing.T) {
 	}
 }
 
-//----------
-
 func TestEncDec1(t *testing.T) {
 	vm := VarMap{
 		"~":  "/a/b", // same value as ~1
@@ -129,8 +125,6 @@ func TestEncDec2(t *testing.T) {
 	}
 }
 
-//----------
-
 func TestParseVars1(t *testing.T) {
 	s := "$aaa=1 | $bb=2 | $c=3${aaa}4$bb+ | ~1=5 | $d=~0~{1}2"
 	d := Parse(s)
@@ -158,8 +152,6 @@ func TestParseVars3(t *testing.T) {
 		t.Fatal(vm)
 	}
 }
-
-//----------
 
 var benchStr1 = "$aaa=b | $a=a${aaa}c+$aaa+| ~1=zzz | $c=~1"
 

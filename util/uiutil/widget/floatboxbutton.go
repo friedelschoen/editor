@@ -35,8 +35,6 @@ func (fbb *FloatBoxButton) Close() {
 	fbb.floatBox.Parent.Remove(fbb.floatBox)
 }
 
-//----------
-
 func (fbb *FloatBoxButton) Layout() {
 	fbb.Button.Layout()
 

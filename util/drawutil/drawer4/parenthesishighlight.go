@@ -26,8 +26,6 @@ func updateParenthesisHighlight(d *Drawer) {
 	d.Opt.ParenthesisHighlight.Group.Ops = ph.do()
 }
 
-//----------
-
 type ParenthesisHighlight struct {
 	d     *Drawer
 	sc    *pscan.Scanner

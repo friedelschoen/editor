@@ -12,8 +12,6 @@ func parseVarDecl(src string) (*VarDecl, error) {
 	return p.parseVarDecl([]byte(src))
 }
 
-//----------
-
 var vdp *varDeclParser
 
 func getVarDeclParser() *varDeclParser {
@@ -22,10 +20,6 @@ func getVarDeclParser() *varDeclParser {
 	}
 	return vdp
 }
-
-//----------
-//----------
-//----------
 
 type varDeclParser struct {
 	sc *pscan.Scanner
@@ -85,8 +79,6 @@ func (p *varDeclParser) parseDollarVarDecl(pos int) (any, int, error) {
 		return vd, p2, err
 	}
 }
-
-//----------
 
 func (p *varDeclParser) parseVarValue(pos int) (any, int, error) {
 	notSpace := func(ru rune) bool { return !unicode.IsSpace(ru) }

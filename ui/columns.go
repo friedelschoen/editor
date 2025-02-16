@@ -53,8 +53,6 @@ func (cols *Columns) removeColumn(col *Column) {
 	cols.ColsLayout.Spl.Remove(col)
 }
 
-//----------
-
 func (cols *Columns) PointColumn(p *image.Point) (*Column, bool) {
 	for _, c := range cols.Columns() {
 		if p.In(c.Bounds) {
@@ -86,8 +84,6 @@ func (cols *Columns) PointColumnExtra(p *image.Point) (*Column, bool) {
 
 	return nil, false
 }
-
-//----------
 
 func (cols *Columns) FirstChildColumn() *Column {
 	u := cols.ColsLayout.Spl.FirstChildWrapper()

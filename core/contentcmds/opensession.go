@@ -27,8 +27,6 @@ func OpenSession(ctx context.Context, erow *core.ERow, index int) (error, bool) 
 	return nil, true
 }
 
-//----------
-
 func sessionName(rd iorw.ReaderAt, index int) (string, error) {
 	sc := iorw.NewScanner(rd)
 	//sc.SetSrc2(rd, index)

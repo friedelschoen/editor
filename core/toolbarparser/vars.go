@@ -58,8 +58,6 @@ func (m *HomeVarMap) caseFilter(s string) string {
 	return s
 }
 
-//----------
-
 func (m *HomeVarMap) Encode(filename string) string {
 	filename = osutil.FilepathClean(filename)
 	v := m.encode2(filename)
@@ -91,8 +89,6 @@ func (m *HomeVarMap) encode2(f string) string {
 	return f
 }
 
-//----------
-
 func (m *HomeVarMap) Decode(f string) string {
 	// input can be from varmap (user input)
 	f = parseutil.RemoveEscapes(f, osutil.EscapeRune)
@@ -119,15 +115,7 @@ func (m *HomeVarMap) decode2(f string) string {
 	return f
 }
 
-//----------
-//----------
-//----------
-
 type VarMap map[string]string // [name]value; name includes {"~","$",...}
-
-//----------
-//----------
-//----------
 
 func ParseVars(data *Data) VarMap {
 	vm := VarMap{}

@@ -137,8 +137,6 @@ func (sq *RowSquare) OnInputEvent(ev any, p image.Point) event.Handled {
 	return true
 }
 
-//----------
-
 type RowState uint16
 
 func (m *RowState) add(u RowState)         { *m |= u }

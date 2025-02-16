@@ -16,8 +16,6 @@ func NewPad(ctx ImageContext, child Node) *Pad {
 	return b
 }
 
-//----------
-
 // Used by Pad and Border.
 type Padder struct {
 	ENode

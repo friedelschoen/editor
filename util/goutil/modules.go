@@ -12,8 +12,6 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
-//----------
-
 func ReadGoMod(ctx context.Context, dir string, env []string) (*modfile.File, error) {
 	f, _, err := ParseDirGoMod(dir)
 	if err != nil {
@@ -21,8 +19,6 @@ func ReadGoMod(ctx context.Context, dir string, env []string) (*modfile.File, er
 	}
 	return f, nil
 }
-
-//----------
 
 func GoModInit(ctx context.Context, dir, modPath string, env []string) error {
 	args := []string{"go", "mod", "init"}
@@ -75,8 +71,6 @@ func GoModReplace(ctx context.Context, dir, old, new string, env []string) error
 	return ioutil.WriteFile(fname, b, 0660)
 }
 
-//----------
-
 func runGoModCmd(ctx context.Context, dir string, args []string, env []string) ([]byte, error) {
 	c := osutil.NewCmdIShell(ctx, args...)
 	c.Cmd().Dir = dir
@@ -87,8 +81,6 @@ func runGoModCmd(ctx context.Context, dir string, args []string, env []string) (
 	}
 	return bout, nil
 }
-
-//----------
 
 func FindGoMod(dir string) (string, bool) {
 	v := os.Getenv("GOMOD")
@@ -133,8 +125,6 @@ func findFileUp(dir, name string) (string, bool) {
 	}
 }
 
-//----------
-
 func ParseDirGoMod(dir string) (*modfile.File, string, error) {
 	name, b, err := readDirGoModFile(dir)
 	if err != nil {
@@ -153,8 +143,6 @@ func readDirGoModFile(dir string) (string, []byte, error) {
 	return s, b, err
 }
 
-//----------
-
 //func GoModCreateContent(dir string, content string) error {
 //	filename := filepath.Join(dir, "go.mod")
 //	f, err := os.Create(filename)
@@ -167,8 +155,6 @@ func readDirGoModFile(dir string) (string, []byte, error) {
 //	}
 //	return nil
 //}
-
-//----------
 
 //func goModReplaceUsingAppend(ctx context.Context, dir, old, new string) error {
 //	filename := filepath.Join(dir, "go.mod")

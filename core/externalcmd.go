@@ -40,8 +40,6 @@ func ExternalCmdFromArgs(erow *ERow, cargs []string, fend func(error), env []str
 	}
 }
 
-//----------
-
 func externalCmdFromDir(erow *ERow, cargs []string, fend func(error), env []string) {
 	if !erow.Info.IsDir() {
 		panic("not a directory")
@@ -82,10 +80,6 @@ func externalCmdDir2(ctx context.Context, erow *ERow, cargs []string, env []stri
 	return c.Wait()
 }
 
-//----------
-//----------
-//----------
-
 func cmdPartArgs(part *toolbarparser.Part) []string {
 	var u []string
 	for _, a := range part.Args {
@@ -97,10 +91,6 @@ func cmdPartArgs(part *toolbarparser.Part) []string {
 	}
 	return u
 }
-
-//----------
-//----------
-//----------
 
 func populateEdEnvVars(erow *ERow, cargs []string) []string {
 	// Can't use os.Expand() to replace (and show the values in cargs) since the idea is for the variable to be available in scripting if wanted.
@@ -161,8 +151,6 @@ func cmdVar_edFileWord(erow *ERow) string {
 	}
 	return string(b)
 }
-
-//----------
 
 func toolbarVarsEnv(part *toolbarparser.Part) []string {
 	data2 := *part.Data // copy

@@ -11,14 +11,10 @@ type Register struct {
 	m map[int]*list.List
 }
 
-//----------
-
 // Remove is done via *Regist.Unregister().
 func (reg *Register) Add(evId int, fn func(any)) *Regist {
 	return reg.AddCallback(evId, &Callback{fn})
 }
-
-//----------
 
 func (reg *Register) AddCallback(evId int, cb *Callback) *Regist {
 	reg.Lock()
@@ -60,8 +56,6 @@ func (reg *Register) RemoveCallback(evId int, cb *Callback) {
 	}
 }
 
-//----------
-
 // Returns number of callbacks done.
 func (reg *Register) RunCallbacks(evId int, ev any) int {
 	reg.RLock()
@@ -96,13 +90,9 @@ func (reg *Register) NCallbacks(evId int) int {
 	return l.Len()
 }
 
-//----------
-
 type Callback struct {
 	F func(ev any)
 }
-
-//----------
 
 type Regist struct {
 	evReg *Register
@@ -113,8 +103,6 @@ type Regist struct {
 func (reg *Regist) Unregister() {
 	reg.evReg.RemoveCallback(reg.id, reg.cb)
 }
-
-//----------
 
 // Utility to unregister big number of regists.
 type Unregister struct {

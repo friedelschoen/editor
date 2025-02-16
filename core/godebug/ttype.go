@@ -89,16 +89,12 @@ func (tt *TType) init(node ast.Node, info *types.Info) bool {
 	return tt.Type != nil
 }
 
-//----------
-
 func (tt *TType) constValue() (constant.Value, bool) {
 	if tt.tv != nil {
 		return tt.tv.Value, tt.tv.Value != nil
 	}
 	return nil, false
 }
-
-//----------
 
 func (tt *TType) objPackage() (*types.Package, bool) {
 	if tt.obj == nil {
@@ -110,8 +106,6 @@ func (tt *TType) objPackage() (*types.Package, bool) {
 	}
 	return pkg, true
 }
-
-//----------
 
 func (tt *TType) isType() bool {
 	if tt.tv != nil {
@@ -163,8 +157,6 @@ func (tt *TType) isSignatureVariadic() bool {
 	return ok && sig.Variadic()
 }
 
-//----------
-
 func (tt *TType) nResults() int {
 	return tt.nResults2(false)
 }
@@ -190,10 +182,6 @@ func (tt *TType) typeTypes(retInFuncLit bool) []types.Type {
 	}
 	return []types.Type{tt.Type}
 }
-
-//----------
-//----------
-//----------
 
 func tupleTypes(tu *types.Tuple) []types.Type {
 	w := []types.Type{}

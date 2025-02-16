@@ -43,8 +43,6 @@ func setupPredefineds(ri *RuleIndex) error {
 	return nil
 }
 
-//----------
-
 func setupAnyRuneFn(ri *RuleIndex) error {
 	name := "anyRune"
 	fn := func(args ProcRuleArgs) (Rule, error) {
@@ -181,10 +179,6 @@ func setupEscapeAnyFn(ri *RuleIndex) error {
 	}
 	return ri.setProcRuleFn("escapeAny", fn) // grammar call name
 }
-
-//----------
-//----------
-//----------
 
 //// commented: using grammar definition
 //func parseLetter(ps *PState) error {

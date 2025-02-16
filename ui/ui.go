@@ -35,8 +35,6 @@ func NewUI(winName string) (*UI, error) {
 	return ui, nil
 }
 
-//----------
-
 func (ui *UI) WarpPointerToRectanglePad(r image.Rectangle) {
 	p, err := ui.QueryPointer()
 	if err != nil {
@@ -63,8 +61,6 @@ func (ui *UI) WarpPointerToRectanglePad(r image.Rectangle) {
 	ui.WarpPointer(p)
 }
 
-//----------
-
 func (ui *UI) resizeRowToGoodSize(row *Row) {
 	if row.PrevSibling() == nil {
 		return
@@ -76,8 +72,6 @@ func (ui *UI) resizeRowToGoodSize(row *Row) {
 	perc := float64(b.Min.Y-col.Bounds.Min.Y) / float64(colDy)
 	col.RowsLayout.Spl.Resize(row, perc)
 }
-
-//----------
 
 func (ui *UI) GoodRowPos() *RowPos {
 	var best struct {
@@ -123,8 +117,6 @@ func (ui *UI) GoodRowPos() *RowPos {
 	return NewRowPos(best.col, best.nextRow)
 }
 
-//----------
-
 func (ui *UI) rowInsertionBounds(prevRow *Row) image.Rectangle {
 	ta := prevRow.TextArea
 	if r2, ok := ui.boundsAfterVisibleCursor(ta); ok {
@@ -165,15 +157,11 @@ func (ui *UI) boundsOfTwoThirds(ta *TextArea) (*image.Rectangle, bool) {
 	return &r, true
 }
 
-//----------
-
 func (ui *UI) Error(err error) {
 	if ui.OnError != nil {
 		ui.OnError(err)
 	}
 }
-
-//----------
 
 type RowPos struct {
 	Column  *Column

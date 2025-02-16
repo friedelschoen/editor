@@ -115,8 +115,6 @@ func TestCmdIRead4(t *testing.T) {
 	}
 }
 
-//----------
-
 func TestCmdIWrite1(t *testing.T) {
 	// wait for stdout indefinitely
 
@@ -182,8 +180,6 @@ func TestCmdIWrite1(t *testing.T) {
 //	}
 //}
 
-//----------
-
 func TestCmdIShell(t *testing.T) {
 	args := []string{"a", "b c d", "e f"}
 	script := `for arg in "$@"; do echo "$arg"; done; true`
@@ -207,10 +203,6 @@ func TestCmdIShell(t *testing.T) {
 		t.Fatal(out)
 	}
 }
-
-//----------
-//----------
-//----------
 
 type Hanger struct {
 	t   time.Duration

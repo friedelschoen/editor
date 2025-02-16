@@ -13,8 +13,6 @@ func NewBytesReadWriterAt(b []byte) *BytesReadWriterAt {
 	return &BytesReadWriterAt{b}
 }
 
-//----------
-
 // Implement ReaderAt
 func (rw *BytesReadWriterAt) ReadFastAt(i, n int) ([]byte, error) {
 	if i < 0 {
@@ -50,8 +48,6 @@ func (rw *BytesReadWriterAt) Min() int { return 0 }
 // Implement ReaderAt
 func (rw *BytesReadWriterAt) Max() int { return len(rw.buf) }
 
-//----------
-
 // Implement WriterAt
 func (rw *BytesReadWriterAt) OverwriteAt(i, del int, p []byte) error {
 	// delete
@@ -76,8 +72,6 @@ func (rw *BytesReadWriterAt) OverwriteAt(i, del int, p []byte) error {
 	rw.buf = autoReduceCap(rw.buf)
 	return nil
 }
-
-//----------
 
 func autoReduceCap(p []byte) []byte {
 	if len(p) > 1024 && len(p) < 3*cap(p) {

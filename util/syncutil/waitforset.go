@@ -38,8 +38,6 @@ func NewWaitForSet() *WaitForSet {
 	return w
 }
 
-//----------
-
 func (w *WaitForSet) Start(timeout time.Duration) {
 	w.d.Lock()
 	defer w.d.Unlock()
@@ -74,8 +72,6 @@ func (w *WaitForSet) WaitForSet() (any, error) {
 	return nil, fmt.Errorf("waitforset: timeout")
 }
 
-//----------
-
 // In case waitforset() is not going to be called.
 func (w *WaitForSet) Cancel() {
 	w.d.Lock()
@@ -87,8 +83,6 @@ func (w *WaitForSet) clearTimer() {
 	w.d.get.timer.Stop()
 	w.d.get.timer = nil
 }
-
-//----------
 
 // Fails if not able to set while get() is ready.
 func (w *WaitForSet) Set(v any) error {

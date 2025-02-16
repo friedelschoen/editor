@@ -28,8 +28,6 @@ func updateWordHighlightWord(d *Drawer) {
 	d.opt.wordH.word = word
 }
 
-//----------
-
 func updateWordHighlightOps(d *Drawer) {
 	if !d.Opt.WordHighlight.On {
 		d.Opt.WordHighlight.Group.Ops = nil

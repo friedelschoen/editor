@@ -8,8 +8,6 @@ import (
 
 // lsp protocol: https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/
 
-//----------
-
 type Message struct {
 	JsonRpc string `json:"jsonrpc"`
 }
@@ -18,16 +16,12 @@ func MakeMessage() Message {
 	return Message{JsonRpc: "2.0"}
 }
 
-//----------
-
 type RequestMessage struct {
 	Message
 	Id     int    `json:"id"`
 	Method string `json:"method,omitempty"`
 	Params any    `json:"params,omitempty"`
 }
-
-//----------
 
 // Used as request and response (sent/received).
 type NotificationMessage struct {
@@ -37,8 +31,6 @@ type NotificationMessage struct {
 	//Params any                        `json:"params,omitempty"`
 	Params _notificationMessageParams `json:"params,omitempty"`
 }
-
-//----------
 
 // The reason to have this struct is that there was an error when using godebug that was only getting reported through a logmessageparams notification. This resulted in a different result when not using godebug, causing confusion. The error is connected to the build. Because of the error, the completionitem action would not fail, but report zero completions. While with the regular compiler it would fail showing an issue with a json field that was not declared in one of the structs.
 type _notificationMessageParams struct {
@@ -60,15 +52,11 @@ func (nmp *_notificationMessageParams) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-//----------
-
 type LogMessageParams struct {
 	Type    MessageType `json:"type,omitempty"`
 	Message string      `json:"message,omitempty"`
 }
 type MessageType int
-
-//----------
 
 type Response struct {
 	*ResponseMessage
@@ -79,16 +67,12 @@ func (res *Response) IsNotification() bool {
 	return res.NotificationMessage != nil
 }
 
-//----------
-
 type ResponseMessage struct {
 	Message
 	Id     int             `json:"id,omitempty"` // id can be zero on first msg
 	Error  *ResponseError  `json:"error,omitempty"`
 	Result json.RawMessage `json:"result,omitempty"`
 }
-
-//----------
 
 type ResponseError struct {
 	Code    int    `json:"code"`
@@ -113,8 +97,6 @@ func (e *ResponseError) Error() string {
 	return fmt.Sprintf("%v%v", e.Message, vs)
 }
 
-//----------
-
 type WorkspaceFolder struct {
 	Uri  DocumentUri `json:"uri"`
 	Name string      `json:"name"`
@@ -135,8 +117,6 @@ type Range struct {
 	Start Position `json:"start"`
 	End   Position `json:"end"`
 }
-
-//----------
 
 type CompletionParams struct {
 	TextDocumentPositionParams
@@ -161,8 +141,6 @@ type CompletionItem struct {
 type CompletionItemKind int
 type CompletionItemTag int
 
-//----------
-
 type _completionItemDocumentation struct {
 	mc  *MarkupContent
 	str *string
@@ -181,15 +159,11 @@ func (u *_completionItemDocumentation) UnmarshalJSON(b []byte) error {
 	return json.Unmarshal(b, &u.str)
 }
 
-//----------
-
 type MarkupContent struct {
 	Kind  MarkupKind `json:"kind"`
 	Value string     `json:"value"`
 }
 type MarkupKind string // ex: plaintext, markup
-
-//----------
 
 type DidOpenTextDocumentParams struct {
 	TextDocument TextDocumentItem `json:"textDocument"`
@@ -234,8 +208,6 @@ type RenameParams struct {
 	NewName string `json:"newName"`
 }
 
-//----------
-
 type WorkspaceEdit struct {
 	Changes         map[DocumentUri][]*TextEdit `json:"changes,omitempty"`
 	DocumentChanges []*TextDocumentEdit         `json:"documentChanges,omitempty"`
@@ -266,8 +238,6 @@ func (we *WorkspaceEdit) GetChanges() ([]*WorkspaceEditChange, error) {
 	return w, nil
 }
 
-//----------
-
 type TextDocumentEdit struct {
 	TextDocument VersionedTextDocumentIdentifier `json:"textDocument"`
 	Edits        []*TextEdit                     `json:"edits"`
@@ -276,8 +246,6 @@ type TextEdit struct {
 	Range   *Range `json:"range"`
 	NewText string `json:"newText"`
 }
-
-//----------
 
 type CallHierarchyPrepareParams struct {
 	TextDocumentPositionParams
@@ -328,8 +296,6 @@ type CallHierarchyItem struct {
 	Data           any          `json:"data,omitempty"` // optional (related to prepare calls)
 }
 
-//----------
-
 type ReferenceParams struct {
 	TextDocumentPositionParams
 	Context ReferenceContext `json:"context"`
@@ -351,10 +317,6 @@ type DocumentUri string
 type SymbolKind int
 type SymbolTag int
 
-//----------
-//----------
-//----------
-
 // Not part of the protocol, used to unify/simplify
 type CallHierarchyCallType int
 
@@ -362,8 +324,6 @@ const (
 	IncomingChct CallHierarchyCallType = iota
 	OutgoingChct
 )
-
-//----------
 
 // Not part of the protocol, used to unify/simplify
 type WorkspaceEditChange struct {

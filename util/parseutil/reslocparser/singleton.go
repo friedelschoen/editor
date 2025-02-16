@@ -33,8 +33,6 @@ func ParseResLoc2(rd iorw.ReaderAt, index int) (*ResLoc, error) {
 	return rl, nil
 }
 
-//----------
-
 // reslocparser singleton
 var rlps struct {
 	once sync.Once
@@ -59,10 +57,6 @@ func newResLocParserSingletonInstance() (*ResLocParser, error) {
 
 	return rlp, nil
 }
-
-//----------
-//----------
-//----------
 
 // util func to replace parseutil.*
 func ParseFilePos(src []byte, index int) (*parseutil.FilePos, error) {

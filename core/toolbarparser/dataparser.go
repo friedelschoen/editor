@@ -16,10 +16,6 @@ func Parse(str string) *Data {
 	return p.data
 }
 
-//----------
-//----------
-//----------
-
 type dataParser struct {
 	data *Data
 	sc   *pscan.Scanner

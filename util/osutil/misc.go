@@ -20,8 +20,6 @@ func HomeEnvVar() string {
 	return h
 }
 
-//----------
-
 func FilepathHasDirPrefix(s, prefix string) bool {
 	// ensure it ends in separator
 	sep := string(filepath.Separator)
@@ -49,8 +47,6 @@ func FilepathClean(s string) string {
 	return filepath.Clean(s)
 }
 
-//----------
-
 func GetFreeTcpPort() (int, error) {
 	addr, err := net.ResolveTCPAddr("tcp", "localhost:0")
 	if err != nil {
@@ -70,8 +66,6 @@ func RandomPort(simpleSeed, min, max int) int {
 	ra := rand.New(rand.NewSource(int64(seed)))
 	return min + ra.Intn(max-min)
 }
-
-//----------
 
 // doesn't wait for the cmd to end
 func OpenBrowser(url string) error {

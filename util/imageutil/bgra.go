@@ -48,8 +48,6 @@ func (img *BGRA) SubImage(r image.Rectangle) draw.Image {
 	return &BGRA{*u}
 }
 
-//----------
-
 func BgraColor(c color.Color) color.RGBA {
 	c2 := RgbaColor(c)
 	c2.R, c2.B = c2.B, c2.R // convert to BGR

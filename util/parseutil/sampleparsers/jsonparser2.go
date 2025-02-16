@@ -9,8 +9,6 @@ func ParseJson2(src []byte) (any, error) {
 	return p.parseJson(src)
 }
 
-//----------
-
 type JsonParser2 struct {
 	sc *pscan.Scanner
 	fn struct {
@@ -125,9 +123,5 @@ func (p *JsonParser2) parseJson(src []byte) (any, error) {
 		return p.testStrings, nil // TESTING
 	}
 }
-
-//----------
-//----------
-//----------
 
 type SParserFunc = pscan.MFn

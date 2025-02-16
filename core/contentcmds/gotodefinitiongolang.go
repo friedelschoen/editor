@@ -23,8 +23,6 @@ func GoToDefinitionGolang(ctx context.Context, erow *core.ERow, index int) (erro
 	return guruOrGoplsQuery(ctx, erow, index)
 }
 
-//----------
-
 func guruOrGoplsQuery(ctx context.Context, erow *core.ERow, index int) (error, bool) {
 	if path.Ext(erow.Info.Name()) != ".go" {
 		return nil, false
@@ -51,8 +49,6 @@ func guruOrGoplsQuery(ctx context.Context, erow *core.ERow, index int) (error, b
 
 	return iout.MultiErrors(err1, err2), true
 }
-
-//----------
 
 func goplsQuery(ctx context.Context, erow *core.ERow, index int) error {
 	// TODO: no way to send current buffer, needs file to be saved
@@ -90,8 +86,6 @@ func goplsQuery(ctx context.Context, erow *core.ERow, index int) error {
 
 	return nil
 }
-
-//----------
 
 func goGuru(ctx context.Context, erow *core.ERow, index int) error {
 	// go guru args

@@ -95,13 +95,9 @@ func (clickf *ClickFilter) move(ev *event.MouseMove) {
 	}
 }
 
-//----------
-
 func (clickf *ClickFilter) emitEv(ev any, p image.Point) {
 	clickf.emitEvFn(ev, p)
 }
-
-//----------
 
 type MultipleClick struct {
 	upTime        time.Time

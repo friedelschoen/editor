@@ -16,8 +16,6 @@ import (
 
 // continuation of the "annotator.go" file to separate some util funcs
 
-//----------
-
 func (ann *Annotator) newDebugCE(fname string, des ...DebugExpr) DebugExpr {
 	// ex: fname="IAn" has no args, need to use newDebugCE2 directly
 	if len(des) == 0 {
@@ -40,8 +38,6 @@ func (ann *Annotator) newDebugCE2(fname string, pos token.Pos, des ...DebugExpr)
 	return &ast.CallExpr{Fun: se, Args: w}
 }
 
-//----------
-
 func (ann *Annotator) newDebugIVi(e ast.Expr) DebugExpr {
 	return ann.newDebugCE("IVi", DebugExpr(e))
 }
@@ -62,8 +58,6 @@ func (ann *Annotator) newDebugILOrNilIdent(pos token.Pos, exprs ...DebugExpr) De
 		return ann.newDebugIL(exprs...)
 	}
 }
-
-//----------
 
 func (ann *Annotator) insertDebugLineStmt(ctx *Ctx, de DebugExpr) {
 	stmt := (ast.Stmt)(nil)
@@ -87,8 +81,6 @@ func (ann *Annotator) newDebugLineStmt(ctx *Ctx, de DebugExpr) ast.Stmt {
 	}
 	return &ast.ExprStmt{X: &ast.CallExpr{Fun: se, Args: args}}
 }
-
-//----------
 
 func (ann *Annotator) newTType(node ast.Node) (*TType, error) {
 	tt, ok := ann.newTType2(node)
@@ -114,8 +106,6 @@ func (ann *Annotator) newTType2(node ast.Node) (*TType, bool) {
 	return nil, false
 }
 
-//----------
-
 func (ann *Annotator) exprsTypesExpanded(exprs ...ast.Expr) ([]types.Type, error) {
 	w := []types.Type{}
 	for _, e := range exprs {
@@ -133,8 +123,6 @@ func (ann *Annotator) exprsTypesExpanded(exprs ...ast.Expr) ([]types.Type, error
 	}
 	return w, nil
 }
-
-//----------
 
 func (ann *Annotator) resultDE(ctx *Ctx, expr ast.Expr) (DebugExpr, error) {
 	if ctx.valueMatch2(cidnResNil, expr) {
@@ -233,8 +221,6 @@ func (ann *Annotator) resConstantValue(ctx *Ctx, expr ast.Expr) (DebugExpr, bool
 	return nil, false, nil
 }
 
-//----------
-
 func (ann *Annotator) resReplaceWithVar(ctx *Ctx, expr ast.Expr) (ast.Expr, error) {
 	tt, err := ann.newTType(expr)
 	if err != nil {
@@ -312,8 +298,6 @@ func (ann *Annotator) castExpr(ctx *Ctx, expr ast.Expr, tt *TType) (ast.Expr, bo
 	ce := &ast.CallExpr{Fun: fun, Args: []ast.Expr{expr}}
 	return ce, true
 }
-
-//----------
 
 func (ann *Annotator) insertAssignToIdent(ctx *Ctx, expr ast.Expr) (ast.Expr, error) {
 	ids, err := ann.insertAssignToIdents(ctx, expr)
@@ -413,8 +397,6 @@ func (ann *Annotator) newIncIdentWithType(define bool, t types.Type, pos token.P
 //	return &ast.Ident{NamePos: pos, Name: name}
 //}
 
-//----------
-
 func (ann *Annotator) nameMissingFieldListNames(fl *ast.FieldList) error {
 	for _, f := range fl.List {
 		if err := ann.nameMissingFieldNames(f); err != nil {
@@ -456,8 +438,6 @@ func (ann *Annotator) fieldListTypeExprs(fl *ast.FieldList) []ast.Expr {
 	return w
 }
 
-//----------
-
 func (ann *Annotator) nameMissingFieldNames(f *ast.Field) error {
 	if len(f.Names) == 0 {
 		f.Names = []*ast.Ident{anonIdent(f.Pos())}
@@ -479,8 +459,6 @@ func (ann *Annotator) nameAnonFieldNames(f *ast.Field) error {
 	}
 	return nil
 }
-
-//----------
 
 func (ann *Annotator) newFuncLitWithType(resultsTypes []ast.Expr) *ast.FuncLit {
 	resultsFields := []*ast.Field{}
@@ -511,17 +489,12 @@ func (ann *Annotator) newFuncLitWithType(resultsTypes []ast.Expr) *ast.FuncLit {
 	return fl
 }
 
-//----------
-//----------
-
 func (ann *Annotator) sprintNode(n ast.Node) string {
 	return astut.SprintNode(ann.fset, n)
 }
 func (ann *Annotator) printNode(n ast.Node) {
 	fmt.Println(ann.sprintNode(n))
 }
-
-//----------
 
 func (ann *Annotator) debug(item any) {
 	goutil.LogSkipf(1, ann.debug2(item))
@@ -544,8 +517,6 @@ func (ann *Annotator) debug2(item any) string {
 	return "DEBUGSRC:\n" + s
 }
 
-//----------
-
 func (ann *Annotator) posSrc(pos token.Pos) string {
 	p := ann.fset.Position(pos)
 	return fmt.Sprintf("%v:%v:%v", p.Filename, p.Line, p.Column)
@@ -553,8 +524,6 @@ func (ann *Annotator) posSrc(pos token.Pos) string {
 func (ann *Annotator) posSrcError(pos token.Pos, err error) error {
 	return fmt.Errorf("%v: %v", ann.posSrc(pos), err)
 }
-
-//----------
 
 func (ann *Annotator) isIdentWithDebugVarPrefix(e ast.Expr) bool {
 	id, ok := e.(*ast.Ident)
@@ -573,8 +542,6 @@ func (ann *Annotator) isDebugPkgCallExpr(node ast.Node) bool {
 	return false
 }
 
-//----------
-
 // Returns (on/off, ok)
 func (ann *Annotator) nodeAnnotationBlockOn(n ast.Node) (bool, bool) {
 	at, ok := ann.nodeAnnTypes[n]
@@ -590,8 +557,6 @@ func (ann *Annotator) nodeAnnotationBlockOn(n ast.Node) (bool, bool) {
 		return false, false
 	}
 }
-
-//----------
 
 func (ann *Annotator) addImports(astFile *ast.File) {
 	addImp := func(name, path string) {
@@ -629,8 +594,6 @@ func (ann *Annotator) addImports(astFile *ast.File) {
 	//	return !done
 	//})
 }
-
-//----------
 
 // Correct debugindexes to have the numbers attributed in order at compile time. Allows assuming an ordered slice (debugindex/textindex) in the editor.
 func (ann *Annotator) correctDebugIndexes(n ast.Node) int {
@@ -719,8 +682,6 @@ func (ann *Annotator) correctDebugIndexes(n ast.Node) int {
 	return di
 }
 
-//----------
-
 func (ann *Annotator) removeInnerFuncComments(astFile *ast.File) {
 	// ensure comments are not in between stmts in the middle of declarations inside functions (solves test100)
 	// Other comments stay in place since they might be needed (build comments, "c" package comments, ...)
@@ -749,8 +710,6 @@ func (ann *Annotator) removeInnerFuncComments(astFile *ast.File) {
 	}
 	astFile.Comments = u
 }
-
-//----------
 
 func (ann *Annotator) detectJumps(ctx *Ctx, node0 ast.Node) (string, bool) {
 	detected := ""
@@ -785,8 +744,6 @@ func (ann *Annotator) detectJumps(ctx *Ctx, node0 ast.Node) (string, bool) {
 	return detected, detected != ""
 }
 
-//----------
-
 func (ann *Annotator) typesPkg() *types.Package {
 	for _, obj := range ann.typesInfo.Defs {
 		if obj != nil {
@@ -795,8 +752,6 @@ func (ann *Annotator) typesPkg() *types.Package {
 	}
 	return nil
 }
-
-//----------
 
 func (ann *Annotator) insertMainClose(ctx *Ctx, fd *ast.FuncDecl) bool {
 	if fd.Recv != nil { // is a method
@@ -840,8 +795,6 @@ func (ann *Annotator) insertDeferRecover(ctx *Ctx) {
 	ctx.insertStmt(ds)
 }
 
-//----------
-
 func (ann *Annotator) updateOsExitCalls(ctx *Ctx, ce *ast.CallExpr) (error, bool) {
 	// verify name
 	expr := ce.Fun
@@ -882,8 +835,6 @@ func (ann *Annotator) updateOsExitCalls(ctx *Ctx, ce *ast.CallExpr) (error, bool
 	return nil, true
 }
 
-//----------
-
 func (ann *Annotator) newFuncLitRetType(node ast.Node) (*ast.FuncLit, error) {
 	tt, err := ann.newTType(node)
 	if err != nil {
@@ -892,8 +843,6 @@ func (ann *Annotator) newFuncLitRetType(node ast.Node) (*ast.FuncLit, error) {
 	fl := newFuncLitRetType(ann.typeString(tt.Type))
 	return fl, nil
 }
-
-//----------
 
 func (ann *Annotator) typeString(typ types.Type) string {
 	// TODO: external pkg private type?
@@ -920,15 +869,7 @@ func (ann *Annotator) typeString(typ types.Type) string {
 	return name
 }
 
-//----------
-//----------
-//----------
-
 type DebugExpr ast.Expr
-
-//----------
-//----------
-//----------
 
 type tupleExpr struct {
 	ast.Expr
@@ -947,10 +888,6 @@ func mustNotBeTupleExpr(e ast.Expr) {
 		panic("not expecting tuple expr")
 	}
 }
-
-//----------
-//----------
-//----------
 
 func newAssignStmtA11(lhs, rhs ast.Expr) *ast.AssignStmt {
 	return newAssignStmtA([]ast.Expr{lhs}, []ast.Expr{rhs})
@@ -976,8 +913,6 @@ func newAssignToAnons(exprs ...ast.Expr) *ast.AssignStmt {
 	return newAssignStmtA(ids, exprs)
 }
 
-//----------
-
 func newFuncLit() *ast.FuncLit {
 	fl := &ast.FuncLit{}
 	fl.Type = &ast.FuncType{
@@ -996,19 +931,13 @@ func newFuncLitRetType(typeName string) *ast.FuncLit {
 	return fl
 }
 
-//----------
-
 func isTypesBasicInfo(tb *types.Basic, bi types.BasicInfo) bool {
 	return tb.Info()&bi != 0
 }
 
-//----------
-
 func isEmptyFieldList(fl *ast.FieldList) bool {
 	return fl == nil || len(fl.List) == 0
 }
-
-//----------
 
 func nilIdent(pos token.Pos) *ast.Ident {
 	return &ast.Ident{Name: "nil", NamePos: pos}
@@ -1036,8 +965,6 @@ func isIdentWithName(e ast.Expr, name string) bool {
 	return ok && id.Name == name
 }
 
-//----------
-
 // a.b.c runs fn(a) first and fn(c) last.
 func identsSequenceFn(e ast.Expr, fn func(*ast.Ident)) bool {
 	// ex: (a.b).c
@@ -1062,16 +989,12 @@ func isIdentsSequence(e ast.Expr) bool {
 	return identsSequenceFn(e, func(*ast.Ident) {})
 }
 
-//----------
-
 func bypassParenExpr(expr ast.Expr) ast.Expr {
 	if pe, ok := expr.(*ast.ParenExpr); ok {
 		return bypassParenExpr(pe.X)
 	}
 	return expr
 }
-
-//----------
 
 func basicLitInt(v int, pos token.Pos) *ast.BasicLit {
 	return &ast.BasicLit{
@@ -1090,8 +1013,6 @@ func basicLitString(v string, pos token.Pos) *ast.BasicLit {
 func basicLitStringQ(v string, pos token.Pos) *ast.BasicLit {
 	return basicLitString(strconv.Quote(v), pos)
 }
-
-//----------
 
 func hasChanRecvOp(ue *ast.UnaryExpr) bool {
 	return ue.Op == token.ARROW
@@ -1112,5 +1033,3 @@ func isAddressOfExpr(expr ast.Expr) (*ast.UnaryExpr, bool) {
 	}
 	return nil, false
 }
-
-//----------

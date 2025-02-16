@@ -83,8 +83,6 @@ func (ui *BasicUI) initMouseFilters() {
 	ui.dragf = mousefilter.NewDragFilter(emitFn)
 }
 
-//----------
-
 func (ui *BasicUI) Close() {
 	ui.closeOnce.Do(func() {
 		req := &event.ReqClose{}
@@ -93,8 +91,6 @@ func (ui *BasicUI) Close() {
 		}
 	})
 }
-
-//----------
 
 func (ui *BasicUI) eventLoop() {
 	for {
@@ -107,8 +103,6 @@ func (ui *BasicUI) eventLoop() {
 		ui.movef.Filter(ev) // sends events to ui.eventsQ.In()
 	}
 }
-
-//----------
 
 // How to use NextEvent():
 //
@@ -131,13 +125,9 @@ func (ui *BasicUI) NextEvent() any {
 	return ui.eventsQ.PopFront()
 }
 
-//----------
-
 func (ui *BasicUI) AppendEvent(ev any) {
 	ui.eventsQ.PushBack(ev)
 }
-
-//----------
 
 func (ui *BasicUI) HandleEvent(ev any) (handled bool) {
 	switch t := ev.(type) {
@@ -168,14 +158,10 @@ func (ui *BasicUI) handleWidgetEv(ev any, p image.Point) {
 	ui.applyEv.Apply(ui.RootNode, ev, p)
 }
 
-//----------
-
 func (ui *BasicUI) LayoutMarkedAndSchedulePaint() {
 	ui.RootNode.LayoutMarked()
 	ui.schedulePaintMarked()
 }
-
-//----------
 
 func (ui *BasicUI) resizeImage(r image.Rectangle) {
 	req := &event.ReqImageResize{r}
@@ -199,8 +185,6 @@ func (ui *BasicUI) resizeImage(r image.Rectangle) {
 		en.MarkNeedsPaint()
 	}
 }
-
-//----------
 
 func (ui *BasicUI) schedulePaintMarked() {
 	if ui.RootNode.Embed().TreeNeedsPaint() {
@@ -229,8 +213,6 @@ func (ui *BasicUI) durationToNextPaint() time.Duration {
 	return frameDur - d
 }
 
-//----------
-
 func (ui *BasicUI) paint() {
 	// DEBUG: print fps
 	now := time.Now()
@@ -257,8 +239,6 @@ func (ui *BasicUI) putImage(r image.Rectangle) {
 		return
 	}
 }
-
-//----------
 
 func (ui *BasicUI) EnqueueNoOpEvent() {
 	ui.AppendEvent(struct{}{})
@@ -287,8 +267,6 @@ func (ui *BasicUI) QueryPointer() (image.Point, error) {
 	return req.ReplyP, err
 }
 
-//----------
-
 // Implements widget.CursorContext
 func (ui *BasicUI) SetCursor(c event.Cursor) {
 	if ui.curCursor == c {
@@ -302,8 +280,6 @@ func (ui *BasicUI) SetCursor(c event.Cursor) {
 		return
 	}
 }
-
-//----------
 
 func (ui *BasicUI) GetClipboardData(i event.ClipboardIndex, fn func(string, error)) {
 	go func() {
@@ -322,8 +298,6 @@ func (ui *BasicUI) SetClipboardData(i event.ClipboardIndex, s string) {
 		return
 	}
 }
-
-//----------
 
 func (ui *BasicUI) RunOnUIGoRoutine(f func()) {
 	ui.AppendEvent(&UIRunFuncEvent{f})
@@ -348,8 +322,6 @@ func (ui *BasicUI) QueueEmptyWindowInputEvent() {
 	}
 	ui.AppendEvent(&event.WindowInput{Point: p})
 }
-
-//----------
 
 type UIPaintTime struct{}
 

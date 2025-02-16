@@ -7,8 +7,6 @@ import (
 
 type Request any
 
-//----------
-
 type ReqClose struct{}
 type ReqWindowSetName struct{ Name string }
 type ReqImage struct{ ReplyImg draw.Image }

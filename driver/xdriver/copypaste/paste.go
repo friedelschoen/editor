@@ -34,8 +34,6 @@ func NewPaste(conn *xgb.Conn, win xproto.Window) (*Paste, error) {
 	return p, nil
 }
 
-//----------
-
 func (p *Paste) Get(index event.ClipboardIndex) (string, error) {
 	switch index {
 	case event.CIPrimary:
@@ -46,8 +44,6 @@ func (p *Paste) Get(index event.ClipboardIndex) (string, error) {
 		return "", fmt.Errorf("unhandled index")
 	}
 }
-
-//----------
 
 func (p *Paste) request(selection xproto.Atom) (string, error) {
 	// TODO: handle timestamps to force only one paste at a time?
@@ -75,8 +71,6 @@ func (p *Paste) requestData(selection xproto.Atom) {
 		xproto.TimeCurrentTime)
 }
 
-//----------
-
 func (p *Paste) OnSelectionNotify(ev *xproto.SelectionNotifyEvent) {
 	// not a a paste event
 	switch ev.Property {
@@ -90,8 +84,6 @@ func (p *Paste) OnSelectionNotify(ev *xproto.SelectionNotifyEvent) {
 		log.Print(fmt.Errorf("onselectionnotify: %w", err))
 	}
 }
-
-//----------
 
 func (p *Paste) OnPropertyNotify(ev *xproto.PropertyNotifyEvent) {
 	// not a a paste event
@@ -108,8 +100,6 @@ func (p *Paste) OnPropertyNotify(ev *xproto.PropertyNotifyEvent) {
 		//log.Print(errors.Wrap(err, "onpropertynotify"))
 	}
 }
-
-//----------
 
 func (p *Paste) extractData(ev *xproto.SelectionNotifyEvent) (string, error) {
 	switch ev.Property {
@@ -190,8 +180,6 @@ func (p *Paste) waitForPropertyNewValue(ev *xproto.SelectionNotifyEvent) error {
 		}
 	}
 }
-
-//----------
 
 var PasteAtoms struct {
 	Primary   xproto.Atom `loadAtoms:"PRIMARY"`

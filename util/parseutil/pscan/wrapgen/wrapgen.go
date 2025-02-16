@@ -49,8 +49,6 @@ func main2() error {
 	return nil
 }
 
-//----------
-
 func build(fset *token.FileSet, f *ast.File) ([]byte, error) {
 	buf := &bytes.Buffer{}
 
@@ -181,8 +179,6 @@ func mustSprintFuncType(fset *token.FileSet, ft *ast.FuncType) (string, string, 
 	return params, results, vars
 }
 
-//----------
-
 func MustSprintNode(fset *token.FileSet, node0 any, fieldNamesFn func(string)) string {
 
 	funcTypeDepth := 0
@@ -241,8 +237,6 @@ func MustSprintNode(fset *token.FileSet, node0 any, fieldNamesFn func(string)) s
 			return fmt.Sprintf("func(%s)%s", params, results)
 		case *ast.StarExpr:
 			return fmt.Sprintf("*%s", fn(t.X))
-
-		//----------
 
 		case *ast.Ident:
 			s, err := astut.SprintNode2(fset, node)

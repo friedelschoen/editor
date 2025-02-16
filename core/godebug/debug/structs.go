@@ -43,15 +43,9 @@ func registerStructsForProtoConn() {
 	reg(&ItemNotAnn{})
 }
 
-//----------
-//----------
-//----------
-
 type HandshakeMsg struct{ Msg string }
 type ReqFilesDataMsg struct{}
 type ReqStartMsg struct{}
-
-//----------
 
 type FilesDataMsg struct {
 	Data []*AnnotatorFileData
@@ -70,8 +64,6 @@ type AfdFileIndex = uint16
 type AfdFileSize = uint32
 type AfdMsgIndex = uint32 // uint16 enough?
 
-//----------
-
 type OffsetMsgs []*OffsetMsg
 
 type OffsetMsg struct {
@@ -80,8 +72,6 @@ type OffsetMsg struct {
 	Offset    AfdFileSize
 	Item      Item
 }
-
-//----------
 
 type Item interface {
 	isItem()
@@ -193,10 +183,6 @@ type ItemStep struct {
 type ItemAnon struct {
 	Item
 }
-
-//----------
-//----------
-//----------
 
 // ItemValue: interface (ex: int=1, string="1")
 func IVi(v any) Item {
@@ -328,7 +314,3 @@ func ILa(reason string) Item {
 func INAnn(reason string) Item {
 	return &ItemNotAnn{Reason: reason}
 }
-
-//----------
-//----------
-//----------

@@ -37,8 +37,6 @@ func (p *Plugins) AddPath(path string) error {
 	return p.runOnLoad(plug)
 }
 
-//----------
-
 func (p *Plugins) runOnLoad(plug *Plug) error {
 	// plugin should have this symbol
 	fname := "OnLoad"
@@ -55,8 +53,6 @@ func (p *Plugins) runOnLoad(plug *Plug) error {
 	f2(p.ed)
 	return nil
 }
-
-//----------
 
 // Runs all plugins until it finds one that returns handled=true and has no errors.
 func (p *Plugins) RunAutoComplete(ctx context.Context, cfb *ui.ContextFloatBox) (_ error, handled bool) {
@@ -91,8 +87,6 @@ func (p *Plugins) runAutoCompletePlug(ctx context.Context, plug *Plug, cfb *ui.C
 	return fn2(ctx, p.ed, cfb)
 }
 
-//----------
-
 func (p *Plugins) RunToolbarCmd(erow *ERow, part *toolbarparser.Part) bool {
 	for _, plug := range p.plugs {
 		handled := p.runToolbarCmdPlug(plug, erow, part)
@@ -124,13 +118,9 @@ func (p *Plugins) runToolbarCmdPlug(plug *Plug, erow *ERow, part *toolbarparser.
 	return f2(p.ed, erow, part)
 }
 
-//----------
-
 func (p *Plugins) badFuncSigErr(path, name string) error {
 	return fmt.Errorf("plugins: bad func signature: %v, %v", path, name)
 }
-
-//----------
 
 type Plug struct {
 	Path   string

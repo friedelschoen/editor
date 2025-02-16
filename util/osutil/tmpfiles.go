@@ -49,8 +49,6 @@ func (tf *TmpFiles) RemoveAll() error {
 	return os.RemoveAll(tf.Dir)
 }
 
-//----------
-
 // Returns the filename
 func (tf *TmpFiles) MkdirInTmpOrPanic(path string) string {
 	s, err := tf.MkdirInTmp(path)

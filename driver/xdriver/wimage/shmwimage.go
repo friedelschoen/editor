@@ -128,8 +128,6 @@ func (wi *ShmWImage) PutImageCompleted() {
 	}
 }
 
-//----------
-
 var initErr error
 
 // initialize early to avoid concurrent map read/write (XGB library issue)

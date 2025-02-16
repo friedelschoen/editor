@@ -27,8 +27,6 @@ func (d *Data) Part0Arg0() (*Arg, bool) {
 	return nil, false
 }
 
-//----------
-
 func (d *Data) ToString() string {
 	s := ""
 	for i, p := range d.Parts {
@@ -42,10 +40,6 @@ func (d *Data) ToString() string {
 	}
 	return s
 }
-
-//----------
-//----------
-//----------
 
 type Part struct {
 	Node
@@ -79,17 +73,9 @@ func (p *Part) FromArgString(i int) string {
 	return p.Data.Str[n1.Pos():n2.End()]
 }
 
-//----------
-//----------
-//----------
-
 type Arg struct {
 	Node
 }
-
-//----------
-//----------
-//----------
 
 type Node struct {
 	lrparser.BasicPNode
@@ -108,10 +94,6 @@ func (n *Node) UnquotedString() string {
 	return s
 }
 
-//----------
-//----------
-//----------
-
 type VarDecl struct {
 	Name, Value string
 }
@@ -119,10 +101,6 @@ type VarDecl struct {
 func (v *VarDecl) String() string {
 	return fmt.Sprintf("%v=%v", v.Name, v.Value)
 }
-
-//----------
-//----------
-//----------
 
 type VarRef struct {
 	lrparser.BasicPNode

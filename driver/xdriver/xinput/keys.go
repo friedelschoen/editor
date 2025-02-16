@@ -283,8 +283,6 @@ func translateXKeysymToEventKeySym(xk xproto.Keysym) event.KeySym {
 	return event.KSymNone
 }
 
-//----------
-
 func keySymsRune(xks xproto.Keysym, eks event.KeySym) rune {
 	ru := rune(xks) // default direct translation (covers some ascii values)
 	ru2 := eventKeySymRune(eks)
@@ -351,8 +349,6 @@ func eventKeySymRune(eks event.KeySym) rune {
 	}
 	return rune(0)
 }
-
-//----------
 
 func translateModifiersToEventKeyModifiers(v uint16) event.KeyModifiers {
 	type pair struct {

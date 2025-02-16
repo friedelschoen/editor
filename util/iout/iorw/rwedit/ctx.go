@@ -52,8 +52,6 @@ func (ctx *Ctx) LocalReader2(min, max int) iorw.ReaderAt {
 	return iorw.NewLimitedReaderAtPad(ctx.RW, min, max, pad)
 }
 
-//----------
-
 type CtxFns struct {
 	Error func(error)
 

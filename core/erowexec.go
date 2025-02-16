@@ -27,8 +27,6 @@ func NewERowExec(erow *ERow) *ERowExec {
 	return ee
 }
 
-//----------
-
 func (ee *ERowExec) RunAsync(fn func(context.Context, io.ReadWriter) error) {
 	// Note: textarea w.close() (textareawriter) could deadlock if runasync() is not on own goroutine. If w.close waits for UI goroutine to finish and runasync() is currently occupying it (w.close called after a runasync(), just that the UI goroutine is not getting released). Launching in a goroutine allows RunAsync() itself to be called from a uigoroutine since this func will return immediately
 	go ee.runAsync2(nil, nil, fn)
@@ -101,8 +99,6 @@ func (ee *ERowExec) runAsync2(optCtx context.Context, optCancel context.CancelFu
 		})
 	}()
 }
-
-//----------
 
 func (ee *ERowExec) Stop() {
 	ee.c.Lock()

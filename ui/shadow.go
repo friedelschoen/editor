@@ -28,8 +28,6 @@ func WrapInTopShadowOrSeparator(ctx widget.ImageContext, content widget.Node) wi
 	}
 }
 
-//----------
-
 func WrapInBottomShadowOrNone(ctx widget.ImageContext, content widget.Node) widget.Node {
 	if !ShadowsOn {
 		return content
@@ -40,8 +38,6 @@ func WrapInBottomShadowOrNone(ctx widget.ImageContext, content widget.Node) widg
 	return s2
 }
 
-//----------
-
 type topShadow2 struct {
 	*widget.TopShadow
 }
@@ -50,8 +46,6 @@ func (s *topShadow2) OnThemeChange() {
 	ff := s.FirstChild().Embed().TreeThemeFontFace()
 	s.TopShadow.Height = UIThemeUtil.ShadowHeight(ff)
 }
-
-//----------
 
 type bottomShadow2 struct {
 	*widget.BottomShadow

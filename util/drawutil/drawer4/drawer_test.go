@@ -64,8 +64,6 @@ func TestNLinesStartIndex1(t *testing.T) {
 	}
 }
 
-//----------
-
 func TestImg01(t *testing.T) {
 	d, img := newTestDrawer()
 
@@ -391,8 +389,6 @@ func TestImg18LongWrap(t *testing.T) {
 	d.Draw(img)
 	cmpResult(t, img, "img18")
 }
-
-//----------
 
 func newTestDrawer() (*Drawer, draw.Image) {
 	rect := image.Rect(0, 0, 70, 70)

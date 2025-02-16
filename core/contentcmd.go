@@ -13,8 +13,6 @@ type ContentCmd struct {
 
 type ContentCmdFn func(ctx context.Context, erow *ERow, index int) (_ error, handled bool)
 
-//----------
-
 type contentCmds []*ContentCmd
 
 func (ccs *contentCmds) Append(name string, fn ContentCmdFn) {
@@ -39,8 +37,6 @@ func (ccs *contentCmds) Remove(name string) (removed bool) {
 	*ccs = a
 	return
 }
-
-//----------
 
 // global cmds added via init() from "contentcmds" pkg
 var ContentCmds contentCmds

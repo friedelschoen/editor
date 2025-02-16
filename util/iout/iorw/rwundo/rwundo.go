@@ -15,8 +15,6 @@ func NewRWUndo(rw iorw.ReadWriterAt, hist *History) *RWUndo {
 	return rwu
 }
 
-//----------
-
 func (rw *RWUndo) OverwriteAt(i, n int, p []byte) error {
 	// don't add to history if the result is equal
 	changed := true
@@ -37,8 +35,6 @@ func (rw *RWUndo) OverwriteAt(i, n int, p []byte) error {
 	return nil
 }
 
-//----------
-
 func (rw *RWUndo) UndoRedo(redo, peek bool) (rwedit.SimpleCursor, bool, error) {
 	edits, ok := rw.History.UndoRedo(redo, peek)
 	if !ok {
@@ -51,8 +47,6 @@ func (rw *RWUndo) UndoRedo(redo, peek bool) (rwedit.SimpleCursor, bool, error) {
 	}
 	return c, true, nil
 }
-
-//----------
 
 // used in tests
 func (rw *RWUndo) undo() (rwedit.SimpleCursor, bool, error) {

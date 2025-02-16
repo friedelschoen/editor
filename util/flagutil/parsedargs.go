@@ -15,8 +15,6 @@ func ParseParsedArgs(args []string, isBool map[string]bool) ParsedArgs {
 	return pa
 }
 
-//----------
-
 type ParsedArgs []*Arg
 
 func (pa ParsedArgs) Get(name string) (*Arg, bool) {
@@ -44,8 +42,6 @@ func (pa ParsedArgs) Join() []string {
 	}
 	return u
 }
-
-//----------
 
 func (pa ParsedArgs) CommonSplit() (ParsedArgs, ParsedArgs, ParsedArgs) {
 	pa, binaryPa := pa.SplitAtDoubleDashExclude()
@@ -86,8 +82,6 @@ func (pa ParsedArgs) SplitAtNameExclude(name string) (ParsedArgs, ParsedArgs) {
 	return pa, nil
 }
 
-//----------
-
 type Arg struct {
 	Name  string // can be empty if just a value
 	Value string // can be empty if just a name
@@ -106,8 +100,6 @@ func (a *Arg) String() string {
 	}
 	return s
 }
-
-//----------
 
 func parseArg(args []string, i int, isBool map[string]bool) (name string, value string, curI int) {
 	curI = i

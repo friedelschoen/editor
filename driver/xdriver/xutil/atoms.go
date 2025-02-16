@@ -41,8 +41,6 @@ func LoadAtoms(conn *xgb.Conn, st any, onlyIfExists bool) error {
 	return nil
 }
 
-//----------
-
 func GetAtomName(conn *xgb.Conn, atom xproto.Atom) (string, error) {
 	cookie := xproto.GetAtomName(conn, atom)
 	r, err := cookie.Reply()

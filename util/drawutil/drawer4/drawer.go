@@ -217,8 +217,6 @@ func (st State) Dump() {
 	spew.Dump(st)
 }
 
-//----------
-
 func New() *Drawer {
 	d := &Drawer{}
 	d.Opt.LineWrap.On = true
@@ -244,8 +242,6 @@ func New() *Drawer {
 	return d
 }
 
-//----------
-
 func (d *Drawer) SetReader(r iorw.ReaderAt) {
 	d.reader = r
 	// always run since an underlying reader could have been changed
@@ -253,8 +249,6 @@ func (d *Drawer) SetReader(r iorw.ReaderAt) {
 }
 
 func (d *Drawer) Reader() iorw.ReaderAt { return d.reader }
-
-//----------
 
 var limitedReaderPadding = 3000
 
@@ -275,8 +269,6 @@ func (d *Drawer) limitedReaderPadSpace(offset int) iorw.ReaderAt {
 	return iorw.NewLimitedReaderAtPad(d.reader, offset, offset, pad)
 }
 
-//----------
-
 func (d *Drawer) ContentChanged() {
 	d.opt.measure.updated = false
 	d.opt.syntaxH.updated = false
@@ -284,8 +276,6 @@ func (d *Drawer) ContentChanged() {
 	d.opt.wordH.updatedOps = false
 	d.opt.parenthesisH.updated = false
 }
-
-//----------
 
 func (d *Drawer) FontFace() *fontutil.FontFace { return d.fface }
 func (d *Drawer) SetFontFace(ff *fontutil.FontFace) {
@@ -307,8 +297,6 @@ func (d *Drawer) LineHeight() int {
 
 func (d *Drawer) SetFg(fg color.Color) { d.fg = fg }
 
-//----------
-
 func (d *Drawer) FirstLineOffsetX() int { return d.firstLineOffsetX }
 func (d *Drawer) SetFirstLineOffsetX(x int) {
 	if x != d.firstLineOffsetX {
@@ -316,8 +304,6 @@ func (d *Drawer) SetFirstLineOffsetX(x int) {
 		d.opt.measure.updated = false
 	}
 }
-
-//----------
 
 func (d *Drawer) Bounds() image.Rectangle { return d.bounds }
 func (d *Drawer) SetBounds(r image.Rectangle) {
@@ -333,8 +319,6 @@ func (d *Drawer) SetBounds(r image.Rectangle) {
 	d.bounds = r // always update value (can change min)
 }
 
-//----------
-
 func (d *Drawer) RuneOffset() int {
 	return d.opt.runeO.offset
 }
@@ -346,8 +330,6 @@ func (d *Drawer) SetRuneOffset(v int) {
 	d.opt.parenthesisH.updated = false
 }
 
-//----------
-
 func (d *Drawer) SetCursorOffset(v int) {
 	d.opt.cursor.offset = v
 
@@ -356,13 +338,9 @@ func (d *Drawer) SetCursorOffset(v int) {
 	d.opt.parenthesisH.updated = false
 }
 
-//----------
-
 func (d *Drawer) ready() bool {
 	return !(d.fface == nil || d.reader == nil || d.bounds == image.ZR)
 }
-
-//----------
 
 func (d *Drawer) Measure() image.Point {
 	if !d.ready() {
@@ -395,8 +373,6 @@ func (d *Drawer) measureContent() image.Point {
 	return m
 }
 
-//----------
-
 func (d *Drawer) Draw(img draw.Image) {
 	updateSyntaxHighlightOps(d)
 	updateWordHighlightWord(d)
@@ -423,8 +399,6 @@ func (d *Drawer) Draw(img draw.Image) {
 	d.loop()
 }
 
-//----------
-
 func (d *Drawer) LocalPointOf(index int) image.Point {
 	if !d.ready() {
 		return image.Point{}
@@ -438,8 +412,6 @@ func (d *Drawer) LocalPointOf(index int) image.Point {
 	return d.st.pointOf.p
 }
 
-//----------
-
 func (d *Drawer) LocalIndexOf(p image.Point) int {
 	if !d.ready() {
 		return 0
@@ -452,8 +424,6 @@ func (d *Drawer) LocalIndexOf(p image.Point) int {
 	d.loop()
 	return d.st.indexOf.index
 }
-
-//----------
 
 func (d *Drawer) AnnotationsIndexOf(p image.Point) (int, int, bool) {
 	if !d.ready() {
@@ -472,8 +442,6 @@ func (d *Drawer) AnnotationsIndexOf(p image.Point) (int, int, bool) {
 	}
 	return st.eindex, st.offset, true
 }
-
-//----------
 
 func (d *Drawer) loopInit(iters []Iterator) {
 	l := &d.loopv
@@ -517,8 +485,6 @@ func (d *Drawer) iterNextExtra() bool {
 	return d.iterNext()
 }
 
-//----------
-
 func (d *Drawer) visibleLen() (int, int, int, int) {
 	d.st = State{}
 	iters := d.sIters(true)
@@ -537,8 +503,6 @@ func (d *Drawer) visibleLen() (int, int, int, int) {
 	return drawOffset, drawLen, offset, offsetLen
 }
 
-//----------
-
 func (d *Drawer) ScrollOffset() image.Point {
 	return image.Point{0, d.RuneOffset()}
 }
@@ -556,14 +520,10 @@ func (d *Drawer) ScrollViewSize() image.Point {
 	return image.Point{0, n}
 }
 
-//----------
-
 func (d *Drawer) ScrollPageSizeY(up bool) int {
 	nlines := d.boundsNLines()
 	return d.scrollSizeY(nlines, up)
 }
-
-//----------
 
 func (d *Drawer) ScrollWheelSizeY(up bool) int {
 	nlines := d.boundsNLines()
@@ -579,15 +539,11 @@ func (d *Drawer) ScrollWheelSizeY(up bool) int {
 	return d.scrollSizeY(nlines, up)
 }
 
-//----------
-
 // integer lines
 func (d *Drawer) boundsNLines() int {
 	dy := mathutil.Intf1(d.bounds.Dy())
 	return int(dy / d.lineHeight)
 }
-
-//----------
 
 func (d *Drawer) scrollSizeY(nlines int, up bool) int {
 	if up {
@@ -599,16 +555,12 @@ func (d *Drawer) scrollSizeY(nlines int, up bool) int {
 	}
 }
 
-//----------
-
 func (d *Drawer) scrollSizeYUp(nlines int) int {
 	return d.wlineStartIndex(true, d.opt.runeO.offset, nlines, nil)
 }
 func (d *Drawer) scrollSizeYDown(nlines int) int {
 	return d.wlineStartIndexDown(d.opt.runeO.offset, nlines)
 }
-
-//----------
 
 func (d *Drawer) RangeVisible(offset, length int) bool {
 	v1 := penVisibility(d, offset)
@@ -660,8 +612,6 @@ func (d *Drawer) RangeVisibleOffset(offset, length int, align drawutil.RangeAlig
 		panic(fmt.Errorf("todo: %v", align))
 	}
 }
-
-//----------
 
 func (d *Drawer) alignKeep() int {
 	return mathutil.Min(d.opt.runeO.offset, d.reader.Max())
@@ -725,8 +675,6 @@ func (d *Drawer) rangeVisibleOffsetAuto(offset, length int) int {
 	return align(drawutil.RAlignCenter)
 }
 
-//----------
-
 func (d *Drawer) rangeVisibleOffset2(offset, length int) int {
 	// don't let offset+length be beyond max for v2 (would give not visible)
 	offset2 := offset + length
@@ -735,8 +683,6 @@ func (d *Drawer) rangeVisibleOffset2(offset, length int) int {
 	}
 	return offset2
 }
-
-//----------
 
 func (d *Drawer) rangeNLines(offset, length int) int {
 	pr1, pr2, ok := d.wlineRangePenBounds(offset, length)
@@ -772,8 +718,6 @@ func (d *Drawer) wlineRangePenBounds(offset, length int) (_, _ mathutil.Rectangl
 	return pr1, pr2, ok1 && ok2
 }
 
-//----------
-
 func (d *Drawer) wlineStartIndexDown(offset, nlinesDown int) int {
 	count := 0
 	startRi := 0
@@ -801,8 +745,6 @@ func (d *Drawer) wlineStartIndexDown(offset, nlinesDown int) int {
 	return d.st.runeR.ri
 }
 
-//----------
-
 func (d *Drawer) header0() {
 	_ = d.header(d.opt.runeO.offset, 0)
 }
@@ -814,8 +756,6 @@ func (d *Drawer) header1() {
 		d.st.runeR.pen.Y -= d.lineHeight * mathutil.Intf(ul)
 	}
 }
-
-//----------
 
 func (d *Drawer) header(offset, nLinesUp int) int {
 	// smooth scrolling
@@ -872,8 +812,6 @@ func (d *Drawer) wlineStartEnd(offset int) (int, int) {
 	return s, e
 }
 
-//----------
-
 func (d *Drawer) wlineStartLoopFn(clearState bool, offset, nLinesUp int, fnInit func(), fn func()) {
 	// keep/restore iters
 	iters := d.loopv.iters
@@ -884,8 +822,6 @@ func (d *Drawer) wlineStartLoopFn(clearState bool, offset, nLinesUp int, fnInit 
 	fnInit()
 	d.loop()
 }
-
-//----------
 
 // Leaves the state at line start
 func (d *Drawer) wlineStartState(clearState bool, offset, nLinesUp int) int {
@@ -910,8 +846,6 @@ func (d *Drawer) wlineStartState(clearState bool, offset, nLinesUp int) int {
 	return uppedLines
 }
 
-//----------
-
 func (d *Drawer) wlineStartIndex(clearState bool, offset, nLinesUp int, rd iorw.ReaderAt) int {
 	if clearState {
 		d.st = State{}
@@ -924,8 +858,6 @@ func (d *Drawer) wlineStartIndex(clearState bool, offset, nLinesUp int, rd iorw.
 	d.loop()
 	return d.st.lineStart.ri
 }
-
-//----------
 
 // structure iterators
 func (d *Drawer) sIters(earlyExit bool, more ...Iterator) []Iterator {
@@ -942,15 +874,11 @@ func (d *Drawer) sIters(earlyExit bool, more ...Iterator) []Iterator {
 	return iters
 }
 
-//----------
-
 type Iterator interface {
 	Init()
 	Iter()
 	End()
 }
-
-//----------
 
 type FnIter struct {
 	fn func()
@@ -959,8 +887,6 @@ type FnIter struct {
 func (it *FnIter) Init() {}
 func (it *FnIter) Iter() { it.fn() }
 func (it *FnIter) End()  {}
-
-//----------
 
 func assignColor(dest *color.Color, src color.Color) {
 	if src != nil {

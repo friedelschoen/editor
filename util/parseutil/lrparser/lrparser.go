@@ -42,8 +42,6 @@ func (lrp *Lrparser) ContentParser(opt *CpOpt) (*ContentParser, error) {
 	return cp, nil
 }
 
-//----------
-
 func (lrp *Lrparser) SetStringRule(name string, s string) error {
 	if s == "" {
 		return fmt.Errorf("empty string")
@@ -58,8 +56,6 @@ func (lrp *Lrparser) SetBoolRule(name string, v bool) error {
 func (lrp *Lrparser) SetFuncRule(name string, parseOrder int, fn PStateParseFn) error {
 	return lrp.ri.setFuncRule(name, parseOrder, fn)
 }
-
-//----------
 
 func (lrp *Lrparser) MustGetStringRule(name string) string {
 	if s, err := lrp.GetStringRule(name); err != nil {

@@ -46,8 +46,6 @@ func autoCompleteERow(ed *core.Editor, cfb *ui.ContextFloatBox, erow *core.ERow)
 	return false
 }
 
-//----------
-
 func autoCompleteERowGolang(ed *core.Editor, cfb *ui.ContextFloatBox, erow *core.ERow) {
 	// timeout for the cmd to run
 	timeout := 8000 * time.Millisecond

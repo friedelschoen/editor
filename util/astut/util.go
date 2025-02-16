@@ -16,8 +16,6 @@ func NodeFilename(fset *token.FileSet, node ast.Node) (string, error) {
 	return f.Name(), nil
 }
 
-//----------
-
 // print ast notes
 // TODO: without tabwidth set, it won't output the source correctly
 // Fail: has struct fields without spaces "field int"->"fieldint"

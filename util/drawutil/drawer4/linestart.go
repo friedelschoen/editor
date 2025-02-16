@@ -49,8 +49,6 @@ func (ls *LineStart) End() {
 	}
 }
 
-//----------
-
 func (ls *LineStart) lineStartIndex(offset, nLinesUp int) int {
 	w := ls.linesStartIndexes(offset, nLinesUp)
 

@@ -34,8 +34,6 @@ func header1PenBounds(d *Drawer, offset int) (mathutil.RectangleIntf, bool) {
 	return pen, found
 }
 
-//----------
-
 type PenVisibility struct {
 	not     bool // not visible
 	full    bool // fully visible

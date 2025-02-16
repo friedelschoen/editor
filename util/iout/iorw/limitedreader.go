@@ -23,8 +23,6 @@ func NewLimitedReaderAtPad(r ReaderAt, min, max, pad int) *LimitedReaderAt {
 	return NewLimitedReaderAt(r, min-pad, max+pad)
 }
 
-//----------
-
 func (r *LimitedReaderAt) ReadFastAt(i, n int) ([]byte, error) {
 	if i < r.min {
 		return nil, fmt.Errorf("limited index: %v<%v: %w", i, r.min, io.EOF)

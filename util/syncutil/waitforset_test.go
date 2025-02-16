@@ -28,8 +28,6 @@ func waitForSet1(b *testing.B) {
 	}
 }
 
-//----------
-
 func BenchmarkNBChan(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		bNBChan(b)

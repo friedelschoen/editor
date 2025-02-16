@@ -38,8 +38,6 @@ type Options struct {
 	ZipSessionsFile bool
 }
 
-//----------
-
 // implements flag.Value interface
 type RegistrationsOpt struct {
 	regs []*lsproto.Registration
@@ -68,8 +66,6 @@ func (ro *RegistrationsOpt) String() string {
 	return fmt.Sprintf("%v", strings.Join(u, "\n"))
 }
 
-//----------
-
 // implements flag.Value interface
 type PreSaveHooksOpt struct {
 	regs []*PreSaveHook
@@ -97,8 +93,6 @@ func (o *PreSaveHooksOpt) String() string {
 	}
 	return fmt.Sprintf("%v", strings.Join(u, "\n"))
 }
-
-//----------
 
 type PreSaveHook struct {
 	Language string

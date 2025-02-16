@@ -244,8 +244,6 @@ func TestStringifyNil(t *testing.T) {
 	runTest1(t, &a, "&nil")
 }
 
-//----------
-
 //func TestSliceCut(t *testing.T) {
 //	b1 := []interface{}{}
 //	for i := 0; i < 50; i++ {
@@ -257,8 +255,6 @@ func TestStringifyNil(t *testing.T) {
 //	t.Logf("%0.5s\n", b1)
 //	t.Logf("%0.2v\n", true)
 //}
-
-//----------
 
 func runTest1(t *testing.T, v any, out string) {
 	t.Helper()
@@ -297,8 +293,6 @@ func runTest3(t *testing.T, v any, out string, max, maxDepth int, sbr bool) {
 		t.Fatalf("got %q expecting %q", s2, out)
 	}
 }
-
-//----------
 
 type Dummy1 struct{ s string }
 

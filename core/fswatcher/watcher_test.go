@@ -9,8 +9,6 @@ import (
 	"time"
 )
 
-//----------
-
 func tmpDir() string {
 	name, err := ioutil.TempDir("", "watcher_test")
 	if err != nil {
@@ -73,8 +71,6 @@ func mustWriteFile(t *testing.T, name string) {
 	}
 }
 
-//----------
-
 func mustAddWatch(t *testing.T, w Watcher, name string) {
 	t.Helper()
 	if err := w.Add(name); err != nil {
@@ -88,8 +84,6 @@ func mustRemoveWatch(t *testing.T, w Watcher, name string) {
 		t.Fatal(err)
 	}
 }
-
-//----------
 
 func readEvent(t *testing.T, w Watcher, failOnTimeout bool, fn func(*Event) bool) {
 	t.Helper()

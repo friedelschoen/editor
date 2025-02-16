@@ -29,8 +29,6 @@ func NewScanner() *Scanner {
 	return sc
 }
 
-//----------
-
 func (sc *Scanner) SetSrc(src []byte) {
 	sc.src = src
 }
@@ -39,13 +37,9 @@ func (sc *Scanner) SetSrc2(src []byte, offset int) {
 	sc.srcOffset = offset
 }
 
-//----------
-
 func (sc *Scanner) ValidPos(i int) int {
 	return mathutil.Max(sc.SrcMin(), mathutil.Min(i, sc.SrcLen()))
 }
-
-//----------
 
 func (sc *Scanner) srcAt(i int) int {
 	return i - sc.srcOffset
@@ -72,14 +66,10 @@ func (sc *Scanner) SrcLen() int {
 	return sc.srcOffset + len(sc.src)
 }
 
-//----------
-
 // WARNING: use with caution, using pos in resulting []byte might fail when there is offset
 func (sc *Scanner) SrcFullFromOffset() []byte {
 	return sc.SrcFromTo(sc.SrcMin(), sc.SrcLen())
 }
-
-//----------
 
 func (sc *Scanner) srcSection0(pos int, maxLen int) string {
 	start := mathutil.Max(pos-maxLen, sc.SrcMin())
@@ -93,8 +83,6 @@ func (sc *Scanner) SrcSection(pos int) string {
 func (sc *Scanner) SrcError(pos int, err error) error {
 	return fmt.Errorf("%v: %v", err, sc.SrcSection(pos))
 }
-
-//----------
 
 func (sc *Scanner) ReadByte(pos int) (byte, int, error) {
 	if sc.Reverse {
@@ -132,8 +120,6 @@ func (sc *Scanner) ReadRune(pos int) (rune, int, error) {
 	}
 }
 
-//----------
-
 func (sc *Scanner) EnsureFatalError(err error) error {
 	e2, ok := err.(*Error)
 	if !ok {
@@ -142,8 +128,6 @@ func (sc *Scanner) EnsureFatalError(err error) error {
 	e2.Fatal = true
 	return e2
 }
-
-//----------
 
 func (sc *Scanner) NewValueKeeper() *ValueKeeper {
 	return sc.NewValueKeepers(1)[0]
@@ -155,10 +139,6 @@ func (sc *Scanner) NewValueKeepers(n int) []*ValueKeeper {
 	}
 	return w
 }
-
-//----------
-//----------
-//----------
 
 type ValueKeeper struct {
 	sc *Scanner
@@ -180,16 +160,8 @@ func (vk *ValueKeeper) WKeepValue(fn VFn) MFn {
 	}
 }
 
-//----------
-//----------
-//----------
-
 type MFn func(pos int) (int, error)      // match func
 type VFn func(pos int) (any, int, error) // value func
-
-//----------
-//----------
-//----------
 
 type Error struct {
 	err   error
@@ -200,24 +172,14 @@ func (e Error) Error() string {
 	return e.err.Error()
 }
 
-//----------
-
 func errorIsFatal(err error) bool {
 	e, ok := err.(*Error)
 	return ok && e.Fatal
 }
 
-//----------
-//----------
-//----------
-
 var NoMatchErr = errors.New("no match")
 var EOF = io.EOF
 var SOF = errors.New("SOF") // start-of-file (as opposed to EOF)
-
-//----------
-//----------
-//----------
 
 type RuneRange [2]rune // assume [0]<[1]
 

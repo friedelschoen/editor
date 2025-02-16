@@ -85,8 +85,6 @@ func acceptWebsocket(conn net.Conn) (net.Conn, error) {
 	}
 }
 
-//----------
-
 type singleConnListener struct {
 	conn net.Conn
 }
@@ -108,10 +106,6 @@ func (s *singleConnListener) Close() error {
 func (s *singleConnListener) Addr() Addr {
 	return s.conn.LocalAddr()
 }
-
-//----------
-//----------
-//----------
 
 func dialWebsocket(ctx context.Context, addr Addr, conn net.Conn) (Conn, error) {
 	srv := websocketEntryPathUrl(addr.String())

@@ -36,8 +36,6 @@ import (
 //go:embed debug/*
 var debugPkgFs embed.FS
 
-//----------
-
 type Cmd struct {
 	Dir string // running directory
 
@@ -87,8 +85,6 @@ func NewCmd() *Cmd {
 	return cmd
 }
 
-//------------
-
 func (cmd *Cmd) printf(f string, a ...any) (int, error) {
 	return fmt.Fprintf(cmd.Stderr, "# "+f, a...)
 }
@@ -100,15 +96,11 @@ func (cmd *Cmd) logf(f string, a ...any) (int, error) {
 	return 0, nil
 }
 
-//------------
-
 // allow direct external access to this feature (ex: godebug -h)
 func (cmd *Cmd) ParseFlagsOnce(args []string) error {
 	cmd.flags.stderr = cmd.Stderr
 	return cmd.flags.parseArgsOnce(args)
 }
-
-//------------
 
 func (cmd *Cmd) Start(ctx context.Context, args []string) (bool, error) {
 	if err := cmd.start2(ctx, args); err != nil {
@@ -216,8 +208,6 @@ func (cmd *Cmd) start4(ctx context.Context) error {
 	return cmd.startEditorSide(ctx)
 }
 
-//----------
-
 func (cmd *Cmd) startEditorSide(ctx context.Context) error {
 	// use timeout: ex: exec side started but exited early with a crash
 	if !cmd.flags.mode.connect || cmd.Testing {
@@ -246,8 +236,6 @@ func (cmd *Cmd) startEditorSide(ctx context.Context) error {
 	return nil
 }
 
-//------------
-
 func (cmd *Cmd) startExecSide(ctx context.Context) error {
 	// args of the built binary to run (annotated program)
 	args := []string{}
@@ -272,8 +260,6 @@ func (cmd *Cmd) startExecSide(ctx context.Context) error {
 	return nil
 }
 
-//------------
-
 func (cmd *Cmd) Wait() error {
 	w := []error{}
 
@@ -291,15 +277,11 @@ func (cmd *Cmd) Wait() error {
 	return errors.Join(w...)
 }
 
-//------------
-
 func (cmd *Cmd) ProtoRead() (any, error) {
 	v := (any)(nil)
 	err := cmd.start.proto.Read(&v)
 	return v, err
 }
-
-//----------
 
 func (cmd *Cmd) build(ctx context.Context) error {
 	if err := cmd.fa.find(ctx); err != nil {
@@ -364,8 +346,6 @@ func (cmd *Cmd) build2(ctx context.Context) error {
 	return ec.Wait()
 }
 
-//------------
-
 // DEBUG
 func (cmd *Cmd) printAnnotatedFilesAsts(fa *FilesToAnnotate) {
 	for orig := range cmd.overlay {
@@ -375,8 +355,6 @@ func (cmd *Cmd) printAnnotatedFilesAsts(fa *FilesToAnnotate) {
 		}
 	}
 }
-
-//------------
 
 //func (cmd *Cmd) tmpDirBasedFilename(filename string) string {
 //	// remove volume name
@@ -394,8 +372,6 @@ func (cmd *Cmd) printAnnotatedFilesAsts(fa *FilesToAnnotate) {
 //	// just replicate on tmp dir
 //	return filepath.Join(cmd.tmpDir, filename)
 //}
-
-//------------
 
 //func (cmd *Cmd) setGoPathEnv(env []string) []string {
 //	// after cmd.flags.env such that this result won't be overriden
@@ -432,8 +408,6 @@ func (cmd *Cmd) addToGopathStart(dir string) {
 	v2 := dir + sep + v
 	cmd.env = osutil.SetEnv(cmd.env, varName, v2)
 }
-
-//------------
 
 func (cmd *Cmd) detectGopathMode(env []string) error {
 	modsMode, err := cmd.detectModulesMode(env)
@@ -482,8 +456,6 @@ func (cmd *Cmd) neededGoVersion() error {
 	return nil
 }
 
-//------------
-
 func (cmd *Cmd) cleanupAfterStart() {
 	// allow garbage collect
 	cmd.fa = nil
@@ -521,8 +493,6 @@ func (cmd *Cmd) cleanupAfterWait() {
 	}
 }
 
-//------------
-
 func (cmd *Cmd) mkdirAllWriteAstFile(filename string, astFile *ast.File) error {
 	buf := &bytes.Buffer{}
 
@@ -538,8 +508,6 @@ func (cmd *Cmd) mkdirAllWriteAstFile(filename string, astFile *ast.File) error {
 	}
 	return mkdirAllWriteFile(filename, buf.Bytes())
 }
-
-//------------
 
 func (cmd *Cmd) editorRootTmpDir() string {
 	fixedDir := filepath.Join(os.TempDir(), "editor_godebug")
@@ -561,8 +529,6 @@ func (cmd *Cmd) setupTmpDir() error {
 	}
 	return nil
 }
-
-//------------
 
 func (cmd *Cmd) buildArgs() []string {
 	u := []string{}
@@ -588,8 +554,6 @@ func (cmd *Cmd) buildArgs() []string {
 
 	return u
 }
-
-//------------
 
 func (cmd *Cmd) setupNetwork() {
 	// do nothing if already set
@@ -646,8 +610,6 @@ func (cmd *Cmd) setupAddress() error {
 		return fmt.Errorf("unexpected network: %q", cmd.flags.network)
 	}
 }
-
-//------------
 
 func (cmd *Cmd) annotateFiles2(ctx context.Context) error {
 	// annotate files
@@ -735,8 +697,6 @@ func (cmd *Cmd) annotateFiles2(ctx context.Context) error {
 	return nil
 }
 
-//------------
-
 func (cmd *Cmd) buildOverlayFile(ctx context.Context) error {
 	// build entries
 	w := []string{}
@@ -748,8 +708,6 @@ func (cmd *Cmd) buildOverlayFile(ctx context.Context) error {
 	cmd.overlayFilename = filepath.Join(cmd.tmpDir, "annotated_overlay.json")
 	return mkdirAllWriteFile(cmd.overlayFilename, src)
 }
-
-//------------
 
 func (cmd *Cmd) buildDebugPkg(ctx context.Context) error {
 	// target dir
@@ -838,8 +796,6 @@ func init(){
 	return []byte(src)
 }
 
-//------------
-
 func (cmd *Cmd) buildAlternativeGoWork(ctx context.Context) error {
 	if cmd.gopathMode {
 		return nil
@@ -875,8 +831,6 @@ func (cmd *Cmd) buildAlternativeGoWork(ctx context.Context) error {
 	cmd.env = osutil.AppendEnv(cmd.env, []string{"GOWORK=" + gw2Filename})
 	return nil
 }
-
-//------------
 
 func (cmd *Cmd) buildAlternativeGoMod(ctx context.Context) error {
 	if cmd.gopathMode {
@@ -1023,8 +977,6 @@ func (cmd *Cmd) buildPkgLinks(mf *modfile.File) error {
 	return nil
 }
 
-//------------
-
 func (cmd *Cmd) buildOutFilename(fa *FilesToAnnotate) (string, error) {
 	if cmd.flags.outFilename != "" {
 		return cmd.flags.outFilename, nil
@@ -1042,8 +994,6 @@ func (cmd *Cmd) buildOutFilename(fa *FilesToAnnotate) (string, error) {
 	return fname, nil
 }
 
-//------------
-
 func (cmd *Cmd) newCmdI(ctx context.Context, args []string) osutil.CmdI {
 	ci := osutil.NewCmdIShell(ctx, args...)
 	ec := ci.Cmd()
@@ -1055,8 +1005,6 @@ func (cmd *Cmd) newCmdI(ctx context.Context, args []string) osutil.CmdI {
 	return ci
 }
 
-//------------
-
 func (cmd *Cmd) printBuildInfo() {
 	info := []string{}
 
@@ -1066,10 +1014,6 @@ func (cmd *Cmd) printBuildInfo() {
 
 	cmd.printf("build: %v (builtin: %s)\n", cmd.tmpBuiltFile, strings.Join(info, ", "))
 }
-
-//------------
-//------------
-//------------
 
 func writeFile(filename string, src []byte) error {
 	return os.WriteFile(filename, src, 0640)
@@ -1089,8 +1033,6 @@ func copyFile(src, dst string) error {
 	return iout.CopyFile(src, dst, 0640)
 }
 
-//------------
-
 func splitCommaList(val string) []string {
 	a := strings.Split(val, ",")
 	u := []string{}
@@ -1106,8 +1048,6 @@ func splitCommaList(val string) []string {
 	return u
 }
 
-//----------
-
 // TODO: remove once env vars supported in editor
 func envGodebugBuildFlags(env []string) []string {
 	bfs := osutil.GetEnv(env, "GODEBUG_BUILD_FLAGS")
@@ -1116,8 +1056,6 @@ func envGodebugBuildFlags(env []string) []string {
 	}
 	return strings.Split(bfs, ",")
 }
-
-//----------
 
 func goModuleSrc(name string) string {
 	// go 1.16 needed to support -overlay flag

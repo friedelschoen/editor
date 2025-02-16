@@ -22,8 +22,6 @@ func (l *Line) Iter() {
 
 func (l *Line) End() {}
 
-//----------
-
 func (l *Line) newLine() {
 	l.newLineKeepAdv()
 	l.d.st.runeR.advance = 0

@@ -11,13 +11,9 @@ type Listener = net.Listener
 type Conn = net.Conn
 type Addr = net.Addr
 
-//----------
-
 func listen(ctx context.Context, addr Addr) (Listener, error) {
 	return listen2(ctx, addr)
 }
-
-//----------
 
 func dial(ctx context.Context, addr Addr) (Conn, error) {
 	return dial2(ctx, addr)

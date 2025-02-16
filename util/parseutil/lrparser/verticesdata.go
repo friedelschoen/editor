@@ -79,8 +79,6 @@ func newVerticesData(ri *RuleIndex, startRuleName string, reverse bool) (*Vertic
 	return vd, nil
 }
 
-//----------
-
 func (vd *VerticesData) String() string {
 	sb := &strings.Builder{}
 	for _, v := range vd.verts {
@@ -88,10 +86,6 @@ func (vd *VerticesData) String() string {
 	}
 	return strings.TrimSpace(sb.String())
 }
-
-//----------
-//----------
-//----------
 
 func rdlasGoto(rdlas RuleDotsLaSet, x Rule, rFirst *RuleFirstT) (RuleDotsLaSet, RuleDotsLaSet) {
 	res := RuleDotsLaSet{}
@@ -103,10 +97,6 @@ func rdlasGoto(rdlas RuleDotsLaSet, x Rule, rFirst *RuleFirstT) (RuleDotsLaSet, 
 	}
 	return res, rdlasClosure(res, rFirst)
 }
-
-//----------
-//----------
-//----------
 
 func rdlasClosure(rdslas RuleDotsLaSet, rFirst *RuleFirstT) RuleDotsLaSet {
 	res := RuleDotsLaSet{}
@@ -174,10 +164,6 @@ func rdlasClosure(rdslas RuleDotsLaSet, rFirst *RuleFirstT) RuleDotsLaSet {
 	return res
 }
 
-//----------
-//----------
-//----------
-
 type Vertex struct {
 	id       VertexId
 	rdslasK  RuleDotsLaSet    // kernels
@@ -229,10 +215,6 @@ func (v *Vertex) String() string {
 
 	return strings.TrimSpace(s)
 }
-
-//----------
-//----------
-//----------
 
 type VertexId int
 

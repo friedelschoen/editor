@@ -207,8 +207,6 @@ func TestResLocParser34(t *testing.T) {
 	testMode2b(t, in, out, 0, 0, false)
 }
 
-//----------
-
 func TestResLocParserWin1(t *testing.T) {
 	in := "++c:\\a\\b.t^ xt:3●"
 	out := "c:\\a\\b.t^ xt:3"
@@ -224,10 +222,6 @@ func TestResLocParserWin3(t *testing.T) {
 	out := "abc\\"
 	testMode2(t, in, out, '^', '\\', true)
 }
-
-//----------
-//----------
-//----------
 
 func BenchmarkResLoc1(b *testing.B) {
 	t := b
@@ -249,10 +243,6 @@ func BenchmarkResLoc1(b *testing.B) {
 		_ = rl
 	}
 }
-
-//----------
-//----------
-//----------
 
 func testMode1(t *testing.T, in, out string) {
 	t.Helper()

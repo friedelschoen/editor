@@ -207,8 +207,6 @@ func TestInsertComplete(t *testing.T) {
 	}
 }
 
-//----------
-
 func cmpStrSlices(a, b []string) bool {
 	if len(a) != len(b) {
 		return false
