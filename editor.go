@@ -57,6 +57,12 @@ func main() {
 	version := flag.Bool("version", false, "output version and exit")
 
 	flag.Parse()
+
+	if err := core.ParseConfig(opt, core.ConfigFilename()); err != nil {
+		log.Println(err)
+		return
+	}
+
 	opt.Filenames = flag.Args()
 
 	log.SetFlags(log.Lshortfile)

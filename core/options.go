@@ -9,21 +9,21 @@ import (
 )
 
 type Options struct {
-	Font        string
-	FontSize    float64
-	FontHinting string
-	DPI         float64
+	Font        string  `json:"font"`
+	FontSize    float64 `json:"font-size"`
+	FontHinting string  `json:"font-hinting"`
+	DPI         float64 `json:"dpi"`
 
-	TabWidth           int
-	WrapLineRune       int
-	CarriageReturnRune int
+	TabWidth           int `json:"tabwidth"`
+	WrapLineRune       int `json:"wrapline-rune"`
+	CarriageReturnRune int `json:"carriage-return-rune"`
 
-	ColorTheme     string
-	CommentsColor  int
-	StringsColor   int
-	ScrollBarWidth int
-	ScrollBarLeft  bool
-	Shadows        bool
+	ColorTheme     string `json:"colortheme"`
+	CommentsColor  int    `json:"comment-color"`
+	StringsColor   int    `json:"string-color"`
+	ScrollBarWidth int    `json:"scrollbar-width"`
+	ScrollBarLeft  bool   `json:"scrollbar-left"`
+	Shadows        bool   `json:"shadows"`
 
 	SessionName string
 	Filenames   []string
