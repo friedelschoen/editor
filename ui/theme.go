@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"image"
 	"image/color"
-	"io/ioutil"
+	"os"
+	"strings"
 
+	"github.com/flopp/go-findfont"
 	"github.com/golang/freetype/truetype"
 	"github.com/jmigpin/editor/util/fontutil"
 	"github.com/jmigpin/editor/util/imageutil"
 	"github.com/jmigpin/editor/util/uiutil/widget"
-	"golang.org/x/image/font/gofont/gomedium"
 	"golang.org/x/image/font/gofont/gomono"
-	"golang.org/x/image/font/gofont/goregular"
 )
 
 var ScrollBarLeft = true
@@ -203,40 +203,7 @@ var ColorThemeCycler cycler = cycler{
 	},
 }
 
-var FontThemeCycler cycler = cycler{
-	entries: []cycleEntry{
-		{"regular", regularThemeFont},
-		{"medium", mediumThemeFont},
-		{"mono", monoThemeFont},
-	},
-}
-
-func regularThemeFont(node widget.Node) {
-	loadThemeFont("regular", node)
-}
-func mediumThemeFont(node widget.Node) {
-	loadThemeFont("medium", node)
-}
-func monoThemeFont(node widget.Node) {
-	loadThemeFont("mono", node)
-}
-
-func AddUserFont(filename string) error {
-	// test now if it will load when needed
-	_, err := ThemeFontFace(filename)
-	if err != nil {
-		return err
-	}
-
-	// prepare callback and add to font cycler
-	f := func(node widget.Node) {
-		_ = loadThemeFont(filename, node)
-	}
-	e := cycleEntry{filename, f}
-	FontThemeCycler.entries = append(FontThemeCycler.entries, e)
-	FontThemeCycler.CurName = filename
-	return nil
-}
+var CurrentFont = ""
 
 func loadThemeFont(name string, node widget.Node) error {
 	// close previous faces
@@ -272,17 +239,16 @@ func ThemeFontFace2(name string, size float64) (*fontutil.FontFace, error) {
 	return f.FontFace(opt), nil
 }
 
-func fontBytes(name string) ([]byte, error) {
-	switch name {
-	case "regular":
-		return goregular.TTF, nil
-	case "medium":
-		return gomedium.TTF, nil
-	case "mono":
-		return gomono.TTF, nil
-	default:
-		return ioutil.ReadFile(name)
+var defaultFont = gomono.TTF
+
+func fontBytes(query string) ([]byte, error) {
+	for _, name := range strings.Split(query, ",") {
+		name = strings.TrimSpace(name)
+		if path, err := findfont.Find(name); err == nil {
+			return os.ReadFile(path)
+		}
 	}
+	return defaultFont, nil
 }
 
 type cycler struct {

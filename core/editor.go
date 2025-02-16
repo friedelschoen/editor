@@ -497,19 +497,7 @@ func (ed *Editor) setupTheme(opt *Options) {
 	}
 
 	// font theme
-	if _, ok := ui.FontThemeCycler.GetIndex(opt.Font); ok {
-		ui.FontThemeCycler.CurName = opt.Font
-	} else {
-		// font filename
-		err := ui.AddUserFont(opt.Font)
-		if err != nil {
-			// can't send error to UI since it's not created yet
-			log.Print(err)
-
-			// could fail and abort, but instead continue with a known font
-			ui.FontThemeCycler.CurName = "regular"
-		}
-	}
+	ui.CurrentFont = opt.Font
 }
 
 func (ed *Editor) setupPlugins(opt *Options) error {

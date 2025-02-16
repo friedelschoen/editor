@@ -236,11 +236,6 @@ func ColorTheme(args *core.InternalCmdArgs) error {
 	args.Ed.UI.Root.MarkNeedsLayoutAndPaint()
 	return nil
 }
-func FontTheme(args *core.InternalCmdArgs) error {
-	ui.FontThemeCycler.Cycle(args.Ed.UI.Root)
-	args.Ed.UI.Root.MarkNeedsLayoutAndPaint()
-	return nil
-}
 
 func FontRunes(args *core.InternalCmdArgs) error {
 	var u string

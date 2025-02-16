@@ -66,7 +66,6 @@ func init() {
 	cmd(LSProtoCallHierarchyOutgoingCalls, "LsprotoCallees", "LsprotoCallHierarchyOutgoingCalls")
 
 	cmd(ColorTheme, "ColorTheme")
-	cmd(FontTheme, "FontTheme")
 
 	cmd(CtxutilCallsState, "CtxutilCallsState")
 

@@ -14,9 +14,9 @@ require (
 	golang.org/x/sys v0.21.0
 	golang.org/x/text v0.16.0
 	golang.org/x/tools v0.22.0
+	github.com/flopp/go-findfont v0.1.0
+	golang.org/x/sync v0.7.0
 )
-
-require golang.org/x/sync v0.7.0 // indirect
 
 retract (
 	v2.0.7+incompatible
