@@ -14,9 +14,9 @@ type Options struct {
 	FontHinting string  `json:"font-hinting"`
 	DPI         float64 `json:"dpi"`
 
-	TabWidth           int `json:"tabwidth"`
-	WrapLineRune       int `json:"wrapline-rune"`
-	CarriageReturnRune int `json:"carriage-return-rune"`
+	TabWidth           int    `json:"tabwidth"`
+	WrapLineRune       string `json:"wrapline-rune"`
+	CarriageReturnRune string `json:"carriage-return-rune"`
 
 	ColorTheme     string `json:"colortheme"`
 	CommentsColor  int    `json:"comment-color"`

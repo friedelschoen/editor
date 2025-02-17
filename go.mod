@@ -1,29 +1,18 @@
 module github.com/jmigpin/editor
 
-go 1.21
+go 1.23.4
 
 require (
-	github.com/davecgh/go-spew v1.1.1
-	github.com/fsnotify/fsnotify v1.7.0
-	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
-	github.com/jezek/xgb v1.1.1
-	golang.org/x/exp v0.0.0-20240325151524-a685a6edb6d8
-	golang.org/x/image v0.18.0
-	golang.org/x/mod v0.18.0
-	golang.org/x/net v0.26.0
-	golang.org/x/sys v0.21.0
-	golang.org/x/text v0.16.0
-	golang.org/x/tools v0.22.0
 	github.com/flopp/go-findfont v0.1.0
-	golang.org/x/sync v0.7.0
+	github.com/fsnotify/fsnotify v1.8.0
+	github.com/jezek/xgb v1.1.1
+	golang.org/x/exp v0.0.0-20250215185904-eff6e970281f
+	golang.org/x/image v0.24.0
+	golang.org/x/mod v0.23.0
+	golang.org/x/net v0.35.0
+	golang.org/x/sys v0.30.0
+	golang.org/x/text v0.22.0
+	golang.org/x/tools v0.30.0
 )
 
-retract (
-	v2.0.7+incompatible
-	v2.0.7-alpha.1+incompatible
-	v2.0.6-alpha.2+incompatible
-	v2.0.2+incompatible
-	v2.0.1+incompatible
-	v1.6.1
-	v1.6.0
-)
+require golang.org/x/sync v0.11.0 // indirect

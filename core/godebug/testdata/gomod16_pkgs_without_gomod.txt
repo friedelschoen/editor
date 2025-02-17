@@ -25,7 +25,6 @@ import "golang.org/x/tools/godoc"
 
 func main(){
 	_,_=pdf.Open("somename")
-	spew.Dump(1)
 	_=godoc.RangeSelection("aaa")
 }
 

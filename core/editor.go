@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/jmigpin/editor/core/fswatcher"
 	"github.com/jmigpin/editor/core/lsproto"
@@ -456,9 +457,9 @@ func (ed *Editor) setupInitialRows(opt *Options) {
 }
 
 func (ed *Editor) setupTheme(opt *Options) {
-	drawer4.WrapLineRune = rune(opt.WrapLineRune)
+	drawer4.WrapLineRune, _ = utf8.DecodeRuneInString(opt.WrapLineRune)
 	fontutil.TabWidth = opt.TabWidth
-	fontutil.CarriageReturnRune = rune(opt.CarriageReturnRune)
+	fontutil.CarriageReturnRune, _ = utf8.DecodeRuneInString(opt.CarriageReturnRune)
 	ui.ScrollBarLeft = opt.ScrollBarLeft
 	ui.ScrollBarWidth = opt.ScrollBarWidth
 	ui.ShadowsOn = opt.Shadows

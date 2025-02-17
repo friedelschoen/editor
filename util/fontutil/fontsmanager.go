@@ -1,13 +1,13 @@
 package fontutil
 
 import (
-	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/gofont/goregular"
+	"golang.org/x/image/font/opentype"
 	"golang.org/x/image/math/fixed"
 )
 
-var DPI float64 // default: github.com/golang/freetype/truetype/face.go:31:3
+var DPI float64
 var FontsMan = NewFontsManager()
 
 func DefaultFont() *Font {
@@ -20,7 +20,7 @@ func DefaultFont() *Font {
 
 func DefaultFontFace() *FontFace {
 	f := DefaultFont()
-	opt := truetype.Options{} // defaults: size=12, dpi=72, ~14px
+	opt := opentype.FaceOptions{} // defaults: size=12, dpi=72, ~14px
 	return f.FontFace(opt)
 }
 
@@ -52,12 +52,12 @@ func (fm *FontsManager) Font(ttf []byte) (*Font, error) {
 }
 
 type Font struct {
-	Font       *truetype.Font
-	facesCache map[truetype.Options]*FontFace
+	Font       *opentype.Font
+	facesCache map[opentype.FaceOptions]*FontFace
 }
 
 func NewFont(ttf []byte) (*Font, error) {
-	font, err := truetype.Parse(ttf)
+	font, err := opentype.Parse(ttf)
 	if err != nil {
 		return nil, err
 	}
@@ -67,10 +67,10 @@ func NewFont(ttf []byte) (*Font, error) {
 }
 
 func (f *Font) ClearFacesCache() {
-	f.facesCache = map[truetype.Options]*FontFace{}
+	f.facesCache = map[opentype.FaceOptions]*FontFace{}
 }
 
-func (f *Font) FontFace(opt truetype.Options) *FontFace {
+func (f *Font) FontFace(opt opentype.FaceOptions) *FontFace {
 	if opt.DPI == 0 {
 		opt.DPI = DPI
 	}
@@ -84,7 +84,7 @@ func (f *Font) FontFace(opt truetype.Options) *FontFace {
 }
 
 func (f *Font) FontFace2(size float64) *FontFace {
-	opt := truetype.Options{Size: size}
+	opt := opentype.FaceOptions{Size: size}
 	return f.FontFace(opt)
 }
 
@@ -96,8 +96,11 @@ type FontFace struct {
 	lineHeight fixed.Int26_6
 }
 
-func NewFontFace(font *Font, opt truetype.Options) *FontFace {
-	face := truetype.NewFace(font.Font, &opt)
+func NewFontFace(font *Font, opt opentype.FaceOptions) *FontFace {
+	face, err := opentype.NewFace(font.Font, &opt)
+	if err != nil {
+		return nil
+	}
 	face = NewFaceRunes(face)
 	// TODO: allow cache choice
 	face = NewFaceCacheL(face) // safe for concurrent calls
@@ -110,7 +113,6 @@ func NewFontFace(font *Font, opt truetype.Options) *FontFace {
 
 	ff.Size = opt.Size
 	if ff.Size == 0 {
-		// github.com/golang/freetype/truetype/face.go:26:2
 		ff.Size = 12
 	}
 

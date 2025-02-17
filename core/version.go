@@ -40,7 +40,6 @@ func getBuildInfo() (string, bool) {
 	if !ok {
 		return "", false
 	}
-	//spew.Dump(bi)
 
 	get := func(name string) (string, bool) {
 		for _, bs := range bi.Settings {

@@ -14,7 +14,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/jmigpin/editor/util/iout"
 	"github.com/jmigpin/editor/util/iout/iorw"
 	"github.com/jmigpin/editor/util/parseutil"
@@ -29,7 +28,6 @@ func TestStruct1(t *testing.T) {
 			t.Fatal(err)
 		}
 		if doc.str == nil || *doc.str != "abc" {
-			spew.Dump(doc)
 			t.Fail()
 		}
 	}
@@ -40,7 +38,6 @@ func TestStruct1(t *testing.T) {
 			t.Fatal(err)
 		}
 		if doc.mc == nil || doc.mc.Value != "abc" {
-			spew.Dump(doc)
 			t.Fail()
 		}
 	}

@@ -7,7 +7,6 @@ import (
 	"image/draw"
 	"log"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/jmigpin/editor/util/drawutil"
 	"github.com/jmigpin/editor/util/fontutil"
 	"github.com/jmigpin/editor/util/iout/iorw"
@@ -210,11 +209,6 @@ type State struct {
 			soffset int // start offset
 		}
 	}
-}
-
-func (st State) Dump() {
-	st.drawR.img = nil
-	spew.Dump(st)
 }
 
 func New() *Drawer {
