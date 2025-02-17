@@ -100,7 +100,6 @@ func NewFontFace(font *Font, opt truetype.Options) *FontFace {
 	face := truetype.NewFace(font.Font, &opt)
 	face = NewFaceRunes(face)
 	// TODO: allow cache choice
-	//face = NewFaceCache(face) // can safely be used only in ui loop (read)
 	face = NewFaceCacheL(face) // safe for concurrent calls
 	//face = NewFaceCacheL2(face)
 

@@ -7,64 +7,6 @@ import (
 	"golang.org/x/image/math/fixed"
 )
 
-type FaceCache struct {
-	font.Face
-	gc  map[rune]*GlyphCache
-	gac map[rune]*GlyphAdvanceCache
-	gbc map[rune]*GlyphBoundsCache
-	kc  map[string]fixed.Int26_6 // kern cache
-}
-
-func NewFaceCache(face font.Face) *FaceCache {
-	fc := &FaceCache{Face: face}
-	fc.gc = make(map[rune]*GlyphCache)
-	fc.gac = make(map[rune]*GlyphAdvanceCache)
-	fc.gbc = make(map[rune]*GlyphBoundsCache)
-	fc.kc = make(map[string]fixed.Int26_6)
-	return fc
-}
-func (fc *FaceCache) Glyph(dot fixed.Point26_6, ru rune) (
-	dr image.Rectangle,
-	mask image.Image,
-	maskp image.Point,
-	advance fixed.Int26_6,
-	ok bool,
-) {
-	gc, ok := fc.gc[ru]
-	if !ok {
-		gc = NewGlyphCache(fc.Face, ru)
-		fc.gc[ru] = gc
-	}
-	p := image.Point{dot.X.Floor(), dot.Y.Floor()}
-	dr2 := gc.dr.Add(p)
-	return dr2, gc.mask, gc.maskp, gc.advance, gc.ok
-}
-func (fc *FaceCache) GlyphAdvance(ru rune) (advance fixed.Int26_6, ok bool) {
-	gac, ok := fc.gac[ru]
-	if !ok {
-		gac = NewGlyphAdvanceCache(fc.Face, ru)
-		fc.gac[ru] = gac
-	}
-	return gac.advance, gac.ok
-}
-func (fc *FaceCache) GlyphBounds(ru rune) (bounds fixed.Rectangle26_6, advance fixed.Int26_6, ok bool) {
-	gbc, ok := fc.gbc[ru]
-	if !ok {
-		gbc = NewGlyphBoundsCache(fc.Face, ru)
-		fc.gbc[ru] = gbc
-	}
-	return gbc.bounds, gbc.advance, gbc.ok
-}
-func (fc *FaceCache) Kern(r0, r1 rune) fixed.Int26_6 {
-	i := kernIndex(r0, r1)
-	k, ok := fc.kc[i]
-	if !ok {
-		k = NewKernCache(fc.Face, r0, r1)
-		fc.kc[i] = k
-	}
-	return k
-}
-
 type GlyphCache struct {
 	dr      image.Rectangle
 	mask    image.Image
