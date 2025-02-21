@@ -15,4 +15,9 @@ require (
 	golang.org/x/tools v0.30.0
 )
 
-require golang.org/x/sync v0.11.0 // indirect
+require (
+	github.com/alecthomas/chroma/v2 v2.15.0 // indirect
+	github.com/dlclark/regexp2 v1.11.4 // indirect
+	github.com/veandco/go-sdl2 v0.4.40 // indirect
+	golang.org/x/sync v0.11.0 // indirect
+)

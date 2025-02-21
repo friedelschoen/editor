@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"path/filepath"
 	"strconv"
 	"strings"
 	"sync"
@@ -539,87 +538,87 @@ func (erow *ERow) MakeRangeVisibleAndFlash(index int, len int) {
 }
 
 func (erow *ERow) setupSyntaxHighlightAndCommentShortcuts() {
-	// special handling for the toolbar (allow comment shortcut to work in the toolbar to easily disable cmds)
-	tb := erow.Row.Toolbar
-	tb.SetCommentStrings("#")
+	// // special handling for the toolbar (allow comment shortcut to work in the toolbar to easily disable cmds)
+	// tb := erow.Row.Toolbar
+	// tb.SetCommentStrings("#")
 
 	ta := erow.Row.TextArea
 
-	// ensure syntax highlight is on (ex: strings)
+	// // ensure syntax highlight is on (ex: strings)
 	ta.EnableSyntaxHighlight(true)
 
-	//// consider only files from here (dirs and special rows are out)
-	//if !erow.Info.IsFileButNotDir() {
-	//	return
-	//}
+	// //// consider only files from here (dirs and special rows are out)
+	// //if !erow.Info.IsFileButNotDir() {
+	// //	return
+	// //}
 
-	// util funcs
-	setComments := func(a ...any) {
-		ta.SetCommentStrings(a...)
-	}
+	// // util funcs
+	// setComments := func(a ...any) {
+	// 	ta.SetCommentStrings(a...)
+	// }
 
-	// ignore "." on files starting with "."
-	name := filepath.Base(erow.Info.Name())
-	if len(name) >= 1 && name[0] == '.' {
-		name = name[1:]
-	}
+	// // ignore "." on files starting with "."
+	// name := filepath.Base(erow.Info.Name())
+	// if len(name) >= 1 && name[0] == '.' {
+	// 	name = name[1:]
+	// }
 
-	// specific names
-	switch name {
-	case "bashrc":
-		setComments("#")
-		return
-	case "Xresources":
-		setComments("!")
-		return
-	}
+	// // specific names
+	// switch name {
+	// case "bashrc":
+	// 	setComments("#")
+	// 	return
+	// case "Xresources":
+	// 	setComments("!")
+	// 	return
+	// }
 
-	// specific suffixes (ex: allows "my_go.work")
-	suffixes := []string{
-		"go.mod", "go.sum", "go.work", "go.work.sum",
-	}
-	for _, suf := range suffixes {
-		if strings.HasSuffix(name, suf) {
-			setComments("//")
-			return
-		}
-	}
+	// // specific suffixes (ex: allows "my_go.work")
+	// suffixes := []string{
+	// 	"go.mod", "go.sum", "go.work", "go.work.sum",
+	// }
+	// for _, suf := range suffixes {
+	// 	if strings.HasSuffix(name, suf) {
+	// 		setComments("//")
+	// 		return
+	// 	}
+	// }
 
-	// setup comments based on name extension
-	ext := strings.ToLower(filepath.Ext(name))
-	switch ext {
-	case ".sh",
-		".conf", ".list",
-		".py", // python
-		".pl": // perl
-		setComments("#")
-	case ".go",
-		".c", ".h",
-		".cpp", ".hpp", ".cxx", ".hxx", // c++
-		".java",
-		".v",  // verilog
-		".js": // javascript
-		setComments("//", [2]string{"/*", "*/"})
-	case ".ledger":
-		setComments(";", "#") // ";" is main symbol for comments but is not if in the description; while "#" is not a comment in some other cases
-	case ".pro": // prolog
-		setComments("%", [2]string{"/*", "*/"})
-	case ".html", ".xml", ".svg":
-		setComments([2]string{"<!--", "-->"})
-	case ".css":
-		setComments([2]string{"/*", "*/"})
-	case ".s", ".asm": // assembly
-		setComments("//")
-	case ".json":
-		// no comments to setup
-	case ".txt":
-		setComments("#") // useful (but not correct)
-	case "": // no file extension
-		// handy for ex: /etc/network/interfaces
-		setComments("#") // useful (but not correct)
-	default: // all other file extensions
-		setComments("#") // useful (but not correct)
-	}
+	// // setup comments based on name extension
+	// ext := strings.ToLower(filepath.Ext(name))
+	// switch ext {
+	// case ".sh",
+	// 	".conf", ".list",
+	// 	".py", // python
+	// 	".pl": // perl
+	// 	setComments("#")
+	// case ".go",
+	// 	".c", ".h",
+	// 	".cpp", ".hpp", ".cxx", ".hxx", // c++
+	// 	".java",
+	// 	".v",  // verilog
+	// 	".js": // javascript
+	// 	setComments("//", [2]string{"/*", "*/"})
+	// case ".ledger":
+	// 	setComments(";", "#") // ";" is main symbol for comments but is not if in the description; while "#" is not a comment in some other cases
+	// case ".pro": // prolog
+	// 	setComments("%", [2]string{"/*", "*/"})
+	// case ".html", ".xml", ".svg":
+	// 	setComments([2]string{"<!--", "-->"})
+	// case ".css":
+	// 	setComments([2]string{"/*", "*/"})
+	// case ".s", ".asm": // assembly
+	// 	setComments("//")
+	// case ".json":
+	// 	// no comments to setup
+	// case ".txt":
+	// 	setComments("#") // useful (but not correct)
+	// case "": // no file extension
+	// 	// handy for ex: /etc/network/interfaces
+	// 	setComments("#") // useful (but not correct)
+	// default: // all other file extensions
+	// 	setComments("#") // useful (but not correct)
+	// }
 }
 
 func (erow *ERow) newContentCmdCtx() (context.Context, context.CancelFunc) {

@@ -120,14 +120,7 @@ type Drawer struct {
 			Group  ColorizeGroup
 		}
 		SyntaxHighlight struct {
-			On      bool
-			Comment struct {
-				Defs   []*drawutil.SyntaxHighlightComment
-				Fg, Bg color.Color
-			}
-			String struct {
-				Fg, Bg color.Color
-			}
+			On    bool
 			Group ColorizeGroup
 		}
 	}
