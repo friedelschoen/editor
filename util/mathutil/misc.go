@@ -1,10 +1,9 @@
 package mathutil
 
 import (
+	"cmp"
 	"math"
 	"math/rand"
-
-	"golang.org/x/exp/constraints"
 )
 
 func RoundFloat64(val float64, precision uint) float64 {
@@ -32,7 +31,7 @@ func LimitInt(v int, min, max int) int {
 	return v
 }
 
-func Limit[T constraints.Ordered](v, min, max T) T {
+func Limit[T cmp.Ordered](v, min, max T) T {
 	if v < min {
 		return min
 	} else if v > max {
@@ -41,7 +40,7 @@ func Limit[T constraints.Ordered](v, min, max T) T {
 	return v
 }
 
-func Min[T constraints.Ordered](s ...T) T {
+func Min[T cmp.Ordered](s ...T) T {
 	m := s[0]
 	for _, v := range s[1:] {
 		if m > v {
@@ -50,7 +49,7 @@ func Min[T constraints.Ordered](s ...T) T {
 	}
 	return m
 }
-func Max[T constraints.Ordered](s ...T) T {
+func Max[T cmp.Ordered](s ...T) T {
 	m := s[0]
 	for _, v := range s[1:] {
 		if m < v {
