@@ -3,7 +3,7 @@ package widget
 import (
 	"image/draw"
 
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/jmigpin/editor/ui/event"
 )
 
 type UIContext interface {
@@ -15,8 +15,8 @@ type UIContext interface {
 	//	SetCursor(event.Cursor) // TODO
 
 	RunOnUIGoRoutine(f func())
-	SetClipboardData(event.ClipboardIndex, string)
-	GetClipboardData(event.ClipboardIndex, func(string, error))
+	SetClipboardData(string)
+	GetClipboardData() (string, error)
 }
 
 type ImageContext interface {

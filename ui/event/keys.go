@@ -202,8 +202,8 @@ const (
 	ButtonWheelDown
 	ButtonWheelLeft
 	ButtonWheelRight
-	ButtonBackward // TODO: rename X1?
-	ButtonForward  // TODO: rename X2?
+	ButtonX1 // forward
+	ButtonX2 // backward
 )
 
 type MouseButtons uint16

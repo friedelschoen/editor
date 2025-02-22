@@ -3,11 +3,11 @@ package widget
 import (
 	"image"
 
+	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/util/evreg"
 	"github.com/jmigpin/editor/util/iout/iorw"
 	"github.com/jmigpin/editor/util/iout/iorw/rwedit"
 	"github.com/jmigpin/editor/util/iout/iorw/rwundo"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 type TextEdit struct {
@@ -41,13 +41,7 @@ func NewTextEdit(uiCtx UIContext) *TextEdit {
 	te.ctx.Fns.Undo = te.Undo
 	te.ctx.Fns.Redo = te.Redo
 	te.ctx.Fns.SetClipboardData = te.uiCtx.SetClipboardData
-	te.ctx.Fns.GetClipboardData = func(i event.ClipboardIndex, fn func(string, error)) {
-		te.uiCtx.GetClipboardData(i, func(s string, err error) {
-			te.uiCtx.RunOnUIGoRoutine(func() {
-				fn(s, err)
-			})
-		})
-	}
+	te.ctx.Fns.GetClipboardData = te.uiCtx.GetClipboardData
 
 	return te
 }
@@ -138,7 +132,7 @@ func (te *TextEdit) EndUndoGroup() {
 	te.rwu.History.EndUndoGroup(c)
 }
 
-func (te *TextEdit) OnInputEvent(ev any, p image.Point) event.Handled {
+func (te *TextEdit) OnInputEvent(ev event.Event, p image.Point) bool {
 	te.BeginUndoGroup()
 	defer te.EndUndoGroup()
 

@@ -4,9 +4,9 @@ import (
 	"image"
 	"math"
 
+	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/util/imageutil"
 	"github.com/jmigpin/editor/util/mathutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 // Used by ScrollArea. Parent of ScrollHandle.
@@ -131,7 +131,7 @@ func (sb *ScrollBar) Paint() {
 	imageutil.FillRectangle(sb.ctx.Image(), sb.Bounds, c)
 }
 
-func (sb *ScrollBar) OnInputEvent(ev any, p image.Point) event.Handled {
+func (sb *ScrollBar) OnInputEvent(ev event.Event, p image.Point) bool {
 	switch evt := ev.(type) {
 	case *event.MouseDown:
 		switch evt.Button {

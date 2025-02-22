@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	"github.com/flopp/go-findfont"
+	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/fontutil"
 	"github.com/jmigpin/editor/util/imageutil"
-	"github.com/jmigpin/editor/util/uiutil/widget"
 	"golang.org/x/image/font/gofont/gomono"
 	"golang.org/x/image/font/opentype"
 )

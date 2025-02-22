@@ -19,13 +19,13 @@ import (
 	"github.com/jmigpin/editor/core/fswatcher"
 	"github.com/jmigpin/editor/core/lsproto"
 	"github.com/jmigpin/editor/ui"
+	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/drawutil/drawer4"
 	"github.com/jmigpin/editor/util/fontutil"
 	"github.com/jmigpin/editor/util/imageutil"
 	"github.com/jmigpin/editor/util/iout/iorw"
 	"github.com/jmigpin/editor/util/osutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
-	"github.com/jmigpin/editor/util/uiutil/widget"
 	"golang.org/x/image/font"
 )
 
@@ -169,6 +169,9 @@ func (ed *Editor) uiEventLoop() {
 
 	for {
 		ev := ed.UI.NextEvent()
+		if ev == nil {
+			continue
+		}
 		switch t := ev.(type) {
 		case error:
 			log.Println(t) // in case there is no window yet (TODO: detect?)
@@ -534,34 +537,31 @@ func (ed *Editor) NewColumn() *ui.Column {
 
 func (ed *Editor) handleGlobalShortcuts(ev any) (handled bool) {
 	switch t := ev.(type) {
-	case *event.WindowInput:
+	case event.KeyDown:
 		autoCloseInfo := true
 
-		switch t2 := t.Event.(type) {
-		case *event.KeyDown:
-			m := t2.Mods.ClearLocks()
-			switch {
-			case m.Is(event.ModNone):
-				switch t2.KeySym {
-				case event.KSymEscape:
-					ed.GoDebug.CancelAndClear()
-					ed.InlineComplete.CancelAndClear()
-					ed.cancelERowInfosCmds()
-					ed.cancelERowsContentCmds()
-					ed.cancelERowsInternalCmds()
-					autoCloseInfo = false
-					ed.cancelInfoFloatBox()
-					return true
-				case event.KSymF1:
-					autoCloseInfo = false
-					ed.toggleInfoFloatBox()
-					return true
-				}
+		m := t.Mods.ClearLocks()
+		switch {
+		case m.Is(event.ModNone):
+			switch t.KeySym {
+			case event.KSymEscape:
+				ed.GoDebug.CancelAndClear()
+				ed.InlineComplete.CancelAndClear()
+				ed.cancelERowInfosCmds()
+				ed.cancelERowsContentCmds()
+				ed.cancelERowsInternalCmds()
+				autoCloseInfo = false
+				ed.cancelInfoFloatBox()
+				return true
+			case event.KSymF1:
+				autoCloseInfo = false
+				ed.toggleInfoFloatBox()
+				return true
 			}
 		}
 
 		if autoCloseInfo {
-			ed.UI.Root.ContextFloatBox.AutoClose(t.Event, t.Point)
+			ed.UI.Root.ContextFloatBox.AutoClose(t, t.Point)
 			if !ed.ifbw.ui().Visible() {
 				ed.cancelInfoFloatBox()
 			}
@@ -903,3 +903,5 @@ func (ifbw *InfoFloatBoxWrap) ui() *ui.ContextFloatBox {
 }
 
 type editorCloseEv struct{}
+
+func (editorCloseEv) IsEvent() {}

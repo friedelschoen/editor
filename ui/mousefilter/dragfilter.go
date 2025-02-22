@@ -3,17 +3,17 @@ package mousefilter
 import (
 	"image"
 
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/jmigpin/editor/ui/event"
 )
 
 // Produce mousedrag* events. Keeps track of the first mouse button used.
 type DragFilter struct {
 	pressEv  *event.MouseDown
 	dragging bool
-	emitEvFn func(any, image.Point)
+	emitEvFn func(event.Event, image.Point)
 }
 
-func NewDragFilter(emitEvFn func(any, image.Point)) *DragFilter {
+func NewDragFilter(emitEvFn func(event.Event, image.Point)) *DragFilter {
 	return &DragFilter{emitEvFn: emitEvFn}
 }
 
@@ -65,6 +65,6 @@ func (dragf *DragFilter) end(ev *event.MouseUp) {
 	}
 }
 
-func (dragf *DragFilter) emitEv(ev any, p image.Point) {
+func (dragf *DragFilter) emitEv(ev event.Event, p image.Point) {
 	dragf.emitEvFn(ev, p)
 }

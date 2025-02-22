@@ -3,8 +3,8 @@ package widget
 import (
 	"image"
 
+	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/util/imageutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 type ScrollArea struct {
@@ -126,7 +126,7 @@ func (sa *ScrollArea) Layout() {
 	sa.scrollable.Layout()
 }
 
-func (sa *ScrollArea) OnInputEvent(ev0 any, p image.Point) event.Handled {
+func (sa *ScrollArea) OnInputEvent(ev0 event.Event, p image.Point) bool {
 	switch evt := ev0.(type) {
 	case *event.KeyDown:
 		switch evt.KeySym {

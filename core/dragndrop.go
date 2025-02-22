@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/jmigpin/editor/ui/event"
 )
 
 type DndHandler struct {

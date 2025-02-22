@@ -5,12 +5,12 @@ import (
 	"io"
 	"unicode"
 
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/jmigpin/editor/ui/event"
 )
 
 //godebug:annotatefile
 
-func HandleInput(ctx *Ctx, ev any) (event.Handled, error) {
+func HandleInput(ctx *Ctx, ev any) (bool, error) {
 	in := &Input{ctx, ev}
 	return in.handle()
 }
@@ -20,7 +20,7 @@ type Input struct {
 	ev  any
 }
 
-func (in *Input) handle() (event.Handled, error) {
+func (in *Input) handle() (bool, error) {
 	switch ev := in.ev.(type) {
 	case *event.KeyDown:
 		return in.onKeyDown(ev)
@@ -40,7 +40,7 @@ func (in *Input) handle() (event.Handled, error) {
 	return false, nil
 }
 
-func (in *Input) onMouseDown(ev *event.MouseDown) (event.Handled, error) {
+func (in *Input) onMouseDown(ev *event.MouseDown) (bool, error) {
 	switch ev.Button {
 	case event.ButtonLeft:
 		if ev.Mods.ClearLocks().Is(event.ModShift) {
@@ -57,14 +57,14 @@ func (in *Input) onMouseDown(ev *event.MouseDown) (event.Handled, error) {
 	return false, nil
 }
 
-func (in *Input) onMouseDragMove(ev *event.MouseDragMove) (event.Handled, error) {
+func (in *Input) onMouseDragMove(ev *event.MouseDragMove) (bool, error) {
 	if ev.Buttons.Has(event.ButtonLeft) {
 		MoveCursorToPoint(in.ctx, ev.Point, true)
 		return true, nil
 	}
 	return false, nil
 }
-func (in *Input) onMouseDragEnd(ev *event.MouseDragEnd) (event.Handled, error) {
+func (in *Input) onMouseDragEnd(ev *event.MouseDragEnd) (bool, error) {
 	switch ev.Button {
 	case event.ButtonLeft:
 		MoveCursorToPoint(in.ctx, ev.Point, true)
@@ -73,17 +73,17 @@ func (in *Input) onMouseDragEnd(ev *event.MouseDragEnd) (event.Handled, error) {
 	return false, nil
 }
 
-func (in *Input) onMouseClick(ev *event.MouseClick) (event.Handled, error) {
+func (in *Input) onMouseClick(ev *event.MouseClick) (bool, error) {
 	switch ev.Button {
 	case event.ButtonMiddle:
 		MoveCursorToPoint(in.ctx, ev.Point, false)
-		Paste(in.ctx, event.CIPrimary)
+		Paste(in.ctx)
 		return true, nil
 	}
 	return false, nil
 }
 
-func (in *Input) onMouseDoubleClick(ev *event.MouseDoubleClick) (event.Handled, error) {
+func (in *Input) onMouseDoubleClick(ev *event.MouseDoubleClick) (bool, error) {
 	switch ev.Button {
 	case event.ButtonLeft:
 		MoveCursorToPoint(in.ctx, ev.Point, false)
@@ -98,7 +98,7 @@ func (in *Input) onMouseDoubleClick(ev *event.MouseDoubleClick) (event.Handled, 
 	return false, nil
 }
 
-func (in *Input) onMouseTripleClick(ev *event.MouseTripleClick) (event.Handled, error) {
+func (in *Input) onMouseTripleClick(ev *event.MouseTripleClick) (bool, error) {
 	switch ev.Button {
 	case event.ButtonLeft:
 		MoveCursorToPoint(in.ctx, ev.Point, false)
@@ -108,7 +108,7 @@ func (in *Input) onMouseTripleClick(ev *event.MouseTripleClick) (event.Handled, 
 	return false, nil
 }
 
-func (in *Input) onKeyDown(ev *event.KeyDown) (_ event.Handled, err error) {
+func (in *Input) onKeyDown(ev *event.KeyDown) (_ bool, err error) {
 	mcl := ev.Mods.ClearLocks()
 
 	makeCursorVisible := func() {
@@ -265,7 +265,7 @@ func (in *Input) onKeyDown(ev *event.KeyDown) (_ event.Handled, err error) {
 				err = Cut(in.ctx)
 				return true, err
 			case event.KSymV:
-				Paste(in.ctx, event.CIClipboard)
+				Paste(in.ctx)
 				return true, nil
 			case event.KSymK:
 				err = RemoveLines(in.ctx)

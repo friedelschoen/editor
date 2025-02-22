@@ -10,8 +10,8 @@ import (
 	"github.com/jezek/xgb"
 	"github.com/jezek/xgb/xproto"
 	"github.com/jmigpin/editor/driver/xdriver/xutil"
+	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/util/syncutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 type Paste struct {

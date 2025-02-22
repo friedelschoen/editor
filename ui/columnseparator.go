@@ -3,8 +3,8 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/util/uiutil/event"
-	"github.com/jmigpin/editor/util/uiutil/widget"
+	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/widget"
 )
 
 type ColSeparator struct {
@@ -23,7 +23,7 @@ func NewColSeparator(col *Column) *ColSeparator {
 	csep.SetThemePaletteNamePrefix("colseparator_")
 	return csep
 }
-func (sh *ColSeparator) OnInputEvent(ev0 any, p image.Point) event.Handled {
+func (sh *ColSeparator) OnInputEvent(ev0 event.Event, p image.Point) bool {
 	switch ev := ev0.(type) {
 	case *event.MouseDragMove:
 		switch {

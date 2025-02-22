@@ -4,12 +4,12 @@ import (
 	"image"
 	"unicode"
 
+	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/drawutil/drawer4"
 	"github.com/jmigpin/editor/util/evreg"
 	"github.com/jmigpin/editor/util/iout/iorw"
 	"github.com/jmigpin/editor/util/iout/iorw/rwedit"
-	"github.com/jmigpin/editor/util/uiutil/event"
-	"github.com/jmigpin/editor/util/uiutil/widget"
 )
 
 type TextArea struct {
@@ -27,8 +27,8 @@ func NewTextArea(ui *UI) *TextArea {
 	return ta
 }
 
-func (ta *TextArea) OnInputEvent(ev0 any, p image.Point) event.Handled {
-	h := event.Handled(false)
+func (ta *TextArea) OnInputEvent(ev0 event.Event, p image.Point) bool {
+	h := bool(false)
 
 	// input events callbacks (terminal related)
 	if !h {
@@ -57,7 +57,7 @@ func (ta *TextArea) OnInputEvent(ev0 any, p image.Point) event.Handled {
 	return h
 }
 
-func (ta *TextArea) handleInputEvent2(ev0 any, p image.Point) event.Handled {
+func (ta *TextArea) handleInputEvent2(ev0 any, p image.Point) bool {
 	switch ev := ev0.(type) {
 	case *event.MouseClick:
 		switch ev.Button {
@@ -168,7 +168,7 @@ func (ta *TextArea) selAnnCurEv(p image.Point, typ TASelAnnType) bool {
 //	ta.EvReg.RunCallbacks(TextAreaSelectAnnotationEventId, ev2)
 //}
 
-func (ta *TextArea) inlineCompleteEv() event.Handled {
+func (ta *TextArea) inlineCompleteEv() bool {
 	c := ta.Cursor()
 	if c.HaveSelection() {
 		return false
@@ -257,13 +257,13 @@ type TextAreaInlineCompleteEvent struct {
 	TextArea *TextArea
 	Offset   int
 
-	ReplyHandled event.Handled // allow callbacks to set value
+	ReplyHandled bool // allow callbacks to set value
 }
 
 type TextAreaInputEvent struct {
 	TextArea     *TextArea
 	Event        any
-	ReplyHandled event.Handled
+	ReplyHandled bool
 }
 
 type TextAreaLayoutEvent struct {

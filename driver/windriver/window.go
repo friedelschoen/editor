@@ -14,9 +14,9 @@ import (
 
 	"golang.org/x/sys/windows"
 
+	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/util/imageutil"
 	"github.com/jmigpin/editor/util/syncutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 // Functions preceded by "ost" run in the "operating-system-thread".

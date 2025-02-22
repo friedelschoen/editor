@@ -7,9 +7,9 @@ import (
 	"sync"
 
 	"github.com/jmigpin/editor/ui"
+	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/util/evreg"
 	"github.com/jmigpin/editor/util/iout"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 type TerminalIO interface {
@@ -176,7 +176,7 @@ func (tio *ERowTermIO) onTextAreaInputEvent(ev0 any) {
 	ev.ReplyHandled = handled
 }
 
-func (tio *ERowTermIO) eventToBytes(ev any) ([]byte, event.Handled) {
+func (tio *ERowTermIO) eventToBytes(ev any) ([]byte, bool) {
 	// util funcs
 	keyboardEvs := func() bool {
 		return tio.erow.terminalOpt.keyEvents

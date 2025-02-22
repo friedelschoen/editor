@@ -3,9 +3,9 @@ package ui
 import (
 	"image"
 
+	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/imageutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
-	"github.com/jmigpin/editor/util/uiutil/widget"
 )
 
 type ColumnSquare struct {
@@ -27,7 +27,7 @@ func (sq *ColumnSquare) Paint() {
 	c := sq.TreeThemePaletteColor("columnsquare")
 	imageutil.FillRectangle(sq.col.ui.Image(), sq.Bounds, c)
 }
-func (sq *ColumnSquare) OnInputEvent(ev any, p image.Point) event.Handled {
+func (sq *ColumnSquare) OnInputEvent(ev event.Event, p image.Point) bool {
 	switch t := ev.(type) {
 	case *event.MouseClick:
 		switch t.Button {

@@ -3,7 +3,7 @@ package widget
 import (
 	"image"
 
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/jmigpin/editor/ui/event"
 )
 
 type ApplyEvent struct {
@@ -16,7 +16,7 @@ func NewApplyEvent(cctx CursorContext) *ApplyEvent {
 	return ae
 }
 
-func (ae *ApplyEvent) Apply(node Node, ev any, p image.Point) {
+func (ae *ApplyEvent) Apply(node Node, ev event.Event, p image.Point) {
 	if !ae.drag.dragging {
 		ae.mouseEnterLeave(node, p)
 	}
@@ -85,7 +85,7 @@ func (ae *ApplyEvent) mouseEnterLeave(node Node, p image.Point) {
 	ae.mouseEnter(node, p)
 }
 
-func (ae *ApplyEvent) mouseEnter(node Node, p image.Point) event.Handled {
+func (ae *ApplyEvent) mouseEnter(node Node, p image.Point) bool {
 	ne := node.Embed()
 
 	if !p.In(ne.Bounds) {
@@ -93,7 +93,7 @@ func (ae *ApplyEvent) mouseEnter(node Node, p image.Point) event.Handled {
 	}
 
 	// execute on childs
-	h := event.Handled(false)
+	h := bool(false)
 	// later childs are drawn over previous ones, run loop backwards
 	ne.IterateWrappersReverse(func(c Node) bool {
 		h = ae.mouseEnter(c, p)
@@ -116,11 +116,11 @@ func (ae *ApplyEvent) mouseEnter(node Node, p image.Point) event.Handled {
 	return h
 }
 
-func (ae *ApplyEvent) mouseLeave(node Node, p image.Point) event.Handled {
+func (ae *ApplyEvent) mouseLeave(node Node, p image.Point) bool {
 	ne := node.Embed()
 
 	// execute on childs
-	h := event.Handled(false)
+	h := bool(false)
 	// later childs are drawn over previous ones, run loop backwards
 	ne.IterateWrappersReverse(func(c Node) bool {
 		h = ae.mouseLeave(c, p)
@@ -193,13 +193,13 @@ func (ae *ApplyEvent) dragEnd(ev *event.MouseDragEnd, p image.Point) {
 	ae.drag = AEDragState{}
 }
 
-func (ae *ApplyEvent) depthFirstEv(node Node, ev any, p image.Point) event.Handled {
+func (ae *ApplyEvent) depthFirstEv(node Node, ev event.Event, p image.Point) bool {
 	if !p.In(node.Embed().Bounds) {
 		return false
 	}
 
 	// execute on childs
-	h := event.Handled(false)
+	h := bool(false)
 	// later childs are drawn over previous ones, run loop backwards
 	node.Embed().IterateWrappersReverse(func(c Node) bool {
 		h = ae.depthFirstEv(c, ev, p)
@@ -218,7 +218,7 @@ func (ae *ApplyEvent) depthFirstEv(node Node, ev any, p image.Point) event.Handl
 	return h
 }
 
-func (ae *ApplyEvent) runEv(node Node, ev any, p image.Point) event.Handled {
+func (ae *ApplyEvent) runEv(node Node, ev event.Event, p image.Point) bool {
 	return node.OnInputEvent(ev, p)
 }
 

@@ -4,16 +4,16 @@ import (
 	"image"
 	"time"
 
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/jmigpin/editor/ui/event"
 )
 
 // produce click/doubleclick/tripleclick events
 type ClickFilter struct {
 	m        map[event.MouseButton]*MultipleClick
-	emitEvFn func(any, image.Point)
+	emitEvFn func(event.Event, image.Point)
 }
 
-func NewClickFilter(emitEvFn func(any, image.Point)) *ClickFilter {
+func NewClickFilter(emitEvFn func(event.Event, image.Point)) *ClickFilter {
 	return &ClickFilter{
 		m:        map[event.MouseButton]*MultipleClick{},
 		emitEvFn: emitEvFn,
@@ -95,7 +95,7 @@ func (clickf *ClickFilter) move(ev *event.MouseMove) {
 	}
 }
 
-func (clickf *ClickFilter) emitEv(ev any, p image.Point) {
+func (clickf *ClickFilter) emitEv(ev event.Event, p image.Point) {
 	clickf.emitEvFn(ev, p)
 }
 

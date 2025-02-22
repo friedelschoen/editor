@@ -3,8 +3,8 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/util/uiutil/event"
-	"github.com/jmigpin/editor/util/uiutil/widget"
+	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/widget"
 )
 
 type RowSeparator struct {
@@ -23,7 +23,7 @@ func NewRowSeparator(row *Row) *RowSeparator {
 	rsep.SetThemePaletteNamePrefix("rowseparator_")
 	return rsep
 }
-func (sh *RowSeparator) OnInputEvent(ev0 any, p image.Point) event.Handled {
+func (sh *RowSeparator) OnInputEvent(ev0 event.Event, p image.Point) bool {
 	switch ev := ev0.(type) {
 	case *event.MouseDragMove:
 		switch {

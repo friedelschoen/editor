@@ -3,8 +3,8 @@ package ui
 import (
 	"image"
 
+	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/util/drawutil/drawer4"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 type Toolbar struct {
@@ -22,7 +22,7 @@ func NewToolbar(ui *UI) *Toolbar {
 	return tb
 }
 
-func (tb *Toolbar) OnInputEvent(ev any, p image.Point) event.Handled {
+func (tb *Toolbar) OnInputEvent(ev event.Event, p image.Point) bool {
 	switch ev.(type) {
 	case *event.KeyDown, *event.KeyUp:
 		// allow typing in the toolbar (dynamic size) without losing focus

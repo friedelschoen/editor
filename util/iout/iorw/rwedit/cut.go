@@ -1,9 +1,5 @@
 package rwedit
 
-import (
-	"github.com/jmigpin/editor/util/uiutil/event"
-)
-
 func Cut(ctx *Ctx) error {
 	a, b, ok := ctx.C.SelectionIndexes()
 	if !ok {
@@ -14,7 +10,7 @@ func Cut(ctx *Ctx) error {
 	if err != nil {
 		return err
 	}
-	ctx.Fns.SetClipboardData(event.CIClipboard, string(s))
+	ctx.Fns.SetClipboardData(string(s))
 
 	if err := ctx.RW.OverwriteAt(a, b-a, nil); err != nil {
 		return err

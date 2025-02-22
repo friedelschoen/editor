@@ -3,10 +3,10 @@ package ui
 import (
 	"image"
 
+	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/drawutil/drawer4"
 	"github.com/jmigpin/editor/util/evreg"
-	"github.com/jmigpin/editor/util/uiutil/event"
-	"github.com/jmigpin/editor/util/uiutil/widget"
 )
 
 type Row struct {
@@ -77,7 +77,7 @@ func (row *Row) Layout() {
 	row.BoxLayout.Layout()
 }
 
-func (row *Row) OnInputEvent(ev0 any, p image.Point) event.Handled {
+func (row *Row) OnInputEvent(ev0 event.Event, p image.Point) bool {
 	ev2 := &RowInputEvent{row, ev0}
 	row.EvReg.RunCallbacks(RowInputEventId, ev2)
 	return false

@@ -4,8 +4,8 @@ import (
 	"image"
 	"image/color"
 
+	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/util/imageutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 // Used by ScrollBar.
@@ -37,7 +37,7 @@ func (sh *ScrollHandle) Paint() {
 	imageutil.FillRectangle(sh.ctx.Image(), sh.Bounds, c)
 }
 
-func (sh *ScrollHandle) OnInputEvent(ev any, p image.Point) event.Handled {
+func (sh *ScrollHandle) OnInputEvent(ev event.Event, p image.Point) bool {
 	switch ev.(type) {
 	case *event.MouseEnter:
 		sh.inside = true

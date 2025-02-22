@@ -7,9 +7,9 @@ import (
 	"image/color"
 	"strings"
 
+	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/util/fontutil"
 	"github.com/jmigpin/editor/util/imageutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 type Node interface {
@@ -36,7 +36,7 @@ type Node interface {
 
 	OnThemeChange()
 	OnChildMarked(child Node, newMarks Marks)
-	OnInputEvent(ev any, p image.Point) event.Handled
+	OnInputEvent(ev event.Event, p image.Point) bool
 }
 
 // Doesn't allow embed to be assigned to a Node directly, which prevents a range of programming mistakes. This is the node other widgets should inherit from.
@@ -384,7 +384,8 @@ func (en *EmbedNode) PaintMarked() image.Rectangle {
 		if en.Wrapper.PaintTree() {
 			u = u.Union(en.Bounds)
 		}
-	} else if en.HasAnyMarks(MarkChildNeedsPaint) {
+	}
+	if en.HasAnyMarks(MarkChildNeedsPaint) {
 		en.marks.Remove(MarkChildNeedsPaint)
 		en.IterateWrappers2(func(c Node) {
 			r := c.PaintMarked()
@@ -419,7 +420,7 @@ func (en *EmbedNode) ChildsPaintTree() {
 	})
 }
 
-func (en *EmbedNode) OnInputEvent(ev any, p image.Point) event.Handled {
+func (en *EmbedNode) OnInputEvent(ev event.Event, p image.Point) bool {
 	return false
 }
 

@@ -11,10 +11,10 @@ import (
 
 	"github.com/jmigpin/editor/core/toolbarparser"
 	"github.com/jmigpin/editor/ui"
+	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/util/drawutil"
 	"github.com/jmigpin/editor/util/iout"
 	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 type ERow struct {
@@ -232,7 +232,7 @@ func (erow *ERow) initHandlers() {
 		ev := ev0.(*ui.TextAreaInlineCompleteEvent)
 		handled := erow.Ed.InlineComplete.Complete(erow, ev)
 		// Allow the input event (`tab` key press) to function normally if the inlinecomplete is not being handled (ex: no lsproto server is registered for this filename extension)
-		ev.ReplyHandled = event.Handled(handled)
+		ev.ReplyHandled = bool(handled)
 	})
 	// key shortcuts
 	row.EvReg.Add(ui.RowInputEventId, func(ev0 any) {

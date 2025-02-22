@@ -2,7 +2,7 @@ package xinput
 
 import (
 	"github.com/jezek/xgb/xproto"
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/jmigpin/editor/ui/event"
 )
 
 // Constants from /usr/include/X11/keysymdef.h
@@ -387,7 +387,7 @@ func translateModifiersToEventMouseButtons(v uint16) event.MouseButtons {
 		{xproto.KeyButMaskButton5, event.ButtonWheelDown},
 		{xproto.KeyButMaskButton5 << 1, event.ButtonWheelLeft},
 		{xproto.KeyButMaskButton5 << 2, event.ButtonWheelRight},
-		{xproto.KeyButMaskButton5 << 3, event.ButtonBackward},
+		{xproto.KeyButMaskButton5 << 3, event.ButtonX1},
 		// event sends uint16 (no support for forward?)
 		//{xproto.KeyButMaskButton5 << 4, event.ButtonForward},
 	}
@@ -418,9 +418,9 @@ func translateButtonToEventButton(xb xproto.Button) event.MouseButton {
 	case 7:
 		b = event.ButtonWheelRight
 	case 8:
-		b = event.ButtonBackward
+		b = event.ButtonX1
 	case 9:
-		b = event.ButtonForward
+		b = event.ButtonX2
 	}
 	return b
 }

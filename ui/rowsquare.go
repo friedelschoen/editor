@@ -3,9 +3,9 @@ package ui
 import (
 	"image"
 
+	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/imageutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
-	"github.com/jmigpin/editor/util/uiutil/widget"
 )
 
 type RowSquare struct {
@@ -112,7 +112,7 @@ func (sq *RowSquare) SetState(s RowState, v bool) {
 func (sq *RowSquare) HasState(s RowState) bool {
 	return sq.state.hasAny(s)
 }
-func (sq *RowSquare) OnInputEvent(ev any, p image.Point) event.Handled {
+func (sq *RowSquare) OnInputEvent(ev event.Event, p image.Point) bool {
 	switch t := ev.(type) {
 
 	// use drag events from row separator (allows dragging using rowsquare)

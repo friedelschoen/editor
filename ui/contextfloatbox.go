@@ -3,8 +3,8 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/util/uiutil/event"
-	"github.com/jmigpin/editor/util/uiutil/widget"
+	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/widget"
 )
 
 type ContextFloatBox struct {
@@ -52,7 +52,7 @@ func (cfb *ContextFloatBox) Layout() {
 	cfb.FloatBox.Layout()
 }
 
-func (cfb *ContextFloatBox) OnInputEvent(ev any, p image.Point) event.Handled {
+func (cfb *ContextFloatBox) OnInputEvent(ev event.Event, p image.Point) bool {
 	switch ev.(type) {
 	case *event.KeyUp,
 		*event.KeyDown:

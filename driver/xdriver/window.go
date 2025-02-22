@@ -20,7 +20,7 @@ import (
 	"github.com/jmigpin/editor/driver/xdriver/xcursors"
 	"github.com/jmigpin/editor/driver/xdriver/xinput"
 	"github.com/jmigpin/editor/driver/xdriver/xutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/jmigpin/editor/ui/event"
 )
 
 type Window struct {

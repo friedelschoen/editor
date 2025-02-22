@@ -3,9 +3,9 @@ package ui
 import (
 	"image"
 
+	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/evreg"
-	"github.com/jmigpin/editor/util/uiutil/event"
-	"github.com/jmigpin/editor/util/uiutil/widget"
 )
 
 // User Interface root (top) node.
@@ -65,7 +65,7 @@ func (l *Root) OnChildMarked(child widget.Node, newMarks widget.Marks) {
 	}
 }
 
-func (l *Root) OnInputEvent(ev0 any, p image.Point) event.Handled {
+func (l *Root) OnInputEvent(ev0 event.Event, p image.Point) bool {
 	switch ev := ev0.(type) {
 	case *event.KeyDown:
 		m := ev.Mods.ClearLocks()
