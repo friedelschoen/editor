@@ -34,18 +34,25 @@ func header1PenBounds(d *Drawer, offset int) (mathutil.RectangleIntf, bool) {
 	return pen, found
 }
 
-type PenVisibility struct {
-	not     bool // not visible
-	full    bool // fully visible
-	partial bool // partially visible
-	top     bool // otherwise is bottom, valid in "full" and "partial"
-}
+type PenVisibility int
 
-func penVisibility(d *Drawer, offset int) *PenVisibility {
-	v := &PenVisibility{}
+const (
+	VisibilityNot PenVisibility = iota
+	VisibilityFull
+	VisibilityPartial
+)
+
+// type PenVisibility struct {
+// 	not     bool // not visible
+// 	full    bool // fully visible
+// 	partial bool // partially visible
+// 	top     bool // otherwise is bottom, valid in "full" and "partial"
+// }
+
+func penVisibility(d *Drawer, offset int) (PenVisibility, bool) {
 	pb, ok := header1PenBounds(d, offset)
 	if !ok {
-		v.not = true
+		return VisibilityNot, false
 	} else {
 		pr := pb.ToRectFloorCeil()
 		// allow intersection of empty x in penbounds (case of eof)
@@ -60,15 +67,14 @@ func penVisibility(d *Drawer, offset int) *PenVisibility {
 
 		ir := b.Intersect(pr)
 		if ir.Empty() {
-			v.not = true
+			return VisibilityNot, false
 		} else if ir == pr {
-			v.full = true
+			return VisibilityFull, false
 		} else {
-			v.partial = true
 			if pr.Min.Y < b.Min.Y {
-				v.top = true
+				return VisibilityPartial, true
 			}
+			return VisibilityPartial, false
 		}
 	}
-	return v
 }

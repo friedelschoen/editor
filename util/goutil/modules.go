@@ -3,7 +3,6 @@ package goutil
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -68,7 +67,7 @@ func GoModReplace(ctx context.Context, dir, old, new string, env []string) error
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(fname, b, 0660)
+	return os.WriteFile(fname, b, 0660)
 }
 
 func runGoModCmd(ctx context.Context, dir string, args []string, env []string) ([]byte, error) {
@@ -139,7 +138,7 @@ func ParseDirGoMod(dir string) (*modfile.File, string, error) {
 
 func readDirGoModFile(dir string) (string, []byte, error) {
 	s := filepath.Join(dir, "go.mod")
-	b, err := ioutil.ReadFile(s)
+	b, err := os.ReadFile(s)
 	return s, b, err
 }
 

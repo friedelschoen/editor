@@ -1,7 +1,6 @@
 package goutil
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -89,7 +88,7 @@ func GetGoVersion(env []string) (string, error) {
 		// get from file located in go root
 		d := GetGoRoot(env)
 		fp := filepath.Join(d, "VERSION")
-		b, err := ioutil.ReadFile(fp)
+		b, err := os.ReadFile(fp)
 		if err != nil {
 			return "", err
 		}

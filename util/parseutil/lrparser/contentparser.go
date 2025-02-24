@@ -392,21 +392,24 @@ func (stk cpStack) topEnd() int {
 
 //godebug:annotateoff
 func (stk cpStack) String() string {
-	u := []string{}
-	for _, item := range stk {
-		s := fmt.Sprintf("%v:", item.st.id)
+	builder := strings.Builder{}
+	for i, item := range stk {
+		if i > 0 {
+			builder.WriteString("\n\t")
+		}
+		fmt.Fprintf(&builder, "%v:", item.st.id)
 		if item.cpn != nil { // can be nil in state0
 			if item.cpn.rule != nil { // can be nil in state0
-				s += fmt.Sprintf(" %v", item.cpn.rule.id())
+				fmt.Fprintf(&builder, " %v", item.cpn.rule.id())
 			}
-			s += " " + PNodePosStr(item.cpn)
+			builder.WriteByte(' ')
+			builder.WriteString(PNodePosStr(item.cpn))
 			if item.cpn.simulated {
-				s += fmt.Sprintf(" (simulated)")
+				builder.WriteString(" (simulated)")
 			}
 		}
-		u = append(u, s)
 	}
-	return fmt.Sprintf("stk{\n\t%v\n}", strings.Join(u, "\n\t"))
+	return fmt.Sprintf("stk{\n\t%v\n}", builder.String())
 }
 
 // content parser stack item

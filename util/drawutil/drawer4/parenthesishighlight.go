@@ -118,7 +118,7 @@ func (ph *ParenthesisHighlight) do() []*ColorizeOp {
 
 	// sort points
 	points := []int{openPos}
-	hasClosePos := done == true
+	hasClosePos := done
 	if hasClosePos {
 		points = append(points, closePos)
 		if reverse {

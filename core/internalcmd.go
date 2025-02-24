@@ -2,7 +2,7 @@ package core
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"path/filepath"
 	"strings"
 
@@ -13,7 +13,7 @@ import (
 // cmds added via init() from "internalcmds" pkg
 var InternalCmds = internalCmds{}
 
-var noERowErr = fmt.Errorf("no active row")
+var errNoERow = errors.New("no active row")
 
 type internalCmds map[string]*InternalCmd
 
@@ -42,7 +42,7 @@ func (args *InternalCmdArgs) ERow() (*ERow, bool) {
 func (args *InternalCmdArgs) ERowOrErr() (*ERow, error) {
 	erow, ok := args.ERow()
 	if !ok {
-		return nil, noERowErr
+		return nil, errNoERow
 	}
 	return erow, nil
 }
@@ -163,7 +163,7 @@ func internalCmd2(ed *Editor, part *toolbarparser.Part, optERow *ERow) error {
 	// run external cmd (needs erow)
 	erow := optERow
 	if erow == nil {
-		return noERowErr
+		return errNoERow
 	}
 	ExternalCmd(erow, part)
 	return nil

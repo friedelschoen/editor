@@ -6,7 +6,7 @@ import (
 	"go/ast"
 	"go/token"
 	"go/types"
-	"io/ioutil"
+	"os"
 	"strings"
 	"sync"
 
@@ -89,7 +89,7 @@ func (annset *AnnotatorSet) annotatorFileData(filename string) (*debug.Annotator
 		return afd, nil
 	}
 
-	src, err := ioutil.ReadFile(filename)
+	src, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, fmt.Errorf("annotatorfiledata: %w", err)
 	}

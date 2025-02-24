@@ -101,7 +101,7 @@ func (t *Theme) SetPaletteNamePrefix(prefix string) {
 type Palette map[string]color.Color
 
 func (pal Palette) Empty() bool {
-	return pal == nil || len(pal) == 0
+	return len(pal) == 0
 }
 
 func (pal Palette) Merge(p2 Palette) {

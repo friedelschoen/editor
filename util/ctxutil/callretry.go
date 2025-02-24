@@ -42,8 +42,7 @@ func Call(ctx context.Context, prefix string, fn func() error, lateFn func(error
 		if d.ctxDone {
 			if lateFn != nil {
 				lateFn(err)
-			} else {
-				// err is lost
+				// otherwise err is lost
 			}
 		}
 	}()

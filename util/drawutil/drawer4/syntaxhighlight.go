@@ -63,7 +63,7 @@ func SyntaxHighlight(d *Drawer) []*ColorizeOp {
 		style = styles.Fallback
 	}
 
-	tokens, err := lexer.Tokenise(nil, content)
+	tokens, _ := lexer.Tokenise(nil, content)
 
 	ops := make([]*ColorizeOp, 0)
 

@@ -2,7 +2,7 @@ package contentcmds
 
 import (
 	"context"
-	"io/ioutil"
+	"os"
 	"time"
 
 	"github.com/jmigpin/editor/core"
@@ -52,7 +52,7 @@ func GoToImplementationLSProto(ctx context.Context, erow *core.ERow, index int) 
 	}
 	if rd == nil {
 		// read file
-		b, err := ioutil.ReadFile(filename)
+		b, err := os.ReadFile(filename)
 		if err != nil {
 			return err, true
 		}

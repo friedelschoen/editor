@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"io"
-	"io/ioutil"
+	"os"
 )
 
 // taken from: go/parser/interface.go:25:9
@@ -29,5 +29,5 @@ func ReadSource(filename string, src any) ([]byte, error) {
 		}
 		return nil, errors.New("invalid source")
 	}
-	return ioutil.ReadFile(filename)
+	return os.ReadFile(filename)
 }

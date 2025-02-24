@@ -48,7 +48,7 @@ func GoRename(args *core.InternalCmdArgs) error {
 
 	// command
 	offsetStr := fmt.Sprintf("%v:#%v", erow.Info.Name(), offset)
-	cargs := []string{}
+	var cargs []string
 	if isF {
 		cargs = []string{"gorename", "-offset", offsetStr, "-to", to}
 		cargs = append(cargs, otherArgs...)

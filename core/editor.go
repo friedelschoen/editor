@@ -198,18 +198,16 @@ func (ed *Editor) uiEventLoop() {
 
 func (ed *Editor) fswatcherEventLoop() {
 	for {
-		select {
-		case ev, ok := <-ed.Watcher.Events():
-			if !ok {
-				ed.Close()
-				return
-			}
-			switch evt := ev.(type) {
-			case error:
-				ed.Error(evt)
-			case *fswatcher.Event:
-				ed.handleWatcherEvent(evt)
-			}
+		ev, ok := <-ed.Watcher.Events()
+		if !ok {
+			ed.Close()
+			return
+		}
+		switch evt := ev.(type) {
+		case error:
+			ed.Error(evt)
+		case *fswatcher.Event:
+			ed.handleWatcherEvent(evt)
 		}
 	}
 }
@@ -312,9 +310,7 @@ func (ed *Editor) DeleteERowInfo(name string) {
 func (ed *Editor) ERows() []*ERow {
 	w := []*ERow{}
 	for _, info := range ed.ERowInfos() {
-		for _, e := range info.ERows {
-			w = append(w, e)
-		}
+		w = append(w, info.ERows...)
 	}
 	return w
 }

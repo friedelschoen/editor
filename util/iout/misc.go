@@ -21,7 +21,7 @@ func (c FnCloser) Close() error {
 }
 
 func CopyBytes(b []byte) []byte {
-	p := make([]byte, len(b), len(b))
+	p := make([]byte, len(b))
 	copy(p, b)
 	return p
 }

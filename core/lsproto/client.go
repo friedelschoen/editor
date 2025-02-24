@@ -68,15 +68,14 @@ func NewClientIO(ctx context.Context, rwc io.ReadWriteCloser, li *LangInstance) 
 
 	// close when ctx is done
 	go func() {
-		select {
-		case <-ctx.Done():
-			if err := cli.sendClose(); err != nil {
-				// Commented: best effort, ignore errors
-				//cli.li.lang.PrintWrapError(err)
-			}
-			if err := rwc.Close(); err != nil {
-				cli.li.lang.PrintWrapError(err)
-			}
+		<-ctx.Done()
+		cli.sendClose()
+		// if err := cli.sendClose(); err != nil {
+		// 	Commented: best effort, ignore errors
+		// 	cli.li.lang.PrintWrapError(err)
+		// }
+		if err := rwc.Close(); err != nil {
+			cli.li.lang.PrintWrapError(err)
 		}
 	}()
 
@@ -247,7 +246,7 @@ func (cli *Client) readServerCapabilities(caps any) {
 	path := "capabilities.workspace.workspaceFolders.supported"
 	v, err := JsonGetPath(caps, path)
 	if err == nil {
-		if b, ok := v.(bool); ok && b == true {
+		if b, ok := v.(bool); ok && b {
 			cli.serverCapabilities.workspace.folders = true
 		}
 	}
@@ -255,7 +254,7 @@ func (cli *Client) readServerCapabilities(caps any) {
 	path = "capabilities.workspaceSymbolProvider"
 	v, err = JsonGetPath(caps, path)
 	if err == nil {
-		if b, ok := v.(bool); ok && b == true {
+		if b, ok := v.(bool); ok && b {
 			cli.serverCapabilities.workspace.symbol = true
 		}
 	}
@@ -263,7 +262,7 @@ func (cli *Client) readServerCapabilities(caps any) {
 	path = "capabilities.renameProvider"
 	v, err = JsonGetPath(caps, path)
 	if err == nil {
-		if b, ok := v.(bool); ok && b == true {
+		if b, ok := v.(bool); ok && b {
 			cli.serverCapabilities.rename = true
 		}
 	}

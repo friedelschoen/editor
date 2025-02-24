@@ -483,7 +483,7 @@ func (ann *Annotator) newFuncLitWithType(resultsTypes []ast.Expr) *ast.FuncLit {
 	fl.Type.Results.List = resultsFields
 
 	resultsTuple := types.NewTuple(resultsVars...)
-	sig := types.NewSignature(nil, nil, resultsTuple, variadic)
+	sig := types.NewSignatureType(nil, nil, nil, nil, resultsTuple, variadic)
 	ann.typesInfo.Types[fl] = types.TypeAndValue{Type: sig}
 
 	return fl

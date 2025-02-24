@@ -33,9 +33,8 @@ type Script struct {
 	ucmds map[string]*ScriptCmd // user cmds (mapped)
 	icmds map[string]*ScriptCmd // internal cmds
 
-	workDir    string
-	lastCmdStd [2][]byte // stdin, stdout
-	lastCmd    struct {
+	workDir string
+	lastCmd struct {
 		stdout []byte
 		stderr []byte
 		err    []byte

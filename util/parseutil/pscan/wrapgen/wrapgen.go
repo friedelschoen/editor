@@ -7,7 +7,7 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/jmigpin/editor/util/astut"
@@ -24,7 +24,7 @@ func main() {
 	}
 }
 func main2() error {
-	//src, err := ioutil.ReadFile(input)
+	//src, err := os.ReadFile(input)
 	//if err != nil {
 	//	return err
 	//}
@@ -43,7 +43,7 @@ func main2() error {
 		return err
 	}
 
-	if err := ioutil.WriteFile(output, b, 0o644); err != nil {
+	if err := os.WriteFile(output, b, 0o644); err != nil {
 		return err
 	}
 	return nil

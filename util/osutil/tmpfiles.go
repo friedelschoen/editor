@@ -1,7 +1,6 @@
 package osutil
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -17,7 +16,7 @@ func NewTmpFiles(prefix string) *TmpFiles {
 }
 
 func (tf *TmpFiles) setupDir(prefix string) error {
-	d, err := ioutil.TempDir(os.TempDir(), prefix)
+	d, err := os.MkdirTemp(os.TempDir(), prefix)
 	if err != nil {
 		return err
 	}
@@ -39,7 +38,7 @@ func (tf *TmpFiles) WriteFileInTmp(path string, src []byte) (string, error) {
 	if err := os.MkdirAll(baseDir, 0700); err != nil {
 		return "", err
 	}
-	if err := ioutil.WriteFile(fp, src, 0600); err != nil {
+	if err := os.WriteFile(fp, src, 0600); err != nil {
 		return "", err
 	}
 	return fp, nil

@@ -692,7 +692,7 @@ func (ann *Annotator) visReturnStmt(ctx *Ctx, rs *ast.ReturnStmt) error {
 			return err
 		}
 		rs.Results = ann.fieldListNames(ft.Results)
-	} else {
+		// } else {
 		//// TODO:***
 		//// fix "return nil" has no type
 		//tes := ann.fieldListTypeExprs(ft.Results)

@@ -129,24 +129,24 @@ func GoplsRegistration(stderr bool, tcp bool, trace bool) string {
 	}
 
 	errOut := ""
-	if net == "stdio" {
-		if stderr {
-			//errOut = ",stderr"
-			// DEBUG
-			//errOut = ",stderrmanmsg"
-		}
-	}
+	// if net == "stdio" {
+	// if stderr {
+	//errOut = ",stderr"
+	// DEBUG
+	//errOut = ",stderrmanmsg"
+	// }
+	// }
 
 	return fmt.Sprintf("go,.go,%v,%q%s", net, cmd, errOut)
 }
 
-func cLangRegistration(stderr bool) string {
+func cLangRegistration(_ bool) string {
 	ext := ".c .h .cpp .hpp .cc"
 	cmd := osutil.ExecName("clangd")
 	errOut := ""
-	if stderr {
-		//errOut = ",stderr"
-	}
+	// if stderr {
+	// 	errOut = ",stderr"
+	// }
 	return fmt.Sprintf("cpp,%q,stdio,%q%s", ext, cmd, errOut)
 }
 

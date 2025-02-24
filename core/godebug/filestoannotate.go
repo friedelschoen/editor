@@ -398,10 +398,9 @@ func (fa *FilesToAnnotate) addToAnnotate(filename string, typ AnnotationType) {
 
 func (fa *FilesToAnnotate) loadPackages(ctx context.Context) ([]*packages.Package, error) {
 
-	loadMode := 0 |
+	loadMode := packages.NeedCompiledGoFiles |
 		//packages.NeedExportFile | // TODO
 		//packages.NeedTypesSizes | // TODO
-		packages.NeedCompiledGoFiles |
 		packages.NeedDeps |
 		packages.NeedFiles |
 		packages.NeedImports |
@@ -409,8 +408,7 @@ func (fa *FilesToAnnotate) loadPackages(ctx context.Context) ([]*packages.Packag
 		packages.NeedName | // name and pkgpath
 		packages.NeedSyntax |
 		packages.NeedTypes |
-		packages.NeedTypesInfo | // access to pkg.TypesInfo.*
-		0
+		packages.NeedTypesInfo // access to pkg.TypesInfo.*
 
 	cfg := &packages.Config{
 		Context:    ctx,

@@ -3,7 +3,6 @@ package iout
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -18,7 +17,7 @@ func MkdirAllWriteFile(filename string, src []byte, m os.FileMode) error {
 	if err := MkdirAll(filepath.Dir(filename)); err != nil {
 		return err
 	}
-	return ioutil.WriteFile(filename, []byte(src), m)
+	return os.WriteFile(filename, []byte(src), m)
 }
 
 func MkdirAllCopyFile(src, dst string, m os.FileMode) error {

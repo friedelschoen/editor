@@ -6,7 +6,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -227,7 +226,7 @@ func lspRename(t *testing.T, args []string, man *Manager) error {
 		return err
 	}
 	for _, wec := range wecs {
-		b, err := ioutil.ReadFile(wec.Filename)
+		b, err := os.ReadFile(wec.Filename)
 		if err != nil {
 			return err
 		}
@@ -384,7 +383,7 @@ func sourceCursor(t *testing.T, src string, nth int) (int, string) {
 }
 
 func readBytesOffset(t *testing.T, filename string, line, col int) (iorw.ReadWriterAt, int) {
-	b, err := ioutil.ReadFile(filename)
+	b, err := os.ReadFile(filename)
 	if err != nil {
 		t.Fatal(err)
 	}

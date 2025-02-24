@@ -1,7 +1,6 @@
 package core
 
 import (
-	"fmt"
 	"image"
 	"net/url"
 	"strings"
@@ -95,7 +94,7 @@ func (h *DndHandler) handleDroppedURL(col *ui.Column, p *image.Point, u *url.URL
 	}
 	rowPos := ui.NewRowPos(col, next)
 
-	name := fmt.Sprintf("%s", u)
+	name := u.String()
 	if u.Scheme == "file" {
 		name = u.Path
 	}

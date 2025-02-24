@@ -326,7 +326,7 @@ func (d *Drawer) SetCursorOffset(v int) {
 }
 
 func (d *Drawer) ready() bool {
-	return !(d.fface == nil || d.reader == nil || d.bounds == image.ZR)
+	return !(d.fface == nil || d.reader == nil || d.bounds == image.Rectangle{})
 }
 
 func (d *Drawer) Measure() image.Point {
@@ -550,17 +550,16 @@ func (d *Drawer) scrollSizeYDown(nlines int) int {
 }
 
 func (d *Drawer) RangeVisible(offset, length int) bool {
-	v1 := penVisibility(d, offset)
-	if v1.full || v1.partial {
+	v1, _ := penVisibility(d, offset)
+	if v1 != VisibilityNot {
 		return true
 	}
-	v2 := penVisibility(d, offset+length)
-	if v2.full || v2.partial {
-		return true
-	}
+	v2, _ := penVisibility(d, offset+length)
+
+	return v2 != VisibilityNot
 	// v1 above and v2 below view is considered not visible (will align with v1 at top on RangeVisibleOffset(...))
-	return false
 }
+
 func (d *Drawer) RangeVisibleOffset(offset, length int, align drawutil.RangeAlignment) int {
 
 	// top lines visible before the offset line
@@ -606,8 +605,8 @@ func (d *Drawer) alignKeep() int {
 
 func (d *Drawer) rangeVisibleOffsetKeepIfVisible(offset, length int) (int, bool) {
 	offset2 := d.rangeVisibleOffset2(offset, length)
-	v2 := penVisibility(d, offset2)
-	if v2.full {
+	v2, _ := penVisibility(d, offset2)
+	if v2 == VisibilityFull {
 		return d.alignKeep(), true
 	}
 	return 0, false
@@ -620,40 +619,30 @@ func (d *Drawer) rangeVisibleOffsetAuto(offset, length int) int {
 
 	offset2 := d.rangeVisibleOffset2(offset, length)
 
-	v1 := penVisibility(d, offset)
-	v2 := penVisibility(d, offset2)
-	if v1.full {
-		if v2.full {
+	v1, top1 := penVisibility(d, offset)
+	v2, _ := penVisibility(d, offset2)
+	if v1 == VisibilityFull {
+		if v2 == VisibilityFull {
 			return align(drawutil.RAlignKeep)
-		} else if v2.partial {
-			if v2.top {
-				// panic: can't be: v1 is full
-			} else {
-				return align(drawutil.RAlignBottom)
-			}
-		} else if v2.not { // past bottom line
+		} else if v2 == VisibilityPartial {
 			return align(drawutil.RAlignBottom)
-		} else {
-			// panic
+		} else if v2 == VisibilityNot { // past bottom line
+			return align(drawutil.RAlignBottom)
 		}
-	} else if v1.partial {
-		if v1.top {
+	} else if v1 == VisibilityPartial {
+		if top1 {
 			return align(drawutil.RAlignTop)
 		} else {
 			return align(drawutil.RAlignBottom)
 		}
-	} else if v1.not {
-		if v2.full {
+	} else if v1 == VisibilityNot {
+		if v2 == VisibilityFull {
 			return align(drawutil.RAlignTop)
-		} else if v2.partial {
+		} else if v2 == VisibilityPartial {
 			return align(drawutil.RAlignTop)
-		} else if v2.not {
+		} else if v2 == VisibilityNot {
 			return align(drawutil.RAlignCenter)
-		} else {
-			// panic
 		}
-	} else {
-		// panic
 	}
 
 	// NOTE: should never get here

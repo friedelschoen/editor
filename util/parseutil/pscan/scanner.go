@@ -133,7 +133,7 @@ func (sc *Scanner) NewValueKeeper() *ValueKeeper {
 	return sc.NewValueKeepers(1)[0]
 }
 func (sc *Scanner) NewValueKeepers(n int) []*ValueKeeper {
-	w := make([]*ValueKeeper, n, n)
+	w := make([]*ValueKeeper, n)
 	for i := 0; i < n; i++ {
 		w[i] = &ValueKeeper{sc: sc}
 	}

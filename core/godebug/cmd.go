@@ -11,7 +11,6 @@ import (
 	"go/token"
 	"go/types"
 	"io"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -517,7 +516,7 @@ func (cmd *Cmd) editorRootTmpDir() string {
 
 func (cmd *Cmd) setupTmpDir() error {
 	fixedDir := cmd.editorRootTmpDir()
-	dir, err := ioutil.TempDir(fixedDir, "work*")
+	dir, err := os.MkdirTemp(fixedDir, "work*")
 	if err != nil {
 		return err
 	}
@@ -806,7 +805,7 @@ func (cmd *Cmd) buildAlternativeGoWork(ctx context.Context) error {
 	}
 
 	// build based on current go.work
-	src, err := ioutil.ReadFile(gwFilename)
+	src, err := os.ReadFile(gwFilename)
 	if err != nil {
 		return fmt.Errorf("unable to read go work file: %w", err)
 	}
@@ -863,7 +862,7 @@ func (cmd *Cmd) buildAlternativeGoMod(ctx context.Context) error {
 	}
 
 	// build based on current go.mod
-	src, err := ioutil.ReadFile(filename)
+	src, err := os.ReadFile(filename)
 	if err != nil {
 		return fmt.Errorf("unable to read mod file: %w", err)
 	}

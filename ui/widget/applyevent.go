@@ -94,7 +94,7 @@ func (ae *ApplyEvent) mouseEnter(node Node, p image.Point) bool {
 	// later childs are drawn over previous ones, run loop backwards
 	ne.IterateWrappersReverse(func(c Node) bool {
 		h = ae.mouseEnter(c, p)
-		return h == false // continue while not handled
+		return !h // continue while not handled
 	})
 
 	// execute on node
@@ -121,7 +121,7 @@ func (ae *ApplyEvent) mouseLeave(node Node, p image.Point) bool {
 	// later childs are drawn over previous ones, run loop backwards
 	ne.IterateWrappersReverse(func(c Node) bool {
 		h = ae.mouseLeave(c, p)
-		return h == false // continue while not handled
+		return !h // continue while not handled
 	})
 
 	// execute on node
@@ -136,11 +136,11 @@ func (ae *ApplyEvent) mouseLeave(node Node, p image.Point) bool {
 	return h
 }
 
-func (ae *ApplyEvent) dragStart(node Node, ev *event.MouseDragStart, p image.Point) {
+func (ae *ApplyEvent) dragStart(node Node, ev *event.MouseDragStart, _ image.Point) {
 	if ae.drag.dragging {
 		return
 	}
-	p = ev.Point // use the starting point, not the current point
+	p := ev.Point // use the starting point, not the current point
 	ae.findDragNode2(node, ev, p)
 }
 
@@ -200,7 +200,7 @@ func (ae *ApplyEvent) depthFirstEv(node Node, ev event.Event, p image.Point) boo
 	// later childs are drawn over previous ones, run loop backwards
 	node.Embed().IterateWrappersReverse(func(c Node) bool {
 		h = ae.depthFirstEv(c, ev, p)
-		return h == false // continue while not handled
+		return !h // continue while not handled
 	})
 
 	// execute on node

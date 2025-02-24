@@ -9,7 +9,6 @@ import (
 
 	//_ "image/gif"
 	_ "image/jpeg"
-	_ "image/png"
 	"os"
 
 	"golang.org/x/image/colornames"

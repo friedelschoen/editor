@@ -208,11 +208,12 @@ func (gdi *GoDebugInstance) runCmd(ctx context.Context, erow *ERow, args []strin
 }
 
 func (gdi *GoDebugInstance) selectAnnotation(rowPos *ui.RowPos, ev *ui.RootSelectAnnotationEvent) {
-	if err := gdi.selectAnnotation2(ev); err != nil {
-		//gdi.gdm.printError(err)
-		//gdi.updateAnnotations()
-		//return
-	}
+	gdi.selectAnnotation2(ev)
+	// if err := gdi.selectAnnotation2(ev); err != nil {
+	// gdi.gdm.printError(err)
+	// gdi.updateAnnotations()
+	// return
+	// }
 	gdi.updateAnnotationsAndShowLine(nil, rowPos)
 }
 
@@ -235,12 +236,12 @@ func (gdi *GoDebugInstance) selectAnnotation2(ev *ui.RootSelectAnnotationEvent) 
 }
 
 func (gdi *GoDebugInstance) selectERowAnnotation(erow *ERow, ev *ui.TextAreaSelectAnnotationEvent) {
-	showLine, err := gdi.selectERowAnnotation2(erow, ev)
-	if err != nil {
-		//gdi.gdm.printError(err)
-		//gdi.updateAnnotations()
-		//return
-	}
+	showLine, _ := gdi.selectERowAnnotation2(erow, ev)
+	// if err != nil {
+	//gdi.gdm.printError(err)
+	//gdi.updateAnnotations()
+	//return
+	// }
 	if showLine {
 		gdi.updateAnnotationsAndShowLine(erow, erow.Row.PosBelow())
 	}
