@@ -34,7 +34,6 @@ type Editor struct {
 	HomeVars          *HomeVars
 	Watcher           fswatcher.Watcher
 	RowReopener       *RowReopener
-	GoDebug           *GoDebugManager
 	LSProtoMan        *lsproto.Manager
 	InlineComplete    *InlineComplete
 	Plugins           *Plugins
@@ -60,7 +59,6 @@ func RunEditor(opt *Options) error {
 	ed.HomeVars = NewHomeVars()
 	ed.RowReopener = NewRowReopener(ed)
 	ed.dndh = NewDndHandler(ed)
-	ed.GoDebug = NewGoDebugManager(ed)
 	ed.InlineComplete = NewInlineComplete(ed)
 	ed.EEvents = NewEEvents()
 
@@ -333,11 +331,11 @@ func (ed *Editor) setupUIRoot() {
 	ed.setupRootMenuToolbar()
 
 	// ui.root select annotation
-	ed.UI.Root.EvReg.Add(ui.RootSelectAnnotationEventId, func(ev any) {
-		rowPos := ed.GoodRowPos()
-		ev2 := ev.(*ui.RootSelectAnnotationEvent)
-		ed.GoDebug.SelectAnnotation(rowPos, ev2)
-	})
+	// ed.UI.Root.EvReg.Add(ui.RootSelectAnnotationEventId, func(ev any) {
+	// 	rowPos := ed.GoodRowPos()
+	// 	ev2 := ev.(*ui.RootSelectAnnotationEvent)
+	// 	ed.GoDebug.SelectAnnotation(rowPos, ev2)
+	// })
 }
 
 func (ed *Editor) setupRootToolbar() {
@@ -537,7 +535,6 @@ func (ed *Editor) handleGlobalShortcuts(ev any) (handled bool) {
 		case m.Is(event.ModNone):
 			switch t.KeySym {
 			case event.KSymEscape:
-				ed.GoDebug.CancelAndClear()
 				ed.InlineComplete.CancelAndClear()
 				ed.cancelERowInfosCmds()
 				ed.cancelERowsContentCmds()
@@ -747,15 +744,15 @@ func (ed *Editor) setAnnotations2(req EdAnnotationsRequester, ta *ui.TextArea, o
 		ta.MarkNeedsLayoutAndPaint()
 	}
 
-	// restore godebug annotations
-	if req == EareqInlineComplete && !on {
-		// find erow info from textarea
-		for _, erow := range ed.ERows() {
-			if erow.Row.TextArea == ta {
-				ed.GoDebug.UpdateInfoAnnotations(erow.Info)
-			}
-		}
-	}
+	// // restore godebug annotations
+	// if req == EareqInlineComplete && !on {
+	// 	// find erow info from textarea
+	// 	for _, erow := range ed.ERows() {
+	// 		if erow.Row.TextArea == ta {
+	// 			ed.GoDebug.UpdateInfoAnnotations(erow.Info)
+	// 		}
+	// 	}
+	// }
 }
 
 func (ed *Editor) CanModifyAnnotations(req EdAnnotationsRequester, ta *ui.TextArea) bool {

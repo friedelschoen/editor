@@ -223,10 +223,10 @@ func (erow *ERow) initHandlers() {
 		ContentCmdFromTextArea(erow, ev.Index)
 	})
 	// textarea select annotation
-	row.TextArea.EvReg.Add(ui.TextAreaSelectAnnotationEventId, func(ev any) {
-		ev2 := ev.(*ui.TextAreaSelectAnnotationEvent)
-		erow.Ed.GoDebug.SelectERowAnnotation(erow, ev2)
-	})
+	// row.TextArea.EvReg.Add(ui.TextAreaSelectAnnotationEventId, func(ev any) {
+	// 	ev2 := ev.(*ui.TextAreaSelectAnnotationEvent)
+	// 	erow.Ed.GoDebug.SelectERowAnnotation(erow, ev2)
+	// })
 	// textarea inlinecomplete
 	row.TextArea.EvReg.Add(ui.TextAreaInlineCompleteEventId, func(ev0 any) {
 		ev := ev0.(*ui.TextAreaInlineCompleteEvent)

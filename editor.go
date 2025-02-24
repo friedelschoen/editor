@@ -2,7 +2,6 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -11,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/core/godebug"
 	"github.com/jmigpin/editor/core/lsproto"
 	"github.com/jmigpin/editor/ui"
 	"github.com/jmigpin/editor/util/fontutil"
@@ -22,11 +20,6 @@ import (
 )
 
 func main() {
-	// allow direct access to godebug on the cmd line
-	if godebugMain() {
-		return
-	}
-
 	opt := &core.Options{}
 
 	// flags
@@ -86,38 +79,4 @@ func main() {
 		log.Println(err) // fatal
 		os.Exit(1)
 	}
-}
-
-func godebugMain() bool {
-	args := make([]string, len(os.Args))
-	copy(args, os.Args)
-
-	if len(args) <= 1 {
-		return false
-	}
-	if args[1] == "--" {
-		args = append(args[:1], args[2:]...)
-	}
-	if args[1] != "godebug" {
-		return false
-	}
-	args = args[2:]
-	if err := godebugMain2(args); err != nil {
-		fmt.Fprintf(os.Stderr, "godebug error: %s\n", err)
-		os.Exit(1)
-	}
-	return true
-}
-func godebugMain2(args []string) error {
-	cmd := godebug.NewCmd()
-	cmd.CmdLineMode = true
-	ctx := context.Background()
-	done, err := cmd.Start(ctx, args)
-	if err != nil {
-		return err
-	}
-	if done {
-		return nil
-	}
-	return cmd.Wait()
 }

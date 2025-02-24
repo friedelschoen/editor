@@ -387,7 +387,7 @@ func (info *ERowInfo) UpdateEditedRowState() {
 	edited := !info.EqualToBytesHash(info.fileData.saved.size, info.fileData.saved.hash)
 	info.updateRowsStates(ui.RowStateEdited, edited)
 
-	info.Ed.GoDebug.UpdateInfoAnnotations(info)
+	// info.Ed.GoDebug.UpdateInfoAnnotations(info)
 }
 
 func (info *ERowInfo) UpdateExistsRowState() {

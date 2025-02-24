@@ -1,14 +1,10 @@
 package internalcmds
 
 import (
-	"bytes"
-	"errors"
-	"flag"
 	"fmt"
 	"os"
 
 	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/core/godebug"
 	"github.com/jmigpin/editor/ui"
 	"github.com/jmigpin/editor/util/ctxutil"
 	"github.com/jmigpin/editor/util/iout"
@@ -186,49 +182,6 @@ func OpenExternal(args *core.InternalCmdArgs) error {
 	}
 
 	return osutil.OpenExternal(erow.Info.Name())
-}
-
-func GoDebug(args *core.InternalCmdArgs) error {
-	args2 := args.Part.ArgsUnquoted()
-
-	// special case: show help
-	cmd := godebug.NewCmd()
-	buf := &bytes.Buffer{}
-	cmd.Stderr = buf
-	if err := cmd.ParseFlagsOnce(args2[1:]); errors.Is(err, flag.ErrHelp) {
-		return fmt.Errorf("%w\n%v", err, buf.String())
-	}
-
-	erow, err := args.ERowOrErr()
-	if err != nil {
-		return err
-	}
-	return args.Ed.GoDebug.RunAsync(args.Ctx, erow, args2)
-}
-
-func GoDebugFind(args *core.InternalCmdArgs) error {
-	// TODO: erow needed?
-	//erow, err := args.ERowOrErr()
-	//if err != nil {
-	//	return err
-	//}
-
-	a := args.Part.ArgsUnquoted()
-	if len(a) < 2 {
-		return fmt.Errorf("missing string to find")
-	}
-	s := ""
-	if len(a) == 2 {
-		s = a[1] // single arg, unquoted if quoted
-	} else {
-		s = args.Part.FromArgString(1) // verbatim
-	}
-
-	return args.Ed.GoDebug.AnnotationFind(s)
-}
-
-func GoDebugTrace(args *core.InternalCmdArgs) error {
-	return args.Ed.GoDebug.Trace()
 }
 
 func ColorTheme(args *core.InternalCmdArgs) error {
