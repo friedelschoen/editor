@@ -226,10 +226,6 @@ func (in *Input) onKeyDown(ev *event.KeyDown) (_ bool, err error) {
 		err = AutoIndent(in.ctx)
 		makeCursorVisible()
 		return true, err
-	case event.KSymTabLeft:
-		err = TabLeft(in.ctx)
-		makeCursorVisible()
-		return true, err
 	case event.KSymTab:
 		switch {
 		case mcl.Is(event.ModShift):

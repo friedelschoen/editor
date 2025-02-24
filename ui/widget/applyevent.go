@@ -42,10 +42,7 @@ func (ae *ApplyEvent) Apply(node Node, ev event.Event, p image.Point) {
 			ae.mouseEnterLeave(node, p)
 		}
 	case *event.KeyDown:
-		isLatch := event.ComposeDiacritic(&evt.KeySym, &evt.Rune)
-		if !isLatch {
-			ae.depthFirstEv(node, evt, p)
-		}
+		ae.depthFirstEv(node, evt, p)
 	default:
 		// ex: event.KeyUp
 		ae.depthFirstEv(node, evt, p)

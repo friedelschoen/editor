@@ -17,7 +17,7 @@ import (
 
 type UI struct {
 	DrawFrameRate int // frames per second
-	Win           driver.Window
+	Win           *driver.Window
 
 	curCursor event.Cursor
 
@@ -26,7 +26,6 @@ type UI struct {
 	eventsQ *syncutil.SyncedQ // linked list queue (unlimited length)
 	applyEv *widget.ApplyEvent
 	movef   *mousefilter.MoveFilter
-	clickf  *mousefilter.ClickFilter
 	dragf   *mousefilter.DragFilter
 
 	pendingPaint   bool
@@ -85,11 +84,7 @@ func (ui *UI) initMouseFilters() {
 	ui.movef = mousefilter.NewMoveFilter(ui.DrawFrameRate, ui.eventsQ.PushBack, isMouseMoveEv)
 
 	// click/drag filters
-	emitFn := func(ev event.Event, p image.Point) {
-		ui.handleWidgetEv(ev, p)
-	}
-	ui.clickf = mousefilter.NewClickFilter(emitFn)
-	ui.dragf = mousefilter.NewDragFilter(emitFn)
+	ui.dragf = mousefilter.NewDragFilter(ui.handleWidgetEv)
 }
 
 func (ui *UI) Close() {
@@ -108,7 +103,8 @@ func (ui *UI) eventLoop() {
 		if !ok {
 			break
 		}
-		ui.movef.Filter(ev) // sends events to ui.eventsQ.In()
+		ui.eventsQ.PushBack(ev)
+		// ui.movef.Filter(ev) // sends events to ui.eventsQ.In()
 		// ui.clickf.Filter(ev)
 		// ui.dragf.Filter(ev)
 	}
@@ -158,6 +154,7 @@ func (ui *UI) HandleEvent(ev event.Event) (handled bool) {
 	case *UIPaintTime:
 		ui.paint()
 	case event.InputEvent:
+		fmt.Printf("%T\n", t)
 		ui.handleWindowInput(t)
 	}
 	return true
@@ -165,8 +162,8 @@ func (ui *UI) HandleEvent(ev event.Event) (handled bool) {
 
 func (ui *UI) handleWindowInput(wi event.InputEvent) {
 	ui.handleWidgetEv(wi, wi.At())
-	ui.clickf.Filter(wi) // emit events; set on initMouseFilters()
-	ui.dragf.Filter(wi)  // emit events; set on initMouseFilters()
+	// ui.clickf.Filter(wi) // emit events; set on initMouseFilters()
+	ui.dragf.Filter(wi) // emit events; set on initMouseFilters()
 }
 func (ui *UI) handleWidgetEv(ev event.Event, p image.Point) {
 	ui.applyEv.Apply(ui.Root, ev, p)

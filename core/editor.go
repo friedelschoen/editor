@@ -85,7 +85,6 @@ func (ed *Editor) init(opt *Options) error {
 	ed.zipSessionsFile = opt.ZipSessionsFile
 
 	ed.setupTheme(opt)
-	event.UseMultiKey = opt.UseMultiKey
 
 	// user interface
 	ui0, err := ui.NewUI("Editor")
@@ -169,9 +168,6 @@ func (ed *Editor) uiEventLoop() {
 
 	for {
 		ev := ed.UI.NextEvent()
-		if ev == nil {
-			continue
-		}
 		switch t := ev.(type) {
 		case error:
 			log.Println(t) // in case there is no window yet (TODO: detect?)
@@ -185,11 +181,11 @@ func (ed *Editor) uiEventLoop() {
 		case *event.DndDrop:
 			ed.dndh.OnDrop(t)
 		default:
-			//if !ed.handleGlobalShortcuts(ev) {
-			//	if !ed.UI.HandleEvent(ev) {
-			//		log.Printf("uievloop: unhandled event: %#v", ev)
-			//	}
-			//}
+			// if !ed.handleGlobalShortcuts(ev) {
+			// 	if !ed.UI.HandleEvent(ev) {
+			// 		log.Printf("uievloop: unhandled event: %#v", ev)
+			// 	}
+			// }
 			h1 := ed.handleGlobalShortcuts(ev)
 			h2 := ed.UI.HandleEvent(ev)
 			if !h1 && !h2 {
@@ -730,7 +726,7 @@ func (ed *Editor) RunAsyncBusyCursor2(node widget.Node, fn func(done func())) {
 	}
 	set(event.WaitCursor)
 	done := func() {
-		set(event.NoneCursor)
+		set(event.DefaultCursor)
 	}
 	// launch go routine to allow the UI to update the cursor
 	go fn(done)

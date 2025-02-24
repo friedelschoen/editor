@@ -72,11 +72,9 @@ const (
 	KSymSuperR
 	KSymDelete
 	KSymTab
-	KSymTabLeft
 
 	KSymNumLock
-	KSymCapsLock  // only capitalizes letters
-	KSymShiftLock // prints all keys secondary symbols
+	KSymCapsLock // only capitalizes letters
 
 	KSymExclam      // !
 	KSymDoubleQuote // "

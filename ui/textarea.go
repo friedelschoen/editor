@@ -28,14 +28,12 @@ func NewTextArea(ui *UI) *TextArea {
 }
 
 func (ta *TextArea) OnInputEvent(ev0 event.Event, p image.Point) bool {
-	h := bool(false)
+	h := false
 
 	// input events callbacks (terminal related)
-	if !h {
-		ev2 := &TextAreaInputEvent{TextArea: ta, Event: ev0}
-		ta.EvReg.RunCallbacks(TextAreaInputEventId, ev2)
-		h = ev2.ReplyHandled
-	}
+	ev2 := &TextAreaInputEvent{TextArea: ta, Event: ev0}
+	ta.EvReg.RunCallbacks(TextAreaInputEventId, ev2)
+	h = ev2.ReplyHandled
 
 	// select annotation events
 	if !h {
@@ -110,12 +108,12 @@ func (ta *TextArea) handleInputEvent2(ev0 any, p image.Point) bool {
 	case *event.MouseUp:
 		switch ev.Button {
 		case event.ButtonRight:
-			ta.ENode.Cursor = event.NoneCursor
+			ta.ENode.Cursor = event.DefaultCursor
 		}
 	case *event.MouseDragStart:
 		switch ev.Button {
 		case event.ButtonRight:
-			ta.ENode.Cursor = event.NoneCursor
+			ta.ENode.Cursor = event.DefaultCursor
 		}
 	case *event.KeyDown:
 		m := ev.Mods.ClearLocks()

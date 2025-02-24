@@ -3,8 +3,7 @@ package event
 type Cursor int
 
 const (
-	NoneCursor Cursor = iota // none means not set
-	DefaultCursor
+	DefaultCursor Cursor = iota // none means not set
 	NSResizeCursor
 	WEResizeCursor
 	CloseCursor
