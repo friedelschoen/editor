@@ -3,8 +3,8 @@ package driver
 import (
 	"image"
 	"image/draw"
+	"sync/atomic"
 	"time"
-	"unicode"
 	"unicode/utf8"
 
 	"github.com/jmigpin/editor/ui/event"
@@ -14,9 +14,9 @@ import (
 const FPS = 60
 
 type Window struct {
-	window  *sdl.Window
-	events  chan event.Event
-	running bool
+	window *sdl.Window
+	events chan event.Event
+	istext atomic.Bool
 }
 
 func NewWindow() (*Window, error) {
@@ -41,7 +41,6 @@ func NewWindow() (*Window, error) {
 
 	win.window.SetResizable(true)
 	sdl.StartTextInput()
-	win.running = true
 
 	return win, nil
 }
@@ -121,8 +120,10 @@ func (win *Window) WindowSetName(title string) error {
 	return nil
 }
 
-func getModifier() (res event.KeyModifiers) {
-	mod := sdl.GetModState()
+func getModifier(mod sdl.Keymod) (res event.KeyModifiers) {
+	if mod == 0 {
+		mod = sdl.GetModState()
+	}
 	switch {
 	case mod&sdl.KMOD_CTRL != 0:
 		res |= event.ModCtrl
@@ -142,87 +143,7 @@ func getModifier() (res event.KeyModifiers) {
 	return
 }
 
-var eventnames = map[uint32]string{
-	// Application events
-	sdl.QUIT: "quit", // user-requested quit
-
-	// Display events
-	sdl.DISPLAYEVENT: "displayevent", // Display state change
-
-	// Window events
-	sdl.WINDOWEVENT: "windowevent", // window state change
-	sdl.SYSWMEVENT:  "syswmevent",  // system specific event
-
-	// Keyboard events
-	sdl.KEYDOWN:         "keydown",         // key pressed
-	sdl.KEYUP:           "keyup",           // key released
-	sdl.TEXTEDITING:     "textediting",     // keyboard text editing (composition)
-	sdl.TEXTINPUT:       "textinput",       // keyboard text input
-	sdl.TEXTEDITING_EXT: "textediting_ext", // keyboard text editing (composition)
-	sdl.KEYMAPCHANGED:   "keymapchanged",   // keymap changed due to a system event such as an input language or keyboard layout change (>= SDL 2.0.4)
-
-	// Mouse events
-	sdl.MOUSEMOTION:     "mousemotion",     // mouse moved
-	sdl.MOUSEBUTTONDOWN: "mousebuttondown", // mouse button pressed
-	sdl.MOUSEBUTTONUP:   "mousebuttonup",   // mouse button released
-	sdl.MOUSEWHEEL:      "mousewheel",      // mouse wheel motion
-
-	// Joystick events
-	sdl.JOYAXISMOTION:    "joyaxismotion",    // joystick axis motion
-	sdl.JOYBALLMOTION:    "joyballmotion",    // joystick trackball motion
-	sdl.JOYHATMOTION:     "joyhatmotion",     // joystick hat position change
-	sdl.JOYBUTTONDOWN:    "joybuttondown",    // joystick button pressed
-	sdl.JOYBUTTONUP:      "joybuttonup",      // joystick button released
-	sdl.JOYDEVICEADDED:   "joydeviceadded",   // joystick connected
-	sdl.JOYDEVICEREMOVED: "joydeviceremoved", // joystick disconnected
-
-	// Game controller events
-	sdl.CONTROLLERAXISMOTION:     "controlleraxismotion",     // controller axis motion
-	sdl.CONTROLLERBUTTONDOWN:     "controllerbuttondown",     // controller button pressed
-	sdl.CONTROLLERBUTTONUP:       "controllerbuttonup",       // controller button released
-	sdl.CONTROLLERDEVICEADDED:    "controllerdeviceadded",    // controller connected
-	sdl.CONTROLLERDEVICEREMOVED:  "controllerdeviceremoved",  // controller disconnected
-	sdl.CONTROLLERDEVICEREMAPPED: "controllerdeviceremapped", // controller mapping updated
-
-	// Touch events
-	sdl.FINGERDOWN:   "fingerdown",   // user has touched input device
-	sdl.FINGERUP:     "fingerup",     // user stopped touching input device
-	sdl.FINGERMOTION: "fingermotion", // user is dragging finger on input device
-
-	// Gesture events
-	sdl.DOLLARGESTURE: "dollargesture",
-	sdl.DOLLARRECORD:  "dollarrecord",
-	sdl.MULTIGESTURE:  "multigesture",
-
-	// Clipboard events
-	sdl.CLIPBOARDUPDATE: "clipboardupdate", // the clipboard changed
-
-	// Drag and drop events
-	sdl.DROPFILE:     "dropfile",     // the system requests a file open
-	sdl.DROPTEXT:     "droptext",     // text/plain drag-and-drop event
-	sdl.DROPBEGIN:    "dropbegin",    // a new set of drops is beginning (NULL filename)
-	sdl.DROPCOMPLETE: "dropcomplete", // current set of drops is now complete (NULL filename)
-
-	// Audio hotplug events
-	sdl.AUDIODEVICEADDED:   "audiodeviceadded",   // a new audio device is available (>= SDL 2.0.4)
-	sdl.AUDIODEVICEREMOVED: "audiodeviceremoved", // an audio device has been removed (>= SDL 2.0.4)
-
-	// Sensor events
-	sdl.SENSORUPDATE: "sensorupdate", // a sensor was updated
-
-	// Render events
-	sdl.RENDER_TARGETS_RESET: "render_targets_reset", // the render targets have been reset and their contents need to be updated (>= SDL 2.0.2)
-	sdl.RENDER_DEVICE_RESET:  "render_device_reset",  // the device has been reset and all textures need to be recreated (>= SDL 2.0.4)
-
-	// These are for your use, and should be allocated with RegisterEvents()
-	sdl.USEREVENT: "userevent", // a user-specified event
-	sdl.LASTEVENT: "lastevent", // (only for bounding internal arrays)
-}
-
 func (win *Window) NextEvent() (event.Event, bool) {
-	// if !win.running {
-	// 	return nil, false
-	// }
 	for {
 		select {
 		case event := <-win.events:
@@ -239,7 +160,6 @@ func (win *Window) NextEvent() (event.Event, bool) {
 
 		switch evt := pollevent.(type) {
 		case *sdl.QuitEvent:
-			win.running = false
 			win.window.Destroy()
 			sdl.Quit()
 			return event.WindowClose{}, false
@@ -277,35 +197,35 @@ func (win *Window) NextEvent() (event.Event, bool) {
 						Point:   pnt,
 						Button:  btn,
 						Buttons: event.MouseButtons(btn),
-						Mods:    getModifier(),
+						Mods:    getModifier(0),
 					}
 				case 2:
 					win.events <- &event.MouseDoubleClick{
 						Point:   pnt,
 						Button:  btn,
 						Buttons: event.MouseButtons(btn),
-						Mods:    getModifier(),
+						Mods:    getModifier(0),
 					}
 				case 3:
 					win.events <- &event.MouseTripleClick{
 						Point:   pnt,
 						Button:  btn,
 						Buttons: event.MouseButtons(btn),
-						Mods:    getModifier(),
+						Mods:    getModifier(0),
 					}
 				}
 				return &event.MouseDown{
 					Point:   pnt,
 					Button:  btn,
 					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(),
+					Mods:    getModifier(0),
 				}, true
 			} else {
 				return &event.MouseUp{
 					Point:   pnt,
 					Button:  btn,
 					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(),
+					Mods:    getModifier(0),
 				}, true
 			}
 		case *sdl.MouseWheelEvent:
@@ -322,19 +242,19 @@ func (win *Window) NextEvent() (event.Event, bool) {
 					Point:   pnt,
 					Button:  btn,
 					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(),
+					Mods:    getModifier(0),
 				}
 				win.events <- &event.MouseClick{
 					Point:   pnt,
 					Button:  btn,
 					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(),
+					Mods:    getModifier(0),
 				}
 				win.events <- &event.MouseUp{
 					Point:   pnt,
 					Button:  btn,
 					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(),
+					Mods:    getModifier(0),
 				}
 			}
 
@@ -348,19 +268,19 @@ func (win *Window) NextEvent() (event.Event, bool) {
 					Point:   pnt,
 					Button:  btn,
 					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(),
+					Mods:    getModifier(0),
 				}
 				win.events <- &event.MouseClick{
 					Point:   pnt,
 					Button:  btn,
 					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(),
+					Mods:    getModifier(0),
 				}
 				win.events <- &event.MouseUp{
 					Point:   pnt,
 					Button:  btn,
 					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(),
+					Mods:    getModifier(0),
 				}
 			}
 		case *sdl.MouseMotionEvent:
@@ -376,38 +296,52 @@ func (win *Window) NextEvent() (event.Event, bool) {
 			return &event.MouseMove{
 				Point:   image.Point{int(evt.X), int(evt.Y)},
 				Buttons: event.MouseButtons(btn),
-				Mods:    getModifier(),
+				Mods:    getModifier(0),
 			}, true
 		case *sdl.TextInputEvent:
+			win.istext.Store(true)
 			char, _ := utf8.DecodeRune(evt.Text[:])
 
 			win.events <- &event.KeyUp{
 				KeySym: event.KeySym(char),
 				Rune:   char,
+				Mods:   getModifier(0),
 			}
 
 			return &event.KeyDown{
 				KeySym: event.KeySym(char),
 				Rune:   char,
+				Mods:   getModifier(0),
 			}, true
 		case *sdl.KeyboardEvent:
-			if unicode.IsPrint(rune(evt.Keysym.Sym)) {
-				continue /* wait for TextInputEvent */
-			}
-
 			sym, ok := symmap[int(evt.Keysym.Sym)]
 			if !ok {
 				sym = event.KSymNone
+			}
+
+			/*
+				from SDL2:src/events/SDL_keyboard.c:1048
+				do not send textinput when text starts with
+				->  (unsigned char)*text < ' ' || *text == 127
+				thats for sure!
+				It seems like it does not send textinput when
+				ctrl is pressed.
+			*/
+			char := byte(evt.Keysym.Sym)
+			if char >= ' ' && char != 127 && evt.Keysym.Mod&sdl.KMOD_CTRL == 0 {
+				continue /* wait for TextInputEvent */
 			}
 			if evt.State == sdl.PRESSED {
 				return &event.KeyDown{
 					KeySym: sym,
 					Rune:   rune(evt.Keysym.Sym),
+					Mods:   getModifier(sdl.Keymod(evt.Keysym.Mod)),
 				}, true
 			} else {
 				return &event.KeyUp{
 					KeySym: sym,
 					Rune:   rune(evt.Keysym.Sym),
+					Mods:   getModifier(sdl.Keymod(evt.Keysym.Mod)),
 				}, true
 			}
 		}
