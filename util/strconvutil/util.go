@@ -19,5 +19,5 @@ func BasicUnquote(s string) (string, bool) {
 		return "", false
 	}
 
-	return s[1 : len(s)-2], true
+	return s[1 : len(s)-1], true
 }
