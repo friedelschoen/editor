@@ -146,12 +146,3 @@ func (rr *RuneReader) startingPen() mathutil.PointIntf {
 func (rr *RuneReader) maxX() mathutil.Intf {
 	return mathutil.Intf1(rr.d.bounds.Max.X)
 }
-
-type runeType int
-
-const (
-	rtNormal runeType = iota
-	rtBackground
-	rtInserted
-	//rtAnnotation
-)

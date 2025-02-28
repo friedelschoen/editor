@@ -15,7 +15,6 @@ import (
 
 	"github.com/jmigpin/editor/util/iout"
 	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/parseutil"
 	"github.com/jmigpin/editor/util/testutil"
 )
 
@@ -380,17 +379,4 @@ func sourceCursor(t *testing.T, src string, nth int) (int, string) {
 		t.Fatal(err)
 	}
 	return index, src2
-}
-
-func readBytesOffset(t *testing.T, filename string, line, col int) (iorw.ReadWriterAt, int) {
-	b, err := os.ReadFile(filename)
-	if err != nil {
-		t.Fatal(err)
-	}
-	rw := iorw.NewBytesReadWriterAt(b)
-	offset, err := parseutil.LineColumnIndex(rw, line, col)
-	if err != nil {
-		t.Fatal(err)
-	}
-	return rw, offset
 }

@@ -27,11 +27,10 @@ func updateParenthesisHighlight(d *Drawer) {
 }
 
 type ParenthesisHighlight struct {
-	d     *Drawer
-	sc    *pscan.Scanner
-	ops   []*ColorizeOp
-	pad   int
-	pairs []rune
+	d   *Drawer
+	sc  *pscan.Scanner
+	ops []*ColorizeOp
+	pad int
 }
 
 func (ph *ParenthesisHighlight) do() []*ColorizeOp {

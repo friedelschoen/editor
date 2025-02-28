@@ -133,13 +133,6 @@ func (c *CtxCmd) Wait() error {
 		}
 	}
 }
-func (c *CtxCmd) printf(f string, args ...any) {
-	cmd := c.CmdI.Cmd()
-	if cmd.Stderr == nil {
-		return
-	}
-	fmt.Fprintf(cmd.Stderr, "# ctxcmd: "+f, args...)
-}
 
 func NewNoHangStdinCmd(cmdi CmdI) *NoHangPipeCmd {
 	return &NoHangPipeCmd{CmdI: cmdi, doIn: true}

@@ -69,11 +69,6 @@ func (l *Root) OnInputEvent(ev0 event.Event, p image.Point) bool {
 	return false
 }
 
-func (l *Root) selAnnEv(typ RootSelectAnnotationType) {
-	ev2 := &RootSelectAnnotationEvent{typ}
-	l.EvReg.RunCallbacks(RootSelectAnnotationEventId, ev2)
-}
-
 const (
 	RootSelectAnnotationEventId = iota
 )

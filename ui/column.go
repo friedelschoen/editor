@@ -152,14 +152,6 @@ func (col *Column) PointNextRowExtra(p *image.Point) (*Row, bool) {
 	return nil, false
 }
 
-func (col *Column) resizeToPointWithSwap(p *image.Point) {
-	bounds := col.Cols.Root.Bounds
-	dx := float64(bounds.Dx())
-	perc := float64(p.Sub(bounds.Min).X) / dx
-
-	col.Cols.ColsLayout.Spl.ResizeWithMove(col, perc)
-}
-
 func (col *Column) resizeWithMoveJump(left bool, p *image.Point) {
 	jump := 20
 	if left {

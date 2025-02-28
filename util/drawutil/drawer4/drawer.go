@@ -23,7 +23,6 @@ type Drawer struct {
 
 	fface            *fontutil.FontFace
 	lineHeight       mathutil.Intf
-	offset           image.Point
 	bounds           image.Rectangle
 	firstLineOffsetX int
 	fg               color.Color
@@ -173,7 +172,6 @@ type State struct {
 		fg, bg color.Color
 		lineBg color.Color
 	}
-	bgFill struct{}
 	cursor struct {
 		delay *CursorDelay
 	}
