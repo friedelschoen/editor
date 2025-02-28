@@ -10,7 +10,6 @@ import (
 
 	"github.com/jmigpin/editor/driver"
 	"github.com/jmigpin/editor/ui/event"
-	"github.com/jmigpin/editor/ui/mousefilter"
 	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/syncutil"
 	"github.com/veandco/go-sdl2/sdl"
@@ -26,7 +25,6 @@ type UI struct {
 
 	eventsQ *syncutil.SyncedQ // linked list queue (unlimited length)
 	applyEv *widget.ApplyEvent
-	movef   *mousefilter.MoveFilter
 
 	pendingPaint   bool
 	lastPaintStart time.Time
@@ -56,7 +54,6 @@ func NewUI(winName string) (*UI, error) {
 
 	ui.eventsQ = syncutil.NewSyncedQ()
 	ui.applyEv = widget.NewApplyEvent(ui)
-	ui.initMouseFilters()
 
 	// Embed nodes have their wrapper nodes set when they are appended to another node. The root node is not appended to any other node, therefore it needs to be set here.
 	ui.Root.Embed().SetWrapperForRoot(ui.Root)
@@ -73,15 +70,6 @@ func NewUI(winName string) (*UI, error) {
 	ui.Root.Init()
 
 	return ui, nil
-}
-
-func (ui *UI) initMouseFilters() {
-	// move filter
-	isMouseMoveEv := func(ev any) bool {
-		_, ok := ev.(*event.MouseMove)
-		return ok
-	}
-	ui.movef = mousefilter.NewMoveFilter(ui.DrawFrameRate, ui.eventsQ.PushBack, isMouseMoveEv)
 }
 
 func (ui *UI) Close() {
