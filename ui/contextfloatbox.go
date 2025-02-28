@@ -3,7 +3,7 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/ui/widget"
 )
 
@@ -52,10 +52,10 @@ func (cfb *ContextFloatBox) Layout() {
 	cfb.FloatBox.Layout()
 }
 
-func (cfb *ContextFloatBox) OnInputEvent(ev event.Event, p image.Point) bool {
+func (cfb *ContextFloatBox) OnInputEvent(ev driver.Event, p image.Point) bool {
 	switch ev.(type) {
-	case *event.KeyUp,
-		*event.KeyDown:
+	case *driver.KeyUp,
+		*driver.KeyDown:
 		// let lower layers get events
 		return false
 	}
@@ -65,11 +65,11 @@ func (cfb *ContextFloatBox) OnInputEvent(ev event.Event, p image.Point) bool {
 func (cfb *ContextFloatBox) AutoClose(ev any, p image.Point) {
 	if cfb.Visible() && !p.In(cfb.Bounds) {
 		switch ev.(type) {
-		case *event.KeyDown,
-			*event.MouseDown:
+		case *driver.KeyDown,
+			*driver.MouseDown:
 			cfb.Hide()
 			return
-		case *event.MouseMove:
+		case *driver.MouseMove:
 		default:
 			//fmt.Printf("%T\n", ev)
 		}

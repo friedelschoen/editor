@@ -4,7 +4,7 @@ import (
 	"image"
 	"math"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/util/imageutil"
 	"github.com/jmigpin/editor/util/mathutil"
 )
@@ -131,42 +131,42 @@ func (sb *ScrollBar) Paint() {
 	imageutil.FillRectangle(sb.ctx.Image(), sb.Bounds, c)
 }
 
-func (sb *ScrollBar) OnInputEvent(ev event.Event, p image.Point) bool {
+func (sb *ScrollBar) OnInputEvent(ev driver.Event, p image.Point) bool {
 	switch evt := ev.(type) {
-	case *event.MouseDown:
-		if evt.Key.Mouse == event.ButtonLeft {
+	case *driver.MouseDown:
+		if evt.Key.Mouse == driver.ButtonLeft {
 			sb.clicking = true
 			sb.setPressPad(&evt.Point)
 			sb.scrollToPoint(&evt.Point)
 			sb.MarkNeedsPaint() // in case it didn't move
 		}
-	case *event.MouseWheel:
+	case *driver.MouseWheel:
 		if evt.Y < 0 {
 			sb.scrollPage(true)
 		} else if evt.Y > 0 {
 			sb.scrollPage(false)
 		}
-	case *event.MouseMove:
+	case *driver.MouseMove:
 		if sb.clicking {
 			sb.scrollToPoint(&evt.Point)
 		}
-	case *event.MouseUp:
+	case *driver.MouseUp:
 		if sb.clicking {
 			sb.clicking = false
 			sb.scrollToPoint(&evt.Point)
 			sb.MarkNeedsPaint() // in case it didn't move
 		}
 
-	case *event.MouseDragStart:
+	case *driver.MouseDragStart:
 		// take over from down/move/up to allow dragging outside bounds
 		sb.clicking = false
 
 		sb.dragging = true
 		sb.setPressPad(&evt.Point2)
 		sb.scrollToPoint(&evt.Point2)
-	case *event.MouseDragMove:
+	case *driver.MouseDragMove:
 		sb.scrollToPoint(&evt.Point)
-	case *event.MouseDragEnd:
+	case *driver.MouseDragEnd:
 		sb.dragging = false
 		sb.scrollToPoint(&evt.Point)
 		sb.MarkNeedsPaint() // in case it didn't move

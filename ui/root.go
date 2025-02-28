@@ -3,7 +3,7 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/evreg"
 )
@@ -65,7 +65,7 @@ func (l *Root) OnChildMarked(child widget.Node, newMarks widget.Marks) {
 	}
 }
 
-func (l *Root) OnInputEvent(ev0 event.Event, p image.Point) bool {
+func (l *Root) OnInputEvent(ev0 driver.Event, p image.Point) bool {
 	return false
 }
 

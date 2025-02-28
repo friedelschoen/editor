@@ -3,14 +3,14 @@ package widget
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 )
 
 type Button struct {
 	ENode
 	Label   *Label
 	Sticky  bool // stay down after click to behave like a menu button
-	OnClick func(*event.MouseClick)
+	OnClick func(*driver.MouseClick)
 
 	down  bool
 	stuck bool
@@ -22,7 +22,7 @@ func NewButton(ctx ImageContext) *Button {
 	b.Append(b.Label)
 	return b
 }
-func (b *Button) OnInputEvent(ev0 event.Event, p image.Point) bool {
+func (b *Button) OnInputEvent(ev0 driver.Event, p image.Point) bool {
 	// set "text_*" one level below (b.Label) to allow subclassing elements (ex: floatbutton) to set their own "text_*" values without disrupting the hover/down/sticky colors.
 	restoreColor := func() {
 		b.Label.SetThemePaletteColor("text_fg", nil)
@@ -48,25 +48,25 @@ func (b *Button) OnInputEvent(ev0 event.Event, p image.Point) bool {
 	}
 
 	switch t := ev0.(type) {
-	case *event.MouseEnter:
+	case *driver.MouseEnter:
 		if !b.stuck {
 			hoverShade()
 		}
-	case *event.MouseLeave:
+	case *driver.MouseLeave:
 		if !b.stuck {
 			restoreColor()
 		}
-	case *event.MouseDown:
+	case *driver.MouseDown:
 		b.down = true
 		if !b.stuck {
 			downShade()
 		}
-	case *event.MouseUp:
+	case *driver.MouseUp:
 		if b.down && !b.stuck {
 			hoverShade()
 		}
 		b.down = false
-	case *event.MouseClick:
+	case *driver.MouseClick:
 		if b.Sticky {
 			if !b.stuck {
 				b.stuck = true

@@ -11,7 +11,7 @@ import (
 
 	"github.com/jmigpin/editor/core/toolbarparser"
 	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/util/drawutil"
 	"github.com/jmigpin/editor/util/iout"
 	"github.com/jmigpin/editor/util/iout/iorw"
@@ -239,12 +239,12 @@ func (erow *ERow) initHandlers() {
 		ev := ev0.(*ui.RowInputEvent)
 
 		switch ev.Event.(type) {
-		case *event.KeyDown, *event.MouseDown:
+		case *driver.KeyDown, *driver.MouseDown:
 			erow.Ed.InlineComplete.CancelAndClear()
 		}
 
 		switch evt := ev.Event.(type) {
-		case *event.KeyDown:
+		case *driver.KeyDown:
 			// activate row
 			erow.Info.UpdateActiveRowState(erow)
 			// shortcuts
@@ -264,12 +264,12 @@ func (erow *ERow) initHandlers() {
 			case evt.Key.Is("Escape"):
 				erow.Exec.Stop()
 			}
-		case *event.MouseDown:
+		case *driver.MouseDown:
 			erow.Info.UpdateActiveRowState(erow)
-		case *event.MouseEnter:
+		case *driver.MouseEnter:
 			erow.highlightDuplicates = true
 			erow.Info.UpdateDuplicateHighlightRowState()
-		case *event.MouseLeave:
+		case *driver.MouseLeave:
 			erow.highlightDuplicates = false
 			erow.Info.UpdateDuplicateHighlightRowState()
 		}

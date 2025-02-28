@@ -3,7 +3,7 @@ package widget
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/util/imageutil"
 )
 
@@ -126,9 +126,9 @@ func (sa *ScrollArea) Layout() {
 	sa.scrollable.Layout()
 }
 
-func (sa *ScrollArea) OnInputEvent(ev0 event.Event, p image.Point) bool {
+func (sa *ScrollArea) OnInputEvent(ev0 driver.Event, p image.Point) bool {
 	switch evt := ev0.(type) {
-	case *event.KeyDown:
+	case *driver.KeyDown:
 		switch {
 		case evt.Key.Is("PageUp"):
 			sa.scrollPageUp()
@@ -140,7 +140,7 @@ func (sa *ScrollArea) OnInputEvent(ev0 event.Event, p image.Point) bool {
 				sa.scrollable.OnInputEvent(ev0, p)
 			}
 		}
-	case *event.MouseWheel:
+	case *driver.MouseWheel:
 		// scrolling with the wheel on the content area
 		if p.In(sa.scrollable.Embed().Bounds) {
 			switch {

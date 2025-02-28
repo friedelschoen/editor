@@ -4,7 +4,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 )
 
 //godebug:annotatefile
@@ -21,23 +21,23 @@ type Input struct {
 
 func (in *Input) handle() (bool, error) {
 	switch ev := in.ev.(type) {
-	case *event.KeyDown:
+	case *driver.KeyDown:
 		return in.onKeyDown(ev)
-	case *event.MouseDown:
+	case *driver.MouseDown:
 		return in.onMouseDown(ev)
-	case *event.MouseDragMove:
+	case *driver.MouseDragMove:
 		return in.onMouseDragMove(ev)
-	case *event.MouseDragEnd:
+	case *driver.MouseDragEnd:
 		return in.onMouseDragEnd(ev)
-	case *event.MouseClick:
+	case *driver.MouseClick:
 		return in.onMouseClick(ev)
-	case *event.MouseWheel:
+	case *driver.MouseWheel:
 		return in.onMouseWheel(ev)
 	}
 	return false, nil
 }
 
-func (in *Input) onMouseDown(ev *event.MouseDown) (bool, error) {
+func (in *Input) onMouseDown(ev *driver.MouseDown) (bool, error) {
 	switch {
 	case ev.Key.Is("MouseLeft"):
 		MoveCursorToPoint(in.ctx, ev.Point, false)
@@ -49,7 +49,7 @@ func (in *Input) onMouseDown(ev *event.MouseDown) (bool, error) {
 	return false, nil
 }
 
-func (in *Input) onMouseWheel(ev *event.MouseWheel) (bool, error) {
+func (in *Input) onMouseWheel(ev *driver.MouseWheel) (bool, error) {
 	if ev.Y < 0 {
 		ScrollUp(in.ctx, true)
 	} else if ev.Y > 0 {
@@ -58,31 +58,31 @@ func (in *Input) onMouseWheel(ev *event.MouseWheel) (bool, error) {
 	return true, nil
 }
 
-func (in *Input) onMouseDragMove(ev *event.MouseDragMove) (bool, error) {
-	if ev.Key.Mouse == event.ButtonLeft {
+func (in *Input) onMouseDragMove(ev *driver.MouseDragMove) (bool, error) {
+	if ev.Key.Mouse == driver.ButtonLeft {
 		MoveCursorToPoint(in.ctx, ev.Point, true)
 		return true, nil
 	}
 	return false, nil
 }
-func (in *Input) onMouseDragEnd(ev *event.MouseDragEnd) (bool, error) {
-	if ev.Key.Mouse == event.ButtonLeft {
+func (in *Input) onMouseDragEnd(ev *driver.MouseDragEnd) (bool, error) {
+	if ev.Key.Mouse == driver.ButtonLeft {
 		MoveCursorToPoint(in.ctx, ev.Point, true)
 		return true, nil
 	}
 	return false, nil
 }
 
-func (in *Input) onMouseClick(ev *event.MouseClick) (bool, error) {
+func (in *Input) onMouseClick(ev *driver.MouseClick) (bool, error) {
 	switch ev.Count {
 	case 1:
-		if ev.Key.Mouse == event.ButtonMiddle {
+		if ev.Key.Mouse == driver.ButtonMiddle {
 			MoveCursorToPoint(in.ctx, ev.Point, false)
 			Paste(in.ctx)
 			return true, nil
 		}
 	case 2:
-		if ev.Key.Mouse == event.ButtonLeft {
+		if ev.Key.Mouse == driver.ButtonLeft {
 			MoveCursorToPoint(in.ctx, ev.Point, false)
 			err := SelectWord(in.ctx)
 			// can select at EOF but avoid error msg
@@ -93,7 +93,7 @@ func (in *Input) onMouseClick(ev *event.MouseClick) (bool, error) {
 			return true, err
 		}
 	case 3:
-		if ev.Key.Mouse == event.ButtonLeft {
+		if ev.Key.Mouse == driver.ButtonLeft {
 			MoveCursorToPoint(in.ctx, ev.Point, false)
 			err := SelectLine(in.ctx)
 			return true, err
@@ -102,7 +102,7 @@ func (in *Input) onMouseClick(ev *event.MouseClick) (bool, error) {
 	return false, nil
 }
 
-func (in *Input) onKeyDown(ev *event.KeyDown) (_ bool, err error) {
+func (in *Input) onKeyDown(ev *driver.KeyDown) (_ bool, err error) {
 	makeCursorVisible := func() {
 		if err == nil {
 			in.ctx.Fns.MakeIndexVisible(in.ctx.C.Index())

@@ -8,8 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jmigpin/editor/driver"
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/syncutil"
 	"github.com/veandco/go-sdl2/sdl"
@@ -104,7 +103,7 @@ func (ui *UI) eventLoop() {
 //			switch t := ev.(type) {
 //			case error:
 //				fmt.Println(err)
-//			case *event.WindowClose:
+//			case *driver.WindowClose:
 //				return
 //			default:
 //				ui.HandleEvent(ev)
@@ -112,26 +111,26 @@ func (ui *UI) eventLoop() {
 //			ui.LayoutMarkedAndSchedulePaint()
 //		}
 //	}
-func (ui *UI) NextEvent() event.Event {
+func (ui *UI) NextEvent() driver.Event {
 	this := ui.eventsQ.PopFront()
 	if this == nil {
 		return nil
 	}
-	return this.(event.Event)
+	return this.(driver.Event)
 }
 
 func (ui *UI) AppendEvent(ev any) {
 	ui.eventsQ.PushBack(ev)
 }
 
-func (ui *UI) HandleEvent(ev event.Event) (handled bool) {
+func (ui *UI) HandleEvent(ev driver.Event) (handled bool) {
 	if ev == nil {
 		return true
 	}
 	switch t := ev.(type) {
-	case *event.WindowResize:
+	case *driver.WindowResize:
 		ui.resizeImage(t.Rect)
-	case *event.WindowExpose:
+	case *driver.WindowExpose:
 		fmt.Println("exposed!")
 		ui.Root.Embed().MarkNeedsPaint()
 	case *UIRunFuncEvent:
@@ -144,9 +143,9 @@ func (ui *UI) HandleEvent(ev event.Event) (handled bool) {
 	return true
 }
 
-func (ui *UI) handleWindowInput(wi event.Event) {
+func (ui *UI) handleWindowInput(wi driver.Event) {
 	var p image.Point
-	if inevt, ok := wi.(event.InputEvent); ok {
+	if inevt, ok := wi.(driver.InputEvent); ok {
 		p = inevt.At()
 	} else {
 		x, y, _ := sdl.GetMouseState()
@@ -296,7 +295,7 @@ func (ui *UI) QueueEmptyWindowInputEvent() {
 	if err != nil {
 		return
 	}
-	ui.AppendEvent(&event.MouseClick{Point: p})
+	ui.AppendEvent(&driver.MouseClick{Point: p})
 }
 
 func (ui *UI) WarpPointerToRectanglePad(r image.Rectangle) {

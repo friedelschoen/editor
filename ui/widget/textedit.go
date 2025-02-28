@@ -1,7 +1,7 @@
 package widget
 
 import (
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/util/evreg"
 	"github.com/jmigpin/editor/util/iout/iorw"
 	"github.com/jmigpin/editor/util/iout/iorw/rwedit"
@@ -130,7 +130,7 @@ func (te *TextEdit) EndUndoGroup() {
 	te.rwu.History.EndUndoGroup(c)
 }
 
-func (te *TextEdit) OnInputEvent(ev event.Event) bool {
+func (te *TextEdit) OnInputEvent(ev driver.Event) bool {
 	te.BeginUndoGroup()
 	defer te.EndUndoGroup()
 

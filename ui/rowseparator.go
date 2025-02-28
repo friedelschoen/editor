@@ -3,7 +3,7 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/ui/widget"
 	"github.com/veandco/go-sdl2/sdl"
 )
@@ -24,21 +24,21 @@ func NewRowSeparator(row *Row) *RowSeparator {
 	rsep.SetThemePaletteNamePrefix("rowseparator_")
 	return rsep
 }
-func (sh *RowSeparator) OnInputEvent(ev0 event.Event, p image.Point) bool {
+func (sh *RowSeparator) OnInputEvent(ev0 driver.Event, p image.Point) bool {
 	switch ev := ev0.(type) {
-	case *event.MouseDragMove:
-		if ev.Key.HasMouse(event.ButtonLeft) {
+	case *driver.MouseDragMove:
+		if ev.Key.HasMouse(driver.ButtonLeft) {
 			p.Y += sh.Handle.DragPad.Y
 			sh.row.resizeWithMoveToPoint(&p)
 		}
-	case *event.MouseWheel:
+	case *driver.MouseWheel:
 		if ev.Y < 0 {
 			sh.row.resizeWithPushJump(true, &p)
 		} else if ev.Y > 0 {
 			sh.row.resizeWithPushJump(false, &p)
 		}
-	case *event.MouseClick:
-		if ev.Key.Mouse == event.ButtonMiddle {
+	case *driver.MouseClick:
+		if ev.Key.Mouse == driver.ButtonMiddle {
 			sh.row.Close()
 		}
 	}

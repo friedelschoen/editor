@@ -3,7 +3,7 @@ package widget
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -17,35 +17,35 @@ func NewApplyEvent(cctx CursorContext) *ApplyEvent {
 	return ae
 }
 
-func (ae *ApplyEvent) Apply(node Node, ev event.Event, p image.Point) {
+func (ae *ApplyEvent) Apply(node Node, ev driver.Event, p image.Point) {
 	if !ae.drag.dragging {
 		ae.mouseEnterLeave(node, p)
 	}
 
 	switch evt := ev.(type) {
 	case nil: // allow running the rest of the function without an event
-	case *event.MouseDown:
+	case *driver.MouseDown:
 		ae.depthFirstEv(node, evt, p)
-	case *event.MouseMove:
+	case *driver.MouseMove:
 		ae.depthFirstEv(node, evt, p)
-	case *event.MouseUp:
+	case *driver.MouseUp:
 		ae.depthFirstEv(node, evt, p)
-	case *event.MouseDragStart:
+	case *driver.MouseDragStart:
 		ae.dragStart(node, evt, p)
 		if ae.drag.dragging {
 			ae.mouseEnterLeave(node, ae.drag.startEv.Point)
 		}
-	case *event.MouseDragMove:
+	case *driver.MouseDragMove:
 		ae.dragMove(evt, p)
-	case *event.MouseDragEnd:
+	case *driver.MouseDragEnd:
 		ae.dragEnd(evt, p)
 		if !ae.drag.dragging {
 			ae.mouseEnterLeave(node, p)
 		}
-	case *event.KeyDown:
+	case *driver.KeyDown:
 		ae.depthFirstEv(node, evt, p)
 	default:
-		// ex: event.KeyUp
+		// ex: driver.KeyUp
 		ae.depthFirstEv(node, evt, p)
 	}
 
@@ -102,7 +102,7 @@ func (ae *ApplyEvent) mouseEnter(node Node, p image.Point) bool {
 	if !h {
 		if !ne.HasAnyMarks(MarkPointerInside) {
 			ne.AddMarks(MarkPointerInside)
-			ev2 := &event.MouseEnter{}
+			ev2 := &driver.MouseEnter{}
 			h = ae.runEv(node, ev2, p)
 		}
 	}
@@ -129,7 +129,7 @@ func (ae *ApplyEvent) mouseLeave(node Node, p image.Point) bool {
 	if !h {
 		if ne.HasAnyMarks(MarkPointerInside) && !p.In(ne.Bounds) {
 			ne.RemoveMarks(MarkPointerInside)
-			ev2 := &event.MouseLeave{}
+			ev2 := &driver.MouseLeave{}
 			h = ae.runEv(node, ev2, p)
 		}
 	}
@@ -137,7 +137,7 @@ func (ae *ApplyEvent) mouseLeave(node Node, p image.Point) bool {
 	return h
 }
 
-func (ae *ApplyEvent) dragStart(node Node, ev *event.MouseDragStart, _ image.Point) {
+func (ae *ApplyEvent) dragStart(node Node, ev *driver.MouseDragStart, _ image.Point) {
 	if ae.drag.dragging {
 		return
 	}
@@ -146,7 +146,7 @@ func (ae *ApplyEvent) dragStart(node Node, ev *event.MouseDragStart, _ image.Poi
 }
 
 // Depth first, reverse order.
-func (ae *ApplyEvent) findDragNode2(node Node, ev *event.MouseDragStart, p image.Point) bool {
+func (ae *ApplyEvent) findDragNode2(node Node, ev *driver.MouseDragStart, p image.Point) bool {
 	if !p.In(node.Embed().Bounds) {
 		return false
 	}
@@ -173,14 +173,14 @@ func (ae *ApplyEvent) findDragNode2(node Node, ev *event.MouseDragStart, p image
 	return found
 }
 
-func (ae *ApplyEvent) dragMove(ev *event.MouseDragMove, p image.Point) {
+func (ae *ApplyEvent) dragMove(ev *driver.MouseDragMove, p image.Point) {
 	if !ae.drag.dragging {
 		return
 	}
 	ae.runEv(ae.drag.node, ev, p)
 }
 
-func (ae *ApplyEvent) dragEnd(ev *event.MouseDragEnd, p image.Point) {
+func (ae *ApplyEvent) dragEnd(ev *driver.MouseDragEnd, p image.Point) {
 	if !ae.drag.dragging {
 		return
 	}
@@ -191,7 +191,7 @@ func (ae *ApplyEvent) dragEnd(ev *event.MouseDragEnd, p image.Point) {
 	ae.drag = AEDragState{}
 }
 
-func (ae *ApplyEvent) depthFirstEv(node Node, ev event.Event, p image.Point) bool {
+func (ae *ApplyEvent) depthFirstEv(node Node, ev driver.Event, p image.Point) bool {
 	if !p.In(node.Embed().Bounds) {
 		return false
 	}
@@ -216,12 +216,12 @@ func (ae *ApplyEvent) depthFirstEv(node Node, ev event.Event, p image.Point) boo
 	return h
 }
 
-func (ae *ApplyEvent) runEv(node Node, ev event.Event, p image.Point) bool {
+func (ae *ApplyEvent) runEv(node Node, ev driver.Event, p image.Point) bool {
 	return node.OnInputEvent(ev, p)
 }
 
 type AEDragState struct {
 	dragging bool
-	startEv  *event.MouseDragStart
+	startEv  *driver.MouseDragStart
 	node     Node
 }

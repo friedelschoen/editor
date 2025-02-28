@@ -3,7 +3,7 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/util/drawutil/drawer4"
 )
 
@@ -22,9 +22,9 @@ func NewToolbar(ui *UI) *Toolbar {
 	return tb
 }
 
-func (tb *Toolbar) OnInputEvent(ev event.Event, p image.Point) bool {
+func (tb *Toolbar) OnInputEvent(ev driver.Event, p image.Point) bool {
 	switch ev.(type) {
-	case *event.KeyDown, *event.KeyUp:
+	case *driver.KeyDown, *driver.KeyUp:
 		// allow typing in the toolbar (dynamic size) without losing focus
 		// It is incorrect to do this via rw callback since, for example, restoring a session (writes the toolbar) would trigger the possibility of warping the pointer.
 		tb.keepPointerInsideToolbar()

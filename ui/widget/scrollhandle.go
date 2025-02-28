@@ -4,7 +4,7 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/util/imageutil"
 )
 
@@ -37,12 +37,12 @@ func (sh *ScrollHandle) Paint() {
 	imageutil.FillRectangle(sh.ctx.Image(), sh.Bounds, c)
 }
 
-func (sh *ScrollHandle) OnInputEvent(ev event.Event, p image.Point) bool {
+func (sh *ScrollHandle) OnInputEvent(ev driver.Event, p image.Point) bool {
 	switch ev.(type) {
-	case *event.MouseEnter:
+	case *driver.MouseEnter:
 		sh.inside = true
 		sh.MarkNeedsPaint()
-	case *event.MouseLeave:
+	case *driver.MouseLeave:
 		sh.inside = false
 		sh.MarkNeedsPaint()
 	}

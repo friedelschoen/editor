@@ -3,7 +3,7 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/drawutil/drawer4"
 	"github.com/jmigpin/editor/util/evreg"
@@ -76,7 +76,7 @@ func (row *Row) Layout() {
 	row.BoxLayout.Layout()
 }
 
-func (row *Row) OnInputEvent(ev0 event.Event, p image.Point) bool {
+func (row *Row) OnInputEvent(ev0 driver.Event, p image.Point) bool {
 	ev2 := &RowInputEvent{row, ev0}
 	row.EvReg.RunCallbacks(RowInputEventId, ev2)
 	return false

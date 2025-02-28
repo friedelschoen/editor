@@ -3,7 +3,7 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/imageutil"
 	"github.com/veandco/go-sdl2/sdl"
@@ -28,11 +28,11 @@ func (sq *ColumnSquare) Paint() {
 	c := sq.TreeThemePaletteColor("columnsquare")
 	imageutil.FillRectangle(sq.col.ui.Image(), sq.Bounds, c)
 }
-func (sq *ColumnSquare) OnInputEvent(ev event.Event, p image.Point) bool {
+func (sq *ColumnSquare) OnInputEvent(ev driver.Event, p image.Point) bool {
 	switch t := ev.(type) {
-	case *event.MouseClick:
+	case *driver.MouseClick:
 		switch t.Key.Mouse {
-		case event.ButtonLeft, event.ButtonMiddle, event.ButtonRight:
+		case driver.ButtonLeft, driver.ButtonMiddle, driver.ButtonRight:
 			sq.col.Close()
 		}
 	}

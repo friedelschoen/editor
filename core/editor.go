@@ -20,7 +20,7 @@ import (
 	"github.com/jmigpin/editor/core/fswatcher"
 	"github.com/jmigpin/editor/core/lsproto"
 	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/drawutil/drawer4"
 	"github.com/jmigpin/editor/util/fontutil"
@@ -174,11 +174,11 @@ func (ed *Editor) uiEventLoop() {
 			ed.Error(t)
 		case *editorCloseEv:
 			return
-		case *event.WindowClose:
+		case *driver.WindowClose:
 			return
-		case *event.DndPosition:
+		case *driver.DndPosition:
 			ed.dndh.OnPosition(t)
-		case *event.DndDrop:
+		case *driver.DndDrop:
 			ed.dndh.OnDrop(t)
 		default:
 			// if !ed.handleGlobalShortcuts(ev) {
@@ -529,7 +529,7 @@ func (ed *Editor) NewColumn() *ui.Column {
 
 func (ed *Editor) handleGlobalShortcuts(ev any) (handled bool) {
 	switch t := ev.(type) {
-	case event.KeyDown:
+	case driver.KeyDown:
 		autoCloseInfo := true
 
 		switch {

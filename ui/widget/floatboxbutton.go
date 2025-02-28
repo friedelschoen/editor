@@ -3,7 +3,7 @@ package widget
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 )
 
 type FloatBoxButton struct {
@@ -23,7 +23,7 @@ func NewFloatBoxButton(ctx ImageContext, ml *MultiLayer, fl *FloatLayer, content
 	fl.Append(fbb.floatBox)
 	fbb.floatBox.Hide()
 
-	fbb.OnClick = func(*event.MouseClick) {
+	fbb.OnClick = func(*driver.MouseClick) {
 		fbb.floatBox.Toggle()
 	}
 

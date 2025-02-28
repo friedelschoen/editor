@@ -3,7 +3,7 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/ui/widget"
 	"github.com/veandco/go-sdl2/sdl"
 )
@@ -24,15 +24,15 @@ func NewColSeparator(col *Column) *ColSeparator {
 	csep.SetThemePaletteNamePrefix("colseparator_")
 	return csep
 }
-func (sh *ColSeparator) OnInputEvent(ev0 event.Event, p image.Point) bool {
+func (sh *ColSeparator) OnInputEvent(ev0 driver.Event, p image.Point) bool {
 	switch ev := ev0.(type) {
-	case *event.MouseDragMove:
+	case *driver.MouseDragMove:
 		switch {
-		case ev.Key.HasMouse(event.ButtonLeft):
+		case ev.Key.HasMouse(driver.ButtonLeft):
 			p.X += sh.Handle.DragPad.X
 			sh.col.resizeWithMoveToPoint(&p)
 		}
-	case *event.MouseWheel:
+	case *driver.MouseWheel:
 		if ev.X < 0 {
 			sh.col.resizeWithMoveJump(true, &p)
 		} else if ev.X > 0 {

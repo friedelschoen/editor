@@ -7,7 +7,6 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/jmigpin/editor/ui/event"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -15,8 +14,8 @@ const FPS = 60
 
 type Window struct {
 	window  *sdl.Window
-	events  chan event.Event
-	lastkey event.Key
+	events  chan Event
+	lastkey Key
 }
 
 func NewWindow() (*Window, error) {
@@ -26,7 +25,7 @@ func NewWindow() (*Window, error) {
 		return nil, err
 	}
 
-	win.events = make(chan event.Event, 100)
+	win.events = make(chan Event, 100)
 
 	var err error
 	win.window, err = sdl.CreateWindow("editor", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED, 800, 600, sdl.WINDOW_SHOWN)
@@ -35,7 +34,7 @@ func NewWindow() (*Window, error) {
 	}
 
 	w, h := win.window.GetSize()
-	win.events <- &event.WindowResize{
+	win.events <- &WindowResize{
 		Rect: image.Rect(0, 0, int(w), int(h)),
 	}
 
@@ -101,7 +100,7 @@ func (win *Window) WindowSetName(title string) error {
 	return nil
 }
 
-func (win *Window) NextEvent() (event.Event, bool) {
+func (win *Window) NextEvent() (Event, bool) {
 	for {
 		select {
 		case event := <-win.events:
@@ -120,54 +119,54 @@ func (win *Window) NextEvent() (event.Event, bool) {
 		case *sdl.QuitEvent:
 			win.window.Destroy()
 			sdl.Quit()
-			return event.WindowClose{}, false
+			return WindowClose{}, false
 		case *sdl.WindowEvent:
 			switch evt.Event {
 			case sdl.WINDOWEVENT_ENTER:
-				return &event.MouseEnter{}, true
+				return &MouseEnter{}, true
 			case sdl.WINDOWEVENT_LEAVE:
-				return &event.MouseLeave{}, true
+				return &MouseLeave{}, true
 			case sdl.WINDOWEVENT_RESIZED:
-				return &event.WindowResize{
+				return &WindowResize{
 					Rect: image.Rect(0, 0, int(evt.Data1), int(evt.Data2)),
 				}, true
 			case sdl.WINDOWEVENT_EXPOSED:
 				w, h := win.window.GetSize()
-				return &event.WindowExpose{
+				return &WindowExpose{
 					Rect: image.Rect(0, 0, int(w), int(h)),
 				}, true
 			}
 		case *sdl.MouseButtonEvent:
 			pnt := image.Point{int(evt.X), int(evt.Y)}
-			key := event.NewKey(event.KeyMouse)
+			key := NewKey(KeyMouse)
 			key.Mouse = 1 << (int(evt.Button) - 1)
 
 			if evt.State == sdl.PRESSED {
-				win.events <- &event.MouseClick{
+				win.events <- &MouseClick{
 					Point: pnt,
 					Count: int(evt.Clicks),
 					Key:   key,
 				}
-				return &event.MouseDown{
+				return &MouseDown{
 					Point: pnt,
 					Key:   key,
 				}, true
 			} else {
-				return &event.MouseUp{
+				return &MouseUp{
 					Point: pnt,
 					Key:   key,
 				}, true
 			}
 		case *sdl.MouseWheelEvent:
-			return &event.MouseWheel{
+			return &MouseWheel{
 				X: int(evt.X),
 				Y: int(evt.Y),
 			}, true
 		case *sdl.MouseMotionEvent:
-			key := event.NewKey(event.KeyMouse)
+			key := NewKey(KeyMouse)
 			key.Mouse = 1 << (evt.State - 1)
 
-			return &event.MouseMove{
+			return &MouseMove{
 				Point: image.Point{int(evt.X), int(evt.Y)},
 				Key:   key,
 			}, true
@@ -180,15 +179,15 @@ func (win *Window) NextEvent() (event.Event, bool) {
 				It seems like it does not send textinput when
 				ctrl is pressed.
 			*/
-			win.lastkey = event.NewKeyFromKeysym(evt.Keysym)
+			win.lastkey = NewKeyFromKeysym(evt.Keysym)
 			char := rune(evt.Keysym.Sym)
 			if !unicode.IsPrint(char) || evt.Keysym.Mod&sdl.KMOD_CTRL != 0 {
 				if evt.State == sdl.PRESSED {
-					return &event.KeyDown{
+					return &KeyDown{
 						Key: win.lastkey,
 					}, true
 				} else {
-					return &event.KeyUp{
+					return &KeyUp{
 						Key: win.lastkey,
 					}, true
 				}
@@ -196,11 +195,11 @@ func (win *Window) NextEvent() (event.Event, bool) {
 		case *sdl.TextInputEvent:
 			win.lastkey.Rune, _ = utf8.DecodeRune(evt.Text[:])
 
-			win.events <- &event.KeyUp{
+			win.events <- &KeyUp{
 				Key: win.lastkey,
 			}
 
-			return &event.KeyDown{
+			return &KeyDown{
 				Key: win.lastkey,
 			}, true
 		}

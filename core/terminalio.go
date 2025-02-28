@@ -7,7 +7,7 @@ import (
 	"sync"
 
 	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/util/evreg"
 	"github.com/jmigpin/editor/util/iout"
 )
@@ -193,7 +193,7 @@ func (tio *ERowTermIO) eventToBytes(ev any) ([]byte, bool) {
 	}
 
 	switch t := ev.(type) {
-	case *event.KeyDown:
+	case *driver.KeyDown:
 		if keyboardEvs() {
 			var b []byte
 			switch {

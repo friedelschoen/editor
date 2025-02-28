@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 )
 
 type DndHandler struct {
@@ -17,26 +17,26 @@ func NewDndHandler(ed *Editor) *DndHandler {
 	return &DndHandler{ed}
 }
 
-func (h *DndHandler) OnPosition(ev *event.DndPosition) {
+func (h *DndHandler) OnPosition(ev *driver.DndPosition) {
 	// dnd position must receive a reply
 	ev.Reply(h.onPosition2(ev))
 }
-func (h *DndHandler) onPosition2(ev *event.DndPosition) event.DndAction {
+func (h *DndHandler) onPosition2(ev *driver.DndPosition) driver.DndAction {
 	// must drop on a column
 	_, ok := h.columnAtPoint(&ev.Point)
 	if !ok {
-		return event.DndADeny
+		return driver.DndADeny
 	}
 	// supported types
 	for _, t := range ev.Types {
-		if t == event.TextURLListDndT {
-			return event.DndAPrivate
+		if t == driver.TextURLListDndT {
+			return driver.DndAPrivate
 		}
 	}
-	return event.DndADeny
+	return driver.DndADeny
 }
 
-func (h *DndHandler) OnDrop(ev *event.DndDrop) {
+func (h *DndHandler) OnDrop(ev *driver.DndDrop) {
 	// The drop event might need to request data (send and then receive an event). To receive that event, the main eventloop can't be blocking with this procedure
 	go func() {
 		v := h.onDrop2(ev)
@@ -47,14 +47,14 @@ func (h *DndHandler) OnDrop(ev *event.DndDrop) {
 		}
 	}()
 }
-func (h *DndHandler) onDrop2(ev *event.DndDrop) bool {
+func (h *DndHandler) onDrop2(ev *driver.DndDrop) bool {
 	// find column that matches
 	col, ok := h.columnAtPoint(&ev.Point)
 	if !ok {
 		return false
 	}
 	// get data in required format
-	data, err := ev.RequestData(event.TextURLListDndT)
+	data, err := ev.RequestData(driver.TextURLListDndT)
 	if err != nil {
 		h.ed.Error(err)
 		return false

@@ -3,7 +3,7 @@ package widget
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 )
 
 // A transparent widget added to a top layer (usually multilayer) to facilitate dragging.
@@ -53,9 +53,9 @@ func DetectMovePad(p, press, ref image.Point) image.Point {
 	return u
 }
 
-func (sh *SeparatorHandle) OnInputEvent(ev0 event.Event, p image.Point) bool {
+func (sh *SeparatorHandle) OnInputEvent(ev0 driver.Event, p image.Point) bool {
 	switch ev := ev0.(type) {
-	case *event.MouseDragStart:
+	case *driver.MouseDragStart:
 		u := sh.ref.Embed().Bounds.Min
 		sh.DragPad = DetectMovePad(ev.Point2, ev.Point, u)
 	}

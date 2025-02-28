@@ -4,7 +4,7 @@ import (
 	"image"
 	"unicode"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/drawutil/drawer4"
 	"github.com/jmigpin/editor/util/evreg"
@@ -27,7 +27,7 @@ func NewTextArea(ui *UI) *TextArea {
 	return ta
 }
 
-func (ta *TextArea) OnInputEvent(ev0 event.Event, p image.Point) bool {
+func (ta *TextArea) OnInputEvent(ev0 driver.Event, p image.Point) bool {
 	h := false
 
 	// input events callbacks (terminal related)
@@ -57,7 +57,7 @@ func (ta *TextArea) OnInputEvent(ev0 event.Event, p image.Point) bool {
 
 func (ta *TextArea) handleInputEvent2(ev0 any, p image.Point) bool {
 	switch ev := ev0.(type) {
-	case *event.MouseClick:
+	case *driver.MouseClick:
 		if ev.Key.Is("MouseRight") {
 			if !ta.PointIndexInsideSelection(ev.Point) {
 				rwedit.MoveCursorToPoint(ta.EditCtx(), ev.Point, false)
@@ -67,19 +67,19 @@ func (ta *TextArea) handleInputEvent2(ev0 any, p image.Point) bool {
 			ta.EvReg.RunCallbacks(TextAreaCmdEventId, ev2)
 			return true
 		}
-	case *event.MouseDown:
-		if ev.Key.Mouse == event.ButtonRight {
+	case *driver.MouseDown:
+		if ev.Key.Mouse == driver.ButtonRight {
 			ta.ENode.Cursor = sdl.SYSTEM_CURSOR_HAND
 		}
-	case *event.MouseUp:
-		if ev.Key.Mouse == event.ButtonRight {
+	case *driver.MouseUp:
+		if ev.Key.Mouse == driver.ButtonRight {
 			ta.ENode.Cursor = sdl.SYSTEM_CURSOR_ARROW
 		}
-	case *event.MouseDragStart:
-		if ev.Key.Mouse == event.ButtonRight {
+	case *driver.MouseDragStart:
+		if ev.Key.Mouse == driver.ButtonRight {
 			ta.ENode.Cursor = sdl.SYSTEM_CURSOR_ARROW
 		}
-	case *event.KeyDown:
+	case *driver.KeyDown:
 		if ev.Key.Is("Tab") {
 			return ta.inlineCompleteEv()
 		}

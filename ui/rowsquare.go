@@ -3,7 +3,7 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/jmigpin/editor/ui/driver"
 	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/imageutil"
 	"github.com/veandco/go-sdl2/sdl"
@@ -113,25 +113,25 @@ func (sq *RowSquare) SetState(s RowState, v bool) {
 func (sq *RowSquare) HasState(s RowState) bool {
 	return sq.state.hasAny(s)
 }
-func (sq *RowSquare) OnInputEvent(ev event.Event, p image.Point) bool {
+func (sq *RowSquare) OnInputEvent(ev driver.Event, p image.Point) bool {
 	switch t := ev.(type) {
 
 	// use drag events from row separator (allows dragging using rowsquare)
-	case *event.MouseDragMove:
+	case *driver.MouseDragMove:
 		sq.Cursor = sdl.SYSTEM_CURSOR_CROSSHAIR
 		sq.row.sep.OnInputEvent(ev, p)
 
 	// when exiting a drag, make sure the cursor is back to the default
-	case *event.MouseDragEnd:
+	case *driver.MouseDragEnd:
 		sq.Cursor = sdl.SYSTEM_CURSOR_NO
 
 	// handle scroll events from row separator (allows mouse-wheel ops from rowsquare)
-	case *event.MouseDown:
+	case *driver.MouseDown:
 		sq.row.sep.OnInputEvent(ev, p)
 
-	case *event.MouseClick:
+	case *driver.MouseClick:
 		switch t.Key.Mouse {
-		case event.ButtonLeft, event.ButtonMiddle, event.ButtonRight:
+		case driver.ButtonLeft, driver.ButtonMiddle, driver.ButtonRight:
 			sq.row.Close()
 		}
 	}

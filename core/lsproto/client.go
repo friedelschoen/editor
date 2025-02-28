@@ -447,8 +447,8 @@ func (cli *Client) TextDocumentDidOpenVersion(ctx context.Context, filename stri
 //func (cli *Client) WorkspaceDidChangeWorkspaceFolders(ctx context.Context, added, removed []*WorkspaceFolder) error {
 //	opt := &DidChangeWorkspaceFoldersParams{}
 //	opt.Event = &WorkspaceFoldersChangeEvent{}
-//	opt.Event.Added = added
-//	opt.Event.Removed = removed
+//	opt.driver.Added = added
+//	opt.driver.Removed = removed
 //	err := cli.Call(ctx, "noreply:workspace/didChangeWorkspaceFolders", opt, nil)
 //	return err
 //}
