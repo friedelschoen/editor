@@ -3,8 +3,8 @@ package widget
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/util/imageutil"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 // Should be a child of FloatLayer.
@@ -18,7 +18,7 @@ type FloatBox struct {
 
 func NewFloatBox(ml *MultiLayer, content Node) *FloatBox {
 	fb := &FloatBox{content: content, ml: ml}
-	fb.Cursor = event.DefaultCursor
+	fb.Cursor = sdl.SYSTEM_CURSOR_ARROW
 	fb.Append(content)
 	fb.AddMarks(MarkNotDraggable | MarkInBoundsHandlesEvent)
 	return fb

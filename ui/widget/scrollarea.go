@@ -129,10 +129,10 @@ func (sa *ScrollArea) Layout() {
 func (sa *ScrollArea) OnInputEvent(ev0 event.Event, p image.Point) bool {
 	switch evt := ev0.(type) {
 	case *event.KeyDown:
-		switch evt.KeySym {
-		case event.KSymPageUp:
+		switch {
+		case evt.Key.Is("PageUp"):
 			sa.scrollPageUp()
-		case event.KSymPageDown:
+		case evt.Key.Is("PageDown"):
 			sa.scrollPageDown()
 		default:
 			// allow scrollable to receive keydown input
@@ -140,17 +140,14 @@ func (sa *ScrollArea) OnInputEvent(ev0 event.Event, p image.Point) bool {
 				sa.scrollable.OnInputEvent(ev0, p)
 			}
 		}
-	case *event.MouseDown:
+	case *event.MouseWheel:
 		// scrolling with the wheel on the content area
 		if p.In(sa.scrollable.Embed().Bounds) {
-			m := evt.Mods.ClearLocks()
-			if !m.HasAny(event.ModCtrl) {
-				switch {
-				case evt.Button == event.ButtonWheelUp:
-					sa.scrollJumpUp()
-				case evt.Button == event.ButtonWheelDown:
-					sa.scrollJumpDown()
-				}
+			switch {
+			case evt.Y < 0:
+				sa.scrollJumpUp()
+			case evt.Y > 0:
+				sa.scrollJumpDown()
 			}
 		}
 	}

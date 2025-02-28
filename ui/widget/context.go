@@ -3,7 +3,7 @@ package widget
 import (
 	"image/draw"
 
-	"github.com/jmigpin/editor/ui/event"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 type UIContext interface {
@@ -12,7 +12,7 @@ type UIContext interface {
 	ImageContext
 	CursorContext
 	//	Image() draw.Image // TODO
-	//	SetCursor(event.Cursor) // TODO
+	//	SetCursor(sdl.SystemCursor) // TODO
 
 	RunOnUIGoRoutine(f func())
 	SetClipboardData(string)
@@ -24,5 +24,5 @@ type ImageContext interface {
 }
 
 type CursorContext interface {
-	SetCursor(event.Cursor)
+	SetCursor(sdl.SystemCursor)
 }

@@ -38,10 +38,8 @@ type MouseLeave struct{}
 func (evt MouseLeave) IsEvent() {}
 
 type MouseDown struct {
-	Point   image.Point
-	Button  MouseButton
-	Buttons MouseButtons // contains Button
-	Mods    KeyModifiers
+	Point image.Point
+	Key   Key
 }
 
 func (evt MouseDown) IsEvent() {}
@@ -50,10 +48,8 @@ func (evt MouseDown) At() image.Point {
 }
 
 type MouseUp struct {
-	Point   image.Point
-	Button  MouseButton
-	Buttons MouseButtons // contains Button
-	Mods    KeyModifiers
+	Point image.Point
+	Key   Key
 }
 
 func (evt MouseUp) IsEvent() {}
@@ -62,9 +58,8 @@ func (evt MouseUp) At() image.Point {
 }
 
 type MouseMove struct {
-	Point   image.Point
-	Buttons MouseButtons
-	Mods    KeyModifiers
+	Point image.Point
+	Key   Key
 }
 
 func (evt MouseMove) IsEvent() {}
@@ -73,11 +68,9 @@ func (evt MouseMove) At() image.Point {
 }
 
 type MouseDragStart struct {
-	Point   image.Point // starting (press) point (older then point2)
-	Point2  image.Point // current point (move detection) (newest point)
-	Button  MouseButton
-	Buttons MouseButtons // contains Button
-	Mods    KeyModifiers
+	Point  image.Point // starting (press) point (older then point2)
+	Point2 image.Point // current point (move detection) (newest point)
+	Key    Key
 }
 
 func (evt MouseDragStart) IsEvent() {}
@@ -86,10 +79,8 @@ func (evt MouseDragStart) At() image.Point {
 }
 
 type MouseDragEnd struct {
-	Point   image.Point
-	Button  MouseButton
-	Buttons MouseButtons // contains Button
-	Mods    KeyModifiers
+	Point image.Point
+	Key   Key
 }
 
 func (evt MouseDragEnd) IsEvent() {}
@@ -98,9 +89,8 @@ func (evt MouseDragEnd) At() image.Point {
 }
 
 type MouseDragMove struct {
-	Point   image.Point
-	Buttons MouseButtons
-	Mods    KeyModifiers
+	Point image.Point
+	Key   Key
 }
 
 func (evt MouseDragMove) IsEvent() {}
@@ -109,10 +99,9 @@ func (evt MouseDragMove) At() image.Point {
 }
 
 type MouseClick struct {
-	Point   image.Point
-	Button  MouseButton
-	Buttons MouseButtons // contains Button
-	Mods    KeyModifiers
+	Point image.Point
+	Count int
+	Key   Key
 }
 
 func (evt MouseClick) IsEvent() {}
@@ -120,55 +109,24 @@ func (evt MouseClick) At() image.Point {
 	return evt.Point
 }
 
-type MouseDoubleClick struct {
-	Point   image.Point
-	Button  MouseButton
-	Buttons MouseButtons // contains Button
-	Mods    KeyModifiers
+type MouseWheel struct {
+	X int
+	Y int
 }
 
-func (evt MouseDoubleClick) IsEvent() {}
-func (evt MouseDoubleClick) At() image.Point {
-	return evt.Point
-}
-
-type MouseTripleClick struct {
-	Point   image.Point
-	Button  MouseButton
-	Buttons MouseButtons // contains Button
-	Mods    KeyModifiers
-}
-
-func (evt MouseTripleClick) IsEvent() {}
-func (evt MouseTripleClick) At() image.Point {
-	return evt.Point
-}
+func (evt MouseWheel) IsEvent() {}
 
 type KeyDown struct {
-	Point   image.Point
-	KeySym  KeySym
-	Mods    KeyModifiers
-	Buttons MouseButtons
-	Rune    rune
+	Key Key
 }
 
 func (evt KeyDown) IsEvent() {}
-func (evt KeyDown) At() image.Point {
-	return evt.Point
-}
 
 type KeyUp struct {
-	Point   image.Point
-	KeySym  KeySym
-	Mods    KeyModifiers
-	Buttons MouseButtons
-	Rune    rune
+	Key Key
 }
 
 func (evt KeyUp) IsEvent() {}
-func (evt KeyUp) At() image.Point {
-	return evt.Point
-}
 
 // drag and drop
 

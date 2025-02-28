@@ -248,21 +248,20 @@ func (erow *ERow) initHandlers() {
 			// activate row
 			erow.Info.UpdateActiveRowState(erow)
 			// shortcuts
-			mods := evt.Mods.ClearLocks()
 			switch {
-			case mods.Is(event.ModCtrl) && evt.KeySym == event.KSymS:
+			case evt.Key.Is("ctrl-S"):
 				erow.SaveFileBusyCursor()
-			case mods.Is(event.ModCtrl) && evt.KeySym == event.KSymF:
+			case evt.Key.Is("ctrl-F"):
 				AddFindShortcut(erow)
-			case mods.Is(event.ModCtrl) && evt.KeySym == event.KSymH:
+			case evt.Key.Is("ctrl-H"):
 				AddReplaceShortcut(erow)
-			case mods.Is(event.ModCtrl) && evt.KeySym == event.KSymN:
+			case evt.Key.Is("ctrl-N"):
 				AddNewFileShortcut(erow)
-			case mods.Is(event.ModCtrl) && evt.KeySym == event.KSymR:
+			case evt.Key.Is("ctrl-R"):
 				AddReloadShortcut(erow)
-			case mods.Is(event.ModCtrl) && evt.KeySym == event.KSymW:
+			case evt.Key.Is("ctrl-W"):
 				row.Close()
-			case evt.KeySym == event.KSymEscape:
+			case evt.Key.Is("Escape"):
 				erow.Exec.Stop()
 			}
 		case *event.MouseDown:

@@ -3,8 +3,8 @@ package driver
 import (
 	"image"
 	"image/draw"
-	"sync/atomic"
 	"time"
+	"unicode"
 	"unicode/utf8"
 
 	"github.com/jmigpin/editor/ui/event"
@@ -14,9 +14,9 @@ import (
 const FPS = 60
 
 type Window struct {
-	window *sdl.Window
-	events chan event.Event
-	istext atomic.Bool
+	window  *sdl.Window
+	events  chan event.Event
+	lastkey event.Key
 }
 
 func NewWindow() (*Window, error) {
@@ -73,27 +73,8 @@ func (win *Window) Close() error {
 }
 
 // CursorSet implements driver.Window.
-func (win *Window) CursorSet(cur event.Cursor) error {
-	id := sdl.SystemCursor(0)
-	switch cur {
-	case event.DefaultCursor:
-		id = sdl.SYSTEM_CURSOR_ARROW
-	case event.NSResizeCursor:
-		id = sdl.SYSTEM_CURSOR_SIZENS
-	case event.WEResizeCursor:
-		id = sdl.SYSTEM_CURSOR_SIZEWE
-	case event.CloseCursor:
-		id = sdl.SYSTEM_CURSOR_NO
-	case event.MoveCursor:
-		id = sdl.SYSTEM_CURSOR_CROSSHAIR
-	case event.PointerCursor:
-		id = sdl.SYSTEM_CURSOR_HAND
-	case event.BeamCursor: // text cursor
-		id = sdl.SYSTEM_CURSOR_IBEAM
-	case event.WaitCursor: // watch cursor
-		id = sdl.SYSTEM_CURSOR_WAITARROW
-	}
-	sdl.SetCursor(sdl.CreateSystemCursor(id))
+func (win *Window) CursorSet(cur sdl.SystemCursor) error {
+	sdl.SetCursor(sdl.CreateSystemCursor(cur))
 	return nil
 }
 
@@ -118,29 +99,6 @@ func (win *Window) PointerWarp(cur image.Point) error {
 func (win *Window) WindowSetName(title string) error {
 	win.window.SetTitle(title)
 	return nil
-}
-
-func getModifier(mod sdl.Keymod) (res event.KeyModifiers) {
-	if mod == 0 {
-		mod = sdl.GetModState()
-	}
-	switch {
-	case mod&sdl.KMOD_CTRL != 0:
-		res |= event.ModCtrl
-	case mod&sdl.KMOD_SHIFT != 0:
-		res |= event.ModShift
-	case mod&sdl.KMOD_ALT != 0:
-		res |= event.ModAlt
-	case mod&sdl.KMOD_GUI != 0:
-		res |= event.Mod4
-	case mod&sdl.KMOD_NUM != 0:
-		res |= event.Mod2
-	case mod&sdl.KMOD_CAPS != 0:
-		res |= event.ModLock
-	case mod&sdl.KMOD_MODE != 0:
-		res |= event.ModAltGr
-	}
-	return
 }
 
 func (win *Window) NextEvent() (event.Event, bool) {
@@ -181,144 +139,39 @@ func (win *Window) NextEvent() (event.Event, bool) {
 			}
 		case *sdl.MouseButtonEvent:
 			pnt := image.Point{int(evt.X), int(evt.Y)}
-			btn := event.MouseButton(0)
-			switch evt.Button {
-			case sdl.BUTTON_LEFT:
-				btn = event.ButtonLeft
-			case sdl.BUTTON_MIDDLE:
-				btn = event.ButtonMiddle
-			case sdl.BUTTON_RIGHT:
-				btn = event.ButtonRight
-			}
+			key := event.NewKey(event.KeyMouse)
+			key.Mouse = 1 << (int(evt.Button) - 1)
+
 			if evt.State == sdl.PRESSED {
-				switch evt.Clicks {
-				case 1:
-					win.events <- &event.MouseClick{
-						Point:   pnt,
-						Button:  btn,
-						Buttons: event.MouseButtons(btn),
-						Mods:    getModifier(0),
-					}
-				case 2:
-					win.events <- &event.MouseDoubleClick{
-						Point:   pnt,
-						Button:  btn,
-						Buttons: event.MouseButtons(btn),
-						Mods:    getModifier(0),
-					}
-				case 3:
-					win.events <- &event.MouseTripleClick{
-						Point:   pnt,
-						Button:  btn,
-						Buttons: event.MouseButtons(btn),
-						Mods:    getModifier(0),
-					}
+				win.events <- &event.MouseClick{
+					Point: pnt,
+					Count: int(evt.Clicks),
+					Key:   key,
 				}
 				return &event.MouseDown{
-					Point:   pnt,
-					Button:  btn,
-					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(0),
+					Point: pnt,
+					Key:   key,
 				}, true
 			} else {
 				return &event.MouseUp{
-					Point:   pnt,
-					Button:  btn,
-					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(0),
+					Point: pnt,
+					Key:   key,
 				}, true
 			}
 		case *sdl.MouseWheelEvent:
-			mx, my, _ := sdl.GetMouseState()
-			pnt := image.Point{int(mx), int(my)}
-
-			btn := event.ButtonWheelDown
-			if evt.Y < 0 {
-				btn = event.ButtonWheelUp
-				evt.Y = -evt.Y
-			}
-			for i := int32(0); i < evt.Y; i++ {
-				win.events <- &event.MouseDown{
-					Point:   pnt,
-					Button:  btn,
-					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(0),
-				}
-				win.events <- &event.MouseClick{
-					Point:   pnt,
-					Button:  btn,
-					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(0),
-				}
-				win.events <- &event.MouseUp{
-					Point:   pnt,
-					Button:  btn,
-					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(0),
-				}
-			}
-
-			btn = event.ButtonWheelRight
-			if evt.X < 0 {
-				btn = event.ButtonWheelLeft
-				evt.X = -evt.X
-			}
-			for i := int32(0); i < evt.X; i++ {
-				win.events <- &event.MouseDown{
-					Point:   pnt,
-					Button:  btn,
-					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(0),
-				}
-				win.events <- &event.MouseClick{
-					Point:   pnt,
-					Button:  btn,
-					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(0),
-				}
-				win.events <- &event.MouseUp{
-					Point:   pnt,
-					Button:  btn,
-					Buttons: event.MouseButtons(btn),
-					Mods:    getModifier(0),
-				}
-			}
-		case *sdl.MouseMotionEvent:
-			btn := event.MouseButton(0)
-			switch evt.State {
-			case sdl.BUTTON_LEFT:
-				btn = event.ButtonLeft
-			case sdl.BUTTON_MIDDLE:
-				btn = event.ButtonMiddle
-			case sdl.BUTTON_RIGHT:
-				btn = event.ButtonRight
-			}
-			return &event.MouseMove{
-				Point:   image.Point{int(evt.X), int(evt.Y)},
-				Buttons: event.MouseButtons(btn),
-				Mods:    getModifier(0),
+			return &event.MouseWheel{
+				X: int(evt.X),
+				Y: int(evt.Y),
 			}, true
-		case *sdl.TextInputEvent:
-			win.istext.Store(true)
-			char, _ := utf8.DecodeRune(evt.Text[:])
+		case *sdl.MouseMotionEvent:
+			key := event.NewKey(event.KeyMouse)
+			key.Mouse = 1 << (evt.State - 1)
 
-			win.events <- &event.KeyUp{
-				KeySym: event.KeySym(char),
-				Rune:   char,
-				Mods:   getModifier(0),
-			}
-
-			return &event.KeyDown{
-				KeySym: event.KeySym(char),
-				Rune:   char,
-				Mods:   getModifier(0),
+			return &event.MouseMove{
+				Point: image.Point{int(evt.X), int(evt.Y)},
+				Key:   key,
 			}, true
 		case *sdl.KeyboardEvent:
-			sym, ok := symmap[int(evt.Keysym.Sym)]
-			if !ok {
-				sym = event.KSymNone
-			}
-
 			/*
 				from SDL2:src/events/SDL_keyboard.c:1048
 				do not send textinput when text starts with
@@ -327,23 +180,29 @@ func (win *Window) NextEvent() (event.Event, bool) {
 				It seems like it does not send textinput when
 				ctrl is pressed.
 			*/
-			char := byte(evt.Keysym.Sym)
-			if char >= ' ' && char != 127 && evt.Keysym.Mod&sdl.KMOD_CTRL == 0 {
-				continue /* wait for TextInputEvent */
+			win.lastkey = event.NewKeyFromKeysym(evt.Keysym)
+			char := rune(evt.Keysym.Sym)
+			if !unicode.IsPrint(char) || evt.Keysym.Mod&sdl.KMOD_CTRL != 0 {
+				if evt.State == sdl.PRESSED {
+					return &event.KeyDown{
+						Key: win.lastkey,
+					}, true
+				} else {
+					return &event.KeyUp{
+						Key: win.lastkey,
+					}, true
+				}
 			}
-			if evt.State == sdl.PRESSED {
-				return &event.KeyDown{
-					KeySym: sym,
-					Rune:   rune(evt.Keysym.Sym),
-					Mods:   getModifier(sdl.Keymod(evt.Keysym.Mod)),
-				}, true
-			} else {
-				return &event.KeyUp{
-					KeySym: sym,
-					Rune:   rune(evt.Keysym.Sym),
-					Mods:   getModifier(sdl.Keymod(evt.Keysym.Mod)),
-				}, true
+		case *sdl.TextInputEvent:
+			win.lastkey.Rune, _ = utf8.DecodeRune(evt.Text[:])
+
+			win.events <- &event.KeyUp{
+				Key: win.lastkey,
 			}
+
+			return &event.KeyDown{
+				Key: win.lastkey,
+			}, true
 		}
 	}
 }

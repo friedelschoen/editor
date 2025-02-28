@@ -196,17 +196,17 @@ func (tio *ERowTermIO) eventToBytes(ev any) ([]byte, bool) {
 	case *event.KeyDown:
 		if keyboardEvs() {
 			var b []byte
-			switch t.KeySym {
-			case event.KSymReturn:
+			switch {
+			case t.Key.Is("Return"):
 				b = byteOut('\n', '\n')
-			case event.KSymEscape:
+			case t.Key.Is("Escape"):
 				b = []byte{27}
-			case event.KSymTab:
+			case t.Key.Is("Tab"):
 				b = []byte{'\t'}
-			case event.KSymBackspace:
+			case t.Key.Is("Backspace"):
 				b = []byte{'\b'}
 			default:
-				b = []byte(string(t.Rune))
+				b = []byte(string(t.Key.Rune))
 			}
 			return b, true
 		}

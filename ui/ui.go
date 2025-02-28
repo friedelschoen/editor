@@ -13,20 +13,20 @@ import (
 	"github.com/jmigpin/editor/ui/mousefilter"
 	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/syncutil"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 type UI struct {
 	DrawFrameRate int // frames per second
 	Win           *driver.Window
 
-	curCursor event.Cursor
+	curCursor sdl.SystemCursor
 
 	closeOnce sync.Once
 
 	eventsQ *syncutil.SyncedQ // linked list queue (unlimited length)
 	applyEv *widget.ApplyEvent
 	movef   *mousefilter.MoveFilter
-	dragf   *mousefilter.DragFilter
 
 	pendingPaint   bool
 	lastPaintStart time.Time
@@ -82,9 +82,6 @@ func (ui *UI) initMouseFilters() {
 		return ok
 	}
 	ui.movef = mousefilter.NewMoveFilter(ui.DrawFrameRate, ui.eventsQ.PushBack, isMouseMoveEv)
-
-	// click/drag filters
-	ui.dragf = mousefilter.NewDragFilter(ui.handleWidgetEv)
 }
 
 func (ui *UI) Close() {
@@ -153,20 +150,21 @@ func (ui *UI) HandleEvent(ev event.Event) (handled bool) {
 		t.Func()
 	case *UIPaintTime:
 		ui.paint()
-	case event.InputEvent:
-		fmt.Printf("%T\n", t)
+	default:
 		ui.handleWindowInput(t)
 	}
 	return true
 }
 
-func (ui *UI) handleWindowInput(wi event.InputEvent) {
-	ui.handleWidgetEv(wi, wi.At())
-	// ui.clickf.Filter(wi) // emit events; set on initMouseFilters()
-	ui.dragf.Filter(wi) // emit events; set on initMouseFilters()
-}
-func (ui *UI) handleWidgetEv(ev event.Event, p image.Point) {
-	ui.applyEv.Apply(ui.Root, ev, p)
+func (ui *UI) handleWindowInput(wi event.Event) {
+	var p image.Point
+	if inevt, ok := wi.(event.InputEvent); ok {
+		p = inevt.At()
+	} else {
+		x, y, _ := sdl.GetMouseState()
+		p = image.Point{int(x), int(y)}
+	}
+	ui.applyEv.Apply(ui.Root, wi, p)
 }
 
 func (ui *UI) LayoutMarkedAndSchedulePaint() {
@@ -266,7 +264,7 @@ func (ui *UI) QueryPointer() (image.Point, error) {
 }
 
 // Implements widget.CursorContext
-func (ui *UI) SetCursor(c event.Cursor) {
+func (ui *UI) SetCursor(c sdl.SystemCursor) {
 	if ui.curCursor == c {
 		return
 	}

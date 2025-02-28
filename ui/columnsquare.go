@@ -6,6 +6,7 @@ import (
 	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/imageutil"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 type ColumnSquare struct {
@@ -16,7 +17,7 @@ type ColumnSquare struct {
 
 func NewColumnSquare(col *Column) *ColumnSquare {
 	sq := &ColumnSquare{col: col, Size: image.Point{5, 5}}
-	sq.Cursor = event.CloseCursor
+	sq.Cursor = sdl.SYSTEM_CURSOR_NO
 	return sq
 }
 
@@ -30,7 +31,7 @@ func (sq *ColumnSquare) Paint() {
 func (sq *ColumnSquare) OnInputEvent(ev event.Event, p image.Point) bool {
 	switch t := ev.(type) {
 	case *event.MouseClick:
-		switch t.Button {
+		switch t.Key.Mouse {
 		case event.ButtonLeft, event.ButtonMiddle, event.ButtonRight:
 			sq.col.Close()
 		}

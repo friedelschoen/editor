@@ -39,7 +39,6 @@ func NewRow(col *Column) *Row {
 	// scrollarea with textarea
 	{
 		row.TextArea = NewTextArea(row.ui)
-		row.TextArea.SupportClickInsideSelection = true
 		row.TextArea.EnableCursorWordHighlight(true)
 		row.TextArea.EnableParenthesisMatch(true)
 		if d, ok := row.TextArea.Drawer.(*drawer4.Drawer); ok {

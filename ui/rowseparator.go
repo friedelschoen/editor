@@ -5,6 +5,7 @@ import (
 
 	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/ui/widget"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 type RowSeparator struct {
@@ -17,7 +18,7 @@ func NewRowSeparator(row *Row) *RowSeparator {
 	sep.Size.Y = separatorWidth
 	sep.Handle.Top = 3
 	sep.Handle.Bottom = 3
-	sep.Handle.Cursor = event.MoveCursor
+	sep.Handle.Cursor = sdl.SYSTEM_CURSOR_CROSSHAIR
 
 	rsep := &RowSeparator{Separator: sep, row: row}
 	rsep.SetThemePaletteNamePrefix("rowseparator_")
@@ -26,24 +27,18 @@ func NewRowSeparator(row *Row) *RowSeparator {
 func (sh *RowSeparator) OnInputEvent(ev0 event.Event, p image.Point) bool {
 	switch ev := ev0.(type) {
 	case *event.MouseDragMove:
-		switch {
-		case ev.Buttons.Is(event.ButtonLeft):
+		if ev.Key.HasMouse(event.ButtonLeft) {
 			p.Y += sh.Handle.DragPad.Y
 			sh.row.resizeWithMoveToPoint(&p)
 		}
-	case *event.MouseDown:
-		m := ev.Mods.ClearLocks()
-		if m.Is(event.ModNone) {
-			switch ev.Button {
-			case event.ButtonWheelUp:
-				sh.row.resizeWithPushJump(true, &p)
-			case event.ButtonWheelDown:
-				sh.row.resizeWithPushJump(false, &p)
-			}
+	case *event.MouseWheel:
+		if ev.Y < 0 {
+			sh.row.resizeWithPushJump(true, &p)
+		} else if ev.Y > 0 {
+			sh.row.resizeWithPushJump(false, &p)
 		}
 	case *event.MouseClick:
-		switch ev.Button {
-		case event.ButtonMiddle:
+		if ev.Key.Mouse == event.ButtonMiddle {
 			sh.row.Close()
 		}
 	}

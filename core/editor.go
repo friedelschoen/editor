@@ -6,6 +6,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"image"
 	"log"
 	"os"
 	"path/filepath"
@@ -26,6 +27,7 @@ import (
 	"github.com/jmigpin/editor/util/imageutil"
 	"github.com/jmigpin/editor/util/iout/iorw"
 	"github.com/jmigpin/editor/util/osutil"
+	"github.com/veandco/go-sdl2/sdl"
 	"golang.org/x/image/font"
 )
 
@@ -530,27 +532,24 @@ func (ed *Editor) handleGlobalShortcuts(ev any) (handled bool) {
 	case event.KeyDown:
 		autoCloseInfo := true
 
-		m := t.Mods.ClearLocks()
 		switch {
-		case m.Is(event.ModNone):
-			switch t.KeySym {
-			case event.KSymEscape:
-				ed.InlineComplete.CancelAndClear()
-				ed.cancelERowInfosCmds()
-				ed.cancelERowsContentCmds()
-				ed.cancelERowsInternalCmds()
-				autoCloseInfo = false
-				ed.cancelInfoFloatBox()
-				return true
-			case event.KSymF1:
-				autoCloseInfo = false
-				ed.toggleInfoFloatBox()
-				return true
-			}
+		case t.Key.Is("Escape"):
+			ed.InlineComplete.CancelAndClear()
+			ed.cancelERowInfosCmds()
+			ed.cancelERowsContentCmds()
+			ed.cancelERowsInternalCmds()
+			autoCloseInfo = false
+			ed.cancelInfoFloatBox()
+			return true
+		case t.Key.Is("F1"):
+			autoCloseInfo = false
+			ed.toggleInfoFloatBox()
+			return true
 		}
 
 		if autoCloseInfo {
-			ed.UI.Root.ContextFloatBox.AutoClose(t, t.Point)
+			x, y, _ := sdl.GetMouseState()
+			ed.UI.Root.ContextFloatBox.AutoClose(t, image.Point{int(x), int(y)})
 			if !ed.ifbw.ui().Visible() {
 				ed.cancelInfoFloatBox()
 			}
@@ -711,15 +710,15 @@ func (ed *Editor) RunAsyncBusyCursor(node widget.Node, fn func()) {
 
 // Caller should call done function in the end.
 func (ed *Editor) RunAsyncBusyCursor2(node widget.Node, fn func(done func())) {
-	set := func(c event.Cursor) {
+	set := func(c sdl.SystemCursor) {
 		ed.UI.RunOnUIGoRoutine(func() {
 			node.Embed().Cursor = c
 			ed.UI.QueueEmptyWindowInputEvent() // updates cursor tree
 		})
 	}
-	set(event.WaitCursor)
+	set(sdl.SYSTEM_CURSOR_WAITARROW)
 	done := func() {
-		set(event.DefaultCursor)
+		set(sdl.SYSTEM_CURSOR_ARROW)
 	}
 	// launch go routine to allow the UI to update the cursor
 	go fn(done)

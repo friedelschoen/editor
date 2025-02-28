@@ -4,6 +4,7 @@ import (
 	"image"
 
 	"github.com/jmigpin/editor/ui/event"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 type ApplyEvent struct {
@@ -52,7 +53,7 @@ func (ae *ApplyEvent) Apply(node Node, ev event.Event, p image.Point) {
 }
 
 func (ae *ApplyEvent) setCursor(node Node, p image.Point) {
-	var c event.Cursor
+	var c sdl.SystemCursor
 	if ae.drag.dragging {
 		c = ae.drag.node.Embed().Cursor
 	} else {
@@ -61,12 +62,12 @@ func (ae *ApplyEvent) setCursor(node Node, p image.Point) {
 	ae.cctx.SetCursor(c)
 }
 
-func (ae *ApplyEvent) treeCursor(node Node, p image.Point) event.Cursor {
+func (ae *ApplyEvent) treeCursor(node Node, p image.Point) sdl.SystemCursor {
 	ne := node.Embed()
 	if !p.In(ne.Bounds) {
 		return 0
 	}
-	var c event.Cursor
+	var c sdl.SystemCursor
 	ne.IterateWrappersReverse(func(child Node) bool {
 		c = ae.treeCursor(child, p)
 		return c == 0 // continue while no cursor was set
@@ -183,7 +184,7 @@ func (ae *ApplyEvent) dragEnd(ev *event.MouseDragEnd, p image.Point) {
 	if !ae.drag.dragging {
 		return
 	}
-	if ev.Button != ae.drag.startEv.Button {
+	if ev.Key.Mouse != ae.drag.startEv.Key.Mouse {
 		return
 	}
 	ae.runEv(ae.drag.node, ev, p)

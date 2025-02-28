@@ -1,8 +1,6 @@
 package widget
 
 import (
-	"image"
-
 	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/util/evreg"
 	"github.com/jmigpin/editor/util/iout/iorw"
@@ -132,7 +130,7 @@ func (te *TextEdit) EndUndoGroup() {
 	te.rwu.History.EndUndoGroup(c)
 }
 
-func (te *TextEdit) OnInputEvent(ev event.Event, p image.Point) bool {
+func (te *TextEdit) OnInputEvent(ev event.Event) bool {
 	te.BeginUndoGroup()
 	defer te.EndUndoGroup()
 

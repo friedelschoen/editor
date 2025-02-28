@@ -66,37 +66,6 @@ func (l *Root) OnChildMarked(child widget.Node, newMarks widget.Marks) {
 }
 
 func (l *Root) OnInputEvent(ev0 event.Event, p image.Point) bool {
-	switch ev := ev0.(type) {
-	case *event.KeyDown:
-		m := ev.Mods.ClearLocks()
-		switch {
-		case m.Is(event.ModCtrl):
-			switch ev.KeySym {
-			case event.KSymF4:
-				l.selAnnEv(RootSelAnnTypeFirst)
-				return true
-			case event.KSymF5:
-				l.selAnnEv(RootSelAnnTypeLast)
-				return true
-			case event.KSymF9:
-				l.selAnnEv(RootSelAnnTypeClear)
-				return true
-			}
-		}
-	case *event.MouseDown:
-		m := ev.Mods.ClearLocks()
-		switch {
-		case m.Is(event.ModCtrl):
-			switch ev.Button {
-			case event.ButtonWheelUp:
-				l.selAnnEv(RootSelAnnTypePrev)
-				return true
-			case event.ButtonWheelDown:
-				l.selAnnEv(RootSelAnnTypeNext)
-				return true
-			}
-		}
-	}
 	return false
 }
 

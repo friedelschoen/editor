@@ -134,15 +134,16 @@ func (sb *ScrollBar) Paint() {
 func (sb *ScrollBar) OnInputEvent(ev event.Event, p image.Point) bool {
 	switch evt := ev.(type) {
 	case *event.MouseDown:
-		switch evt.Button {
-		case event.ButtonLeft:
+		if evt.Key.Mouse == event.ButtonLeft {
 			sb.clicking = true
 			sb.setPressPad(&evt.Point)
 			sb.scrollToPoint(&evt.Point)
 			sb.MarkNeedsPaint() // in case it didn't move
-		case event.ButtonWheelUp:
+		}
+	case *event.MouseWheel:
+		if evt.Y < 0 {
 			sb.scrollPage(true)
-		case event.ButtonWheelDown:
+		} else if evt.Y > 0 {
 			sb.scrollPage(false)
 		}
 	case *event.MouseMove:

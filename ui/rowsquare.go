@@ -6,6 +6,7 @@ import (
 	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/ui/widget"
 	"github.com/jmigpin/editor/util/imageutil"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 type RowSquare struct {
@@ -17,7 +18,7 @@ type RowSquare struct {
 
 func NewRowSquare(row *Row) *RowSquare {
 	sq := &RowSquare{row: row, Size: image.Point{5, 5}}
-	sq.Cursor = event.CloseCursor
+	sq.Cursor = sdl.SYSTEM_CURSOR_NO
 	return sq
 }
 func (sq *RowSquare) Measure(hint image.Point) image.Point {
@@ -117,19 +118,19 @@ func (sq *RowSquare) OnInputEvent(ev event.Event, p image.Point) bool {
 
 	// use drag events from row separator (allows dragging using rowsquare)
 	case *event.MouseDragMove:
-		sq.Cursor = event.MoveCursor
+		sq.Cursor = sdl.SYSTEM_CURSOR_CROSSHAIR
 		sq.row.sep.OnInputEvent(ev, p)
 
 	// when exiting a drag, make sure the cursor is back to the default
 	case *event.MouseDragEnd:
-		sq.Cursor = event.CloseCursor
+		sq.Cursor = sdl.SYSTEM_CURSOR_NO
 
 	// handle scroll events from row separator (allows mouse-wheel ops from rowsquare)
 	case *event.MouseDown:
 		sq.row.sep.OnInputEvent(ev, p)
 
 	case *event.MouseClick:
-		switch t.Button {
+		switch t.Key.Mouse {
 		case event.ButtonLeft, event.ButtonMiddle, event.ButtonRight:
 			sq.row.Close()
 		}

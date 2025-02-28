@@ -5,6 +5,7 @@ import (
 
 	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/ui/widget"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 type ColSeparator struct {
@@ -17,7 +18,7 @@ func NewColSeparator(col *Column) *ColSeparator {
 	sep.Size.X = separatorWidth
 	sep.Handle.Left = 3
 	sep.Handle.Right = 3
-	sep.Handle.Cursor = event.WEResizeCursor
+	sep.Handle.Cursor = sdl.SYSTEM_CURSOR_SIZEWE
 
 	csep := &ColSeparator{Separator: sep, col: col}
 	csep.SetThemePaletteNamePrefix("colseparator_")
@@ -27,15 +28,14 @@ func (sh *ColSeparator) OnInputEvent(ev0 event.Event, p image.Point) bool {
 	switch ev := ev0.(type) {
 	case *event.MouseDragMove:
 		switch {
-		case ev.Buttons.Is(event.ButtonLeft):
+		case ev.Key.HasMouse(event.ButtonLeft):
 			p.X += sh.Handle.DragPad.X
 			sh.col.resizeWithMoveToPoint(&p)
 		}
-	case *event.MouseDown:
-		switch ev.Button {
-		case event.ButtonWheelLeft:
+	case *event.MouseWheel:
+		if ev.X < 0 {
 			sh.col.resizeWithMoveJump(true, &p)
-		case event.ButtonWheelRight:
+		} else if ev.X > 0 {
 			sh.col.resizeWithMoveJump(false, &p)
 		}
 	}

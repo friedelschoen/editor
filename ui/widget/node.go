@@ -10,6 +10,7 @@ import (
 	"github.com/jmigpin/editor/ui/event"
 	"github.com/jmigpin/editor/util/fontutil"
 	"github.com/jmigpin/editor/util/imageutil"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 type Node interface {
@@ -48,7 +49,7 @@ func (ENode) fullNode() {}
 
 type EmbedNode struct {
 	Bounds  image.Rectangle
-	Cursor  event.Cursor
+	Cursor  sdl.SystemCursor
 	Wrapper Node
 	Parent  *EmbedNode
 

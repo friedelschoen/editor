@@ -10,13 +10,13 @@ import (
 	"github.com/jmigpin/editor/util/evreg"
 	"github.com/jmigpin/editor/util/iout/iorw"
 	"github.com/jmigpin/editor/util/iout/iorw/rwedit"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 type TextArea struct {
 	*widget.TextEditX
 
-	EvReg                       evreg.Register
-	SupportClickInsideSelection bool
+	EvReg evreg.Register
 
 	ui *UI
 }
@@ -45,7 +45,7 @@ func (ta *TextArea) OnInputEvent(ev0 event.Event, p image.Point) bool {
 	}
 
 	if !h {
-		h = ta.TextEditX.OnInputEvent(ev0, p)
+		h = ta.TextEditX.OnInputEvent(ev0)
 		// don't consider handled to allow ui.Row to get inputevents
 		if h {
 			return false
@@ -58,20 +58,8 @@ func (ta *TextArea) OnInputEvent(ev0 event.Event, p image.Point) bool {
 func (ta *TextArea) handleInputEvent2(ev0 any, p image.Point) bool {
 	switch ev := ev0.(type) {
 	case *event.MouseClick:
-		switch ev.Button {
-		case event.ButtonRight:
-			m := ev.Mods.ClearLocks()
-			switch {
-			case m.Is(event.ModCtrl):
-				if ta.selAnnCurEv(ev.Point, TasatPrint) {
-					return true
-				}
-			case m.Is(event.ModCtrl | event.ModShift):
-				if ta.selAnnCurEv(ev.Point, TasatPrintPreviousAll) {
-					return true
-				}
-			}
-			if !ta.SupportClickInsideSelection || !ta.PointIndexInsideSelection(ev.Point) {
+		if ev.Key.Is("MouseRight") {
+			if !ta.PointIndexInsideSelection(ev.Point) {
 				rwedit.MoveCursorToPoint(ta.EditCtx(), ev.Point, false)
 			}
 			i := ta.GetIndex(ev.Point)
@@ -80,91 +68,24 @@ func (ta *TextArea) handleInputEvent2(ev0 any, p image.Point) bool {
 			return true
 		}
 	case *event.MouseDown:
-		switch ev.Button {
-		case event.ButtonRight:
-			ta.ENode.Cursor = event.PointerCursor
-		case event.ButtonLeft:
-			m := ev.Mods.ClearLocks()
-			if m.Is(event.ModCtrl) {
-				if ta.selAnnCurEv(ev.Point, TasatMsg) {
-					return true
-				}
-			}
-		case event.ButtonWheelUp:
-			m := ev.Mods.ClearLocks()
-			if m.Is(event.ModCtrl) {
-				if ta.selAnnCurEv(ev.Point, TasatMsgPrev) {
-					return true
-				}
-			}
-		case event.ButtonWheelDown:
-			m := ev.Mods.ClearLocks()
-			if m.Is(event.ModCtrl) {
-				if ta.selAnnCurEv(ev.Point, TasatMsgNext) {
-					return true
-				}
-			}
+		if ev.Key.Mouse == event.ButtonRight {
+			ta.ENode.Cursor = sdl.SYSTEM_CURSOR_HAND
 		}
 	case *event.MouseUp:
-		switch ev.Button {
-		case event.ButtonRight:
-			ta.ENode.Cursor = event.DefaultCursor
+		if ev.Key.Mouse == event.ButtonRight {
+			ta.ENode.Cursor = sdl.SYSTEM_CURSOR_ARROW
 		}
 	case *event.MouseDragStart:
-		switch ev.Button {
-		case event.ButtonRight:
-			ta.ENode.Cursor = event.DefaultCursor
+		if ev.Key.Mouse == event.ButtonRight {
+			ta.ENode.Cursor = sdl.SYSTEM_CURSOR_ARROW
 		}
 	case *event.KeyDown:
-		m := ev.Mods.ClearLocks()
-		switch {
-		case m.Is(event.ModNone):
-			switch ev.KeySym {
-			case event.KSymTab:
-				return ta.inlineCompleteEv()
-			}
+		if ev.Key.Is("Tab") {
+			return ta.inlineCompleteEv()
 		}
 	}
 	return false
 }
-
-func (ta *TextArea) selAnnCurEv(p image.Point, typ TASelAnnType) bool {
-	if d, ok := ta.Drawer.(*drawer4.Drawer); ok {
-		if d.Opt.Annotations.On {
-			//i, o, ok := d.AnnotationsIndexOf(p)
-			//if ok {
-			//	ev2 := &TextAreaSelectAnnotationEvent{ta, i, o, typ}
-			//	ta.EvReg.RunCallbacks(TextAreaSelectAnnotationEventId, ev2)
-			//	return true
-			//}
-
-			ev2 := &TextAreaSelectAnnotationEvent{ta, 0, 0, typ}
-			i, o, ok := d.AnnotationsIndexOf(p)
-			if ok {
-				ev2.AnnotationIndex = i
-				ev2.Offset = o
-			} else {
-				// not in an annotation, switch the general prev/next
-				switch typ {
-				case TasatMsgPrev:
-					ev2.Type = TasatPrev
-				case TasatMsgNext:
-					ev2.Type = TasatNext
-				default:
-					return false
-				}
-			}
-			ta.EvReg.RunCallbacks(TextAreaSelectAnnotationEventId, ev2)
-			return true
-		}
-	}
-	return false
-}
-
-//func (ta *TextArea) selAnnEv(typ TASelAnnType) {
-//	ev2 := &TextAreaSelectAnnotationEvent{ta, 0, 0, typ}
-//	ta.EvReg.RunCallbacks(TextAreaSelectAnnotationEventId, ev2)
-//}
 
 func (ta *TextArea) inlineCompleteEv() bool {
 	c := ta.Cursor()
