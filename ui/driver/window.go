@@ -16,6 +16,9 @@ type Window struct {
 	window  *sdl.Window
 	events  chan Event
 	lastkey Key
+
+	dragging  bool
+	dragStart image.Point
 }
 
 func NewWindow() (*Window, error) {
@@ -163,11 +166,45 @@ func (win *Window) NextEvent() (Event, bool) {
 				Y: int(evt.Y),
 			}, true
 		case *sdl.MouseMotionEvent:
+			pnt := image.Point{int(evt.X), int(evt.Y)}
 			key := NewKey(KeyMouse)
 			key.Mouse = 1 << (evt.State - 1)
 
+			defer func() {
+				win.dragStart = pnt
+			}()
+
+			if evt.State != 0 {
+				if !win.dragging {
+					if win.dragStart.X == 0 && win.dragStart.Y == 0 {
+						win.dragStart = pnt
+					} else {
+						win.dragging = true
+
+						return &MouseDragStart{
+							Point:  win.dragStart,
+							Point2: pnt,
+							Key:    key,
+						}, true
+					}
+				} else {
+					return &MouseDragMove{
+						Point: pnt,
+						Key:   key,
+					}, true
+				}
+			} else {
+				if win.dragging {
+					win.dragging = false
+					return &MouseDragEnd{
+						Point: pnt,
+						Key:   key,
+					}, true
+				}
+			}
+
 			return &MouseMove{
-				Point: image.Point{int(evt.X), int(evt.Y)},
+				Point: pnt,
 				Key:   key,
 			}, true
 		case *sdl.KeyboardEvent:
