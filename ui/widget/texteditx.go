@@ -4,9 +4,9 @@ import (
 	"image/color"
 	"time"
 
-	"github.com/jmigpin/editor/util/drawutil/drawer4"
-	"github.com/jmigpin/editor/util/imageutil"
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/drawutil/drawer4"
+	"github.com/friedelschoen/glake/util/imageutil"
+	"github.com/friedelschoen/glake/util/iout/iorw"
 )
 
 // textedit with extensions

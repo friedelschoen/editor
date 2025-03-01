@@ -3,8 +3,8 @@ package drawer4
 import (
 	"sync"
 
-	"github.com/jmigpin/editor/util/fontutil"
-	"github.com/jmigpin/editor/util/mathutil"
+	"github.com/friedelschoen/glake/util/fontutil"
+	"github.com/friedelschoen/glake/util/mathutil"
 )
 
 type Annotations struct {

@@ -3,8 +3,8 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/widget"
-	"github.com/jmigpin/editor/util/evreg"
+	"github.com/friedelschoen/glake/ui/widget"
+	"github.com/friedelschoen/glake/util/evreg"
 )
 
 type Column struct {

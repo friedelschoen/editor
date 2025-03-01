@@ -10,9 +10,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/osutil"
+	"github.com/friedelschoen/glake/ui"
+	"github.com/friedelschoen/glake/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/osutil"
 )
 
 // TODO: become an interface, with file/dir/special implementations.

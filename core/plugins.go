@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"plugin"
 
-	"github.com/jmigpin/editor/core/toolbarparser"
-	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/util/iout"
+	"github.com/friedelschoen/glake/core/toolbarparser"
+	"github.com/friedelschoen/glake/ui"
+	"github.com/friedelschoen/glake/util/iout"
 )
 
 type Plugins struct {

@@ -3,9 +3,9 @@ package internalcmds
 import (
 	"fmt"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/core/lsproto"
-	"github.com/jmigpin/editor/ui"
+	"github.com/friedelschoen/glake/core"
+	"github.com/friedelschoen/glake/core/lsproto"
+	"github.com/friedelschoen/glake/ui"
 )
 
 func LSProtoRename(args *core.InternalCmdArgs) error {

@@ -3,8 +3,8 @@ package widget
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/driver"
-	"github.com/jmigpin/editor/util/imageutil"
+	"github.com/friedelschoen/glake/ui/driver"
+	"github.com/friedelschoen/glake/util/imageutil"
 )
 
 type ScrollArea struct {

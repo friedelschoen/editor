@@ -5,8 +5,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/jmigpin/editor/util/osutil"
-	"github.com/jmigpin/editor/util/parseutil"
+	"github.com/friedelschoen/glake/util/osutil"
+	"github.com/friedelschoen/glake/util/parseutil"
 )
 
 type HomeVarMap struct {

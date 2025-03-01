@@ -7,9 +7,9 @@ import (
 	"image/color"
 	"strings"
 
-	"github.com/jmigpin/editor/ui/driver"
-	"github.com/jmigpin/editor/util/fontutil"
-	"github.com/jmigpin/editor/util/imageutil"
+	"github.com/friedelschoen/glake/ui/driver"
+	"github.com/friedelschoen/glake/util/fontutil"
+	"github.com/friedelschoen/glake/util/imageutil"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

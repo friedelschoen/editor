@@ -3,8 +3,8 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/driver"
-	"github.com/jmigpin/editor/util/drawutil/drawer4"
+	"github.com/friedelschoen/glake/ui/driver"
+	"github.com/friedelschoen/glake/util/drawutil/drawer4"
 )
 
 type Toolbar struct {

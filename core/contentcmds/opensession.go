@@ -5,8 +5,8 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/glake/core"
+	"github.com/friedelschoen/glake/util/iout/iorw"
 )
 
 func OpenSession(ctx context.Context, erow *core.ERow, index int) (error, bool) {

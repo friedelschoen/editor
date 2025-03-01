@@ -3,7 +3,7 @@ package widget
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/driver"
+	"github.com/friedelschoen/glake/ui/driver"
 )
 
 // A transparent widget added to a top layer (usually multilayer) to facilitate dragging.

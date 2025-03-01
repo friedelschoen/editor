@@ -4,7 +4,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/jmigpin/editor/ui/driver"
+	"github.com/friedelschoen/glake/ui/driver"
 )
 
 //godebug:annotatefile

@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/jmigpin/editor/util/astut"
+	"github.com/friedelschoen/glake/util/astut"
 )
 
 // var input = "../scmatch.go"

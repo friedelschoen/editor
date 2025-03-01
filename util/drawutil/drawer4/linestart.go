@@ -1,7 +1,7 @@
 package drawer4
 
 import (
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/iout/iorw"
 )
 
 type LineStart struct {

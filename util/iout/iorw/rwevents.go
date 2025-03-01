@@ -1,7 +1,7 @@
 package iorw
 
 import (
-	"github.com/jmigpin/editor/util/evreg"
+	"github.com/friedelschoen/glake/util/evreg"
 )
 
 // Runs callbacks on operations.

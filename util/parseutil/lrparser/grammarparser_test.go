@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/jmigpin/editor/util/testutil"
+	"github.com/friedelschoen/glake/util/testutil"
 )
 
 func TestGrammarParser1(t *testing.T) {

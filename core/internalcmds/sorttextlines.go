@@ -7,8 +7,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/glake/core"
+	"github.com/friedelschoen/glake/util/iout/iorw"
 )
 
 func sortTextLines(args *core.InternalCmdArgs) error {

@@ -1,4 +1,4 @@
-module github.com/jmigpin/editor
+module github.com/friedelschoen/glake
 
 go 1.23.4
 

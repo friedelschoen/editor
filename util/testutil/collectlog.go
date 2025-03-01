@@ -7,7 +7,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/jmigpin/editor/util/iout"
+	"github.com/friedelschoen/glake/util/iout"
 )
 
 func CollectLog(t *testing.T, fn func() error) ([]byte, []byte, error) {

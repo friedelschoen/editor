@@ -7,10 +7,10 @@ import (
 	"image/draw"
 	"log"
 
-	"github.com/jmigpin/editor/util/drawutil"
-	"github.com/jmigpin/editor/util/fontutil"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/mathutil"
+	"github.com/friedelschoen/glake/util/drawutil"
+	"github.com/friedelschoen/glake/util/fontutil"
+	"github.com/friedelschoen/glake/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/mathutil"
 )
 
 const (

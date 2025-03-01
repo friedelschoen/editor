@@ -13,13 +13,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/util/osutil"
-	"github.com/jmigpin/editor/util/parseutil/reslocparser"
+	"github.com/friedelschoen/glake/core"
+	"github.com/friedelschoen/glake/util/osutil"
+	"github.com/friedelschoen/glake/util/parseutil/reslocparser"
 )
 
 func OnLoad(ed *core.Editor) {
-	// default contentcmds at: github.com/jmigpin/editor/core/contentcmds/init.go
+	// default contentcmds at: github.com/friedelschoen/glake/core/contentcmds/init.go
 	core.ContentCmds.Remove("gotodefinition") // remove default
 	core.ContentCmds.Prepend("gotodefinition_godef", goToDefinition)
 }

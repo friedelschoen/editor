@@ -13,9 +13,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/jmigpin/editor/util/iout"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/testutil"
+	"github.com/friedelschoen/glake/util/iout"
+	"github.com/friedelschoen/glake/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/testutil"
 )
 
 func TestStruct1(t *testing.T) {

@@ -6,10 +6,10 @@ import (
 	"sync"
 	"unicode"
 
-	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/util/drawutil/drawer4"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/mathutil"
+	"github.com/friedelschoen/glake/ui"
+	"github.com/friedelschoen/glake/util/drawutil/drawer4"
+	"github.com/friedelschoen/glake/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/mathutil"
 )
 
 type InlineComplete struct {

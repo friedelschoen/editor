@@ -13,10 +13,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jmigpin/editor/core/toolbarparser"
-	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/util/mathutil"
-	"github.com/jmigpin/editor/util/osutil"
+	"github.com/friedelschoen/glake/core/toolbarparser"
+	"github.com/friedelschoen/glake/ui"
+	"github.com/friedelschoen/glake/util/mathutil"
+	"github.com/friedelschoen/glake/util/osutil"
 )
 
 type Sessions struct {

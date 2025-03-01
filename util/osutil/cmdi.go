@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jmigpin/editor/util/iout"
+	"github.com/friedelschoen/glake/util/iout"
 )
 
 type CmdI interface {

@@ -1,7 +1,7 @@
 package drawer4
 
 import (
-	"github.com/jmigpin/editor/util/imageutil"
+	"github.com/friedelschoen/glake/util/imageutil"
 )
 
 type BgFill struct {

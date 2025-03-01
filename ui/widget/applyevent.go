@@ -3,7 +3,7 @@ package widget
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/driver"
+	"github.com/friedelschoen/glake/ui/driver"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

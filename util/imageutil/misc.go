@@ -7,7 +7,7 @@ import (
 	"math"
 	"sort"
 
-	"github.com/jmigpin/editor/util/mathutil"
+	"github.com/friedelschoen/glake/util/mathutil"
 )
 
 func MaxPoint(p1, p2 image.Point) image.Point {

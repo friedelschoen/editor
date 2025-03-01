@@ -5,7 +5,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/jmigpin/editor/util/strconvutil"
+	"github.com/friedelschoen/glake/util/strconvutil"
 )
 
 func GetEnv(env []string, key string) string {

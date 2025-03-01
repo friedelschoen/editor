@@ -3,8 +3,8 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/driver"
-	"github.com/jmigpin/editor/ui/widget"
+	"github.com/friedelschoen/glake/ui/driver"
+	"github.com/friedelschoen/glake/ui/widget"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

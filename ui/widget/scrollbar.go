@@ -4,9 +4,9 @@ import (
 	"image"
 	"math"
 
-	"github.com/jmigpin/editor/ui/driver"
-	"github.com/jmigpin/editor/util/imageutil"
-	"github.com/jmigpin/editor/util/mathutil"
+	"github.com/friedelschoen/glake/ui/driver"
+	"github.com/friedelschoen/glake/util/imageutil"
+	"github.com/friedelschoen/glake/util/mathutil"
 )
 
 // Used by ScrollArea. Parent of ScrollHandle.

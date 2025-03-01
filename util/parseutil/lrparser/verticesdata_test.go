@@ -3,7 +3,7 @@ package lrparser
 import (
 	"testing"
 
-	"github.com/jmigpin/editor/util/testutil"
+	"github.com/friedelschoen/glake/util/testutil"
 )
 
 func TestVerticesData1(t *testing.T) {

@@ -8,7 +8,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/jmigpin/editor/util/parseutil"
+	"github.com/friedelschoen/glake/util/parseutil"
 )
 
 func ListDirERow(erow *ERow, filepath string, subs, hiddens bool) {

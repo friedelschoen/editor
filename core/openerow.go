@@ -3,9 +3,9 @@ package core
 import (
 	"errors"
 
-	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/parseutil"
+	"github.com/friedelschoen/glake/ui"
+	"github.com/friedelschoen/glake/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/parseutil"
 )
 
 type OpenFileERowConfig struct {

@@ -6,7 +6,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/jmigpin/editor/ui"
+	"github.com/friedelschoen/glake/ui"
 )
 
 type ERowExec struct {

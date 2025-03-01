@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jmigpin/editor/util/goutil"
+	"github.com/friedelschoen/glake/util/goutil"
 )
 
 type ContentParser struct {

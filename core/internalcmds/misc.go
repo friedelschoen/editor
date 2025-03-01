@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/util/ctxutil"
-	"github.com/jmigpin/editor/util/iout"
-	"github.com/jmigpin/editor/util/osutil"
+	"github.com/friedelschoen/glake/core"
+	"github.com/friedelschoen/glake/ui"
+	"github.com/friedelschoen/glake/util/ctxutil"
+	"github.com/friedelschoen/glake/util/iout"
+	"github.com/friedelschoen/glake/util/osutil"
 )
 
 func Version(args *core.InternalCmdArgs) error {

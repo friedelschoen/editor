@@ -3,8 +3,8 @@ package reslocparser
 import (
 	"sync"
 
-	"github.com/jmigpin/editor/util/parseutil"
-	"github.com/jmigpin/editor/util/parseutil/pscan"
+	"github.com/friedelschoen/glake/util/parseutil"
+	"github.com/friedelschoen/glake/util/parseutil/pscan"
 )
 
 type MFn = pscan.MFn

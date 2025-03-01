@@ -6,10 +6,10 @@ import (
 	"io"
 	"sync"
 
-	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/ui/driver"
-	"github.com/jmigpin/editor/util/evreg"
-	"github.com/jmigpin/editor/util/iout"
+	"github.com/friedelschoen/glake/ui"
+	"github.com/friedelschoen/glake/ui/driver"
+	"github.com/friedelschoen/glake/util/evreg"
+	"github.com/friedelschoen/glake/util/iout"
 )
 
 type TerminalIO interface {

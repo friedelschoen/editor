@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"strconv"
 
-	"github.com/jmigpin/editor/core/toolbarparser"
+	"github.com/friedelschoen/glake/core/toolbarparser"
 )
 
 func AddFindShortcut(erow *ERow) {

@@ -1,7 +1,7 @@
 package drawer4
 
 import (
-	"github.com/jmigpin/editor/util/mathutil"
+	"github.com/friedelschoen/glake/util/mathutil"
 )
 
 func header1PenBounds(d *Drawer, offset int) (mathutil.RectangleIntf, bool) {

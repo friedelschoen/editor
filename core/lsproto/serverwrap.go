@@ -8,8 +8,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/jmigpin/editor/util/iout"
-	"github.com/jmigpin/editor/util/osutil"
+	"github.com/friedelschoen/glake/util/iout"
+	"github.com/friedelschoen/glake/util/osutil"
 )
 
 type ServerWrap struct {

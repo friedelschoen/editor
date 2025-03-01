@@ -9,14 +9,14 @@ import (
 	"runtime/pprof"
 	"strings"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/core/lsproto"
-	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/util/fontutil"
+	"github.com/friedelschoen/glake/core"
+	"github.com/friedelschoen/glake/core/lsproto"
+	"github.com/friedelschoen/glake/ui"
+	"github.com/friedelschoen/glake/util/fontutil"
 
 	// imports that can't be imported from core (cyclic import)
-	_ "github.com/jmigpin/editor/core/contentcmds"
-	_ "github.com/jmigpin/editor/core/internalcmds"
+	_ "github.com/friedelschoen/glake/core/contentcmds"
+	_ "github.com/friedelschoen/glake/core/internalcmds"
 )
 
 func main() {

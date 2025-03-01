@@ -5,7 +5,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/iout/iorw"
 )
 
 func Find(cctx context.Context, ectx *Ctx, str string, reverse bool, opt *iorw.IndexOpt) (bool, error) {

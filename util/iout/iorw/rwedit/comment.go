@@ -7,10 +7,10 @@ import (
 	"io"
 	"unicode"
 
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/iout/iorw"
 )
 
-////godebug:annotatepackage:github.com/jmigpin/editor/util/iout/iorw
+////godebug:annotatepackage:github.com/friedelschoen/glake/util/iout/iorw
 
 func Comment(ctx *Ctx) error {
 	sym := ctx.Fns.CommentLineSym()

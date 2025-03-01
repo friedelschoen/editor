@@ -4,8 +4,8 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/jmigpin/editor/ui/driver"
-	"github.com/jmigpin/editor/util/imageutil"
+	"github.com/friedelschoen/glake/ui/driver"
+	"github.com/friedelschoen/glake/util/imageutil"
 )
 
 // Used by ScrollBar.

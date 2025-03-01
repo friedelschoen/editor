@@ -3,8 +3,8 @@ package drawer4
 import (
 	"strings"
 
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/parseutil/pscan"
+	"github.com/friedelschoen/glake/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/parseutil/pscan"
 )
 
 func updateParenthesisHighlight(d *Drawer) {

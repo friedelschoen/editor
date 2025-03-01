@@ -5,8 +5,8 @@ import (
 	"image/color"
 	"image/draw"
 
-	"github.com/jmigpin/editor/util/fontutil"
-	"github.com/jmigpin/editor/util/imageutil"
+	"github.com/friedelschoen/glake/util/fontutil"
+	"github.com/friedelschoen/glake/util/imageutil"
 )
 
 type DrawRune struct {

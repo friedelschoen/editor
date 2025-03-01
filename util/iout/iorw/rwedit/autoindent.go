@@ -5,7 +5,7 @@ import (
 	"io"
 	"unicode"
 
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/iout/iorw"
 )
 
 func AutoIndent(ctx *Ctx) error {

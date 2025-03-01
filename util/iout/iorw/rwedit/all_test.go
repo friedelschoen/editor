@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/iout/iorw"
 )
 
 func TestAll1(t *testing.T) {

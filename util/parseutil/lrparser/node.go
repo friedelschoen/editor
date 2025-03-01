@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/jmigpin/editor/util/parseutil/pscan"
+	"github.com/friedelschoen/glake/util/parseutil/pscan"
 )
 
 type PState struct {

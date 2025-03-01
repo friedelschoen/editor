@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/jmigpin/editor/util/pathutil"
+	"github.com/friedelschoen/glake/util/pathutil"
 	"golang.org/x/tools/txtar"
 )
 

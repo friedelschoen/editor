@@ -5,10 +5,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/core/lsproto"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/parseutil"
+	"github.com/friedelschoen/glake/core"
+	"github.com/friedelschoen/glake/core/lsproto"
+	"github.com/friedelschoen/glake/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/parseutil"
 )
 
 func GoToImplementationLSProto(ctx context.Context, erow *core.ERow, index int) (error, bool) {

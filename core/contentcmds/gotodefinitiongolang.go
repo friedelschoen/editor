@@ -8,10 +8,10 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/util/iout"
-	"github.com/jmigpin/editor/util/osutil"
-	"github.com/jmigpin/editor/util/parseutil/reslocparser"
+	"github.com/friedelschoen/glake/core"
+	"github.com/friedelschoen/glake/util/iout"
+	"github.com/friedelschoen/glake/util/osutil"
+	"github.com/friedelschoen/glake/util/parseutil/reslocparser"
 )
 
 func GoToDefinitionGolang(ctx context.Context, erow *core.ERow, index int) (error, bool) {

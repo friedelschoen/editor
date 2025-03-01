@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/jmigpin/editor/util/goutil"
+	"github.com/friedelschoen/glake/util/goutil"
 )
 
 // Checks in GOROOT/GOPATH,  and some C include dirs.

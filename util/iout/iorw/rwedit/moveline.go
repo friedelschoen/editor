@@ -1,8 +1,8 @@
 package rwedit
 
 import (
-	"github.com/jmigpin/editor/util/iout"
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/iout"
+	"github.com/friedelschoen/glake/util/iout/iorw"
 )
 
 func MoveLineUp(ctx *Ctx) error {

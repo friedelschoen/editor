@@ -1,7 +1,7 @@
 package rwedit
 
 import (
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/iout/iorw"
 )
 
 func SelectWord(ctx *Ctx) error {

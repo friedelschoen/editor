@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jmigpin/editor/util/iout"
+	"github.com/friedelschoen/glake/util/iout"
 )
 
 type StatesData struct {

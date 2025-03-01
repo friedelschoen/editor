@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/jmigpin/editor/util/astut"
-	"github.com/jmigpin/editor/util/testutil"
+	"github.com/friedelschoen/glake/util/astut"
+	"github.com/friedelschoen/glake/util/testutil"
 	"golang.org/x/tools/go/ast/astutil"
 )
 

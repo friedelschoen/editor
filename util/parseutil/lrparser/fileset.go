@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/jmigpin/editor/util/parseutil"
+	"github.com/friedelschoen/glake/util/parseutil"
 )
 
 // TODO: multiple files (working for single file only)

@@ -3,7 +3,7 @@ package toolbarparser
 import (
 	"fmt"
 
-	"github.com/jmigpin/editor/util/parseutil/pscan"
+	"github.com/friedelschoen/glake/util/parseutil/pscan"
 )
 
 // scan for cmd position, update with arg, or insert new cmd

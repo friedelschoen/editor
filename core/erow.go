@@ -9,12 +9,12 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/jmigpin/editor/core/toolbarparser"
-	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/ui/driver"
-	"github.com/jmigpin/editor/util/drawutil"
-	"github.com/jmigpin/editor/util/iout"
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/glake/core/toolbarparser"
+	"github.com/friedelschoen/glake/ui"
+	"github.com/friedelschoen/glake/ui/driver"
+	"github.com/friedelschoen/glake/util/drawutil"
+	"github.com/friedelschoen/glake/util/iout"
+	"github.com/friedelschoen/glake/util/iout/iorw"
 )
 
 type ERow struct {

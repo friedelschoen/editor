@@ -1,6 +1,6 @@
 package parseutil
 
-import "github.com/jmigpin/editor/util/parseutil/pscan"
+import "github.com/friedelschoen/glake/util/parseutil/pscan"
 
 func ParseFields(s string, fieldSep rune) ([]string, error) {
 	sc := pscan.NewScanner()

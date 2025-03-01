@@ -3,7 +3,7 @@ package contentcmds
 import (
 	"testing"
 
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/iout/iorw"
 )
 
 func TestOpenSession1(t *testing.T) {

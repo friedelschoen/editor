@@ -4,10 +4,10 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/jmigpin/editor/util/drawutil"
-	"github.com/jmigpin/editor/util/drawutil/drawer4"
-	"github.com/jmigpin/editor/util/imageutil"
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/drawutil"
+	"github.com/friedelschoen/glake/util/drawutil/drawer4"
+	"github.com/friedelschoen/glake/util/imageutil"
+	"github.com/friedelschoen/glake/util/iout/iorw"
 )
 
 type Text struct {

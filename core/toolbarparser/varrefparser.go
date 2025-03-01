@@ -3,8 +3,8 @@ package toolbarparser
 import (
 	"fmt"
 
-	"github.com/jmigpin/editor/util/osutil"
-	"github.com/jmigpin/editor/util/parseutil/pscan"
+	"github.com/friedelschoen/glake/util/osutil"
+	"github.com/friedelschoen/glake/util/parseutil/pscan"
 )
 
 func parseVarRefs(src []byte) ([]*VarRef, error) {

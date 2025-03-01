@@ -3,7 +3,7 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/ui/widget"
+	"github.com/friedelschoen/glake/ui/widget"
 )
 
 type Columns struct {

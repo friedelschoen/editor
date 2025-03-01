@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/jmigpin/editor/util/parseutil"
+	"github.com/friedelschoen/glake/util/parseutil"
 )
 
 type ResLoc struct {

@@ -4,12 +4,12 @@ import (
 	"image"
 	"unicode"
 
-	"github.com/jmigpin/editor/ui/driver"
-	"github.com/jmigpin/editor/ui/widget"
-	"github.com/jmigpin/editor/util/drawutil/drawer4"
-	"github.com/jmigpin/editor/util/evreg"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/iout/iorw/rwedit"
+	"github.com/friedelschoen/glake/ui/driver"
+	"github.com/friedelschoen/glake/ui/widget"
+	"github.com/friedelschoen/glake/util/drawutil/drawer4"
+	"github.com/friedelschoen/glake/util/evreg"
+	"github.com/friedelschoen/glake/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/iout/iorw/rwedit"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

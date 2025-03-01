@@ -14,9 +14,9 @@ import (
 	"strings"
 	"unicode/utf16"
 
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/osutil"
-	"github.com/jmigpin/editor/util/parseutil"
+	"github.com/friedelschoen/glake/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/osutil"
+	"github.com/friedelschoen/glake/util/parseutil"
 )
 
 var logger0 = log.New(os.Stdout, "", log.Lshortfile)
