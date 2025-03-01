@@ -9,8 +9,6 @@ import (
 	"go/token"
 	"os"
 	"strings"
-
-	"github.com/friedelschoen/glake/util/astut"
 )
 
 // var input = "../scmatch.go"
@@ -239,11 +237,12 @@ func MustSprintNode(fset *token.FileSet, node0 any, fieldNamesFn func(string)) s
 			return fmt.Sprintf("*%s", fn(t.X))
 
 		case *ast.Ident:
-			s, err := astut.SprintNode2(fset, node)
-			if err != nil {
-				panic(err)
-			}
-			return s
+			// s, err := astut.SprintNode2(fset, node)
+			// if err != nil {
+			// 	panic(err)
+			// }
+			// return s
+			return ""
 		default:
 			return fmt.Sprintf("<TODO:%T>", t)
 		}
