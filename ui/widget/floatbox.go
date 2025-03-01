@@ -3,7 +3,7 @@ package widget
 import (
 	"image"
 
-	"github.com/friedelschoen/glake/util/imageutil"
+	"github.com/friedelschoen/glake/util/drawutil"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -57,7 +57,7 @@ func (fb *FloatBox) Layout() {
 	// max size
 	max := b.Size()
 	if fb.MaxSize != (image.Point{}) {
-		max = imageutil.MinPoint(max, fb.MaxSize)
+		max = drawutil.MinPoint(max, fb.MaxSize)
 	}
 	m := fb.content.Measure(max)
 

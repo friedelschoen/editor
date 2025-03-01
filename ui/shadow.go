@@ -19,7 +19,7 @@ func WrapInTopShadowOrSeparator(ctx widget.ImageContext, content widget.Node) wi
 		bl := widget.NewBoxLayout()
 		bl.YAxis = true
 		rect := widget.NewRectangle(ctx)
-		rect.SetThemePaletteNamePrefix("shadowsep_")
+		rect.SetThemePaletteNamePrefix("shadow.sep_")
 		rect.Size.Y = separatorWidth
 		bl.Append(rect, content)
 		bl.SetChildFlex(content, true, true)

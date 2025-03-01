@@ -6,7 +6,7 @@ import (
 
 	"github.com/friedelschoen/glake/ui/driver"
 	"github.com/friedelschoen/glake/ui/widget"
-	"github.com/friedelschoen/glake/util/imageutil"
+	"github.com/friedelschoen/glake/util/drawutil"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -23,7 +23,7 @@ func NewRowSquare(row *Row) *RowSquare {
 	return sq
 }
 func (sq *RowSquare) Measure(hint image.Point) image.Point {
-	return imageutil.MinPoint(sq.Size, hint)
+	return drawutil.MinPoint(sq.Size, hint)
 }
 
 func (sq *RowSquare) Paint() {

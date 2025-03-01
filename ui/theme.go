@@ -10,7 +10,7 @@ import (
 	"github.com/flopp/go-findfont"
 	"github.com/friedelschoen/glake/ui/widget"
 	"github.com/friedelschoen/glake/util/fontutil"
-	"github.com/friedelschoen/glake/util/imageutil"
+	"github.com/friedelschoen/glake/util/shadow"
 	"golang.org/x/image/font/gofont/gomono"
 	"golang.org/x/image/font/opentype"
 )
@@ -18,15 +18,11 @@ import (
 var ScrollBarLeft = true
 var ScrollBarWidth int = 0 // 0=based on a portion of the font size
 
-var TextAreaCommentsColor color.Color
-var TextAreaStringsColor color.Color
-
 const separatorWidth = 1 // col/row separators width
 
 func lightThemeColors(node widget.Node) {
 	pal := lightThemeColorsPal()
 	pal.Merge(rowSquarePalette())
-	pal.Merge(userPalette())
 	node.Embed().SetThemePalette(pal)
 }
 func lightThemeColorsPal() widget.Palette {
@@ -49,15 +45,15 @@ func lightThemeColorsPal() widget.Palette {
 		"toolbar_text_wrapline_bg": cint(0xccccd8),
 
 		"scrollbar_bg":        cint(0xf2f2f2),
-		"scrollhandle_normal": imageutil.Shade(cint(0xf2f2f2), 0.20),
-		"scrollhandle_hover":  imageutil.Shade(cint(0xf2f2f2), 0.30),
-		"scrollhandle_select": imageutil.Shade(cint(0xf2f2f2), 0.40),
+		"scrollhandle_normal": shadow.Shade(cint(0xf2f2f2), 0.20),
+		"scrollhandle_hover":  shadow.Shade(cint(0xf2f2f2), 0.30),
+		"scrollhandle_select": shadow.Shade(cint(0xf2f2f2), 0.40),
 
 		"column_norows_rect":  cint(0xffffff),
 		"columns_nocols_rect": cint(0xffffff),
 		"colseparator_rect":   cint(0x0),
 		"rowseparator_rect":   cint(0x0),
-		"shadowsep_rect":      cint(0x0),
+		"shadow.sep_rect":     cint(0x0),
 
 		"columnsquare": cint(0xccccd8),
 		"rowsquare":    cint(0xccccd8),
@@ -74,14 +70,12 @@ func lightThemeColorsPal() widget.Palette {
 		"contextfloatbox_border": cint(0x0),
 	}
 	pal.Merge(rowSquarePalette())
-	pal.Merge(userPalette())
 	return pal
 }
 
 func acmeThemeColors(node widget.Node) {
 	pal := acmeThemeColorsPal()
 	pal.Merge(rowSquarePalette())
-	pal.Merge(userPalette())
 	node.Embed().SetThemePalette(pal)
 }
 func acmeThemeColorsPal() widget.Palette {
@@ -110,15 +104,15 @@ func acmeThemeColorsPal() widget.Palette {
 		"columns_nocols_rect": cint(0xffffff),
 		"colseparator_rect":   cint(0x0),
 		"rowseparator_rect":   cint(0x0),
-		"shadowsep_rect":      cint(0x0),
+		"shadow.sep_rect":     cint(0x0),
 
 		"columnsquare": cint(0xc6d8d8),
 		"rowsquare":    cint(0xc6d8d8),
 
 		"mm_text_bg":          cint(0xeaffff),
-		"mm_button_hover_bg":  imageutil.Shade(cint(0xeaffff), 0.10),
-		"mm_button_down_bg":   imageutil.Shade(cint(0xeaffff), 0.20),
-		"mm_button_sticky_bg": imageutil.Shade(cint(0xeaffff), 0.40),
+		"mm_button_hover_bg":  shadow.Shade(cint(0xeaffff), 0.10),
+		"mm_button_down_bg":   shadow.Shade(cint(0xeaffff), 0.20),
+		"mm_button_sticky_bg": shadow.Shade(cint(0xeaffff), 0.40),
 		"mm_border":           cint(0x0),
 		"mm_content_pad":      cint(0xeaffff),
 		"mm_content_border":   cint(0x0),
@@ -126,70 +120,20 @@ func acmeThemeColorsPal() widget.Palette {
 		"contextfloatbox_border": cint(0x0),
 	}
 	pal.Merge(rowSquarePalette())
-	pal.Merge(userPalette())
-	return pal
-}
-
-func lightInvertedThemeColors(node widget.Node) {
-	fn := newLinearInvertFn()
-	pal := lightThemeColorsPal()
-	for k, c := range pal {
-		if c != nil {
-			pal[k] = fn(c)
-		}
-	}
-	pal.Merge(rowSquarePalette())
-	pal.Merge(userPalette())
-	node.Embed().SetThemePalette(pal)
-}
-
-func acmeInvertedThemeColors(node widget.Node) {
-	fn := newLinearInvertFn()
-	pal := acmeThemeColorsPal()
-	for k, c := range pal {
-		if c != nil {
-			pal[k] = fn(c)
-		}
-	}
-	pal.Merge(rowSquarePalette())
-	pal.Merge(userPalette())
-	node.Embed().SetThemePalette(pal)
-}
-
-// Palette with user supplied color options that should override themes.
-func userPalette() widget.Palette {
-	pal := widget.Palette{}
-
-	setup := func(name string, c color.Color) {
-		// not defined, nothing to change, use defaults
-		if c == nil {
-			return
-		}
-		// allow explicit setup to nil with a value of 0x1
-		v := imageutil.RgbaToInt(imageutil.RgbaColor(c))
-		if v == 0x1 {
-			c = nil
-		}
-
-		pal[name] = c
-	}
-
-	setup("text_colorize_string_fg", TextAreaStringsColor)
-	setup("text_colorize_comments_fg", TextAreaCommentsColor)
 	return pal
 }
 
 func rowSquarePalette() widget.Palette {
 	pal := widget.Palette{
 		"rs_active":              cint(0x0),
-		"rs_executing":           cint(0x0fad00),                       // dark green
-		"rs_edited":              cint(0x0000ff),                       // blue
-		"rs_disk_changes":        cint(0xff0000),                       // red
-		"rs_not_exist":           cint(0xff9900),                       // orange
-		"rs_duplicate":           cint(0x8888cc),                       // blueish
-		"rs_duplicate_highlight": cint(0xffff00),                       // yellow
-		"rs_annotations":         cint(0xd35400),                       // pumpkin
-		"rs_annotations_edited":  imageutil.Tint(cint(0xd35400), 0.45), // pumpkin (brighter)
+		"rs_executing":           cint(0x0fad00),                    // dark green
+		"rs_edited":              cint(0x0000ff),                    // blue
+		"rs_disk_changes":        cint(0xff0000),                    // red
+		"rs_not_exist":           cint(0xff9900),                    // orange
+		"rs_duplicate":           cint(0x8888cc),                    // blueish
+		"rs_duplicate_highlight": cint(0xffff00),                    // yellow
+		"rs_annotations":         cint(0xd35400),                    // pumpkin
+		"rs_annotations_edited":  shadow.Tint(cint(0xd35400), 0.45), // pumpkin (brighter)
 	}
 	return pal
 }
@@ -198,8 +142,6 @@ var ColorThemeCycler cycler = cycler{
 	entries: []cycleEntry{
 		{"light", lightThemeColors},
 		{"acme", acmeThemeColors},
-		{"lightInverted", lightInvertedThemeColors},
-		{"acmeInverted", acmeInvertedThemeColors},
 	},
 }
 
@@ -327,10 +269,9 @@ func (uitu *uiThemeUtil) ShadowHeight(ff *fontutil.FontFace) int {
 }
 
 func cint(c int) color.RGBA {
-	return imageutil.RgbaFromInt(c)
-}
-
-func newLinearInvertFn() func(color.Color) color.Color {
-	//return imageutil.NewLinearInvertFn2(0.56, 2.5) // match gimp results
-	return imageutil.NewLinearInvertFn2(0.80, 2.2) // darker, but better contrast then gimps
+	v := c & 0xffffff
+	r := uint8(v >> 16)
+	g := uint8(v >> 8)
+	b := uint8(v >> 0)
+	return color.RGBA{r, g, b, 255}
 }

@@ -4,7 +4,7 @@ import (
 	"image"
 	"image/draw"
 
-	"github.com/friedelschoen/glake/util/imageutil"
+	"github.com/friedelschoen/glake/util/drawutil"
 )
 
 type Pad struct {
@@ -48,11 +48,11 @@ func (p *Padder) Measure(hint image.Point) image.Point {
 	h := hint
 	h.X -= p.Right + p.Left
 	h.Y -= p.Top + p.Bottom
-	h = imageutil.MaxPoint(h, image.Point{0, 0})
+	h = drawutil.MaxPoint(h, image.Point{0, 0})
 	m := p.ENode.Measure(h)
 	m.X += p.Right + p.Left
 	m.Y += p.Top + p.Bottom
-	m = imageutil.MinPoint(m, hint)
+	m = drawutil.MinPoint(m, hint)
 	return m
 }
 

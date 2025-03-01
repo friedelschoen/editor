@@ -19,8 +19,6 @@ type Options struct {
 	CarriageReturnRune string `json:"carriage-return-rune"`
 
 	ColorTheme     string `json:"colortheme"`
-	CommentsColor  int    `json:"comment-color"`
-	StringsColor   int    `json:"string-color"`
 	ScrollBarWidth int    `json:"scrollbar-width"`
 	ScrollBarLeft  bool   `json:"scrollbar-left"`
 	Shadows        bool   `json:"shadows"`

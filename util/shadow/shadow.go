@@ -1,4 +1,4 @@
-package imageutil
+package shadow
 
 import (
 	"image"
@@ -16,7 +16,7 @@ func shadowTable(size int) []float64 {
 	return res
 }
 
-// precalculate shadows
+// precalculate shadow.s
 var shadow = shadowTable(1000)
 
 // maxColorDiff in [0.0, 1.0]

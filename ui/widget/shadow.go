@@ -3,7 +3,8 @@ package widget
 import (
 	"image"
 
-	"github.com/friedelschoen/glake/util/imageutil"
+	"github.com/friedelschoen/glake/util/drawutil"
+	"github.com/friedelschoen/glake/util/shadow"
 )
 
 type TopShadow struct {
@@ -38,7 +39,7 @@ func (s *TopShadow) Paint() {
 	r.Max.Y = r.Min.Y + s.Height
 	r = r.Intersect(s.Bounds)
 
-	imageutil.PaintShadow(s.ctx.Image(), r, s.Height, s.MaxDiff)
+	shadow.PaintShadow(s.ctx.Image(), r, s.Height, s.MaxDiff)
 }
 
 type BottomShadow struct {
@@ -73,9 +74,9 @@ type BottomShadowPart struct {
 
 func (s *BottomShadowPart) Measure(hint image.Point) image.Point {
 	w := image.Point{0, s.bs.Height}
-	w = imageutil.MinPoint(w, hint)
+	w = drawutil.MinPoint(w, hint)
 	return w
 }
 func (s *BottomShadowPart) Paint() {
-	imageutil.PaintShadow(s.bs.ctx.Image(), s.Bounds, s.bs.Height, s.bs.MaxDiff)
+	shadow.PaintShadow(s.bs.ctx.Image(), s.Bounds, s.bs.Height, s.bs.MaxDiff)
 }

@@ -4,7 +4,7 @@ import (
 	"image"
 
 	"github.com/friedelschoen/glake/ui/driver"
-	"github.com/friedelschoen/glake/util/imageutil"
+	"github.com/friedelschoen/glake/util/drawutil"
 )
 
 type ScrollArea struct {
@@ -87,13 +87,13 @@ func (sa *ScrollArea) Measure(hint image.Point) image.Point {
 	}
 
 	h := hint.Sub(space)
-	h = imageutil.MaxPoint(h, image.Point{0, 0})
+	h = drawutil.MaxPoint(h, image.Point{0, 0})
 
 	//m := sa.ENode.Measure(h)
 	m := sa.scrollable.Measure(h)
 
 	m = m.Add(space)
-	m = imageutil.MinPoint(m, hint)
+	m = drawutil.MinPoint(m, hint)
 
 	return m
 }

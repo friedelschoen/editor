@@ -24,7 +24,6 @@ import (
 	"github.com/friedelschoen/glake/ui/widget"
 	"github.com/friedelschoen/glake/util/drawutil/drawer4"
 	"github.com/friedelschoen/glake/util/fontutil"
-	"github.com/friedelschoen/glake/util/imageutil"
 	"github.com/friedelschoen/glake/util/iout/iorw"
 	"github.com/friedelschoen/glake/util/osutil"
 	"github.com/veandco/go-sdl2/sdl"
@@ -465,16 +464,6 @@ func (ed *Editor) setupTheme(opt *Options) {
 		os.Exit(2)
 	}
 	ui.ColorThemeCycler.CurName = opt.ColorTheme
-
-	// color comments
-	if opt.CommentsColor != 0 {
-		ui.TextAreaCommentsColor = imageutil.RgbaFromInt(opt.CommentsColor)
-	}
-
-	// color strings
-	if opt.StringsColor != 0 {
-		ui.TextAreaStringsColor = imageutil.RgbaFromInt(opt.StringsColor)
-	}
 
 	// font options
 	fontutil.DPI = opt.DPI

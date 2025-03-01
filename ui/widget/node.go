@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/friedelschoen/glake/ui/driver"
+	"github.com/friedelschoen/glake/util/drawutil"
 	"github.com/friedelschoen/glake/util/fontutil"
-	"github.com/friedelschoen/glake/util/imageutil"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -320,7 +320,7 @@ func (en *EmbedNode) Measure(hint image.Point) image.Point {
 	var max image.Point
 	en.IterateWrappers2(func(c Node) {
 		m := c.Measure(hint)
-		max = imageutil.MaxPoint(max, m)
+		max = drawutil.MaxPoint(max, m)
 	})
 	return max
 }

@@ -7,7 +7,6 @@ import (
 
 	"github.com/friedelschoen/glake/util/drawutil"
 	"github.com/friedelschoen/glake/util/drawutil/drawer4"
-	"github.com/friedelschoen/glake/util/imageutil"
 	"github.com/friedelschoen/glake/util/iout/iorw"
 )
 
@@ -130,7 +129,7 @@ func (t *Text) Measure(hint image.Point) image.Point {
 	b.Max = b.Min.Add(hint)
 	t.Drawer.SetBounds(b)
 	m := t.Drawer.Measure()
-	return imageutil.MinPoint(m, hint)
+	return drawutil.MinPoint(m, hint)
 }
 
 func (t *Text) Layout() {

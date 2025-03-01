@@ -4,7 +4,6 @@ import (
 	"image/color"
 
 	"github.com/friedelschoen/glake/util/fontutil"
-	"github.com/friedelschoen/glake/util/imageutil"
 )
 
 var DefaultPalette = Palette{
@@ -111,5 +110,9 @@ func (pal Palette) Merge(p2 Palette) {
 }
 
 func cint(c int) color.RGBA {
-	return imageutil.RgbaFromInt(c)
+	v := c & 0xffffff
+	r := uint8(v >> 16)
+	g := uint8(v >> 8)
+	b := uint8(v >> 0)
+	return color.RGBA{r, g, b, 255}
 }

@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/friedelschoen/glake/util/drawutil/drawer4"
-	"github.com/friedelschoen/glake/util/imageutil"
 	"github.com/friedelschoen/glake/util/iout/iorw"
+	"github.com/friedelschoen/glake/util/shadow"
 )
 
 // textedit with extensions
@@ -174,11 +174,11 @@ func (te *TextEditX) updateFlashOpt4(d *drawer4.Drawer) {
 	// process color function
 	bg3 := te.TreeThemePaletteColor("text_bg")
 	pc := func(fg, bg color.Color) (_, _ color.Color) {
-		fg2 := imageutil.TintOrShade(fg, perc)
+		fg2 := shadow.TintOrShade(fg, perc)
 		if bg == nil {
 			bg = bg3
 		}
-		bg2 := imageutil.TintOrShade(bg, perc)
+		bg2 := shadow.TintOrShade(bg, perc)
 		return fg2, bg2
 	}
 
