@@ -13,13 +13,6 @@ type HSV struct {
 }
 
 // h in [0-360), {s,v} in [0-100]
-func MakeHSV(h uint16, s, v uint8) HSV {
-	return HSV{
-		H: h,
-		S: uint8(uint32(s) * 255 / 100),
-		V: uint8(uint32(v) * 255 / 100),
-	}
-}
 
 func (c HSV) RGBA() (_, _, _, _ uint32) {
 	r, g, b := hsv2rgb(c.H, c.S, c.V)
@@ -120,36 +113,4 @@ func rgb2hsv(r0, g0, b0 uint8) (h uint16, s, v uint8) {
 	h = uint16(seg*60 + offset)
 
 	return
-}
-
-func Valorize(c color.Color, v float64, auto bool) color.Color {
-	if v < -1 || v > 1 {
-		panic("!")
-	}
-	hsv := HSVModel.Convert(c).(HSV)
-
-	var u int = int(hsv.V)
-
-	//d := int(float64(hsv.V) * v)
-	d := int(255 * v)
-	if auto {
-		// auto decide to add or subtract
-		if hsv.V < 255/2 {
-			u += d
-		} else {
-			u -= d
-		}
-	} else {
-		u += d
-	}
-
-	if u > 255 {
-		hsv.V = 255
-	} else if u < 0 {
-		hsv.V = 0
-	} else {
-		hsv.V = uint8(u)
-	}
-	c2 := RgbaColor(hsv)
-	return c2
 }

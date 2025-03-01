@@ -3,7 +3,6 @@ package mathutil
 import (
 	"cmp"
 	"math"
-	"math/rand"
 )
 
 func RoundFloat64(val float64, precision uint) float64 {
@@ -22,14 +21,6 @@ func LimitFloat64(v float64, min, max float64) float64 {
 }
 
 // TODO: remove
-func LimitInt(v int, min, max int) int {
-	if v < min {
-		return min
-	} else if v > max {
-		return max
-	}
-	return v
-}
 
 func Limit[T cmp.Ordered](v, min, max T) T {
 	if v < min {
@@ -57,13 +48,4 @@ func Max[T cmp.Ordered](s ...T) T {
 		}
 	}
 	return m
-}
-
-func GenDigitsStr(n int) string {
-	const src = "0123456789"
-	b := make([]byte, n)
-	for i := range b {
-		b[i] = src[rand.Intn(len(src))]
-	}
-	return string(b)
 }

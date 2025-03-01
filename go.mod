@@ -8,12 +8,8 @@ require (
 	github.com/fsnotify/fsnotify v1.8.0
 	github.com/veandco/go-sdl2 v0.4.40
 	golang.org/x/image v0.24.0
-	golang.org/x/mod v0.23.0
 	golang.org/x/sys v0.30.0
 	golang.org/x/text v0.22.0
-	golang.org/x/tools v0.30.0
 )
 
-require (
-	github.com/dlclark/regexp2 v1.11.5 // indirect
-)
+require github.com/dlclark/regexp2 v1.11.5 // indirect

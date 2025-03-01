@@ -149,19 +149,3 @@ func cLangRegistration(_ bool) string {
 	// }
 	return fmt.Sprintf("cpp,%q,stdio,%q%s", ext, cmd, errOut)
 }
-
-func pylspRegistration(stderr bool, tcp bool) string {
-	cmd := osutil.ExecName("pylsp")
-	net := "stdio"
-	if tcp {
-		net = "tcp"
-		cmd += " --tcp"
-		cmd += " --host={{.Host}}"
-		cmd += " --port={{.Port}}"
-	}
-	errOut := ""
-	if stderr {
-		errOut = ",stderr"
-	}
-	return fmt.Sprintf("python,.py,%s,%q%s", net, cmd, errOut)
-}

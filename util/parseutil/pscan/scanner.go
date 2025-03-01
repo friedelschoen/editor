@@ -67,9 +67,6 @@ func (sc *Scanner) SrcLen() int {
 }
 
 // WARNING: use with caution, using pos in resulting []byte might fail when there is offset
-func (sc *Scanner) SrcFullFromOffset() []byte {
-	return sc.SrcFromTo(sc.SrcMin(), sc.SrcLen())
-}
 
 func (sc *Scanner) srcSection0(pos int, maxLen int) string {
 	start := mathutil.Max(pos-maxLen, sc.SrcMin())
@@ -120,15 +117,6 @@ func (sc *Scanner) ReadRune(pos int) (rune, int, error) {
 	}
 }
 
-func (sc *Scanner) EnsureFatalError(err error) error {
-	e2, ok := err.(*Error)
-	if !ok {
-		e2 = &Error{err: err}
-	}
-	e2.Fatal = true
-	return e2
-}
-
 func (sc *Scanner) NewValueKeeper() *ValueKeeper {
 	return sc.NewValueKeepers(1)[0]
 }
@@ -163,33 +151,8 @@ func (vk *ValueKeeper) WKeepValue(fn VFn) MFn {
 type MFn func(pos int) (int, error)      // match func
 type VFn func(pos int) (any, int, error) // value func
 
-type Error struct {
-	err   error
-	Fatal bool
-}
-
-func (e Error) Error() string {
-	return e.err.Error()
-}
-
-func errorIsFatal(err error) bool {
-	e, ok := err.(*Error)
-	return ok && e.Fatal
-}
-
 var NoMatchErr = errors.New("no match")
 var EOF = io.EOF
 var SOF = errors.New("SOF") // start-of-file (as opposed to EOF)
 
 type RuneRange [2]rune // assume [0]<[1]
-
-func (rr RuneRange) HasRune(ru rune) bool {
-	return ru >= rr[0] && ru <= rr[1]
-}
-func (rr RuneRange) IntersectsRange(rr2 RuneRange) bool {
-	noIntersection := rr2[1] <= rr[0] || rr2[0] > rr[1]
-	return !noIntersection
-}
-func (rr RuneRange) String() string {
-	return fmt.Sprintf("%q-%q", rr[0], rr[1])
-}

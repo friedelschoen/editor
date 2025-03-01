@@ -14,7 +14,7 @@ import (
 )
 
 type Node interface {
-	fullNode() // ensure that EmbNode can't be directly assigned to a Node
+	// fullNode() // ensure that EmbNode can't be directly assigned to a Node
 
 	Embed() *EmbedNode
 
@@ -44,8 +44,6 @@ type Node interface {
 type ENode struct {
 	EmbedNode
 }
-
-func (ENode) fullNode() {}
 
 type EmbedNode struct {
 	Bounds  image.Rectangle

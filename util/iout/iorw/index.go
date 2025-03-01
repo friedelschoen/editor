@@ -57,12 +57,6 @@ func indexCtx2(ctx context.Context, r ReaderAt, i int, sep []byte, chunk int, op
 	return -1, 0, nil
 }
 
-func LastIndex(r ReaderAt, i int, sep []byte, ignoreCase bool) (int, int, error) {
-	ctx := context.Background()
-	opt := &IndexOpt{IgnoreCase: ignoreCase}
-	return LastIndexCtx(ctx, r, i, sep, opt)
-}
-
 // Returns (-1, 0, nil) if not found.
 func LastIndexCtx(ctx context.Context, r ReaderAt, i int, sep []byte, opt *IndexOpt) (int, int, error) {
 	return lastIndexCtx2(ctx, r, i, sep, -1, opt)

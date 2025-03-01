@@ -20,24 +20,6 @@ func (ccs *contentCmds) Append(name string, fn ContentCmdFn) {
 	*ccs = append(*ccs, cc)
 }
 
-func (ccs *contentCmds) Prepend(name string, fn ContentCmdFn) {
-	cc := &ContentCmd{name, fn}
-	*ccs = append([]*ContentCmd{cc}, *ccs...)
-}
-
-func (ccs *contentCmds) Remove(name string) (removed bool) {
-	var a []*ContentCmd
-	for _, cc := range *ccs {
-		if cc.Name == name {
-			removed = true
-		} else {
-			a = append(a, cc)
-		}
-	}
-	*ccs = a
-	return
-}
-
 // global cmds added via init() from "contentcmds" pkg
 var ContentCmds contentCmds
 

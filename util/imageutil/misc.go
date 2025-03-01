@@ -1,11 +1,9 @@
 package imageutil
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	"math"
-	"sort"
 
 	"github.com/friedelschoen/glake/util/mathutil"
 )
@@ -65,18 +63,6 @@ func RgbaToInt(c color.RGBA) int {
 }
 
 // Ex. usage: editor.xutil.cursors
-func ColorUint16s(c color.Color) (uint16, uint16, uint16, uint16) {
-	r, g, b, a := c.RGBA()
-	return uint16(r << 8), uint16(g << 8), uint16(b << 8), uint16(a)
-}
-
-func SprintRgb(c color.Color) string {
-	rgba := RgbaColor(c)
-	return fmt.Sprintf("%x %x %x", rgba.R, rgba.G, rgba.B)
-}
-func SprintRgbaHex(c color.Color) string {
-	return fmt.Sprintf("%06x", RgbaToInt(RgbaColor(c)))
-}
 
 //func Invert(c color.Color) color.Color {
 //	return InvertRgba(RgbaColor(c))
@@ -87,37 +73,6 @@ func SprintRgbaHex(c color.Color) string {
 //func LinearInvert(c color.Color) color.Color {
 //	return LinearInvertRgba(RgbaColor(c))
 //}
-
-func Invert(c color.RGBA) color.RGBA {
-	c.R = 255 - c.R
-	c.G = 255 - c.G
-	c.B = 255 - c.B
-	return c
-}
-func Invert2(c color.RGBA) color.RGBA {
-	c.R = c.A - c.R
-	c.G = c.A - c.G
-	c.B = c.A - c.B
-	return c
-}
-
-func Complement(c color.RGBA) color.RGBA {
-	c3 := RgbaColor(c)
-	r, g, b, a := c3.R, c3.G, c3.B, c3.A
-	w := [3]int{int(r), int(g), int(b)}
-
-	// calc "add" with a copy (needs sort)
-	h := w // copy
-	sort.Ints(h[:])
-	m1, _, m3 := h[0], h[1], h[2]
-	add := m1 + m3
-
-	for i := range w {
-		w[i] = add - w[i]
-	}
-	c2 := color.RGBA{uint8(w[0]), uint8(w[1]), uint8(w[2]), uint8(a)}
-	return c2
-}
 
 // NOTE: https://www.pyimagesearch.com/2015/10/05/opencv-gamma-correction/
 func NewLinearInvertFn(v1, v2 float64) func(color.RGBA) color.RGBA {

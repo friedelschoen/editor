@@ -1,77 +1,11 @@
 package lrparser
 
-import (
-	"fmt"
-	"strings"
-)
-
 // rules first terminals
 type RuleFirstT struct {
 	ri      *RuleIndex
 	cache   map[Rule]RuleSet
 	seen    map[Rule]int
 	reverse bool
-}
-
-func newRuleFirstT(ri *RuleIndex, reverse bool) *RuleFirstT {
-	rf := &RuleFirstT{ri: ri, reverse: reverse}
-	rf.cache = map[Rule]RuleSet{}
-	rf.seen = map[Rule]int{}
-	return rf
-}
-
-func (rf *RuleFirstT) first(r Rule) RuleSet {
-	rset, ok := rf.cache[r]
-	if ok {
-		return rset
-	}
-
-	rf.seen[r]++
-	defer func() { rf.seen[r]-- }()
-	if rf.seen[r] > 2 { // extra loop to allow proper solve
-		return nil
-	}
-
-	rset = RuleSet{}
-	if r.isTerminal() {
-		rset.set(r)
-	} else {
-		inReverse := rf.reverse && ruleProdCanReverse(r)
-		for _, r2 := range ruleProductions(r) { // r->a0|...|an
-			w2 := ruleSequence(r2, inReverse) // r->a0 ... an
-			rset2 := rf.sequenceFirst(w2)
-			rset.add(rset2)
-		}
-	}
-	rf.cache[r] = rset
-	return rset
-}
-func (rf *RuleFirstT) sequenceFirst(w []Rule) RuleSet {
-	rset := RuleSet{}
-	allHaveNil := true
-	for _, r := range w { // w -> r1 ... rk
-		rset2 := rf.first(r)
-		rset.add(rset2)
-		if !rset2.has(nilRule) {
-			allHaveNil = false
-			break
-		}
-	}
-	if !allHaveNil {
-		rset.unset(nilRule)
-	}
-	return rset
-}
-
-func (rf *RuleFirstT) String() string {
-	u := []string{}
-	for _, r := range rf.ri.sorted() {
-		if r.isTerminal() { // no need to show terminals
-			continue
-		}
-		u = append(u, fmt.Sprintf("%v:%v", r.id(), rf.first(r)))
-	}
-	return fmt.Sprintf("rulefirst[rev=%v]{\n\t%v\n}", rf.reverse, strings.Join(u, "\n\t"))
 }
 
 //type RuleFollow struct {

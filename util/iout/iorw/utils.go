@@ -54,9 +54,6 @@ func ReadFullCopy(rd ReaderAt) ([]byte, error) {
 func SetBytes(rw ReadWriterAt, b []byte) error {
 	return rw.OverwriteAt(rw.Min(), rw.Max(), b)
 }
-func SetString(rw ReadWriterAt, s string) error {
-	return SetBytes(rw, []byte(s))
-}
 func Append(rw ReadWriterAt, b []byte) error {
 	return rw.OverwriteAt(rw.Max(), 0, b)
 }
@@ -64,23 +61,6 @@ func Append(rw ReadWriterAt, b []byte) error {
 const EndRune = -1
 
 // Iterate over n+1 runes, with the last rune being eofRune(-1).
-func ReaderIter(r ReaderAt, fn func(i int, ru rune) bool) error {
-	for i := r.Min(); ; {
-		ru, size, err := ReadRuneAt(r, i)
-		if err != nil {
-			if err == io.EOF {
-				_ = fn(i, EndRune)
-				return nil
-			}
-			return err
-		}
-		if !fn(i, ru) {
-			break
-		}
-		i += size
-	}
-	return nil
-}
 
 func HasPrefix(r ReaderAt, i int, s []byte) bool {
 	if len(s) == 0 {
@@ -145,19 +125,8 @@ func RuneLastIndexFn(r ReaderAt, i int, truth bool, f func(rune) bool) (index, s
 }
 
 // Returns index where truth was found.
-func ExpandRuneIndexFn(r ReaderAt, i int, truth bool, f func(rune) bool) int {
-	j, _, _ := RuneIndexFn(r, i, truth, f)
-	return j // found, or last known index before an err
-}
 
 // Returns last index before truth was found.
-func ExpandRuneLastIndexFn(r ReaderAt, i int, truth bool, f func(rune) bool) int {
-	j, size, err := RuneLastIndexFn(r, i, truth, f)
-	if err != nil {
-		return j // last known index before an err
-	}
-	return j + size
-}
 
 //func Lines(r ReaderAt, a, b int) (int, int, [][]byte, error) {
 //	ls, err := LineStartIndex(r, a)

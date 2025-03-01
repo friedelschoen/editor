@@ -65,19 +65,6 @@ func NewLoadedERowOrNewBasic(info *ERowInfo, rowPos *ui.RowPos) *ERow {
 	return erow
 }
 
-func ExistingERowOrNewLoaded(ed *Editor, name string) (_ *ERow, isNew bool, _ error) {
-	info := ed.ReadERowInfo(name)
-	if erow0, ok := info.FirstERow(); ok {
-		return erow0, false, nil
-	}
-	rowPos := ed.GoodRowPos()
-	erow, err := NewLoadedERow(info, rowPos)
-	if err != nil {
-		return nil, false, err
-	}
-	return erow, true, nil
-}
-
 // Used for ex. in: +messages, +sessions.
 func ExistingERowOrNewBasic(ed *Editor, name string) (_ *ERow, isNew bool) {
 

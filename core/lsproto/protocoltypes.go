@@ -251,24 +251,6 @@ type CallHierarchyPrepareParams struct {
 	TextDocumentPositionParams
 }
 
-// Commented: here for doc only; using the unified/simplified version below
-
-//type CallHierarchyIncomingCallsParams struct { // request
-//	Item *CallHierarchyItem `json:"item"`
-//}
-//type CallHierarchyIncomingCall struct { // response
-//	From       *CallHierarchyItem `json:"from"`
-//	FromRanges []*Range           `json:"fromRanges"`
-//}
-
-//type CallHierarchyOutgoingCallsParams struct { // request
-//	Item *CallHierarchyItem `json:"item"`
-//}
-//type CallHierarchyOutgoingCall struct { // response
-//	To         *CallHierarchyItem `json:"to"`
-//	FromRanges []*Range           `json:"fromRanges"`
-//}
-
 type CallHierarchyCallsParams struct { // used in Incoming/Outgoing
 	Item *CallHierarchyItem `json:"item"`
 }

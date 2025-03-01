@@ -49,9 +49,3 @@ func (rw *RWUndo) UndoRedo(redo, peek bool) (rwedit.SimpleCursor, bool, error) {
 }
 
 // used in tests
-func (rw *RWUndo) undo() (rwedit.SimpleCursor, bool, error) {
-	return rw.UndoRedo(false, false)
-}
-func (rw *RWUndo) redo() (rwedit.SimpleCursor, bool, error) {
-	return rw.UndoRedo(true, false)
-}

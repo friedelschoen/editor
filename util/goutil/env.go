@@ -1,18 +1,12 @@
 package goutil
 
 import (
-	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
 
 	"github.com/friedelschoen/glake/util/osutil"
 )
-
-func OsAndGoEnv(dir string) []string {
-	env := os.Environ()
-	return osutil.AppendEnv(env, GoEnv(dir))
-}
 
 func GoEnv(dir string) []string {
 	w, err := GoEnv2(dir)
@@ -56,10 +50,6 @@ func GoPath() []string {
 	return GetGoPath(GoEnv(""))
 }
 
-func GoVersion() (string, error) {
-	return GetGoVersion(GoEnv(""))
-}
-
 func GetGoRoot(env []string) string {
 	return osutil.GetEnv(env, "GOROOT")
 }
@@ -80,23 +70,3 @@ func GetGoPath(env []string) []string {
 }
 
 // returns version as in "1.0" without the "go" prefix
-func GetGoVersion(env []string) (string, error) {
-	// get from env var, not present in <=go.15.x?
-	v := osutil.GetEnv(env, "GOVERSION")
-
-	if v == "" {
-		// get from file located in go root
-		d := GetGoRoot(env)
-		fp := filepath.Join(d, "VERSION")
-		b, err := os.ReadFile(fp)
-		if err != nil {
-			return "", err
-		}
-		v = strings.TrimSpace(string(b))
-	}
-
-	// remove "go" prefix if present
-	v = strings.TrimPrefix(v, "go")
-
-	return v, nil
-}

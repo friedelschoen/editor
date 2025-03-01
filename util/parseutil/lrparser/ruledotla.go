@@ -1,56 +1,7 @@
 package lrparser
 
-import (
-	"fmt"
-)
-
 // aka "set of items"
 type RuleDotsLaSet map[RuleDot]RuleSet // lookahead set
-
-func (rdslas RuleDotsLaSet) setRuleSet(rd RuleDot, rset RuleSet) {
-	if _, ok := rdslas[rd]; !ok {
-		rdslas[rd] = RuleSet{}
-	}
-	rdslas[rd].add(rset)
-}
-func (rdslas RuleDotsLaSet) setRule(rd RuleDot, r Rule) {
-	if _, ok := rdslas[rd]; !ok {
-		rdslas[rd] = RuleSet{}
-	}
-	rdslas[rd].set(r)
-}
-func (rdslas RuleDotsLaSet) hasRule(rd RuleDot, r Rule) bool {
-	rset, ok := rdslas[rd]
-	if !ok {
-		return false
-	}
-	return rset.has(r)
-}
-
-func (rdslas RuleDotsLaSet) ruleDots() RuleDots {
-	w := RuleDots{}
-	for rd := range rdslas {
-		u := rd
-		w = append(w, &u)
-	}
-	return w
-}
-
-func (rdslas RuleDotsLaSet) String() string {
-	rds := RuleDots{}
-	for k := range rdslas {
-		u := k
-		rds = append(rds, &u)
-	}
-	rds = rds.sorted()
-	s := ""
-	for _, rd := range rds {
-		rset := rdslas[*rd]
-		u := fmt.Sprintf("[%v,%v]", rd, rset)
-		s += fmt.Sprintf("%v\n", u)
-	}
-	return s
-}
 
 //// aka "set of items"
 //type RuleDotLas []*RuleDotLa

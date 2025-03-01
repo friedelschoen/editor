@@ -59,13 +59,6 @@ func newResLocParserSingletonInstance() (*ResLocParser, error) {
 }
 
 // util func to replace parseutil.*
-func ParseFilePos(src []byte, index int) (*parseutil.FilePos, error) {
-	rl, err := ParseResLoc(src, index)
-	if err != nil {
-		return nil, err
-	}
-	return ResLocToFilePos(rl), nil
-}
 
 func ResLocToFilePos(rl *ResLoc) *parseutil.FilePos {
 	return &parseutil.FilePos{

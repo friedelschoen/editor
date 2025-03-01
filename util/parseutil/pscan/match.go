@@ -56,9 +56,6 @@ func (m *Match) Or(pos int, fns ...MFn) (int, error) {
 	p0 := -1
 	for _, fn := range fns {
 		if p2, err := fn(pos); err != nil {
-			if errorIsFatal(err) {
-				return p2, err
-			}
 			// keep furthest error
 			if err0 == nil ||
 				(!m.sc.Reverse && p2 > p0) ||
@@ -75,9 +72,6 @@ func (m *Match) Or(pos int, fns ...MFn) (int, error) {
 
 func (m *Match) Optional(pos int, fn MFn) (int, error) {
 	if p2, err := fn(pos); err != nil {
-		if errorIsFatal(err) {
-			return p2, err
-		}
 		return pos, nil
 	} else {
 		return p2, nil
@@ -94,23 +88,8 @@ func (m *Match) Byte(pos int, b byte) (int, error) {
 	}
 	return p2, nil
 }
-func (m *Match) ByteFn(pos int, fn func(byte) bool) (int, error) {
-	b, p2, err := m.sc.ReadByte(pos)
-	if err != nil {
-		return p2, err
-	}
-	if !fn(b) {
-		return pos, NoMatchErr // position before reading
-	}
-	return p2, nil
-}
 
 // one or more
-func (m *Match) ByteFnLoop(pos int, fn func(byte) bool) (int, error) {
-	return m.Loop(pos, func(p2 int) (int, error) {
-		return m.ByteFn(p2, fn)
-	})
-}
 
 func (m *Match) ByteSequence(pos int, seq []byte) (int, error) {
 	for i, l := 0, len(seq); i < l; i++ {
@@ -125,19 +104,6 @@ func (m *Match) ByteSequence(pos int, seq []byte) (int, error) {
 		}
 	}
 	return pos, nil
-}
-
-func (m *Match) NBytesFn(pos int, n int, fn func(byte) bool) (int, error) {
-	return m.NLoop(pos, n, m.W.ByteFn(fn))
-}
-func (m *Match) NBytes(pos int, n int) (int, error) {
-	accept := func(byte) bool { return true }
-	return m.NBytesFn(pos, n, accept)
-}
-
-func (m *Match) OneByte(pos int) (int, error) {
-	_, p2, err := m.sc.ReadByte(pos)
-	return p2, err
 }
 
 func (m *Match) Rune(pos int, ru rune) (int, error) {
@@ -218,13 +184,6 @@ func (m *Match) RuneSequenceMid(pos int, rs []rune) (int, error) {
 		}
 	}
 }
-func (m *Match) NRunesFn(pos int, n int, fn func(rune) bool) (int, error) {
-	return m.NLoop(pos, n, m.W.RuneFn(fn))
-}
-func (m *Match) NRunes(pos int, n int) (int, error) {
-	accept := func(rune) bool { return true }
-	return m.NRunesFn(pos, n, accept)
-}
 
 // equivalent to NRunes(1) but faster
 func (m *Match) OneRune(pos int) (int, error) {
@@ -240,19 +199,6 @@ func (m *Match) SequenceMid(pos int, seq string) (int, error) {
 	return m.RuneSequenceMid(pos, []rune(seq))
 }
 
-func (m *Match) RuneRanges(pos int, rrs ...RuneRange) (int, error) {
-	if ru, p2, err := m.sc.ReadRune(pos); err != nil {
-		return p2, err
-	} else {
-		for _, rr := range rrs {
-			if rr.HasRune(ru) {
-				return p2, nil
-			}
-		}
-		return pos, NoMatchErr
-	}
-}
-
 // max<=-1 means no upper limit
 func (m *Match) LimitedLoop(pos int, min, max int, fn MFn) (int, error) {
 	for i := 0; ; i++ {
@@ -261,9 +207,6 @@ func (m *Match) LimitedLoop(pos int, min, max int, fn MFn) (int, error) {
 		}
 		p2, err := fn(pos)
 		if err != nil {
-			if errorIsFatal(err) {
-				return p2, err
-			}
 			if i >= min {
 				return pos, nil // last good fn() position
 			}
@@ -285,16 +228,6 @@ func (m *Match) OptLoop(pos int, fn MFn) (int, error) {
 }
 
 // must have n
-func (m *Match) NLoop(pos int, n int, fn MFn) (int, error) {
-	for i := 0; i < n; i++ {
-		if p2, err := fn(pos); err != nil {
-			return p2, err
-		} else {
-			pos = p2
-		}
-	}
-	return pos, nil
-}
 
 func (m *Match) loopSep0(pos int, fn, sep MFn, lastSep bool) (int, error) {
 	if m.sc.Reverse {
@@ -349,10 +282,6 @@ func (m *Match) LoopSepCanHaveLast(pos int, fn, sep MFn) (int, error) {
 	return m.loopSep0(pos, fn, sep, true)
 }
 
-func (m *Match) PtrFn(pos int, fn *MFn) (int, error) {
-	return (*fn)(pos)
-}
-
 //---------- NOTE: not so "generic" util funcs (more specific)
 
 func (m *Match) Spaces(pos int, includeNL bool, escape rune) (int, error) {
@@ -378,25 +307,6 @@ func (m *Match) EscapeAny(pos int, escape rune) (int, error) {
 	return m.AndR(pos,
 		m.W.Rune(escape),
 		m.OneRune,
-	)
-}
-
-func (m *Match) ToNLOrErr(pos int, includeNL bool, esc rune) (int, error) {
-	done := false
-	valid := func(ru rune) bool {
-		isNL := ru == '\n'
-		if includeNL && isNL {
-			done = true
-			return true
-		}
-		return !isNL
-	}
-	return m.OptLoop(pos, m.W.And(
-		m.W.PtrFalse(&done),
-		m.W.Or(
-			m.W.EscapeAny(esc),
-			m.W.RuneFn(valid),
-		)),
 	)
 }
 
@@ -438,9 +348,6 @@ func (m *Match) StringSection(pos int, openclose string, esc rune, failOnNewline
 	return m.Section(pos, openclose, openclose, esc, failOnNewline, maxLen, eofClose, m.OneRune)
 }
 
-func (m *Match) DoubleQuotedString(pos int, maxLen int) (int, error) {
-	return m.StringSection(pos, "\"", '\\', true, maxLen, false)
-}
 func (m *Match) QuotedString(pos int) (int, error) {
 	return m.QuotedString2(pos, '\\', 3000, 8)
 }
@@ -479,32 +386,6 @@ func (m *Match) Integer(pos int) (int, error) {
 }
 func (m *Match) sign(pos int) (int, error) {
 	return m.RuneOneOf(pos, []rune("+-"))
-}
-
-func (m *Match) Float(pos int) (int, error) {
-	// TODO: reverse
-	//u := "[+-]?([0-9]*[.])?[0-9]+"
-	//u := "[+-]?(\\d+([.]\\d*)?([eE][+-]?\\d+)?|[.]\\d+([eE][+-]?\\d+)?)"
-	//return m.RegexpFromStartCached(u, 100)
-
-	// -1.2
-	// -1.2e3
-	// .2
-	// .2e3
-	return m.AndR(pos,
-		m.W.Optional(m.Integer),
-		// fraction (must have)
-		m.W.AndR(
-			m.W.Rune('.'),
-			m.Digits,
-		),
-		// exponent
-		m.W.Optional(m.W.AndR(
-			m.W.RuneOneOf([]rune("eE")),
-			m.W.Optional(m.sign),
-			m.Digits,
-		)),
-	)
 }
 
 func (m *Match) RegexpFromStart(pos int, res string, cache bool, maxLen int) (int, error) {
@@ -557,12 +438,6 @@ func (m *Match) MustErr(pos int, fn MFn) (int, error) {
 	}
 	return pos, NoMatchErr
 }
-func (m *Match) PtrTrue(pos int, v *bool) (int, error) {
-	if *v {
-		return pos, nil
-	}
-	return pos, NoMatchErr
-}
 func (m *Match) PtrFalse(pos int, v *bool) (int, error) {
 	if !*v {
 		return pos, nil
@@ -571,18 +446,6 @@ func (m *Match) PtrFalse(pos int, v *bool) (int, error) {
 }
 func (m *Match) StaticTrue(pos int, v bool) (int, error) {
 	if v {
-		return pos, nil
-	}
-	return pos, NoMatchErr
-}
-func (m *Match) StaticFalse(pos int, v bool) (int, error) {
-	if !v {
-		return pos, nil
-	}
-	return pos, NoMatchErr
-}
-func (m *Match) FnTrue(pos int, fn func() bool) (int, error) {
-	if fn() {
 		return pos, nil
 	}
 	return pos, NoMatchErr
@@ -602,9 +465,6 @@ func (m *Match) Eof(pos int) (int, error) {
 	}
 	return pos, NoMatchErr
 }
-func (m *Match) NotEof(p int) (int, error) {
-	return m.MustErr(p, m.Eof)
-}
 
 func (m *Match) ReverseMode(pos int, reverse bool, fn MFn) (int, error) {
 	tmp := m.sc.Reverse
@@ -621,14 +481,6 @@ func (m *Match) OnValue(pos int, fn VFn, cb func(any)) (int, error) {
 	} else {
 		cb(v)
 		return p2, nil
-	}
-}
-func (m *Match) OnValue2(pos int, fn VFn, cb func(any) error) (int, error) {
-	if v, p2, err := fn(pos); err != nil {
-		return p2, err
-	} else {
-		err2 := cb(v)
-		return p2, err2
 	}
 }
 func (m *Match) OrValue(pos int, fns ...VFn) (any, int, error) {
@@ -681,60 +533,11 @@ func (m *Match) IntValue(pos int) (any, int, error) {
 		}
 	}
 }
-func (m *Match) IntFnValue(pos int, fn MFn) (any, int, error) {
-	if v, p2, err := m.StringValue(pos, fn); err != nil {
-		return nil, p2, err
-	} else {
-		if u, err := strconv.ParseInt(v.(string), 10, bits.UintSize); err != nil {
-			return nil, pos, err
-		} else {
-			return int(u), p2, nil
-		}
-	}
-}
-func (m *Match) Int64Value(pos int) (any, int, error) {
-	if v, p2, err := m.StringValue(pos, m.Integer); err != nil {
-		return nil, p2, err
-	} else {
-		if u, err := strconv.ParseInt(v.(string), 10, 64); err != nil {
-			return nil, pos, err
-		} else {
-			return u, p2, nil
-		}
-	}
-}
-func (m *Match) Float64Value(pos int) (any, int, error) {
-	if v, p2, err := m.StringValue(pos, m.Float); err != nil {
-		return nil, p2, err
-	} else {
-		if u, err := strconv.ParseFloat(v.(string), 64); err != nil {
-			return nil, pos, err
-		} else {
-			return u, p2, nil
-		}
-	}
-}
 
 //---------- NOTE: debug helpers
 
 // useful in And's
-func (m *Match) PrintfNoErr(pos int, f string, args ...any) (int, error) {
-	fmt.Printf(f, args...)
-	return pos, nil
-}
 
 // useful in Or's
-func (m *Match) PrintfErr(pos int, f string, args ...any) (int, error) {
-	fmt.Printf(f, args...)
-	return pos, fmt.Errorf("printfErr")
-}
 
 //---------- NOTE: error helpers
-
-func (m *Match) FatalOnError(pos int, s string, fn MFn) (int, error) {
-	if p2, err := fn(pos); err != nil {
-		return p2, m.sc.EnsureFatalError(err)
-	} else {
-		return p2, nil
-	}
-}

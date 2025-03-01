@@ -1,7 +1,6 @@
 package parseutil
 
 import (
-	"bytes"
 	"fmt"
 	"net/url"
 	"path/filepath"
@@ -11,12 +10,8 @@ import (
 	"unicode/utf8"
 
 	"github.com/friedelschoen/glake/util/iout/iorw"
-	"github.com/friedelschoen/glake/util/mathutil"
 	"github.com/friedelschoen/glake/util/osutil"
 	"github.com/friedelschoen/glake/util/parseutil/pscan"
-	"golang.org/x/text/runes"
-	"golang.org/x/text/transform"
-	"golang.org/x/text/unicode/norm"
 )
 
 // TODO: review
@@ -220,24 +215,6 @@ func IndexLineColumn(rd iorw.ReaderAt, index int) (int, int, error) {
 }
 
 // Returned line/col values are one-based.
-func IndexLineColumn2(b []byte, index int) (int, int) {
-	line, lineStart := 0, 0
-	ri := 0
-	for ri < index {
-		ru, size := utf8.DecodeRune(b[ri:])
-		if size == 0 {
-			break
-		}
-		ri += size
-		if ru == '\n' {
-			line++
-			lineStart = ri
-		}
-	}
-	line++                    // first line is 1
-	col := ri - lineStart + 1 // first column is 1
-	return line, col
-}
 
 func DetectEnvVar(str, name string) bool {
 	vstr := "$" + name
@@ -273,21 +250,6 @@ func RunesExcept(runes, except string) string {
 }
 
 // Useful to compare src code lines.
-func TrimLineSpaces(str string) string {
-	return TrimLineSpaces2(str, "")
-}
-
-func TrimLineSpaces2(str string, pre string) string {
-	a := strings.Split(str, "\n")
-	u := []string{}
-	for _, s := range a {
-		s = strings.TrimSpace(s)
-		if s != "" {
-			u = append(u, s)
-		}
-	}
-	return pre + strings.Join(u, "\n"+pre)
-}
 
 func UrlToAbsFilename(url2 string) (string, error) {
 	u, err := url.Parse(string(url2))
@@ -331,34 +293,6 @@ func AbsFilenameToUrl(filename string) (string, error) {
 	return u.String(), nil // path is escaped
 }
 
-func SurroundingString(b []byte, k int, pad int) string {
-	// pad n in each direction for error string
-	i := mathutil.Max(k-pad, 0)
-	i2 := mathutil.Min(k+pad, len(b))
-
-	if i > i2 {
-		return ""
-	}
-
-	s := string(b[i:i2])
-	if s == "" {
-		return ""
-	}
-
-	// position indicator (valid after test of empty string)
-	c := k - i
-
-	sep := "●" // "←"
-	s2 := s[:c] + sep + s[c:]
-	if i > 0 {
-		s2 = "..." + s2
-	}
-	if i2 < len(b)-1 {
-		s2 = s2 + "..."
-	}
-	return s2
-}
-
 // unquote string with backslash as escape
 func UnquoteStringBs(s string) (string, error) {
 	return UnquoteString(s, '\\')
@@ -400,22 +334,4 @@ func ContainsRune(rs []rune, ru rune) bool {
 		}
 	}
 	return false
-}
-
-func ToLowerNoAccents(b []byte) []byte {
-	b = bytes.ToLower(b)
-
-	// accents
-	t := transform.Chain(
-		norm.NFD,
-		runes.Remove(runes.In(unicode.Mn)),
-		norm.NFC,
-	)
-	if b2, _, err := transform.Bytes(t, b); err == nil {
-		return b2
-	}
-	return b
-}
-func ToLowerNoAccents2(s string) string {
-	return string(ToLowerNoAccents([]byte(s)))
 }

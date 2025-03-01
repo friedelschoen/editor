@@ -44,11 +44,6 @@ func TintOrShade(c color.Color, v float64) color.Color {
 	}
 }
 
-func IsLighter(c color.Color) bool {
-	c2 := RgbaColor(c)
-	return isLighter(c2)
-}
-
 func isLighter(c color.RGBA) bool {
 	u := int(c.R) + int(c.G) + int(c.B)
 	return u > 256*3/2

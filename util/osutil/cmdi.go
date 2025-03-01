@@ -19,9 +19,6 @@ type CmdI interface {
 	Wait() error
 }
 
-func NewCmdI(cmd *exec.Cmd) CmdI {
-	return NewBasicCmd(cmd)
-}
 func NewCmdI2(args []string) CmdI {
 	cmd := exec.Command(args[0], args[1:]...)
 	return NewBasicCmd(cmd)
@@ -274,22 +271,6 @@ func RunCmdIOutputs(c CmdI) (sout []byte, serr []byte, _ error) {
 	err := RunCmdI(c)
 	return obuf.Bytes(), ebuf.Bytes(), err
 }
-func RunCmdICombineStdoutStderr(c CmdI) ([]byte, error) {
-	buf := &bytes.Buffer{}
-
-	cmd := c.Cmd()
-	if cmd.Stdout != nil {
-		return nil, fmt.Errorf("stdout already set")
-	}
-	if cmd.Stderr != nil {
-		return nil, fmt.Errorf("stderr already set")
-	}
-	cmd.Stdout = buf
-	cmd.Stderr = buf
-
-	err := RunCmdI(c)
-	return buf.Bytes(), err
-}
 func RunCmdICombineStderrErr(c CmdI) ([]byte, error) {
 	bout, berr, err := RunCmdIOutputs(c)
 	if err != nil {
@@ -302,9 +283,6 @@ func RunCmdICombineStderrErr(c CmdI) ([]byte, error) {
 	return bout, nil
 }
 
-func RunCmd(ctx context.Context, dir string, args ...string) ([]byte, error) {
-	return RunCmdStdin(ctx, dir, nil, args...)
-}
 func RunCmdStdin(ctx context.Context, dir string, rd io.Reader, args ...string) ([]byte, error) {
 	c := NewCmdIShell(ctx, args...)
 	c.Cmd().Dir = dir

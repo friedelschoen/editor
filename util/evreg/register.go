@@ -108,13 +108,3 @@ func (reg *Regist) Unregister() {
 type Unregister struct {
 	v []*Regist
 }
-
-func (unr *Unregister) Add(u ...*Regist) {
-	unr.v = append(unr.v, u...)
-}
-func (unr *Unregister) UnregisterAll() {
-	for _, e := range unr.v {
-		e.Unregister()
-	}
-	unr.v = []*Regist{}
-}

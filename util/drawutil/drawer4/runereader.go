@@ -38,10 +38,6 @@ func (rr *RuneReader) Iter() {
 
 func (rr *RuneReader) End() {}
 
-func (rr *RuneReader) eof() bool {
-	return rr.isNormal() && rr.d.st.runeR.ru == 0
-}
-
 func (rr *RuneReader) iter2(ru rune, size int) bool {
 	st := &rr.d.st.runeR
 	st.ru = ru

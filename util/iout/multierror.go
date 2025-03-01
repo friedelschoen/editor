@@ -12,13 +12,6 @@ type MultiError struct {
 }
 
 // Returns an error (MultiError) or nil if the errors added were all nil.
-func MultiErrors(errs ...error) error {
-	me := &MultiError{}
-	for _, e := range errs {
-		me.Add(e)
-	}
-	return me.Result()
-}
 
 // Returns itself, or nil if it has no errors.
 func (me *MultiError) Result() error {

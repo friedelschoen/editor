@@ -62,12 +62,6 @@ type RectangleIntf struct {
 	Min, Max PointIntf
 }
 
-func RIntf(r image.Rectangle) RectangleIntf {
-	min := PIntf2(r.Min)
-	max := PIntf2(r.Max)
-	return RectangleIntf{min, max}
-}
-
 func (r RectangleIntf) Dx() Intf {
 	return r.Max.X - r.Min.X
 }

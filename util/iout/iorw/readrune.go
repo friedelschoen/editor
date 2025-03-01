@@ -5,11 +5,6 @@ import (
 	"unicode/utf8"
 )
 
-//type RuneReaderAt interface {
-//	ReadRuneAt(i int) (r rune, size int, err error)
-//	ReadLastRuneAt(i int) (r rune, size int, err error)
-//}
-
 func ReadRuneAt(r ReaderAt, i int) (rune, int, error) {
 	n := utf8.UTFMax
 	b, err := r.ReadFastAt(i, n)
