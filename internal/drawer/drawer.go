@@ -5,8 +5,8 @@ import (
 	"image/color"
 	"image/draw"
 
-	"github.com/friedelschoen/glake/internal/fontcache"
 	"github.com/friedelschoen/glake/internal/io/iorw"
+	"golang.org/x/image/font"
 )
 
 type Drawer interface {
@@ -14,8 +14,8 @@ type Drawer interface {
 	SetReader(iorw.ReaderAt)
 	ContentChanged()
 
-	FontFace() *fontcache.FontFace
-	SetFontFace(*fontcache.FontFace)
+	FontFace() font.Face
+	SetFontFace(font.Face)
 	LineHeight() int
 	SetFg(color.Color)
 

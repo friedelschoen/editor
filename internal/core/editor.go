@@ -21,7 +21,6 @@ import (
 	"github.com/friedelschoen/glake/internal/core/fswatcher"
 	"github.com/friedelschoen/glake/internal/core/lsproto"
 	"github.com/friedelschoen/glake/internal/drawer/drawer4"
-	"github.com/friedelschoen/glake/internal/fontcache"
 	"github.com/friedelschoen/glake/internal/io/iorw"
 	"github.com/friedelschoen/glake/internal/ui"
 	"github.com/friedelschoen/glake/internal/ui/driver"
@@ -452,8 +451,8 @@ func (ed *Editor) setupInitialRows(opt *Options) {
 
 func (ed *Editor) setupTheme(opt *Options) {
 	drawer4.WrapLineRune, _ = utf8.DecodeRuneInString(opt.WrapLineRune)
-	fontcache.TabWidth = opt.TabWidth
-	fontcache.CarriageReturnRune, _ = utf8.DecodeRuneInString(opt.CarriageReturnRune)
+	// fontcache.TabWidth = opt.TabWidth
+	// fontcache.CarriageReturnRune, _ = utf8.DecodeRuneInString(opt.CarriageReturnRune)
 	ui.ScrollBarLeft = opt.ScrollBarLeft
 	ui.ScrollBarWidth = opt.ScrollBarWidth
 	ui.ShadowsOn = opt.Shadows
@@ -466,7 +465,6 @@ func (ed *Editor) setupTheme(opt *Options) {
 	ui.ColorThemeCycler.CurName = opt.ColorTheme
 
 	// font options
-	fontcache.DPI = opt.DPI
 	ui.TTFontOptions.DPI = opt.DPI
 	ui.TTFontOptions.Size = opt.FontSize
 	switch opt.FontHinting {

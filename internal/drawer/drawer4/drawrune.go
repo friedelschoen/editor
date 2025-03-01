@@ -5,7 +5,8 @@ import (
 	"image/color"
 	"image/draw"
 
-	"github.com/friedelschoen/glake/internal/fontcache"
+	"golang.org/x/image/font"
+	"golang.org/x/image/math/fixed"
 )
 
 type DrawRune struct {
@@ -46,7 +47,7 @@ func (dr *DrawRune) draw() {
 	}
 }
 
-func (dr *DrawRune) draw2(fface *fontcache.FontFace, pen image.Point, ru rune, fg color.Color) {
+func (dr *DrawRune) draw2(fface font.Face, pen image.Point, ru rune, fg color.Color) {
 	// skip draw
 	if ru < 0 {
 		return
@@ -54,8 +55,7 @@ func (dr *DrawRune) draw2(fface *fontcache.FontFace, pen image.Point, ru rune, f
 
 	//fmt.Printf("draw at %v \"%c\"\n", pen, ru)
 
-	bline := fface.BaseLine()
-	gr, mask, maskp, _, ok := fface.Face.Glyph(bline, ru)
+	gr, mask, maskp, _, ok := fface.Glyph(fixed.Point26_6{Y: fface.Metrics().Ascent}, ru)
 	if !ok {
 		return
 	}
@@ -78,5 +78,5 @@ type DrawRuneDelay struct {
 	pen   image.Point
 	ru    rune
 	fg    color.Color
-	fface *fontcache.FontFace
+	fface font.Face
 }

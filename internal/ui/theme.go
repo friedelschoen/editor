@@ -8,11 +8,12 @@ import (
 	"strings"
 
 	"github.com/flopp/go-findfont"
-	"github.com/friedelschoen/glake/internal/fontcache"
 	"github.com/friedelschoen/glake/internal/shadow"
 	"github.com/friedelschoen/glake/internal/ui/widget"
+	"golang.org/x/image/font"
 	"golang.org/x/image/font/gofont/gomono"
 	"golang.org/x/image/font/opentype"
+	"golang.org/x/image/math/fixed"
 )
 
 var ScrollBarLeft = true
@@ -148,10 +149,6 @@ var ColorThemeCycler cycler = cycler{
 var CurrentFont = ""
 
 func loadThemeFont(name string, node widget.Node) error {
-	// close previous faces
-	ff0 := node.Embed().TreeThemeFontFace()
-	ff0.Font.ClearFacesCache()
-
 	ff, err := ThemeFontFace(name)
 	if err != nil {
 		return err
@@ -162,23 +159,23 @@ func loadThemeFont(name string, node widget.Node) error {
 
 var TTFontOptions opentype.FaceOptions
 
-func ThemeFontFace(name string) (*fontcache.FontFace, error) {
+func ThemeFontFace(name string) (font.Face, error) {
 	return ThemeFontFace2(name, 0)
 }
-func ThemeFontFace2(name string, size float64) (*fontcache.FontFace, error) {
+func ThemeFontFace2(name string, size float64) (font.Face, error) {
 	b, err := fontBytes(name)
 	if err != nil {
 		return nil, err
 	}
-	f, err := fontcache.FontsMan.Font(b)
+	font, err := opentype.Parse(b)
 	if err != nil {
 		return nil, err
 	}
-	opt := TTFontOptions // copy
+	opt := TTFontOptions
 	if size != 0 {
 		opt.Size = size
 	}
-	return f.FontFace(opt), nil
+	return opentype.NewFace(font, &opt)
 }
 
 var defaultFont = gomono.TTF
@@ -245,27 +242,29 @@ var UIThemeUtil uiThemeUtil
 
 type uiThemeUtil struct{}
 
-func (uitu *uiThemeUtil) RowMinimumHeight(ff *fontcache.FontFace) int {
-	return ff.LineHeightInt()
-}
-func (uitu *uiThemeUtil) RowSquareSize(ff *fontcache.FontFace) image.Point {
-	lh := ff.LineHeightFloat()
-	w := int(lh * 3 / 4)
-	return image.Point{w, int(lh)}
+func (uitu *uiThemeUtil) RowMinimumHeight(ff font.Face) int {
+	return ff.Metrics().Height.Ceil()
 }
 
-func (uitu *uiThemeUtil) GetScrollBarWidth(ff *fontcache.FontFace) int {
+func (uitu *uiThemeUtil) RowSquareSize(ff font.Face) image.Point {
+	lh := ff.Metrics().Height
+	w := lh.Mul(fixed.Int26_6(48)) // 3/4
+	return image.Point{w.Ceil(), lh.Ceil()}
+}
+
+func (uitu *uiThemeUtil) GetScrollBarWidth(ff font.Face) int {
 	if ScrollBarWidth != 0 {
 		return ScrollBarWidth
 	}
-	lh := ff.LineHeightFloat()
-	w := int(lh * 3 / 4)
-	return w
+	lh := ff.Metrics().Height
+	w := lh.Mul(fixed.Int26_6(48)) // 3/4
+	return w.Ceil()
 }
 
-func (uitu *uiThemeUtil) ShadowHeight(ff *fontcache.FontFace) int {
-	lh := ff.LineHeightFloat()
-	return int(lh * 2 / 5)
+func (uitu *uiThemeUtil) ShadowHeight(ff font.Face) int {
+	lh := ff.Metrics().Height
+	w := lh.Mul(fixed.Int26_6(26)) // 2/5
+	return w.Ceil()
 }
 
 func cint(c int) color.RGBA {

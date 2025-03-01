@@ -3,19 +3,15 @@ package drawer4
 import (
 	"sync"
 
-	"github.com/friedelschoen/glake/internal/fontcache"
 	"github.com/friedelschoen/glake/internal/geometry"
+	"golang.org/x/image/font"
 )
 
 type Annotations struct {
-	d          *Drawer
-	notesFFace *fontcache.FontFace
+	d *Drawer
 }
 
 func (ann *Annotations) Init() {
-	size2 := ann.d.st.runeR.fface.Size * 0.70
-	ann.notesFFace = ann.d.st.runeR.fface.Font.FontFace2(size2)
-
 	if ann.d.Opt.Annotations.Entries != nil {
 		ann.d.Opt.Annotations.Entries.RLock()
 	}
@@ -146,7 +142,7 @@ func (ann *Annotations) insertAnnotations2() {
 
 		// entry.notes (used for arrival index)
 		s2 := string(entry.NotesBytes)
-		if !ann.insertNotesString(ann.notesFFace, s2) {
+		if !ann.insertNotesString(ann.d.st.runeR.fface, s2) {
 			return
 		}
 	}
@@ -175,7 +171,7 @@ func (ann *Annotations) insertAnnotationString(s string, eindex int, colorizeIfI
 	return ann.d.iters.runeR.insertExtraString(s)
 }
 
-func (ann *Annotations) insertNotesString(fface *fontcache.FontFace, s string) bool {
+func (ann *Annotations) insertNotesString(fface font.Face, s string) bool {
 	// keep/restore color state
 	keep := ann.d.st.curColors
 	defer func() { ann.d.st.curColors = keep }()

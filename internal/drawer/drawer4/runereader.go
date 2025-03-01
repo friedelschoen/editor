@@ -43,7 +43,7 @@ func (rr *RuneReader) iter2(ru rune, size int) bool {
 	st.ru = ru
 
 	// add/subtract kern with previous rune
-	k := rr.d.st.runeR.fface.Face.Kern(st.prevRu, st.ru)
+	k := rr.d.st.runeR.fface.Kern(st.prevRu, st.ru)
 	st.kern = geometry.Intf2(k)
 	st.pen.X += st.kern
 
@@ -87,7 +87,7 @@ func (rr *RuneReader) isNormal() bool {
 }
 
 func (rr *RuneReader) glyphAdvance(ru rune) geometry.Intf {
-	adv, ok := rr.d.st.runeR.fface.Face.GlyphAdvance(ru)
+	adv, ok := rr.d.st.runeR.fface.GlyphAdvance(ru)
 	if !ok {
 		return 0
 	}

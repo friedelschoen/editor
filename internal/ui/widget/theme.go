@@ -3,8 +3,22 @@ package widget
 import (
 	"image/color"
 
-	"github.com/friedelschoen/glake/internal/fontcache"
+	"golang.org/x/image/font"
+	"golang.org/x/image/font/gofont/goregular"
+	"golang.org/x/image/font/opentype"
 )
+
+var DefaultFont = func() font.Face {
+	font, err := opentype.Parse(goregular.TTF)
+	if err != nil {
+		panic(err)
+	}
+	face, err := opentype.NewFace(font, &opentype.FaceOptions{})
+	if err != nil {
+		panic(err)
+	}
+	return face
+}()
 
 var DefaultPalette = Palette{
 	"text_cursor_fg":             nil, // present but nil uses the current fg
@@ -45,7 +59,7 @@ var DefaultPalette = Palette{
 }
 
 type Theme struct {
-	FontFace          *fontcache.FontFace
+	FontFace          font.Face
 	Palette           Palette
 	PaletteNamePrefix string
 }
@@ -63,7 +77,7 @@ func (t *Theme) ClearIfEmpty() {
 }
 
 // Can be set to nil to erase.
-func (t *Theme) SetFontFace(ff *fontcache.FontFace) {
+func (t *Theme) SetFontFace(ff font.Face) {
 	t.FontFace = ff
 	t.ClearIfEmpty()
 }

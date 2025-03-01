@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	"github.com/friedelschoen/glake/internal/drawer"
-	"github.com/friedelschoen/glake/internal/fontcache"
 	"github.com/friedelschoen/glake/internal/ui/driver"
 	"github.com/veandco/go-sdl2/sdl"
+	"golang.org/x/image/font"
 )
 
 type Node interface {
@@ -490,20 +490,20 @@ func (en *EmbedNode) treeThemePaletteColor2(name string) (color.Color, bool) {
 	return nil, false
 }
 
-func (en *EmbedNode) SetThemeFontFace(ff *fontcache.FontFace) {
+func (en *EmbedNode) SetThemeFontFace(ff font.Face) {
 	defer en.themeChangeCallback()
 	defer en.MarkNeedsLayout()
 
 	en.theme.SetFontFace(ff)
 }
 
-func (en *EmbedNode) TreeThemeFontFace() *fontcache.FontFace {
+func (en *EmbedNode) TreeThemeFontFace() font.Face {
 	for n := en; n != nil; n = n.Parent {
 		if n.theme.FontFace != nil {
 			return n.theme.FontFace
 		}
 	}
-	return fontcache.DefaultFontFace()
+	return DefaultFont
 }
 
 func (en *EmbedNode) themeChangeCallback() {

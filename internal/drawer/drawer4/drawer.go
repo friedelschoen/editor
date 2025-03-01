@@ -8,9 +8,9 @@ import (
 	"log"
 
 	"github.com/friedelschoen/glake/internal/drawer"
-	"github.com/friedelschoen/glake/internal/fontcache"
 	"github.com/friedelschoen/glake/internal/geometry"
 	"github.com/friedelschoen/glake/internal/io/iorw"
+	"golang.org/x/image/font"
 )
 
 const (
@@ -21,7 +21,7 @@ const (
 type Drawer struct {
 	reader iorw.ReaderAt
 
-	fface            *fontcache.FontFace
+	fface            font.Face
 	lineHeight       geometry.Intf
 	bounds           image.Rectangle
 	firstLineOffsetX int
@@ -135,7 +135,7 @@ type State struct {
 		kern, advance geometry.Intf
 		extra         int
 		startRi       int
-		fface         *fontcache.FontFace
+		fface         font.Face
 	}
 	measure struct {
 		penMax geometry.PointIntf
@@ -262,13 +262,13 @@ func (d *Drawer) ContentChanged() {
 	d.opt.parenthesisH.updated = false
 }
 
-func (d *Drawer) FontFace() *fontcache.FontFace { return d.fface }
-func (d *Drawer) SetFontFace(ff *fontcache.FontFace) {
+func (d *Drawer) FontFace() font.Face { return d.fface }
+func (d *Drawer) SetFontFace(ff font.Face) {
 	if ff == d.fface {
 		return
 	}
 	d.fface = ff
-	d.lineHeight = geometry.Intf2(d.fface.LineHeight())
+	d.lineHeight = geometry.Intf2(d.fface.Metrics().Height)
 
 	d.opt.measure.updated = false
 }
@@ -277,7 +277,7 @@ func (d *Drawer) LineHeight() int {
 	if d.fface == nil {
 		return 0
 	}
-	return d.fface.LineHeightInt()
+	return d.fface.Metrics().Height.Ceil()
 }
 
 func (d *Drawer) SetFg(fg color.Color) { d.fg = fg }

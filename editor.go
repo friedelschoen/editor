@@ -11,7 +11,6 @@ import (
 
 	"github.com/friedelschoen/glake/internal/core"
 	"github.com/friedelschoen/glake/internal/core/lsproto"
-	"github.com/friedelschoen/glake/internal/fontcache"
 	"github.com/friedelschoen/glake/internal/ui"
 
 	// imports that can't be imported from core (cyclic import)
@@ -28,7 +27,7 @@ func main() {
 	flag.StringVar(&opt.FontHinting, "fonthinting", "full", "font hinting: none, vertical, full")
 	flag.Float64Var(&opt.DPI, "dpi", 72, "monitor dots per inch")
 	flag.IntVar(&opt.TabWidth, "tabwidth", 8, "")
-	flag.StringVar(&opt.CarriageReturnRune, "carriagereturnrune", string(fontcache.CarriageReturnRune), "replacement rune for carriage return")
+	// flag.StringVar(&opt.CarriageReturnRune, "carriagereturnrune", "", "replacement rune for carriage return")
 	flag.StringVar(&opt.WrapLineRune, "wraplinerune", "←", "code for wrap line rune, can be set to zero")
 	flag.StringVar(&opt.ColorTheme, "colortheme", "light", "available: "+strings.Join(ui.ColorThemeCycler.Names(), ", "))
 	flag.IntVar(&opt.ScrollBarWidth, "scrollbarwidth", 0, "Textarea scrollbar width in pixels. A value of 0 takes 3/4 of the font size.")
