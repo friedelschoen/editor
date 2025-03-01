@@ -1,4 +1,4 @@
-package drawer4
+package drawer
 
 type LineWrap struct {
 	d *Drawer

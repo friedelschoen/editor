@@ -6,7 +6,7 @@ import (
 	"sync"
 	"unicode"
 
-	"github.com/friedelschoen/glake/internal/drawer/drawer4"
+	"github.com/friedelschoen/glake/internal/drawer"
 	"github.com/friedelschoen/glake/internal/geometry"
 	"github.com/friedelschoen/glake/internal/io/iorw"
 	"github.com/friedelschoen/glake/internal/ui"
@@ -102,9 +102,9 @@ func (ic *InlineComplete) insertCompletions(ta *ui.TextArea, ev *ui.TextAreaInli
 		}
 	default:
 		// show completions
-		entries := drawer4.NewAnnotationGroup(len(comps))
+		entries := drawer.NewAnnotationGroup(len(comps))
 		for i, v := range comps {
-			u := &drawer4.Annotation{Offset: ev.Offset, Bytes: []byte(v)}
+			u := &drawer.Annotation{Offset: ev.Offset, Bytes: []byte(v)}
 			entries.Anns[i] = u
 		}
 		ic.setAnnotations(ta, entries)
@@ -152,12 +152,12 @@ func (ic *InlineComplete) lsprotoCompletions(ctx context.Context, filename strin
 
 func (ic *InlineComplete) setAnnotationsMsg(ta *ui.TextArea, s string) {
 	offset := ta.CursorIndex()
-	entries := drawer4.NewAnnotationGroup(1)
-	entries.Anns = []*drawer4.Annotation{{Offset: offset, Bytes: []byte(s)}}
+	entries := drawer.NewAnnotationGroup(1)
+	entries.Anns = []*drawer.Annotation{{Offset: offset, Bytes: []byte(s)}}
 	ic.setAnnotations(ta, entries)
 }
 
-func (ic *InlineComplete) setAnnotations(ta *ui.TextArea, entries *drawer4.AnnotationGroup) {
+func (ic *InlineComplete) setAnnotations(ta *ui.TextArea, entries *drawer.AnnotationGroup) {
 	on := entries != nil && len(entries.Anns) > 0
 	if !on {
 		ic.setOff(ta)

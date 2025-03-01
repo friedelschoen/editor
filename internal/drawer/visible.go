@@ -1,4 +1,4 @@
-package drawer4
+package drawer
 
 import (
 	"github.com/friedelschoen/glake/internal/geometry"

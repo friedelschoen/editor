@@ -1,4 +1,4 @@
-package drawer4
+package drawer
 
 type PointOf struct {
 	d *Drawer

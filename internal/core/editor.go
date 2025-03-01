@@ -20,7 +20,7 @@ import (
 	"github.com/friedelschoen/glake/internal/command"
 	"github.com/friedelschoen/glake/internal/core/fswatcher"
 	"github.com/friedelschoen/glake/internal/core/lsproto"
-	"github.com/friedelschoen/glake/internal/drawer/drawer4"
+	"github.com/friedelschoen/glake/internal/drawer"
 	"github.com/friedelschoen/glake/internal/io/iorw"
 	"github.com/friedelschoen/glake/internal/ui"
 	"github.com/friedelschoen/glake/internal/ui/driver"
@@ -450,7 +450,7 @@ func (ed *Editor) setupInitialRows(opt *Options) {
 }
 
 func (ed *Editor) setupTheme(opt *Options) {
-	drawer4.WrapLineRune, _ = utf8.DecodeRuneInString(opt.WrapLineRune)
+	drawer.WrapLineRune, _ = utf8.DecodeRuneInString(opt.WrapLineRune)
 	// fontcache.TabWidth = opt.TabWidth
 	// fontcache.CarriageReturnRune, _ = utf8.DecodeRuneInString(opt.CarriageReturnRune)
 	ui.ScrollBarLeft = opt.ScrollBarLeft
@@ -711,24 +711,22 @@ func (ed *Editor) RunAsyncBusyCursor2(node widget.Node, fn func(done func())) {
 	go fn(done)
 }
 
-func (ed *Editor) SetAnnotations(req EdAnnotationsRequester, ta *ui.TextArea, on bool, selIndex int, entries *drawer4.AnnotationGroup) {
+func (ed *Editor) SetAnnotations(req EdAnnotationsRequester, ta *ui.TextArea, on bool, selIndex int, entries *drawer.AnnotationGroup) {
 	// avoid lockup:
 	// godebugstart->inlinecomplete.clear->godebugrestoreannotations
 	ed.UI.RunOnUIGoRoutine(func() {
 		ed.setAnnotations2(req, ta, on, selIndex, entries)
 	})
 }
-func (ed *Editor) setAnnotations2(req EdAnnotationsRequester, ta *ui.TextArea, on bool, selIndex int, entries *drawer4.AnnotationGroup) {
+func (ed *Editor) setAnnotations2(req EdAnnotationsRequester, ta *ui.TextArea, on bool, selIndex int, entries *drawer.AnnotationGroup) {
 	if !ed.CanModifyAnnotations(req, ta) {
 		return
 	}
 	// set annotations (including clear)
-	if d, ok := ta.Drawer.(*drawer4.Drawer); ok {
-		d.Opt.Annotations.On = on
-		d.Opt.Annotations.Selected.EntryIndex = selIndex
-		d.Opt.Annotations.Entries = entries
-		ta.MarkNeedsLayoutAndPaint()
-	}
+	ta.Drawer.Opt.Annotations.On = on
+	ta.Drawer.Opt.Annotations.Selected.EntryIndex = selIndex
+	ta.Drawer.Opt.Annotations.Entries = entries
+	ta.MarkNeedsLayoutAndPaint()
 
 	// // restore godebug annotations
 	// if req == EareqInlineComplete && !on {

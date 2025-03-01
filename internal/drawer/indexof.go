@@ -1,4 +1,4 @@
-package drawer4
+package drawer
 
 type IndexOf struct {
 	d *Drawer

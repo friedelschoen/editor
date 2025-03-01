@@ -3,7 +3,6 @@ package ui
 import (
 	"image"
 
-	"github.com/friedelschoen/glake/internal/drawer/drawer4"
 	"github.com/friedelschoen/glake/internal/eventregister"
 	"github.com/friedelschoen/glake/internal/ui/driver"
 	"github.com/friedelschoen/glake/internal/ui/widget"
@@ -41,9 +40,7 @@ func NewRow(col *Column) *Row {
 		row.TextArea = NewTextArea(row.ui)
 		row.TextArea.EnableCursorWordHighlight(true)
 		row.TextArea.EnableParenthesisMatch(true)
-		if d, ok := row.TextArea.Drawer.(*drawer4.Drawer); ok {
-			d.Opt.QuickMeasure = true // performance
-		}
+		row.TextArea.Drawer.Opt.QuickMeasure = true // performance
 
 		row.ScrollArea = widget.NewScrollArea(row.ui, row.TextArea, false, true)
 		row.ScrollArea.LeftScroll = ScrollBarLeft

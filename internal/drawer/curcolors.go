@@ -1,4 +1,4 @@
-package drawer4
+package drawer
 
 // Current colors
 type CurColors struct {

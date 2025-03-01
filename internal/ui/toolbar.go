@@ -3,7 +3,6 @@ package ui
 import (
 	"image"
 
-	"github.com/friedelschoen/glake/internal/drawer/drawer4"
 	"github.com/friedelschoen/glake/internal/ui/driver"
 )
 
@@ -16,9 +15,7 @@ func NewToolbar(ui *UI) *Toolbar {
 	tb := &Toolbar{}
 	tb.TextArea = NewTextArea(ui)
 	tb.SetThemePaletteNamePrefix("toolbar_")
-	if d, ok := tb.TextArea.Drawer.(*drawer4.Drawer); ok {
-		d.Opt.EarlyExitMeasure = true // performance
-	}
+	tb.TextArea.Drawer.Opt.EarlyExitMeasure = true // performance
 	return tb
 }
 

@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"github.com/friedelschoen/glake/internal/drawer/drawer4"
 	"github.com/friedelschoen/glake/internal/ui/widget"
 )
 
@@ -27,9 +26,7 @@ func NewMainMenuButton(root *Root) *MainMenuButton {
 
 	// float content
 	mmb.Toolbar = NewToolbar(root.UI)
-	if d, ok := mmb.Toolbar.Drawer.(*drawer4.Drawer); ok {
-		d.Opt.EarlyExitMeasure = false // full measure to avoid flicker (want the menu size stable)
-	}
+	mmb.Toolbar.Drawer.Opt.EarlyExitMeasure = false // full measure to avoid flicker (want the menu size stable)
 	mmb.sa = widget.NewScrollArea(root.UI, mmb.Toolbar, false, true)
 	mmb.sa.LeftScroll = ScrollBarLeft
 	border := widget.NewBorder(root.UI, mmb.sa)

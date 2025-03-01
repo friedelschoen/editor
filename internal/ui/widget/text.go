@@ -6,7 +6,6 @@ import (
 	"image/draw"
 
 	"github.com/friedelschoen/glake/internal/drawer"
-	"github.com/friedelschoen/glake/internal/drawer/drawer4"
 	"github.com/friedelschoen/glake/internal/io/iorw"
 )
 
@@ -14,7 +13,7 @@ type Text struct {
 	ENode
 	TextScroll
 
-	Drawer drawer.Drawer
+	Drawer *drawer.Drawer
 
 	scrollable struct{ x, y bool }
 	ctx        ImageContext
@@ -26,7 +25,7 @@ type Text struct {
 func NewText(ctx ImageContext) *Text {
 	t := &Text{ctx: ctx}
 
-	t.Drawer = drawer4.New()
+	t.Drawer = drawer.New()
 
 	t.TextScroll.Text = t
 	t.TextScroll.Drawer = t.Drawer

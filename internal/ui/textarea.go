@@ -4,7 +4,6 @@ import (
 	"image"
 	"unicode"
 
-	"github.com/friedelschoen/glake/internal/drawer/drawer4"
 	"github.com/friedelschoen/glake/internal/eventregister"
 	"github.com/friedelschoen/glake/internal/io/iorw"
 	"github.com/friedelschoen/glake/internal/io/iorw/rwedit"
@@ -125,19 +124,17 @@ func (ta *TextArea) Layout() {
 }
 
 func (ta *TextArea) setDrawer4Opts() {
-	if d, ok := ta.Drawer.(*drawer4.Drawer); ok {
-		// scale cursor based on lineheight
-		w := 1
-		u := d.LineHeight()
-		u2 := int(float64(u) * 0.08)
-		if u2 > 1 {
-			w = u2
-		}
-		d.Opt.Cursor.AddedWidth = w
-
-		// set startoffsetx based on cursor
-		d.Opt.RuneReader.StartOffsetX = d.Opt.Cursor.AddedWidth * 2
+	// scale cursor based on lineheight
+	w := 1
+	u := ta.Drawer.LineHeight()
+	u2 := int(float64(u) * 0.08)
+	if u2 > 1 {
+		w = u2
 	}
+	ta.Drawer.Opt.Cursor.AddedWidth = w
+
+	// set startoffsetx based on cursor
+	ta.Drawer.Opt.RuneReader.StartOffsetX = ta.Drawer.Opt.Cursor.AddedWidth * 2
 }
 
 const (
