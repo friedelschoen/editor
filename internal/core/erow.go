@@ -9,10 +9,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/friedelschoen/glake/internal/core/toolbarparser"
 	"github.com/friedelschoen/glake/internal/drawer"
 	io1 "github.com/friedelschoen/glake/internal/io"
 	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/toolbarparser"
 	"github.com/friedelschoen/glake/internal/ui"
 	"github.com/friedelschoen/glake/internal/ui/driver"
 )

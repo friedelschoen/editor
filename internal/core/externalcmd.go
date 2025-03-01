@@ -9,9 +9,9 @@ import (
 	"strings"
 
 	"github.com/friedelschoen/glake/internal/command"
-	"github.com/friedelschoen/glake/internal/core/toolbarparser"
 	"github.com/friedelschoen/glake/internal/io/iorw"
 	"github.com/friedelschoen/glake/internal/parser"
+	"github.com/friedelschoen/glake/internal/toolbarparser"
 )
 
 func ExternalCmd(erow *ERow, part *toolbarparser.Part) {

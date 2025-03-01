@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"plugin"
 
-	"github.com/friedelschoen/glake/internal/core/toolbarparser"
 	"github.com/friedelschoen/glake/internal/io"
+	"github.com/friedelschoen/glake/internal/toolbarparser"
 	"github.com/friedelschoen/glake/internal/ui"
 )
 

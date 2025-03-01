@@ -10,12 +10,12 @@ import (
 	"strings"
 
 	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/core/lsproto"
+	"github.com/friedelschoen/glake/internal/lsproto"
 	"github.com/friedelschoen/glake/internal/ui"
 
 	// imports that can't be imported from core (cyclic import)
-	_ "github.com/friedelschoen/glake/internal/core/contentcmds"
-	_ "github.com/friedelschoen/glake/internal/core/internalcmds"
+	_ "github.com/friedelschoen/glake/internal/contentcmds"
+	_ "github.com/friedelschoen/glake/internal/internalcmds"
 )
 
 func main() {

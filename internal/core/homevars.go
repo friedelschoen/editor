@@ -3,7 +3,7 @@ package core
 import (
 	"os"
 
-	"github.com/friedelschoen/glake/internal/core/toolbarparser"
+	"github.com/friedelschoen/glake/internal/toolbarparser"
 )
 
 type HomeVars struct {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/core/lsproto"
+	"github.com/friedelschoen/glake/internal/lsproto"
 	"github.com/friedelschoen/glake/internal/ui"
 )
 

@@ -18,10 +18,10 @@ import (
 	"unicode/utf8"
 
 	"github.com/friedelschoen/glake/internal/command"
-	"github.com/friedelschoen/glake/internal/core/fswatcher"
-	"github.com/friedelschoen/glake/internal/core/lsproto"
 	"github.com/friedelschoen/glake/internal/drawer"
+	"github.com/friedelschoen/glake/internal/fswatcher"
 	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/lsproto"
 	"github.com/friedelschoen/glake/internal/ui"
 	"github.com/friedelschoen/glake/internal/ui/driver"
 	"github.com/friedelschoen/glake/internal/ui/widget"

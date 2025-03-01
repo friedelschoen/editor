@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 
 	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/core/lsproto"
 	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/lsproto"
 )
 
 func LSProtoReferences(args *core.InternalCmdArgs) error {

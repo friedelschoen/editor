@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"strconv"
 
-	"github.com/friedelschoen/glake/internal/core/toolbarparser"
+	"github.com/friedelschoen/glake/internal/toolbarparser"
 )
 
 func AddFindShortcut(erow *ERow) {

@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/core/lsproto"
 	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/lsproto"
 	"github.com/friedelschoen/glake/internal/parser"
 )
 
-func GoToImplementationLSProto(ctx context.Context, erow *core.ERow, index int) (error, bool) {
+func GoToDefinitionLSProto(ctx context.Context, erow *core.ERow, index int) (error, bool) {
 	if erow.Info.IsDir() {
 		return nil, false
 	}
@@ -26,17 +26,12 @@ func GoToImplementationLSProto(ctx context.Context, erow *core.ERow, index int) 
 	rw := ta.RW()
 
 	// must have a registration that handles the filename
-	lang, err := ed.LSProtoMan.LangManager(erow.Info.Name())
+	_, err := ed.LSProtoMan.LangManager(erow.Info.Name())
 	if err != nil {
 		return nil, false
 	}
 
-	// some languages don't need to check for implementations (definitions are enough)
-	if lang.Reg.HasOptional("nogotoimpl") {
-		return nil, false
-	}
-
-	filename, rang, err := ed.LSProtoMan.TextDocumentImplementation(ctx, erow.Info.Name(), rw, index)
+	filename, rang, err := ed.LSProtoMan.TextDocumentDefinition(ctx, erow.Info.Name(), rw, index)
 	if err != nil {
 		return err, true
 	}
