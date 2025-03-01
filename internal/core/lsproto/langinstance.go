@@ -103,10 +103,7 @@ func (li *LangInstance) startClientServerStdio(ctx context.Context) error {
 	}
 	if li.lang.Reg.HasOptional("stderrmanmsg") {
 		// get server output in manager messages (editor msgs)
-		stderr = io1.FnWriter(func(p []byte) (int, error) {
-			li.lang.man.Message(string(p))
-			return len(p), nil
-		})
+		stderr = li.lang.man
 	}
 
 	// server wrap

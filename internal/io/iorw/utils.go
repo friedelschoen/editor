@@ -6,7 +6,6 @@ import (
 	"io"
 	"unicode"
 
-	io1 "github.com/friedelschoen/glake/internal/io"
 	"github.com/friedelschoen/glake/internal/parser/pscan"
 )
 
@@ -48,7 +47,7 @@ func ReadFullCopy(rd ReaderAt) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return io1.CopyBytes(b), nil
+	return bytes.Clone(b), nil
 }
 
 func SetBytes(rw ReadWriterAt, b []byte) error {
@@ -216,7 +215,7 @@ func WordAtIndex(r ReaderAt, index int) ([]byte, int, error) {
 	if err != nil {
 		return nil, 0, err
 	}
-	return io1.CopyBytes(w), i0, nil
+	return bytes.Clone(w), i0, nil
 }
 
 func WordIsolated(r ReaderAt, i, le int) bool {

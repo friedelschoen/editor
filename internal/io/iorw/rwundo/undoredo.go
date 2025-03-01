@@ -1,7 +1,8 @@
 package rwundo
 
 import (
-	"github.com/friedelschoen/glake/internal/io"
+	"bytes"
+
 	"github.com/friedelschoen/glake/internal/io/iorw"
 )
 
@@ -17,7 +18,7 @@ func NewUndoRedoOverwrite(rw iorw.ReadWriterAt, i, n int, p []byte) (*UndoRedo, 
 	if err != nil {
 		return nil, err
 	}
-	b1 := io.CopyBytes(b0)
+	b1 := bytes.Clone(b0)
 	// copy insert
 	b2 := make([]byte, len(p))
 	copy(b2, p)

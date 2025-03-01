@@ -7,7 +7,6 @@ import (
 	"sync"
 
 	"github.com/friedelschoen/glake/internal/eventregister"
-	io1 "github.com/friedelschoen/glake/internal/io"
 	"github.com/friedelschoen/glake/internal/ui"
 	"github.com/friedelschoen/glake/internal/ui/driver"
 )
@@ -144,7 +143,7 @@ func (tio *ERowTermIO) appendOp(op any) {
 	switch t := op.(type) {
 	case []byte:
 		// copy to avoid losing/overwriting content
-		b := io1.CopyBytes(t)
+		b := bytes.Clone(t)
 
 		// performance: append to previous op if possible
 		l := len(*o)

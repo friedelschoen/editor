@@ -464,13 +464,23 @@ func (erow *ERow) AppendBytesClearHistory2(p []byte) error {
 	return nil
 }
 
+type IOFunction func(b []byte) (int, error)
+
+func (w IOFunction) Write(b []byte) (int, error) {
+	return w(b)
+}
+
+func (w IOFunction) Read(b []byte) (int, error) {
+	return w(b)
+}
+
 func (erow *ERow) TextAreaReadWriteCloser() io.ReadWriteCloser {
 	if erow.terminalOpt.On() {
 		return NewTerminalFilter(erow)
 	}
 
 	// synced writer to slow down memory usage
-	w := io1.FnWriter(func(b []byte) (int, error) {
+	w := IOFunction(func(b []byte) (int, error) {
 		var err error
 		erow.Ed.UI.WaitRunOnUIGoRoutine(func() {
 			err = erow.AppendBytesClearHistory2(b)
@@ -481,7 +491,7 @@ func (erow *ERow) TextAreaReadWriteCloser() io.ReadWriteCloser {
 	// buffered for performance, which needs timed output (auto-flush)
 	wc := io1.NewAutoBufWriter(w, 4096*2)
 
-	rd := io1.FnReader(func(b []byte) (int, error) { return 0, io.EOF })
+	rd := IOFunction(func(b []byte) (int, error) { return 0, io.EOF })
 	type iorwc struct {
 		io.Reader
 		io.Writer

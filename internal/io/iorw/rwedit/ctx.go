@@ -1,10 +1,10 @@
 package rwedit
 
 import (
+	"bytes"
 	"fmt"
 	"image"
 
-	"github.com/friedelschoen/glake/internal/io"
 	"github.com/friedelschoen/glake/internal/io/iorw"
 )
 
@@ -40,7 +40,7 @@ func (ctx *Ctx) Selection() ([]byte, bool) {
 	if err != nil {
 		return nil, false
 	}
-	return io.CopyBytes(w), true
+	return bytes.Clone(w), true
 }
 
 func (ctx *Ctx) LocalReader(i int) iorw.ReaderAt {

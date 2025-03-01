@@ -39,6 +39,11 @@ func (man *Manager) Message(s string) {
 	}
 }
 
+func (man *Manager) Write(p []byte) (n int, err error) {
+	man.Message(string(p))
+	return len(p), nil
+}
+
 func (man *Manager) Register(reg *Registration) error {
 	lang := NewLangManager(man, reg)
 	// replace if already exists

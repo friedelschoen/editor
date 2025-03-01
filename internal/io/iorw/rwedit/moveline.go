@@ -1,7 +1,8 @@
 package rwedit
 
 import (
-	"github.com/friedelschoen/glake/internal/io"
+	"bytes"
+
 	"github.com/friedelschoen/glake/internal/io/iorw"
 )
 
@@ -19,7 +20,7 @@ func MoveLineUp(ctx *Ctx) error {
 	if err != nil {
 		return err
 	}
-	s := io.CopyBytes(s0)
+	s := bytes.Clone(s0)
 
 	if err := ctx.RW.OverwriteAt(a, b-a, nil); err != nil {
 		return err
@@ -72,7 +73,7 @@ func MoveLineDown(ctx *Ctx) error {
 	if err != nil {
 		return err
 	}
-	s := io.CopyBytes(s0)
+	s := bytes.Clone(s0)
 
 	// delete moving line
 	if err := ctx.RW.OverwriteAt(a, b-a, nil); err != nil {
