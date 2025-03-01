@@ -6,7 +6,6 @@ import (
 	"image/draw"
 
 	"github.com/friedelschoen/glake/util/fontutil"
-	"github.com/friedelschoen/glake/util/imageutil"
 )
 
 type DrawRune struct {
@@ -72,7 +71,7 @@ func (dr *DrawRune) draw2(fface *fontutil.FontFace, pen image.Point, ru rune, fg
 	}
 	gr = gr.Intersect(b)
 
-	imageutil.DrawUniformMask(dr.d.st.drawR.img, gr, fg, mask, maskp, draw.Over)
+	draw.DrawMask(dr.d.st.drawR.img, gr, image.NewUniform(fg), image.Point{}, mask, maskp, draw.Over)
 }
 
 type DrawRuneDelay struct {

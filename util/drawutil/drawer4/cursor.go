@@ -3,8 +3,7 @@ package drawer4
 import (
 	"image"
 	"image/color"
-
-	"github.com/friedelschoen/glake/util/imageutil"
+	"image/draw"
 )
 
 type Cursor struct {
@@ -66,7 +65,7 @@ func (c *Cursor) draw2(dr image.Rectangle, col color.Color) {
 	r3.Min.X -= vbw / 2
 	r3.Max.X = r3.Min.X + vbw
 	r4 := r3.Intersect(bounds)
-	imageutil.FillRectangle(img, r4, col)
+	draw.Draw(img, r4, image.NewUniform(col), image.Point{}, draw.Src)
 
 	// squares width
 	aw := vbw // added width
@@ -81,14 +80,14 @@ func (c *Cursor) draw2(dr image.Rectangle, col color.Color) {
 	r1.Max.X += aw
 	r1.Max.Y = r1.Min.Y + w
 	r1 = r1.Intersect(bounds)
-	imageutil.FillRectangle(img, r1, col)
+	draw.Draw(img, r1, image.NewUniform(col), image.Point{}, draw.Src)
 	// lower square
 	r2 := r3
 	r2.Min.X -= aw
 	r2.Max.X += aw
 	r2.Min.Y = r2.Max.Y - w
 	r2 = r2.Intersect(bounds)
-	imageutil.FillRectangle(img, r2, col)
+	draw.Draw(img, r2, image.NewUniform(col), image.Point{}, draw.Src)
 }
 
 type CursorDelay struct {

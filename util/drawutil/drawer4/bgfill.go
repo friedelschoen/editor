@@ -1,7 +1,8 @@
 package drawer4
 
 import (
-	"github.com/friedelschoen/glake/util/imageutil"
+	"image"
+	"image/draw"
 )
 
 type BgFill struct {
@@ -33,12 +34,12 @@ func (bgf *BgFill) iter2() {
 		r.Min.X = b.Min.X
 		r.Max.X = b.Max.X
 		r = r.Intersect(b)
-		imageutil.FillRectangle(bgf.d.st.drawR.img, r, st.lineBg)
+		draw.Draw(bgf.d.st.drawR.img, r, image.NewUniform(st.lineBg), image.Point{}, draw.Src)
 	}
 	if st.bg != nil {
 		r := bgf.d.iters.runeR.penBoundsRect()
 		r = r.Intersect(bgf.d.bounds)
-		imageutil.FillRectangle(bgf.d.st.drawR.img, r, st.bg)
+		draw.Draw(bgf.d.st.drawR.img, r, image.NewUniform(st.bg), image.Point{}, draw.Src)
 	}
 }
 

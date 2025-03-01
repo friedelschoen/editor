@@ -2,10 +2,10 @@ package widget
 
 import (
 	"image"
+	"image/draw"
 	"math"
 
 	"github.com/friedelschoen/glake/ui/driver"
-	"github.com/friedelschoen/glake/util/imageutil"
 	"github.com/friedelschoen/glake/util/mathutil"
 )
 
@@ -128,7 +128,7 @@ func (sb *ScrollBar) Layout() {
 
 func (sb *ScrollBar) Paint() {
 	c := sb.TreeThemePaletteColor("scrollbar_bg")
-	imageutil.FillRectangle(sb.ctx.Image(), sb.Bounds, c)
+	draw.Draw(sb.ctx.Image(), sb.Bounds, image.NewUniform(c), image.Point{}, draw.Src)
 }
 
 func (sb *ScrollBar) OnInputEvent(ev driver.Event, p image.Point) bool {

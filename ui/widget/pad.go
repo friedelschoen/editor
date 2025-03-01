@@ -2,6 +2,7 @@ package widget
 
 import (
 	"image"
+	"image/draw"
 
 	"github.com/friedelschoen/glake/util/imageutil"
 )
@@ -72,20 +73,20 @@ func (p *Padder) Paint() {
 	u := b
 	u.Max.Y = u.Min.Y + p.Top
 	u = u.Intersect(b)
-	imageutil.FillRectangle(p.ctx.Image(), u, c1)
+	draw.Draw(p.ctx.Image(), u, image.NewUniform(c1), image.Point{}, draw.Src)
 	// bottom
 	u = b
 	u.Min.Y = u.Max.Y - p.Bottom
 	u = u.Intersect(b)
-	imageutil.FillRectangle(p.ctx.Image(), u, c1)
+	draw.Draw(p.ctx.Image(), u, image.NewUniform(c1), image.Point{}, draw.Src)
 	// right
 	u = b
 	u.Min.X = u.Max.X - p.Right
 	u = u.Intersect(b)
-	imageutil.FillRectangle(p.ctx.Image(), u, c1)
+	draw.Draw(p.ctx.Image(), u, image.NewUniform(c1), image.Point{}, draw.Src)
 	// left
 	u = b
 	u.Max.X = u.Min.X + p.Left
 	u = u.Intersect(b)
-	imageutil.FillRectangle(p.ctx.Image(), u, c1)
+	draw.Draw(p.ctx.Image(), u, image.NewUniform(c1), image.Point{}, draw.Src)
 }

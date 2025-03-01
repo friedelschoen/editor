@@ -31,19 +31,13 @@ func RgbaColor(c color.Color) color.RGBA {
 	if u, ok := c.(color.RGBA); ok {
 		return u
 	} else {
-		return convertToRgbaColor(c)
-	}
-}
-func convertToRgbaColor(c color.Color) color.RGBA {
-	//// slow
-	//return color.RGBAModel.Convert(c).(color.RGBA)
-
-	r, g, b, a := c.RGBA()
-	return color.RGBA{
-		uint8(r >> 8),
-		uint8(g >> 8),
-		uint8(b >> 8),
-		uint8(a >> 8),
+		r, g, b, a := c.RGBA()
+		return color.RGBA{
+			uint8(r >> 8),
+			uint8(g >> 8),
+			uint8(b >> 8),
+			uint8(a >> 8),
+		}
 	}
 }
 
@@ -61,18 +55,6 @@ func RgbaToInt(c color.RGBA) int {
 	v += int(c.B) << 0
 	return v
 }
-
-// Ex. usage: editor.xutil.cursors
-
-//func Invert(c color.Color) color.Color {
-//	return InvertRgba(RgbaColor(c))
-//}
-//func Invert2(c color.Color) color.Color {
-//	return InvertRgba2(RgbaColor(c))
-//}
-//func LinearInvert(c color.Color) color.Color {
-//	return LinearInvertRgba(RgbaColor(c))
-//}
 
 // NOTE: https://www.pyimagesearch.com/2015/10/05/opencv-gamma-correction/
 func NewLinearInvertFn(v1, v2 float64) func(color.RGBA) color.RGBA {

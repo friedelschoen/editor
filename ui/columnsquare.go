@@ -2,6 +2,7 @@ package ui
 
 import (
 	"image"
+	"image/draw"
 
 	"github.com/friedelschoen/glake/ui/driver"
 	"github.com/friedelschoen/glake/ui/widget"
@@ -26,7 +27,7 @@ func (sq *ColumnSquare) Measure(hint image.Point) image.Point {
 }
 func (sq *ColumnSquare) Paint() {
 	c := sq.TreeThemePaletteColor("columnsquare")
-	imageutil.FillRectangle(sq.col.ui.Image(), sq.Bounds, c)
+	draw.Draw(sq.col.ui.Image(), sq.Bounds, image.NewUniform(c), image.Point{}, draw.Src)
 }
 func (sq *ColumnSquare) OnInputEvent(ev driver.Event, p image.Point) bool {
 	switch t := ev.(type) {

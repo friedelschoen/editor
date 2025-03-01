@@ -3,9 +3,9 @@ package widget
 import (
 	"image"
 	"image/color"
+	"image/draw"
 
 	"github.com/friedelschoen/glake/ui/driver"
-	"github.com/friedelschoen/glake/util/imageutil"
 )
 
 // Used by ScrollBar.
@@ -34,7 +34,7 @@ func (sh *ScrollHandle) Paint() {
 	} else {
 		c = sh.TreeThemePaletteColor("scrollhandle_normal")
 	}
-	imageutil.FillRectangle(sh.ctx.Image(), sh.Bounds, c)
+	draw.Draw(sh.ctx.Image(), sh.Bounds, image.NewUniform(c), image.Point{}, draw.Src)
 }
 
 func (sh *ScrollHandle) OnInputEvent(ev driver.Event, p image.Point) bool {
