@@ -9,7 +9,7 @@ import (
 )
 
 type RuneReader struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (rr *RuneReader) Init() {

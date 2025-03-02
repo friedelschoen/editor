@@ -10,7 +10,7 @@ import (
 )
 
 type DrawRune struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (dr *DrawRune) Init() {}

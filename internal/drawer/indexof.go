@@ -1,7 +1,7 @@
 package drawer
 
 type IndexOf struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (io *IndexOf) Init() {

@@ -8,7 +8,7 @@ var NoPaddedIndentedLines bool
 var useSpaceForMargin bool
 
 type Indent struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (in *Indent) Init() {}

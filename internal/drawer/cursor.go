@@ -7,7 +7,7 @@ import (
 )
 
 type Cursor struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (c *Cursor) Init() {}

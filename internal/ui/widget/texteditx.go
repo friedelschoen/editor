@@ -154,7 +154,7 @@ func (te *TextEditX) updateFlashOpt() {
 	te.updateFlashOpt4(te.Drawer)
 }
 
-func (te *TextEditX) updateFlashOpt4(d *drawer.Drawer) {
+func (te *TextEditX) updateFlashOpt4(d *drawer.TextDrawer) {
 	g := d.Opt.Colorize.Groups[5]
 	if !te.flash.index.on {
 		g.Ops = nil

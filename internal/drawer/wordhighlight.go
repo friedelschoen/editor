@@ -4,7 +4,7 @@ import (
 	"github.com/friedelschoen/glake/internal/ioutil"
 )
 
-func updateWordHighlightWord(d *Drawer) {
+func updateWordHighlightWord(d *TextDrawer) {
 	if !d.Opt.WordHighlight.On {
 		return
 	}
@@ -28,7 +28,7 @@ func updateWordHighlightWord(d *Drawer) {
 	d.opt.wordH.word = word
 }
 
-func updateWordHighlightOps(d *Drawer) {
+func updateWordHighlightOps(d *TextDrawer) {
 	if !d.Opt.WordHighlight.On {
 		d.Opt.WordHighlight.Group.Ops = nil
 		return
@@ -42,7 +42,7 @@ func updateWordHighlightOps(d *Drawer) {
 	d.Opt.WordHighlight.Group.Ops = wordHOps(d)
 }
 
-func wordHOps(d *Drawer) []*ColorizeOp {
+func wordHOps(d *TextDrawer) []*ColorizeOp {
 	word := d.opt.wordH.word
 	if word == nil {
 		return nil

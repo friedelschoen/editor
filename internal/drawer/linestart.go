@@ -5,7 +5,7 @@ import (
 )
 
 type LineStart struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (ls *LineStart) Init() {

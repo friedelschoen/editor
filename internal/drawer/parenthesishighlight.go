@@ -7,7 +7,7 @@ import (
 	"github.com/friedelschoen/glake/internal/parser/pscan"
 )
 
-func updateParenthesisHighlight(d *Drawer) {
+func updateParenthesisHighlight(d *TextDrawer) {
 	// TODO: testing handling parenthesis in syntaxhighlight
 	//updateSyntaxHighlightOps(d)
 	// return
@@ -27,7 +27,7 @@ func updateParenthesisHighlight(d *Drawer) {
 }
 
 type ParenthesisHighlight struct {
-	d   *Drawer
+	d   *TextDrawer
 	sc  *pscan.Scanner
 	ops []*ColorizeOp
 	pad int

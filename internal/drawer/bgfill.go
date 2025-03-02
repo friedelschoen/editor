@@ -6,7 +6,7 @@ import (
 )
 
 type BgFill struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (bgf *BgFill) Init() {}

@@ -2,7 +2,7 @@ package drawer
 
 // Current colors
 type CurColors struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (cc *CurColors) Init() {}

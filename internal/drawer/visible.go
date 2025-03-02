@@ -6,7 +6,7 @@ import (
 	"golang.org/x/image/math/fixed"
 )
 
-func header1PenBounds(d *Drawer, offset int) (fixed.Rectangle52_12, bool) {
+func header1PenBounds(d *TextDrawer, offset int) (fixed.Rectangle52_12, bool) {
 	d.st = State{}
 	fnIter := FnIter{}
 	iters := append(d.sIters(true), &fnIter)
@@ -51,7 +51,7 @@ const (
 // 	top     bool // otherwise is bottom, valid in "full" and "partial"
 // }
 
-func penVisibility(d *Drawer, offset int) (PenVisibility, bool) {
+func penVisibility(d *TextDrawer, offset int) (PenVisibility, bool) {
 	pb, ok := header1PenBounds(d, offset)
 	if !ok {
 		return VisibilityNot, false

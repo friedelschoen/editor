@@ -13,7 +13,7 @@ type Text struct {
 	ENode
 	TextScroll
 
-	Drawer *drawer.Drawer
+	Drawer *drawer.TextDrawer
 
 	scrollable struct{ x, y bool }
 	ctx        ImageContext

@@ -3,7 +3,7 @@ package drawer
 import "image/color"
 
 type Colorize struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (c *Colorize) Init() {

@@ -3,7 +3,7 @@ package drawer
 import "image"
 
 type PointOf struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (po *PointOf) Init() {}

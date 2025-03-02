@@ -1,7 +1,7 @@
 package drawer
 
 type LineWrap struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (lw *LineWrap) Init() {}

@@ -8,7 +8,7 @@ import (
 )
 
 type Annotations struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (ann *Annotations) Init() {
@@ -220,7 +220,7 @@ type Annotation struct {
 }
 
 type AnnotationsIndexOf struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (aio *AnnotationsIndexOf) Init() {

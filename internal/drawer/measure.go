@@ -1,7 +1,7 @@
 package drawer
 
 type Measure struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (m *Measure) Init() {

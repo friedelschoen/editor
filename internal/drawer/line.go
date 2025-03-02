@@ -1,7 +1,7 @@
 package drawer
 
 type Line struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (l *Line) Init() {}

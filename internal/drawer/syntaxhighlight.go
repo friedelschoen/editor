@@ -9,15 +9,14 @@ import (
 	"github.com/alecthomas/chroma/v2/styles"
 )
 
-func updateSyntaxHighlightOps(d *Drawer) {
+func updateSyntaxHighlightOps(d *TextDrawer) {
 	if shDone(d) {
 		return
 	}
-
 	d.Opt.SyntaxHighlight.Group.Ops = SyntaxHighlight(d)
 }
 
-func shDone(d *Drawer) bool {
+func shDone(d *TextDrawer) bool {
 	if !d.Opt.SyntaxHighlight.On {
 		d.Opt.SyntaxHighlight.Group.Ops = nil
 		return true
@@ -41,7 +40,7 @@ func HexColor(in chroma.Colour) color.Color {
 	}
 }
 
-func SyntaxHighlight(d *Drawer) []*ColorizeOp {
+func SyntaxHighlight(d *TextDrawer) []*ColorizeOp {
 	// limit reading to be able to handle big content
 	o, n, _, _ := d.visibleLen()
 

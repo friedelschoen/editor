@@ -3,7 +3,7 @@ package drawer
 import "golang.org/x/image/math/fixed"
 
 type EarlyExit struct {
-	d *Drawer
+	d *TextDrawer
 }
 
 func (ee *EarlyExit) Init() {}
