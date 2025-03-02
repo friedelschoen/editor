@@ -10,7 +10,7 @@ import (
 	"text/template"
 
 	"github.com/friedelschoen/glake/internal/command"
-	io1 "github.com/friedelschoen/glake/internal/io"
+	"github.com/friedelschoen/glake/internal/multierror"
 )
 
 type ServerWrap struct {
@@ -105,7 +105,7 @@ type rwc struct {
 }
 
 func (rwc *rwc) Close() error {
-	me := io1.MultiError{}
+	me := multierror.MultiError{}
 	me.Add(rwc.ReadCloser.Close())
 	me.Add(rwc.WriteCloser.Close())
 	return me.Result()

@@ -3,7 +3,7 @@ package drawer
 import (
 	"strings"
 
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/parser/pscan"
 )
 
@@ -35,9 +35,9 @@ type ParenthesisHighlight struct {
 
 func (ph *ParenthesisHighlight) do() []*ColorizeOp {
 	ci := ph.d.opt.cursor.offset
-	r := iorw.NewLimitedReaderAtPad(ph.d.reader, ci, ci, ph.pad)
+	r := ioutil.NewLimitedReaderAtPad(ph.d.reader, ci, ci, ph.pad)
 
-	ph.sc = iorw.NewScanner(r)
+	ph.sc = ioutil.NewScanner(r)
 	pos0 := ph.sc.ValidPos(ci)
 
 	// match a parenthesis

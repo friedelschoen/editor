@@ -6,7 +6,7 @@ import (
 	"image/draw"
 
 	"github.com/friedelschoen/glake/internal/drawer"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 )
 
 type Text struct {
@@ -19,7 +19,7 @@ type Text struct {
 	ctx        ImageContext
 	bg         color.Color
 
-	rw iorw.ReadWriterAt
+	rw ioutil.ReadWriterAt
 }
 
 func NewText(ctx ImageContext) *Text {
@@ -30,17 +30,17 @@ func NewText(ctx ImageContext) *Text {
 	t.TextScroll.Text = t
 	t.TextScroll.Drawer = t.Drawer
 
-	rw := iorw.NewBytesReadWriterAt(nil)
+	rw := ioutil.NewBytesReadWriterAt(nil)
 	t.SetRW(rw)
 
 	return t
 }
 
-func (t *Text) RW() iorw.ReadWriterAt {
+func (t *Text) RW() ioutil.ReadWriterAt {
 	return t.rw
 }
 
-func (t *Text) SetRW(rw iorw.ReadWriterAt) {
+func (t *Text) SetRW(rw ioutil.ReadWriterAt) {
 	t.rw = rw
 	t.Drawer.SetReader(rw)
 }
@@ -51,11 +51,11 @@ func (t *Text) Len() int {
 
 // Result might not be a copy, so changes to the slice might affect the text data.
 func (t *Text) Bytes() ([]byte, error) {
-	return iorw.ReadFastFull(t.rw)
+	return ioutil.ReadFastFull(t.rw)
 }
 
 func (t *Text) SetBytes(b []byte) error {
-	if err := iorw.SetBytes(t.rw, b); err != nil {
+	if err := ioutil.SetBytes(t.rw, b); err != nil {
 		return err
 	}
 	t.contentChanged()

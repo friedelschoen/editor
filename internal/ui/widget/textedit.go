@@ -1,19 +1,19 @@
 package widget
 
 import (
+	"github.com/friedelschoen/glake/internal/editbuf"
 	"github.com/friedelschoen/glake/internal/eventregister"
-	"github.com/friedelschoen/glake/internal/io/iorw"
-	"github.com/friedelschoen/glake/internal/io/iorw/rwedit"
-	"github.com/friedelschoen/glake/internal/io/iorw/rwundo"
+	"github.com/friedelschoen/glake/internal/historybuf"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/ui/driver"
 )
 
 type TextEdit struct {
 	*Text
 	uiCtx   UIContext
-	rwev    *iorw.RWEvents
-	rwu     *rwundo.RWUndo
-	ctx     *rwedit.Ctx             // ctx for rw editing utils (contains cursor)
+	rwev    *ioutil.RWEvents
+	rwu     *historybuf.RWUndo
+	ctx     *editbuf.EditorBuffer   // ctx for rw editing utils (contains cursor)
 	RWEvReg *eventregister.Register // the rwundo wraps the rwev, so on a write event callback, the undo data is not commited yet. It is incorrect to try to undo inside a write callback. If a rwev wraps rwundo, undoing will not trigger the outer rwev events, otherwise undoing would register as another undo event (cycle).
 }
 
@@ -21,16 +21,16 @@ func NewTextEdit(uiCtx UIContext) *TextEdit {
 	t := NewText(uiCtx)
 	te := &TextEdit{Text: t, uiCtx: uiCtx}
 
-	te.rwev = iorw.NewRWEvents(te.Text.rw)
+	te.rwev = ioutil.NewRWEvents(te.Text.rw)
 	te.RWEvReg = &te.rwev.EvReg
-	te.RWEvReg.Add(iorw.RWEvIdWrite2, te.onWrite2)
+	te.RWEvReg.Add(ioutil.RWEvIdWrite2, te.onWrite2)
 
-	hist := rwundo.NewHistory(200)
-	te.rwu = rwundo.NewRWUndo(te.rwev, hist)
+	hist := historybuf.NewHistory(200)
+	te.rwu = historybuf.NewRWUndo(te.rwev, hist)
 
-	te.ctx = rwedit.NewCtx()
+	te.ctx = editbuf.NewEditorBuffer()
 	te.ctx.RW = te.rwu
-	te.ctx.C = rwedit.NewTriggerCursor(te.onCursorChange)
+	te.ctx.C = editbuf.NewTriggerCursor(te.onCursorChange)
 	te.ctx.Fns.Error = uiCtx.Error
 	te.ctx.Fns.GetPoint = te.GetPoint
 	te.ctx.Fns.GetIndex = te.GetIndex
@@ -44,13 +44,13 @@ func NewTextEdit(uiCtx UIContext) *TextEdit {
 	return te
 }
 
-func (te *TextEdit) RW() iorw.ReadWriterAt {
+func (te *TextEdit) RW() ioutil.ReadWriterAt {
 	// TODO: returning rw with undo/events, differs from SetRW(), workaround is to use te.Text.RW() to get underlying rw
 
 	return te.ctx.RW
 }
 
-func (te *TextEdit) SetRW(rw iorw.ReadWriterAt) {
+func (te *TextEdit) SetRW(rw ioutil.ReadWriterAt) {
 	// TODO: setting basic rw (bytes), differs from RW()
 
 	te.Text.SetRW(rw)
@@ -66,14 +66,14 @@ func (te *TextEdit) SetRWFromMaster(m *TextEdit) {
 
 // Called when the changes are done on this textedit
 func (te *TextEdit) onWrite2(ev any) {
-	e := ev.(*iorw.RWEvWrite2)
+	e := ev.(*ioutil.RWEvWrite2)
 	if e.Changed {
 		te.contentChanged()
 	}
 }
 
 // Called when changes were made on another row
-func (te *TextEdit) HandleRWWrite2(ev *iorw.RWEvWrite2) {
+func (te *TextEdit) HandleRWWrite2(ev *ioutil.RWEvWrite2) {
 	te.stableRuneOffset(&ev.RWEvWrite)
 	te.stableCursor(&ev.RWEvWrite)
 	if ev.Changed {
@@ -81,7 +81,7 @@ func (te *TextEdit) HandleRWWrite2(ev *iorw.RWEvWrite2) {
 	}
 }
 
-func (te *TextEdit) EditCtx() *rwedit.Ctx {
+func (te *TextEdit) EditCtx() *editbuf.EditorBuffer {
 	return te.ctx
 }
 
@@ -90,7 +90,7 @@ func (te *TextEdit) onCursorChange() {
 	te.MarkNeedsPaint()
 }
 
-func (te *TextEdit) Cursor() rwedit.Cursor {
+func (te *TextEdit) Cursor() editbuf.Cursor {
 	return te.ctx.C
 }
 
@@ -134,7 +134,7 @@ func (te *TextEdit) OnInputEvent(ev driver.Event) bool {
 	te.BeginUndoGroup()
 	defer te.EndUndoGroup()
 
-	handled, err := rwedit.HandleInput(te.ctx, ev)
+	handled, err := editbuf.HandleInput(te.ctx, ev)
 	if err != nil {
 		te.uiCtx.Error(err)
 	}
@@ -148,13 +148,13 @@ func (te *TextEdit) SetBytes(b []byte) error {
 		// because after setbytes the possible selection might not be correct (ex: go fmt; variable renames with lsprotorename)
 		te.ctx.C.SetSelectionOff()
 	}()
-	return iorw.SetBytes(te.ctx.RW, b)
+	return ioutil.SetBytes(te.ctx.RW, b)
 }
 
 func (te *TextEdit) SetBytesClearPos(b []byte) error {
 	te.BeginUndoGroup()
 	defer te.EndUndoGroup()
-	err := iorw.SetBytes(te.ctx.RW, b)
+	err := ioutil.SetBytes(te.ctx.RW, b)
 	te.ClearPos() // keep position in undogroup (history record)
 	return err
 }
@@ -163,7 +163,7 @@ func (te *TextEdit) SetBytesClearPos(b []byte) error {
 func (te *TextEdit) SetBytesClearHistory(b []byte) error {
 	te.rwu.History.Clear()
 	rw := te.rwu.ReadWriterAt // bypass history
-	if err := iorw.SetBytes(rw, b); err != nil {
+	if err := ioutil.SetBytes(rw, b); err != nil {
 		return err
 	}
 	return nil
@@ -203,13 +203,13 @@ func (te *TextEdit) MakeCursorVisible() {
 	}
 }
 
-func (te *TextEdit) stableRuneOffset(ev *iorw.RWEvWrite) {
+func (te *TextEdit) stableRuneOffset(ev *ioutil.RWEvWrite) {
 	// keep offset based scrolling stable
 	ro := StableOffsetScroll(te.RuneOffset(), ev.Index, ev.Dn, ev.In)
 	te.SetRuneOffset(ro)
 }
 
-func (te *TextEdit) stableCursor(ev *iorw.RWEvWrite) {
+func (te *TextEdit) stableCursor(ev *ioutil.RWEvWrite) {
 	c := te.Cursor()
 	ci := StableOffsetScroll(c.Index(), ev.Index, ev.Dn, ev.In)
 	if c.HaveSelection() {

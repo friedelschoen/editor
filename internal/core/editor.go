@@ -20,7 +20,7 @@ import (
 	"github.com/friedelschoen/glake/internal/command"
 	"github.com/friedelschoen/glake/internal/drawer"
 	"github.com/friedelschoen/glake/internal/fswatcher"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/lsproto"
 	"github.com/friedelschoen/glake/internal/ui"
 	"github.com/friedelschoen/glake/internal/ui/driver"
@@ -345,7 +345,7 @@ func (ed *Editor) setupRootToolbar() {
 		InternalCmdFromRootTb(ed, tb)
 	})
 	// on write
-	tb.RWEvReg.Add(iorw.RWEvIdWrite, func(ev0 any) {
+	tb.RWEvReg.Add(ioutil.RWEvIdWrite, func(ev0 any) {
 		ed.updateERowsToolbarsHomeVars()
 	})
 
@@ -360,7 +360,7 @@ func (ed *Editor) setupRootMenuToolbar() {
 		InternalCmdFromRootTb(ed, tb)
 	})
 	// on write
-	tb.RWEvReg.Add(iorw.RWEvIdWrite, func(ev0 any) {
+	tb.RWEvReg.Add(ioutil.RWEvIdWrite, func(ev0 any) {
 		ed.updateERowsToolbarsHomeVars()
 	})
 

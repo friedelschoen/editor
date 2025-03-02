@@ -11,7 +11,7 @@ import (
 
 	"github.com/friedelschoen/glake/internal/command"
 	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/parser"
 )
 
@@ -45,7 +45,7 @@ func OpenURL(ctx context.Context, erow *core.ERow, index int) (error, bool) {
 			strings.ContainsRune(extra, ru)
 	}
 
-	rd := iorw.NewLimitedReaderAtPad(ta.RW(), index, index, 1000)
+	rd := ioutil.NewLimitedReaderAtPad(ta.RW(), index, index, 1000)
 	l, r := parser.ExpandIndexesEscape(rd, index, false, isHttpRune, command.EscapeCharacter())
 
 	b, err := rd.ReadFastAt(l, r-l)

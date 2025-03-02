@@ -1,7 +1,7 @@
 package drawer
 
 import (
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 )
 
 type LineStart struct {
@@ -77,7 +77,7 @@ func (ls *LineStart) linesStartIndexes(offset, nLinesUp int) []int {
 
 	w := []int{}
 	for i := 0; i <= nLinesUp; i++ {
-		k, err := iorw.LineStartIndex(rd, offset)
+		k, err := ioutil.LineStartIndex(rd, offset)
 		if err != nil {
 			break
 		}

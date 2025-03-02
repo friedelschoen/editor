@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/lsproto"
 	"github.com/friedelschoen/glake/internal/parser"
 )
@@ -37,7 +37,7 @@ func GoToDefinitionLSProto(ctx context.Context, erow *core.ERow, index int) (err
 	}
 
 	// content reader
-	var rd iorw.ReaderAt
+	var rd ioutil.ReaderAt
 	info, ok := ed.ERowInfo(filename)
 	if ok {
 		// file is in memory already
@@ -51,7 +51,7 @@ func GoToDefinitionLSProto(ctx context.Context, erow *core.ERow, index int) (err
 		if err != nil {
 			return err, true
 		}
-		rd = iorw.NewBytesReadWriterAt(b)
+		rd = ioutil.NewBytesReadWriterAt(b)
 	}
 
 	// translate range

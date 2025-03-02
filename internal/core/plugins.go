@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"plugin"
 
-	"github.com/friedelschoen/glake/internal/io"
+	"github.com/friedelschoen/glake/internal/multierror"
 	"github.com/friedelschoen/glake/internal/toolbarparser"
 	"github.com/friedelschoen/glake/internal/ui"
 )
@@ -56,7 +56,7 @@ func (p *Plugins) runOnLoad(plug *Plug) error {
 
 // Runs all plugins until it finds one that returns handled=true and has no errors.
 func (p *Plugins) RunAutoComplete(ctx context.Context, cfb *ui.ContextFloatBox) (error, bool) {
-	me := io.MultiError{}
+	me := multierror.MultiError{}
 	for _, plug := range p.plugs {
 		err, handled := p.runAutoCompletePlug(ctx, plug, cfb)
 		if handled {

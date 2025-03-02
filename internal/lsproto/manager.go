@@ -7,8 +7,8 @@ import (
 	"os"
 	"path/filepath"
 
-	io1 "github.com/friedelschoen/glake/internal/io"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/glake/internal/multierror"
 )
 
 ////godebug:annotatepackage
@@ -84,7 +84,7 @@ func (man *Manager) langInstanceClient(ctx context.Context, filename string) (*C
 
 func (man *Manager) Close() error {
 	count := 0
-	me := &io1.MultiError{}
+	me := &multierror.MultiError{}
 	for _, lang := range man.langs {
 		err, ok := lang.Close()
 		if ok {
@@ -102,7 +102,7 @@ func (man *Manager) Close() error {
 	return me.Result()
 }
 
-func (man *Manager) TextDocumentImplementation(ctx context.Context, filename string, rd iorw.ReaderAt, offset int) (string, *Range, error) {
+func (man *Manager) TextDocumentImplementation(ctx context.Context, filename string, rd ioutil.ReaderAt, offset int) (string, *Range, error) {
 	cli, _, err := man.langInstanceClient(ctx, filename)
 	if err != nil {
 		return "", nil, err
@@ -133,7 +133,7 @@ func (man *Manager) TextDocumentImplementation(ctx context.Context, filename str
 	return filename2, loc.Range, nil
 }
 
-func (man *Manager) TextDocumentDefinition(ctx context.Context, filename string, rd iorw.ReaderAt, offset int) (string, *Range, error) {
+func (man *Manager) TextDocumentDefinition(ctx context.Context, filename string, rd ioutil.ReaderAt, offset int) (string, *Range, error) {
 	cli, _, err := man.langInstanceClient(ctx, filename)
 	if err != nil {
 		return "", nil, err
@@ -164,7 +164,7 @@ func (man *Manager) TextDocumentDefinition(ctx context.Context, filename string,
 	return filename2, loc.Range, nil
 }
 
-func (man *Manager) TextDocumentCompletion(ctx context.Context, filename string, rd iorw.ReaderAt, offset int) (*CompletionList, error) {
+func (man *Manager) TextDocumentCompletion(ctx context.Context, filename string, rd ioutil.ReaderAt, offset int) (*CompletionList, error) {
 	cli, _, err := man.langInstanceClient(ctx, filename)
 	if err != nil {
 		return nil, err
@@ -184,7 +184,7 @@ func (man *Manager) TextDocumentCompletion(ctx context.Context, filename string,
 	return cli.TextDocumentCompletion(ctx, filename, pos)
 }
 
-func (man *Manager) TextDocumentCompletionDetailStrings(ctx context.Context, filename string, rd iorw.ReaderAt, offset int) ([]string, error) {
+func (man *Manager) TextDocumentCompletionDetailStrings(ctx context.Context, filename string, rd ioutil.ReaderAt, offset int) ([]string, error) {
 	clist, err := man.TextDocumentCompletion(ctx, filename, rd, offset)
 	if err != nil {
 		return nil, err
@@ -193,8 +193,8 @@ func (man *Manager) TextDocumentCompletionDetailStrings(ctx context.Context, fil
 	return w, nil
 }
 
-func (man *Manager) didOpen(ctx context.Context, cli *Client, filename string, rd iorw.ReaderAt) (func(), error) {
-	b, err := iorw.ReadFastFull(rd)
+func (man *Manager) didOpen(ctx context.Context, cli *Client, filename string, rd ioutil.ReaderAt) (func(), error) {
+	b, err := ioutil.ReadFastFull(rd)
 	if err != nil {
 		return nil, err
 	}
@@ -228,7 +228,7 @@ func (man *Manager) didOpen(ctx context.Context, cli *Client, filename string, r
 //	return cli.TextDocumentDidSave(ctx, filename, text)
 //}
 
-func (man *Manager) SyncText(ctx context.Context, filename string, rd iorw.ReaderAt) error {
+func (man *Manager) SyncText(ctx context.Context, filename string, rd ioutil.ReaderAt) error {
 	cli, _, err := man.langInstanceClient(ctx, filename)
 	if err != nil {
 		return err
@@ -244,7 +244,7 @@ func (man *Manager) SyncText(ctx context.Context, filename string, rd iorw.Reade
 	return nil
 }
 
-func (man *Manager) TextDocumentRename(ctx context.Context, filename string, rd iorw.ReaderAt, offset int, newName string) (*WorkspaceEdit, error) {
+func (man *Manager) TextDocumentRename(ctx context.Context, filename string, rd ioutil.ReaderAt, offset int, newName string) (*WorkspaceEdit, error) {
 	cli, _, err := man.langInstanceClient(ctx, filename)
 	if err != nil {
 		return nil, err
@@ -264,7 +264,7 @@ func (man *Manager) TextDocumentRename(ctx context.Context, filename string, rd 
 	return cli.TextDocumentRename(ctx, filename, pos, newName)
 }
 
-func (man *Manager) TextDocumentRenameAndPatch(ctx context.Context, filename string, rd iorw.ReaderAt, offset int, newName string, prePatchFn func([]*WorkspaceEditChange) error) ([]*WorkspaceEditChange, error) {
+func (man *Manager) TextDocumentRenameAndPatch(ctx context.Context, filename string, rd ioutil.ReaderAt, offset int, newName string, prePatchFn func([]*WorkspaceEditChange) error) ([]*WorkspaceEditChange, error) {
 
 	we, err := man.TextDocumentRename(ctx, filename, rd, offset, newName)
 	if err != nil {
@@ -304,7 +304,7 @@ func (man *Manager) TextDocumentRenameAndPatch(ctx context.Context, filename str
 	return wecs, nil
 }
 
-func (man *Manager) CallHierarchyCalls(ctx context.Context, filename string, rd iorw.ReaderAt, offset int, typ CallHierarchyCallType) ([]*ManagerCallHierarchyCalls, error) {
+func (man *Manager) CallHierarchyCalls(ctx context.Context, filename string, rd ioutil.ReaderAt, offset int, typ CallHierarchyCallType) ([]*ManagerCallHierarchyCalls, error) {
 	cli, _, err := man.langInstanceClient(ctx, filename)
 	if err != nil {
 		return nil, err
@@ -342,7 +342,7 @@ func (man *Manager) CallHierarchyCalls(ctx context.Context, filename string, rd 
 	return res, nil
 }
 
-func (man *Manager) TextDocumentReferences(ctx context.Context, filename string, rd iorw.ReaderAt, offset int) ([]*Location, error) {
+func (man *Manager) TextDocumentReferences(ctx context.Context, filename string, rd ioutil.ReaderAt, offset int) ([]*Location, error) {
 	cli, _, err := man.langInstanceClient(ctx, filename)
 	if err != nil {
 		return nil, err

@@ -90,10 +90,6 @@ func (ee *ERowExec) runAsync2(optCtx context.Context, optCancel context.CancelFu
 		// clear cancel resources
 		cancel()
 
-		if err := rwc.Close(); err != nil {
-			ee.erow.Ed.Error(err)
-		}
-
 		ee.erow.Ed.UI.RunOnUIGoRoutine(func() {
 			ee.erow.Row.SetState(ui.RowStateExecuting, false)
 		})

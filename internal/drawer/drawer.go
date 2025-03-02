@@ -7,7 +7,7 @@ import (
 	"image/draw"
 	"log"
 
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/mathutil"
 	"golang.org/x/image/font"
 	"golang.org/x/image/math/fixed"
@@ -30,7 +30,7 @@ const (
 )
 
 type Drawer struct {
-	reader iorw.ReaderAt
+	reader ioutil.ReaderAt
 
 	fface            font.Face
 	lineHeight       fixed.Int52_12
@@ -170,7 +170,7 @@ type State struct {
 		q          []int
 		ri         int
 		uppedLines int
-		reader     iorw.ReaderAt // limited reader
+		reader     ioutil.ReaderAt // limited reader
 	}
 	indent struct {
 		notStartingSpaces bool
@@ -238,22 +238,22 @@ func New() *Drawer {
 	return d
 }
 
-func (d *Drawer) SetReader(r iorw.ReaderAt) {
+func (d *Drawer) SetReader(r ioutil.ReaderAt) {
 	d.reader = r
 	// always run since an underlying reader could have been changed
 	d.ContentChanged()
 }
 
-func (d *Drawer) Reader() iorw.ReaderAt { return d.reader }
+func (d *Drawer) Reader() ioutil.ReaderAt { return d.reader }
 
 var limitedReaderPadding = 3000
 
-func (d *Drawer) limitedReaderPad(offset int) iorw.ReaderAt {
+func (d *Drawer) limitedReaderPad(offset int) ioutil.ReaderAt {
 	pad := limitedReaderPadding
-	return iorw.NewLimitedReaderAtPad(d.reader, offset, offset, pad)
+	return ioutil.NewLimitedReaderAtPad(d.reader, offset, offset, pad)
 }
 
-func (d *Drawer) limitedReaderPadSpace(offset int) iorw.ReaderAt {
+func (d *Drawer) limitedReaderPadSpace(offset int) ioutil.ReaderAt {
 	// adjust the padding to avoid immediate flicker for x chars for the case of long lines
 	max := 1000
 	pad := limitedReaderPadding // in tests it could be a small num
@@ -262,7 +262,7 @@ func (d *Drawer) limitedReaderPadSpace(offset int) iorw.ReaderAt {
 		diff := max - (u % max)
 		pad = limitedReaderPadding - diff
 	}
-	return iorw.NewLimitedReaderAtPad(d.reader, offset, offset, pad)
+	return ioutil.NewLimitedReaderAtPad(d.reader, offset, offset, pad)
 }
 
 func (d *Drawer) ContentChanged() {
@@ -839,7 +839,7 @@ func (d *Drawer) wlineStartState(clearState bool, offset, nLinesUp int) int {
 	return uppedLines
 }
 
-func (d *Drawer) wlineStartIndex(clearState bool, offset, nLinesUp int, rd iorw.ReaderAt) int {
+func (d *Drawer) wlineStartIndex(clearState bool, offset, nLinesUp int, rd ioutil.ReaderAt) int {
 	if clearState {
 		d.st = State{}
 	}

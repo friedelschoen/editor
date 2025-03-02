@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/io/iorw/rwedit"
+	"github.com/friedelschoen/glake/internal/editbuf"
 )
 
 func Replace(args *core.InternalCmdArgs) error {
@@ -23,7 +23,7 @@ func Replace(args *core.InternalCmdArgs) error {
 	ta := erow.Row.TextArea
 	ta.BeginUndoGroup()
 	defer ta.EndUndoGroup()
-	replaced, err := rwedit.Replace(ta.EditCtx(), old, new)
+	replaced, err := editbuf.Replace(ta.EditCtx(), old, new)
 	if err != nil {
 		return err
 	}

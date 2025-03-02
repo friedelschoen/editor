@@ -10,7 +10,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/friedelschoen/glake/internal/command"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/parser/pscan"
 )
 
@@ -100,7 +100,7 @@ func CleanMultiplePathSeps(str string, sep rune) string {
 	return string(w)
 }
 
-func ExpandIndexesEscape(rd iorw.ReaderAt, index int, truth bool, fn func(rune) bool, escape rune) (int, int) {
+func ExpandIndexesEscape(rd ioutil.ReaderAt, index int, truth bool, fn func(rune) bool, escape rune) (int, int) {
 	// ensure the index is not in the middle of an escape
 	index = ImproveExpandIndexEscape(rd, index, escape)
 
@@ -109,13 +109,13 @@ func ExpandIndexesEscape(rd iorw.ReaderAt, index int, truth bool, fn func(rune) 
 	return l, r
 }
 
-func ExpandIndexEscape(r iorw.ReaderAt, i int, truth bool, fn func(rune) bool, escape rune) int {
-	sc := iorw.NewScanner(r)
+func ExpandIndexEscape(r ioutil.ReaderAt, i int, truth bool, fn func(rune) bool, escape rune) int {
+	sc := ioutil.NewScanner(r)
 	return expandEscape(sc, i, truth, fn, escape)
 }
 
-func ExpandLastIndexEscape(r iorw.ReaderAt, i int, truth bool, fn func(rune) bool, escape rune) int {
-	sc := iorw.NewScanner(r)
+func ExpandLastIndexEscape(r ioutil.ReaderAt, i int, truth bool, fn func(rune) bool, escape rune) int {
+	sc := ioutil.NewScanner(r)
 
 	// read direction
 	tmp := sc.Reverse
@@ -135,8 +135,8 @@ func expandEscape(sc *pscan.Scanner, i int, truth bool, fn func(rune) bool, esca
 	return p2
 }
 
-func ImproveExpandIndexEscape(r iorw.ReaderAt, i int, escape rune) int {
-	sc := iorw.NewScanner(r)
+func ImproveExpandIndexEscape(r ioutil.ReaderAt, i int, escape rune) int {
+	sc := ioutil.NewScanner(r)
 	p2, _ := sc.M.ReverseMode(i, true,
 		sc.W.Loop(sc.W.Rune(escape)),
 	)
@@ -144,7 +144,7 @@ func ImproveExpandIndexEscape(r iorw.ReaderAt, i int, escape rune) int {
 }
 
 // Line/col args are one-based.
-func LineColumnIndex(rd iorw.ReaderAt, line, column int) (int, error) {
+func LineColumnIndex(rd ioutil.ReaderAt, line, column int) (int, error) {
 	// must have a good line
 	if line <= 0 {
 		return 0, fmt.Errorf("bad line: %v", line)
@@ -173,7 +173,7 @@ func LineColumnIndex(rd iorw.ReaderAt, line, column int) (int, error) {
 			break
 		}
 
-		ru, size, err := iorw.ReadRuneAt(rd, ri)
+		ru, size, err := ioutil.ReadRuneAt(rd, ri)
 		if err != nil {
 			// be tolerant about the column
 			if index >= 0 {
@@ -194,11 +194,11 @@ func LineColumnIndex(rd iorw.ReaderAt, line, column int) (int, error) {
 }
 
 // Returned line/col values are one-based.
-func IndexLineColumn(rd iorw.ReaderAt, index int) (int, int, error) {
+func IndexLineColumn(rd ioutil.ReaderAt, index int) (int, int, error) {
 	line, lineStart := 0, 0
 	ri := 0
 	for ri < index {
-		ru, size, err := iorw.ReadRuneAt(rd, ri)
+		ru, size, err := ioutil.ReadRuneAt(rd, ri)
 		if err != nil {
 			return 0, 0, err
 		}

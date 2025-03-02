@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/lsproto"
 )
 
@@ -34,7 +34,7 @@ func lsprotoCallHierarchyCalls(args *core.InternalCmdArgs, typ lsproto.CallHiera
 	dir := filepath.Dir(erow.Info.Name())
 	info := erow.Ed.ReadERowInfo(dir)
 	erow2 := core.NewBasicERow(info, erow.Row.PosBelow())
-	iorw.Append(erow2.Row.Toolbar.RW(), []byte(" | Stop"))
+	ioutil.Append(erow2.Row.Toolbar.RW(), []byte(" | Stop"))
 	erow2.Flash()
 
 	// NOTE: args0.Ctx will end at func exit

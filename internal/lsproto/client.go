@@ -12,8 +12,8 @@ import (
 	"time"
 
 	context1 "github.com/friedelschoen/glake/internal/context"
-	io1 "github.com/friedelschoen/glake/internal/io"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/glake/internal/multierror"
 )
 
 type Client struct {
@@ -88,7 +88,7 @@ func (cli *Client) Wait() error {
 }
 
 func (cli *Client) sendClose() error {
-	me := io1.MultiError{}
+	me := multierror.MultiError{}
 	if err := cli.ShutdownRequest(); err != nil {
 		me.Add(err)
 	} else {
@@ -333,7 +333,7 @@ func (cli *Client) TextDocumentDidChange(ctx context.Context, filename, text str
 	opt.TextDocument.Uri = DocumentUri(url)
 
 	// text end line/column
-	rd := iorw.NewStringReaderAt(text)
+	rd := ioutil.NewStringReaderAt(text)
 	pos, err := OffsetToPosition(rd, len(text))
 	if err != nil {
 		return err

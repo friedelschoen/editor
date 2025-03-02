@@ -4,9 +4,9 @@ import (
 	"image"
 	"unicode"
 
+	"github.com/friedelschoen/glake/internal/editbuf"
 	"github.com/friedelschoen/glake/internal/eventregister"
-	"github.com/friedelschoen/glake/internal/io/iorw"
-	"github.com/friedelschoen/glake/internal/io/iorw/rwedit"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/ui/driver"
 	"github.com/friedelschoen/glake/internal/ui/widget"
 	"github.com/veandco/go-sdl2/sdl"
@@ -59,7 +59,7 @@ func (ta *TextArea) handleInputEvent2(ev0 any, p image.Point) bool {
 	case *driver.MouseClick:
 		if ev.Key.Is("MouseRight") {
 			if !ta.PointIndexInsideSelection(ev.Point) {
-				rwedit.MoveCursorToPoint(ta.EditCtx(), ev.Point, false)
+				editbuf.MoveCursorToPoint(ta.EditCtx(), ev.Point, false)
 			}
 			i := ta.GetIndex(ev.Point)
 			ev2 := &TextAreaCmdEvent{ta, i}
@@ -93,7 +93,7 @@ func (ta *TextArea) inlineCompleteEv() bool {
 	}
 
 	// previous rune should not be a space
-	ru, _, err := iorw.ReadRuneAt(ta.RW(), c.Index()-1)
+	ru, _, err := ioutil.ReadRuneAt(ta.RW(), c.Index()-1)
 	if err != nil {
 		return false
 	}

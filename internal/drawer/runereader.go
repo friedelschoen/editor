@@ -4,7 +4,7 @@ import (
 	"image"
 	"io"
 
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"golang.org/x/image/math/fixed"
 )
 
@@ -24,7 +24,7 @@ func (rr *RuneReader) Iter() {
 		rr.d.st.runeR.startRi = rr.d.st.runeR.ri
 	}
 
-	ru, size, err := iorw.ReadRuneAt(rr.d.reader, rr.d.st.runeR.ri)
+	ru, size, err := ioutil.ReadRuneAt(rr.d.reader, rr.d.st.runeR.ri)
 	if err != nil {
 		// run last advanced position (draw/delayeddraw/selecting)
 		if err == io.EOF {

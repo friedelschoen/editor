@@ -1,7 +1,7 @@
 package drawer
 
 import (
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 )
 
 func updateWordHighlightWord(d *Drawer) {
@@ -20,8 +20,8 @@ func updateWordHighlightWord(d *Drawer) {
 	// find word
 	d.opt.wordH.word = nil
 	ci := d.opt.cursor.offset
-	rd := iorw.NewLimitedReaderAtPad(d.reader, ci, ci, 250)
-	word, _, err := iorw.WordAtIndex(rd, ci)
+	rd := ioutil.NewLimitedReaderAtPad(d.reader, ci, ci, 250)
+	word, _, err := ioutil.WordAtIndex(rd, ci)
 	if err != nil {
 		return
 	}
@@ -68,8 +68,8 @@ func wordHOps(d *Drawer) []*ColorizeOp {
 	var ops []*ColorizeOp
 	for i := a; i < b; {
 		// find word
-		rd := iorw.NewLimitedReaderAt(d.reader, i, b)
-		j, _, err := iorw.Index(rd, i, word, false)
+		rd := ioutil.NewLimitedReaderAt(d.reader, i, b)
+		j, _, err := ioutil.Index(rd, i, word, false)
 		if err != nil {
 			return nil
 		}
@@ -78,7 +78,7 @@ func wordHOps(d *Drawer) []*ColorizeOp {
 		}
 
 		// isolated word
-		if iorw.WordIsolated(d.reader, j, len(word)) {
+		if ioutil.WordIsolated(d.reader, j, len(word)) {
 			op1 := &ColorizeOp{
 				Offset: j,
 				Fg:     d.Opt.WordHighlight.Fg,

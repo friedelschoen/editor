@@ -10,8 +10,6 @@ import (
 	"runtime"
 	"strings"
 	"time"
-
-	io1 "github.com/friedelschoen/glake/internal/io"
 )
 
 func EscapeCharacter() rune {
@@ -211,46 +209,6 @@ func (c *NoHangPipeCmd) CloseStdin() error {
 		return c.stdin.Close()
 	}
 	return nil
-}
-
-// ex: usefull to print something before any cmd output is printed
-type PausedWritersCmd struct {
-	CmdI
-	callback func(CmdI)
-	stdout   *io1.PausedWriter
-	stderr   *io1.PausedWriter
-}
-
-func NewPausedWritersCmd(cmdi CmdI, cb func(CmdI)) *PausedWritersCmd {
-	c := &PausedWritersCmd{CmdI: cmdi, callback: cb}
-	return c
-}
-func (c *PausedWritersCmd) Start() error {
-	defer c.unpause()
-	cmd := c.CmdI.Cmd()
-	if cmd.Stdout != nil {
-		c.stdout = io1.NewPausedWriter(cmd.Stdout)
-	}
-	if cmd.Stderr != nil {
-		c.stderr = io1.NewPausedWriter(cmd.Stderr)
-	}
-	if err := c.CmdI.Start(); err != nil {
-		return err
-	}
-	c.callback(c)
-	return nil
-}
-func (c *PausedWritersCmd) Wait() error {
-	c.unpause()
-	return c.CmdI.Wait()
-}
-func (c *PausedWritersCmd) unpause() {
-	if c.stdout != nil {
-		c.stdout.Unpause()
-	}
-	if c.stderr != nil {
-		c.stderr.Unpause()
-	}
 }
 
 func RunCmdI(ci CmdI) error {

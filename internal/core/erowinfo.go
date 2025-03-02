@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/ui"
 )
 
@@ -300,7 +300,7 @@ func (info *ERowInfo) SaveFile() error {
 		ctx3, cancel3 := context.WithTimeout(ctx2, 5*time.Second)
 		defer cancel3()
 
-		rd := iorw.NewStringReaderAt(string(b))
+		rd := ioutil.NewStringReaderAt(string(b))
 		_ = info.Ed.LSProtoMan.SyncText(ctx3, info.Name(), rd)
 		// if err != nil {
 		// commented: best effort
@@ -467,7 +467,7 @@ func (info *ERowInfo) SetRowsBytes(b []byte) {
 	}
 }
 
-func (info *ERowInfo) HandleRWEvWrite2(erow *ERow, ev *iorw.RWEvWrite2) {
+func (info *ERowInfo) HandleRWEvWrite2(erow *ERow, ev *ioutil.RWEvWrite2) {
 	if !info.IsFileButNotDir() {
 		return
 	}

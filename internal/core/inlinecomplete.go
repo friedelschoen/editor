@@ -7,7 +7,7 @@ import (
 	"unicode"
 
 	"github.com/friedelschoen/glake/internal/drawer"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/mathutil"
 	"github.com/friedelschoen/glake/internal/ui"
 )
@@ -202,7 +202,7 @@ func (ic *InlineComplete) CancelAndClear() {
 //	}
 //}
 
-func insertComplete(comps []string, rw iorw.ReadWriterAt, index int) (newIndex int, completed bool, _ []string, _ error) {
+func insertComplete(comps []string, rw ioutil.ReadWriterAt, index int) (newIndex int, completed bool, _ []string, _ error) {
 	// build prefix from start of string
 	start, prefix, ok := readLastUntilStart(rw, index)
 	if !ok {
@@ -304,8 +304,8 @@ func longestCommonPrefix(strs []string) string {
 	return strs[0][:len(prefix)] // use original string
 }
 
-func readLastUntilStart(rd iorw.ReaderAt, index int) (int, string, bool) {
-	sc := iorw.NewScanner(rd)
+func readLastUntilStart(rd ioutil.ReaderAt, index int) (int, string, bool) {
+	sc := ioutil.NewScanner(rd)
 	sc.Reverse = true
 	max := 1000
 	if v, p2, err := sc.M.StringValue(index, sc.W.RuneFnLoop(func(ru rune) bool {

@@ -3,7 +3,7 @@ package core
 import (
 	"errors"
 
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/parser"
 	"github.com/friedelschoen/glake/internal/ui"
 )
@@ -52,7 +52,7 @@ func openFileERow2(ed *Editor, conf *OpenFileERowConfig) (isNew bool, _ error) {
 	// helper func: cache for LineColumnIndex
 	lciVal := 0
 	lciDone := false
-	cacheLineColumnIndex := func(rd iorw.ReaderAt) int {
+	cacheLineColumnIndex := func(rd ioutil.ReaderAt) int {
 		if lciDone {
 			return lciVal
 		}

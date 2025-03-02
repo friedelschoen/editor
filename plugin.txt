@@ -1,0 +1,11 @@
+p9 -l $GLAKE9
+
+/                       root-directory
+/messages               \n-demilited messages (writing does append plugin-name)
+/buffers/               all open editors
+
+/buffers/0/cursor       current cursor position
+/buffers/0/content      shown content
+/buffers/0/hints        hints for after content-line
+/buffers/0/highlight    highlight-instructions
+/buffers/0/error        errors, warning lines

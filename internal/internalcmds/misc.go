@@ -9,7 +9,7 @@ import (
 
 	"github.com/friedelschoen/glake/internal/context"
 	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/io"
+	"github.com/friedelschoen/glake/internal/multierror"
 	"github.com/friedelschoen/glake/internal/ui"
 )
 
@@ -82,7 +82,7 @@ func Save(args *core.InternalCmdArgs) error {
 	return erow.Info.SaveFile()
 }
 func SaveAllFiles(args *core.InternalCmdArgs) error {
-	var me io.MultiError
+	var me multierror.MultiError
 	for _, info := range args.Ed.ERowInfos() {
 		if info.IsFileButNotDir() {
 			me.Add(info.SaveFile())
@@ -99,7 +99,7 @@ func Reload(args *core.InternalCmdArgs) error {
 	return erow.Reload()
 }
 func ReloadAllFiles(args *core.InternalCmdArgs) error {
-	me := &io.MultiError{}
+	me := &multierror.MultiError{}
 	for _, info := range args.Ed.ERowInfos() {
 		if info.IsFileButNotDir() {
 			me.Add(info.ReloadFile())
@@ -109,7 +109,7 @@ func ReloadAllFiles(args *core.InternalCmdArgs) error {
 }
 func ReloadAll(args *core.InternalCmdArgs) error {
 	// reload all dirs erows
-	me := &io.MultiError{}
+	me := &multierror.MultiError{}
 	for _, info := range args.Ed.ERowInfos() {
 		if info.IsDir() {
 			for _, erow := range info.ERows {

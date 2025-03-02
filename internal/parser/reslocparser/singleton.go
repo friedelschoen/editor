@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	"github.com/friedelschoen/glake/internal/command"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/parser"
 )
 
@@ -17,8 +17,8 @@ func ParseResLoc(src []byte, index int) (*ResLoc, error) {
 	}
 	return rlp.Parse(src, index)
 }
-func ParseResLoc2(rd iorw.ReaderAt, index int) (*ResLoc, error) {
-	src, err := iorw.ReadFastFull(rd)
+func ParseResLoc2(rd ioutil.ReaderAt, index int) (*ResLoc, error) {
+	src, err := ioutil.ReadFastFull(rd)
 	if err != nil {
 		return nil, err
 	}

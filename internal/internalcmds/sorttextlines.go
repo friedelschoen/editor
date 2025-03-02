@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 )
 
 func sortTextLines(args *core.InternalCmdArgs) error {
@@ -32,11 +32,11 @@ func sortTextLines(args *core.InternalCmdArgs) error {
 	if !ok {
 		return fmt.Errorf("missing selection")
 	}
-	a0, err := iorw.LineStartIndex(ctx.RW, a)
+	a0, err := ioutil.LineStartIndex(ctx.RW, a)
 	if err != nil {
 		return err
 	}
-	b0, isNL, err := iorw.LineEndIndex(ctx.RW, b)
+	b0, isNL, err := ioutil.LineEndIndex(ctx.RW, b)
 	if err != nil {
 		return err
 	}

@@ -6,14 +6,14 @@ import (
 	"unicode"
 
 	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 )
 
 func OpenSession(ctx context.Context, erow *core.ERow, index int) (error, bool) {
 	ta := erow.Row.TextArea
 
 	// limit reading
-	rd := iorw.NewLimitedReaderAtPad(ta.RW(), index, index, 1000)
+	rd := ioutil.NewLimitedReaderAtPad(ta.RW(), index, index, 1000)
 
 	sname, err := sessionName(rd, index)
 	if err != nil {
@@ -27,8 +27,8 @@ func OpenSession(ctx context.Context, erow *core.ERow, index int) (error, bool) 
 	return nil, true
 }
 
-func sessionName(rd iorw.ReaderAt, index int) (string, error) {
-	sc := iorw.NewScanner(rd)
+func sessionName(rd ioutil.ReaderAt, index int) (string, error) {
+	sc := ioutil.NewScanner(rd)
 	//sc.SetSrc2(rd, index)
 
 	parseName := sc.W.RuneFnLoop(sessionNameRune)

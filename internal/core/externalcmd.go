@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/friedelschoen/glake/internal/command"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/parser"
 	"github.com/friedelschoen/glake/internal/toolbarparser"
 )
@@ -55,17 +55,17 @@ func externalCmdFromDir(erow *ERow, cargs []string, fend func(error), env []stri
 
 func externalCmdDir2(ctx context.Context, erow *ERow, cargs []string, env []string, rw io.ReadWriter) error {
 
-	printPid := func(c command.CmdI) {
-		//argsStr := strings.Join(c.Cmd().Args, " ")
-		argsStr := strings.Join(cargs, " ")
-		fmt.Fprintf(rw, "# pid %d: %s\n", c.Cmd().Process.Pid, argsStr)
-	}
+	// printPid := func(c command.CmdI) {
+	// 	//argsStr := strings.Join(c.Cmd().Args, " ")
+	// 	argsStr := strings.Join(cargs, " ")
+	// 	fmt.Fprintf(rw, "# pid %d: %s\n", c.Cmd().Process.Pid, argsStr)
+	// }
 
 	c := command.NewCmdI2(cargs)
 	c = command.NewNoHangStdinCmd(c)
 	c = command.NewCtxCmd(ctx, c)
 	c = command.NewShellCmd(c, true)
-	c = command.NewPausedWritersCmd(c, printPid)
+	// c = command.NewPausedWritersCmd(c, printPid)
 
 	cmd := c.Cmd()
 	cmd.Dir = erow.Info.Name()
@@ -145,7 +145,7 @@ func cmdVar_edFileLine(erow *ERow) string {
 
 func cmdVar_edFileWord(erow *ERow) string {
 	ta := erow.Row.TextArea
-	b, _, err := iorw.WordAtIndex(ta.RW(), ta.CursorIndex())
+	b, _, err := ioutil.WordAtIndex(ta.RW(), ta.CursorIndex())
 	if err != nil {
 		return ""
 	}

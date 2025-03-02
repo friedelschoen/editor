@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/friedelschoen/glake/internal/drawer"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/shadow"
 )
 
@@ -121,7 +121,7 @@ func (te *TextEditX) startFlash(index, len int, line bool) {
 
 func (te *TextEditX) flashLineIndexes(offset int) (int, int) {
 	rd := te.EditCtx().LocalReader(offset)
-	s, e, newline, err := iorw.LinesIndexes(rd, offset, offset)
+	s, e, newline, err := ioutil.LinesIndexes(rd, offset, offset)
 	if err != nil {
 		return 0, 0
 	}

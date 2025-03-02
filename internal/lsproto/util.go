@@ -13,7 +13,7 @@ import (
 	"strings"
 	"unicode/utf16"
 
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/parser"
 )
 
@@ -66,7 +66,7 @@ func decodeJsonRaw(raw json.RawMessage, a any) error {
 	return json.Unmarshal(raw, a)
 }
 
-func Utf16Column(rd iorw.ReaderAt, lineStartOffset, utf8Col int) (int, error) {
+func Utf16Column(rd ioutil.ReaderAt, lineStartOffset, utf8Col int) (int, error) {
 	b, err := rd.ReadFastAt(lineStartOffset, utf8Col)
 	if err != nil {
 		return 0, err
@@ -75,7 +75,7 @@ func Utf16Column(rd iorw.ReaderAt, lineStartOffset, utf8Col int) (int, error) {
 }
 
 // Input and result is zero based.
-func Utf8Column(rd iorw.ReaderAt, lineStartOffset, utf16Col int) (int, error) {
+func Utf8Column(rd ioutil.ReaderAt, lineStartOffset, utf16Col int) (int, error) {
 	// ensure good limits
 	n := utf16Col * 2
 	if lineStartOffset+n > rd.Max() {
@@ -96,7 +96,7 @@ func Utf8Column(rd iorw.ReaderAt, lineStartOffset, utf16Col int) (int, error) {
 	return nthChar, nil
 }
 
-func OffsetToPosition(rd iorw.ReaderAt, offset int) (Position, error) {
+func OffsetToPosition(rd ioutil.ReaderAt, offset int) (Position, error) {
 	l, c, err := parser.IndexLineColumn(rd, offset)
 	if err != nil {
 		return Position{}, err
@@ -113,7 +113,7 @@ func OffsetToPosition(rd iorw.ReaderAt, offset int) (Position, error) {
 	return Position{Line: l, Character: c2}, nil
 }
 
-func RangeToOffsetLen(rd iorw.ReaderAt, rang *Range) (int, int, error) {
+func RangeToOffsetLen(rd ioutil.ReaderAt, rang *Range) (int, int, error) {
 	l1, _ := rang.Start.OneBased()
 	l2, _ := rang.End.OneBased()
 
@@ -317,7 +317,7 @@ func CompletionListToString(clist *CompletionList) []string {
 func PatchTextEdits(src []byte, edits []*TextEdit) ([]byte, error) {
 	sortTextEdits(edits)
 	res := bytes.Buffer{} // resulting patched src
-	rd := iorw.NewBytesReadWriterAt(src)
+	rd := ioutil.NewBytesReadWriterAt(src)
 	start := 0
 	for _, e := range edits {
 		offset, n, err := RangeToOffsetLen(rd, e.Range)

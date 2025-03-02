@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/parser"
 	"github.com/friedelschoen/glake/internal/parser/reslocparser"
 )
@@ -14,15 +14,15 @@ import (
 // Detects compilers output file format <string(:int)?(:int)?>, and goes to line/column.
 func OpenFilename(ctx context.Context, erow *core.ERow, index int) (error, bool) {
 	ta := erow.Row.TextArea
-	var rd iorw.ReaderAt
+	var rd ioutil.ReaderAt
 	considerMiddle := false
 	if a, b, ok := ta.Cursor().SelectionIndexes(); ok {
 		// consider only the selection
-		rd = iorw.NewLimitedReaderAt(ta.RW(), a, b)
+		rd = ioutil.NewLimitedReaderAt(ta.RW(), a, b)
 	} else {
 		considerMiddle = true
 		// limit reading
-		rd = iorw.NewLimitedReaderAtPad(ta.RW(), index, index, 1000)
+		rd = ioutil.NewLimitedReaderAtPad(ta.RW(), index, index, 1000)
 	}
 
 	rl, err := reslocparser.ParseResLoc2(rd, index)

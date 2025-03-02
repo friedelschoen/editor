@@ -10,8 +10,7 @@ import (
 	"sync"
 
 	"github.com/friedelschoen/glake/internal/drawer"
-	io1 "github.com/friedelschoen/glake/internal/io"
-	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/toolbarparser"
 	"github.com/friedelschoen/glake/internal/ui"
 	"github.com/friedelschoen/glake/internal/ui/driver"
@@ -189,8 +188,8 @@ func (erow *ERow) initHandlers() {
 	}
 
 	// toolbar on prewrite
-	row.Toolbar.RWEvReg.Add(iorw.RWEvIdPreWrite, func(ev0 any) {
-		ev := ev0.(*iorw.RWEvPreWrite)
+	row.Toolbar.RWEvReg.Add(ioutil.RWEvIdPreWrite, func(ev0 any) {
+		ev := ev0.(*ioutil.RWEvPreWrite)
 		if err := erow.validateToolbarPreWrite(ev); err != nil {
 			ev.ReplyErr = err
 		}
@@ -200,8 +199,8 @@ func (erow *ERow) initHandlers() {
 		InternalCmdFromRowTb(erow)
 	})
 	// textarea on write
-	row.TextArea.RWEvReg.Add(iorw.RWEvIdWrite2, func(ev0 any) {
-		ev := ev0.(*iorw.RWEvWrite2)
+	row.TextArea.RWEvReg.Add(ioutil.RWEvIdWrite2, func(ev0 any) {
+		ev := ev0.(*ioutil.RWEvWrite2)
 		erow.Info.HandleRWEvWrite2(erow, ev)
 	})
 	// textarea content cmds
@@ -299,20 +298,20 @@ func (erow *ERow) encodedName() string {
 	return erow.Ed.HomeVars.Encode(erow.Info.Name())
 }
 
-func (erow *ERow) validateToolbarPreWrite(ev *iorw.RWEvPreWrite) error {
+func (erow *ERow) validateToolbarPreWrite(ev *ioutil.RWEvPreWrite) error {
 	// current content (pre write) copy
-	b, err := iorw.ReadFullCopy(erow.Row.Toolbar.RW())
+	b, err := ioutil.ReadFullCopy(erow.Row.Toolbar.RW())
 	if err != nil {
 		return err
 	}
 
 	// simulate the write
 	// TODO: how to guarantee the simulation is accurate and no rw filter exists.
-	rw := iorw.NewBytesReadWriterAt(b)
+	rw := ioutil.NewBytesReadWriterAt(b)
 	if err := rw.OverwriteAt(ev.Index, ev.N, ev.P); err != nil {
 		return err
 	}
-	b2, err := iorw.ReadFastFull(rw)
+	b2, err := ioutil.ReadFastFull(rw)
 	if err != nil {
 		return err
 	}
@@ -474,7 +473,7 @@ func (w IOFunction) Read(b []byte) (int, error) {
 	return w(b)
 }
 
-func (erow *ERow) TextAreaReadWriteCloser() io.ReadWriteCloser {
+func (erow *ERow) TextAreaReadWriteCloser() io.ReadWriter {
 	if erow.terminalOpt.On() {
 		return NewTerminalFilter(erow)
 	}
@@ -489,15 +488,14 @@ func (erow *ERow) TextAreaReadWriteCloser() io.ReadWriteCloser {
 	})
 
 	// buffered for performance, which needs timed output (auto-flush)
-	wc := io1.NewAutoBufWriter(w, 4096*2)
+	// wc := w //io1.NewAutoBufWriter(w, 4096*2)
 
 	rd := IOFunction(func(b []byte) (int, error) { return 0, io.EOF })
 	type iorwc struct {
 		io.Reader
 		io.Writer
-		io.Closer
 	}
-	return io.ReadWriteCloser(&iorwc{rd, wc, wc})
+	return iorwc{rd, w}
 }
 
 // UI Safe

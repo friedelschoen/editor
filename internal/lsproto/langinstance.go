@@ -8,7 +8,7 @@ import (
 	"time"
 
 	context1 "github.com/friedelschoen/glake/internal/context"
-	io1 "github.com/friedelschoen/glake/internal/io"
+	"github.com/friedelschoen/glake/internal/multierror"
 )
 
 type LangInstance struct {
@@ -120,7 +120,7 @@ func (li *LangInstance) startClientServerStdio(ctx context.Context) error {
 
 func (li *LangInstance) Wait() error {
 	defer li.cancelCtx()
-	var me io1.MultiError
+	var me multierror.MultiError
 	if li.sw != nil { // might be nil: "tcpclient" option (or not started)
 		me.Add(li.sw.Wait())
 	}
