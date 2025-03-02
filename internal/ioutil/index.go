@@ -5,13 +5,7 @@ import (
 	"context"
 	"fmt"
 	"unicode"
-
-	"golang.org/x/text/runes"
-	"golang.org/x/text/transform"
-	"golang.org/x/text/unicode/norm"
 )
-
-// NOTE: considerered golang.org/x/text/search.Matcher but index backwards search is not implemented, as well as some options flexibility
 
 func Index(r ReaderAt, i int, sep []byte, ignoreCase bool) (int, int, error) {
 	ctx := context.Background()
@@ -128,23 +122,26 @@ func (opt *IndexOpt) IgnoringDiacritics() bool {
 type pfcType func([]byte) (result []byte, nSrcBytesRead int, _ error)
 
 func prepareForCompareFn(opt *IndexOpt) pfcType {
-	w := []transform.Transformer{}
-	if opt.IgnoreCase {
-		tla := &toLowerAscii{lowerDiacritics: opt.IgnoreCaseDiacritics}
-		w = append(w, tla)
-	}
-	if opt.IgnoreDiacritics {
-		// https://go.dev/blog/normalization
-		w = append(w,
-			norm.NFD, // decompose
-			runes.Remove(runes.In(unicode.Mn)),
-			norm.NFC, // compose
-		)
-	}
-	t := transform.Chain(w...) // ok if w is empty
 	return func(b []byte) ([]byte, int, error) {
-		return transform.Bytes(t, b)
+		if opt.IgnoreCase {
+			b = bytes.ToLower(b)
+		}
+		if opt.IgnoreDiacritics {
+			b = removeDiacritics(b)
+		}
+		return b, len(b), nil
 	}
+}
+
+// Remove diacritics using unicode.IsMark
+func removeDiacritics(b []byte) []byte {
+	out := make([]rune, 0, len(b))
+	for _, r := range string(b) {
+		if !unicode.IsMark(r) {
+			out = append(out, r)
+		}
+	}
+	return []byte(string(out))
 }
 
 type toLowerAscii struct {

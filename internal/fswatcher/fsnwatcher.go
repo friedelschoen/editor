@@ -1,7 +1,7 @@
 package fswatcher
 
 import (
-	fsnotify "github.com/fsnotify/fsnotify"
+	"github.com/fsnotify/fsnotify"
 )
 
 type FsnWatcher struct {
