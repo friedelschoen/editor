@@ -3,8 +3,8 @@ package drawer
 import (
 	"sync"
 
+	"github.com/friedelschoen/glake/internal/mathutil"
 	"golang.org/x/image/font"
-	"golang.org/x/image/math/fixed"
 )
 
 type Annotations struct {
@@ -104,7 +104,7 @@ func (ann *Annotations) insertAnnotations2() {
 		//}
 
 		space := ann.d.iters.runeR.glyphAdvance(' ')
-		boundsMinX := fixed.Int52_12(ann.d.bounds.Min.X << 12)
+		boundsMinX := mathutil.Intf1(ann.d.bounds.Min.X)
 		min := boundsMinX + space*(8*10)
 		margin := space * 10
 		max := ann.d.iters.runeR.maxX() - margin

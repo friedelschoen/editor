@@ -1,4 +1,4 @@
-package geometry
+package mathutil
 
 import (
 	"cmp"
@@ -29,6 +29,7 @@ func Min[T cmp.Ordered](s ...T) T {
 	}
 	return m
 }
+
 func Max[T cmp.Ordered](s ...T) T {
 	m := s[0]
 	for _, v := range s[1:] {

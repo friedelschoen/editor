@@ -55,7 +55,7 @@ func (p *Plugins) runOnLoad(plug *Plug) error {
 }
 
 // Runs all plugins until it finds one that returns handled=true and has no errors.
-func (p *Plugins) RunAutoComplete(ctx context.Context, cfb *ui.ContextFloatBox) (_ error, handled bool) {
+func (p *Plugins) RunAutoComplete(ctx context.Context, cfb *ui.ContextFloatBox) (error, bool) {
 	me := io.MultiError{}
 	for _, plug := range p.plugs {
 		err, handled := p.runAutoCompletePlug(ctx, plug, cfb)
@@ -67,7 +67,7 @@ func (p *Plugins) RunAutoComplete(ctx context.Context, cfb *ui.ContextFloatBox) 
 	return me.Result(), false
 }
 
-func (p *Plugins) runAutoCompletePlug(ctx context.Context, plug *Plug, cfb *ui.ContextFloatBox) (_ error, handled bool) {
+func (p *Plugins) runAutoCompletePlug(ctx context.Context, plug *Plug, cfb *ui.ContextFloatBox) (error, bool) {
 	// plugin should have this symbol
 	fname := "AutoComplete"
 	fn1, err := plug.Plugin.Lookup(fname)
@@ -75,7 +75,7 @@ func (p *Plugins) runAutoCompletePlug(ctx context.Context, plug *Plug, cfb *ui.C
 		return nil, false // ok if plugin doesn't implement this symbol
 	}
 	// the symbol must implement this signature
-	fn2, ok := fn1.(func(context.Context, *Editor, *ui.ContextFloatBox) (_ error, handled bool))
+	fn2, ok := fn1.(func(context.Context, *Editor, *ui.ContextFloatBox) (error, bool))
 	if !ok {
 		// report error
 		err := p.badFuncSigErr(plug.Path, fname)

@@ -1,5 +1,7 @@
 package drawer
 
+import "image"
+
 type PointOf struct {
 	d *Drawer
 }
@@ -21,5 +23,8 @@ func (po *PointOf) Iter() {
 func (po *PointOf) End() {
 	// pen is top/left, use what penbounds is using
 	penb := po.d.iters.runeR.penBounds()
-	po.d.st.pointOf.p = penb.Min.ToPointFloor()
+	po.d.st.pointOf.p = image.Point{
+		X: penb.Min.X.Floor(),
+		Y: penb.Min.Y.Floor(),
+	}
 }

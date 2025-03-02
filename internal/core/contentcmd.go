@@ -11,7 +11,7 @@ type ContentCmd struct {
 	Fn   ContentCmdFn
 }
 
-type ContentCmdFn func(ctx context.Context, erow *ERow, index int) (_ error, handled bool)
+type ContentCmdFn func(ctx context.Context, erow *ERow, index int) (error, bool)
 
 type contentCmds []*ContentCmd
 

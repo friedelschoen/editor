@@ -1,6 +1,6 @@
 package pscan
 
-import "github.com/friedelschoen/glake/internal/geometry"
+import "github.com/friedelschoen/glake/internal/mathutil"
 
 func ContainsRune(rs []rune, ru rune) bool {
 	for _, ru2 := range rs {
@@ -13,8 +13,8 @@ func ContainsRune(rs []rune, ru rune) bool {
 
 func SurroundingString(b []byte, k int, pad int) string {
 	// pad n in each direction for error string
-	i := geometry.Max(k-pad, 0)
-	i2 := geometry.Min(k+pad, len(b))
+	i := mathutil.Max(k-pad, 0)
+	i2 := mathutil.Min(k+pad, len(b))
 
 	if i > i2 {
 		return ""

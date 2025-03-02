@@ -7,9 +7,10 @@ import (
 	"image/draw"
 	"log"
 
-	"github.com/friedelschoen/glake/internal/geometry"
 	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/mathutil"
 	"golang.org/x/image/font"
+	"golang.org/x/image/math/fixed"
 )
 
 const (
@@ -32,7 +33,7 @@ type Drawer struct {
 	reader iorw.ReaderAt
 
 	fface            font.Face
-	lineHeight       geometry.Intf
+	lineHeight       fixed.Int52_12
 	bounds           image.Rectangle
 	firstLineOffsetX int
 	fg               color.Color
@@ -141,14 +142,14 @@ type State struct {
 	runeR struct {
 		ri            int
 		ru, prevRu    rune
-		pen           geometry.PointIntf // upper left corner (not at baseline)
-		kern, advance geometry.Intf
+		pen           fixed.Point52_12 // upper left corner (not at baseline)
+		kern, advance fixed.Int52_12
 		extra         int
 		startRi       int
 		fface         font.Face
 	}
 	measure struct {
-		penMax geometry.PointIntf
+		penMax fixed.Point52_12
 	}
 	drawR struct {
 		img   draw.Image
@@ -173,7 +174,7 @@ type State struct {
 	}
 	indent struct {
 		notStartingSpaces bool
-		indent            geometry.Intf
+		indent            fixed.Int52_12
 	}
 	earlyExit struct {
 		extraLine bool
@@ -190,7 +191,7 @@ type State struct {
 		p     image.Point
 	}
 	indexOf struct {
-		p     geometry.PointIntf
+		p     fixed.Point52_12
 		index int
 	}
 	colorize struct {
@@ -201,7 +202,7 @@ type State struct {
 		indexQ []int
 	}
 	annotationsIndexOf struct {
-		p      geometry.PointIntf
+		p      fixed.Point52_12
 		eindex int
 		offset int
 		inside struct { // inside an annotation
@@ -278,7 +279,7 @@ func (d *Drawer) SetFontFace(ff font.Face) {
 		return
 	}
 	d.fface = ff
-	d.lineHeight = geometry.Intf2(d.fface.Metrics().Height)
+	d.lineHeight = fixed.Int52_12(d.fface.Metrics().Height << 6)
 
 	d.opt.measure.updated = false
 }
@@ -363,7 +364,8 @@ func (d *Drawer) measureContent() image.Point {
 	d.loopInit(iters)
 	d.loop()
 	// remove bounds min and return only the measure
-	p := d.st.measure.penMax.ToPointCeil()
+	pf := d.st.measure.penMax
+	p := image.Point{pf.X.Ceil(), pf.Y.Ceil()}
 	m := p.Sub(d.bounds.Min)
 	return m
 }
@@ -412,7 +414,10 @@ func (d *Drawer) LocalIndexOf(p image.Point) int {
 		return 0
 	}
 	d.st = State{}
-	d.st.indexOf.p = geometry.PIntf2(p)
+	d.st.indexOf.p = fixed.Point52_12{
+		X: fixed.Int52_12(p.X << 12),
+		Y: fixed.Int52_12(p.Y << 12),
+	}
 	iters := d.sIters(true, &d.iters.indexOf)
 	d.loopInit(iters)
 	d.header1()
@@ -425,7 +430,11 @@ func (d *Drawer) AnnotationsIndexOf(p image.Point) (int, int, bool) {
 		return 0, 0, false
 	}
 	d.st = State{}
-	d.st.annotationsIndexOf.p = geometry.PIntf2(p)
+	d.st.annotationsIndexOf.p = fixed.Point52_12{
+		X: fixed.Int52_12(p.X << 12),
+		Y: fixed.Int52_12(p.Y << 12),
+	}
+
 	iters := d.sIters(true, &d.iters.annotations, &d.iters.annotationsIndexOf)
 	d.loopInit(iters)
 	d.header0()
@@ -536,7 +545,7 @@ func (d *Drawer) ScrollWheelSizeY(up bool) int {
 
 // integer lines
 func (d *Drawer) boundsNLines() int {
-	dy := geometry.Intf1(d.bounds.Dy())
+	dy := fixed.Int52_12(d.bounds.Dy() << 12)
 	return int(dy / d.lineHeight)
 }
 
@@ -608,7 +617,7 @@ func (d *Drawer) RangeVisibleOffset(offset, length int, align RangeAlignment) in
 }
 
 func (d *Drawer) alignKeep() int {
-	return geometry.Min(d.opt.runeO.offset, d.reader.Max())
+	return mathutil.Min(d.opt.runeO.offset, d.reader.Max())
 }
 
 func (d *Drawer) rangeVisibleOffsetKeepIfVisible(offset, length int) (int, bool) {
@@ -680,8 +689,8 @@ func (d *Drawer) rangeNLines(offset, length int) int {
 	return 1 // always at least one line
 }
 
-func (d *Drawer) wlineRangePenBounds(offset, length int) (_, _ geometry.RectangleIntf, _ bool) {
-	var pr1, pr2 geometry.RectangleIntf
+func (d *Drawer) wlineRangePenBounds(offset, length int) (fixed.Rectangle52_12, fixed.Rectangle52_12, bool) {
+	var pr1, pr2 fixed.Rectangle52_12
 	var ok1, ok2 bool
 	d.wlineStartLoopFn(true, offset, 0,
 		func() {
@@ -737,13 +746,13 @@ func (d *Drawer) header1() {
 	d.st.earlyExit.extraLine = true       // extra line at bottom
 	ul := d.header(d.opt.runeO.offset, 1) // extra line at top
 	if ul > 0 {
-		d.st.runeR.pen.Y -= d.lineHeight * geometry.Intf(ul)
+		d.st.runeR.pen.Y -= d.lineHeight * fixed.Int52_12(ul<<12)
 	}
 }
 
 func (d *Drawer) header(offset, nLinesUp int) int {
 	// smooth scrolling
-	adjustPenY := geometry.Intf(0)
+	adjustPenY := fixed.Int52_12(0)
 	if d.smoothScroll {
 		adjustPenY += d.smoothScrolling(offset)
 	}
@@ -757,7 +766,7 @@ func (d *Drawer) header(offset, nLinesUp int) int {
 	return uppedLines
 }
 
-func (d *Drawer) smoothScrolling(offset int) geometry.Intf {
+func (d *Drawer) smoothScrolling(offset int) fixed.Int52_12 {
 	// keep/restore state to avoid interfering with other running iterations
 	st := d.st
 	defer func() { d.st = st }()
@@ -769,7 +778,7 @@ func (d *Drawer) smoothScrolling(offset int) geometry.Intf {
 	}
 	k := offset - s
 	perc := float64(k) / float64(t)
-	return geometry.Intf(int64(float64(d.lineHeight) * perc))
+	return fixed.Int52_12(int64(float64(d.lineHeight) * perc * (1 << 12)))
 }
 
 func (d *Drawer) wlineStartEnd(offset int) (int, int) {

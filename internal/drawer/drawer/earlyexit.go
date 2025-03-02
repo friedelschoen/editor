@@ -1,6 +1,6 @@
 package drawer
 
-import "golang.org/x/image/math/fixed"
+import "github.com/friedelschoen/glake/internal/mathutil"
 
 type EarlyExit struct {
 	d *Drawer
@@ -9,7 +9,7 @@ type EarlyExit struct {
 func (ee *EarlyExit) Init() {}
 
 func (ee *EarlyExit) Iter() {
-	maxY := fixed.Int52_12(ee.d.bounds.Max.Y << 12)
+	maxY := mathutil.Intf1(ee.d.bounds.Max.Y)
 
 	// extra line iterated (not visible, useful for header1)
 	if ee.d.st.earlyExit.extraLine {

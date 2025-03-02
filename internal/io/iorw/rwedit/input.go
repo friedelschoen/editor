@@ -102,7 +102,8 @@ func (in *Input) onMouseClick(ev *driver.MouseClick) (bool, error) {
 	return false, nil
 }
 
-func (in *Input) onKeyDown(ev *driver.KeyDown) (_ bool, err error) {
+func (in *Input) onKeyDown(ev *driver.KeyDown) (bool, error) {
+	var err error
 	makeCursorVisible := func() {
 		if err == nil {
 			in.ctx.Fns.MakeIndexVisible(in.ctx.C.Index())

@@ -1,12 +1,10 @@
 package drawer
 
 import (
-	"image"
-
-	"golang.org/x/image/math/fixed"
+	"github.com/friedelschoen/glake/internal/mathutil"
 )
 
-func header1PenBounds(d *Drawer, offset int) (fixed.Rectangle52_12, bool) {
+func header1PenBounds(d *Drawer, offset int) (mathutil.RectangleIntf, bool) {
 	d.st = State{}
 	fnIter := FnIter{}
 	iters := append(d.sIters(true), &fnIter)
@@ -14,7 +12,7 @@ func header1PenBounds(d *Drawer, offset int) (fixed.Rectangle52_12, bool) {
 	d.header1()
 
 	found := false
-	pen := fixed.Rectangle52_12{}
+	pen := mathutil.RectangleIntf{}
 	fnIter.fn = func() {
 		if d.iters.runeR.isNormal() {
 			if d.st.runeR.ri >= offset {
@@ -56,15 +54,7 @@ func penVisibility(d *Drawer, offset int) (PenVisibility, bool) {
 	if !ok {
 		return VisibilityNot, false
 	} else {
-		min := image.Point{
-			X: pb.Min.X.Ceil(),
-			Y: pb.Min.Y.Ceil(),
-		}
-		max := image.Point{
-			X: pb.Max.X.Floor(),
-			Y: pb.Max.Y.Floor(),
-		}
-		pr := image.Rectangle{Min: min, Max: max}
+		pr := pb.ToRectFloorCeil()
 		// allow intersection of empty x in penbounds (case of eof)
 		if pr.Dx() == 0 {
 			pr.Max.X = pr.Min.X + 1

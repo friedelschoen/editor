@@ -5,7 +5,7 @@ import (
 	"io"
 
 	"github.com/friedelschoen/glake/internal/io/iorw"
-	"golang.org/x/image/math/fixed"
+	"github.com/friedelschoen/glake/internal/mathutil"
 )
 
 type RuneReader struct {
@@ -44,7 +44,7 @@ func (rr *RuneReader) iter2(ru rune, size int) bool {
 
 	// add/subtract kern with previous rune
 	k := rr.d.st.runeR.fface.Kern(st.prevRu, st.ru)
-	st.kern = fixed.Int52_12(k << 6)
+	st.kern = mathutil.Intf2(k)
 	st.pen.X += st.kern
 
 	st.advance = rr.tabbedGlyphAdvance(st.ru)
@@ -86,15 +86,15 @@ func (rr *RuneReader) isNormal() bool {
 	return !rr.isExtra()
 }
 
-func (rr *RuneReader) glyphAdvance(ru rune) fixed.Int52_12 {
+func (rr *RuneReader) glyphAdvance(ru rune) mathutil.Intf {
 	adv, ok := rr.d.st.runeR.fface.GlyphAdvance(ru)
 	if !ok {
 		return 0
 	}
-	return fixed.Int52_12(adv << 6)
+	return mathutil.Intf2(adv)
 }
 
-func (rr *RuneReader) tabbedGlyphAdvance(ru rune) fixed.Int52_12 {
+func (rr *RuneReader) tabbedGlyphAdvance(ru rune) mathutil.Intf {
 	adv := rr.glyphAdvance(ru)
 	if ru == '\t' {
 		adv = rr.nextTabStopAdvance(rr.d.st.runeR.pen.X, adv)
@@ -102,7 +102,7 @@ func (rr *RuneReader) tabbedGlyphAdvance(ru rune) fixed.Int52_12 {
 	return adv
 }
 
-func (rr *RuneReader) nextTabStopAdvance(penx, tadv fixed.Int52_12) fixed.Int52_12 {
+func (rr *RuneReader) nextTabStopAdvance(penx, tadv mathutil.Intf) mathutil.Intf {
 	// avoid divide by zero
 	if tadv == 0 {
 		return 0
@@ -111,46 +111,34 @@ func (rr *RuneReader) nextTabStopAdvance(penx, tadv fixed.Int52_12) fixed.Int52_
 	px := penx - rr.startingPen().X
 	x := px + tadv
 	n := int(x / tadv)
-	nadv := fixed.Int52_12(n) * tadv
+	nadv := mathutil.Intf(n) * tadv
 	return nadv - px
 }
 
-func (rr *RuneReader) penBounds() fixed.Rectangle52_12 {
+func (rr *RuneReader) penBounds() mathutil.RectangleIntf {
 	st := &rr.d.st.runeR
 	minX, minY := st.pen.X, st.pen.Y
 	maxX, maxY := minX+st.advance, minY+rr.d.lineHeight
-	min := fixed.Point52_12{X: minX, Y: minY}
-	max := fixed.Point52_12{X: maxX, Y: maxY}
-	return fixed.Rectangle52_12{Min: min, Max: max}
+	min := mathutil.PointIntf{minX, minY}
+	max := mathutil.PointIntf{maxX, maxY}
+	return mathutil.RectangleIntf{min, max}
 }
 
 func (rr *RuneReader) penBoundsRect() image.Rectangle {
-	rf := rr.penBounds()
+	pb := rr.penBounds()
 	// expand min (use floor), and max (use ceil)
-
-	min := image.Point{
-		X: rf.Min.X.Ceil(),
-		Y: rf.Min.Y.Ceil(),
-	}
-	max := image.Point{
-		X: rf.Max.X.Floor(),
-		Y: rf.Max.Y.Floor(),
-	}
-	return image.Rectangle{Min: min, Max: max}
+	return pb.ToRectFloorCeil()
 }
 
-func (rr *RuneReader) startingPen() fixed.Point52_12 {
+func (rr *RuneReader) startingPen() mathutil.PointIntf {
 	p := rr.d.bounds.Min
 	p.X += rr.d.Opt.RuneReader.StartOffsetX
 	if rr.d.st.runeR.ri == 0 {
 		p.X += rr.d.firstLineOffsetX
 	}
-	return fixed.Point52_12{
-		X: fixed.Int52_12(p.X << 12),
-		Y: fixed.Int52_12(p.Y << 12),
-	}
+	return mathutil.PIntf2(p)
 }
 
-func (rr *RuneReader) maxX() fixed.Int52_12 {
-	return fixed.Int52_12(rr.d.bounds.Max.X << 12)
+func (rr *RuneReader) maxX() mathutil.Intf {
+	return mathutil.Intf1(rr.d.bounds.Max.X)
 }

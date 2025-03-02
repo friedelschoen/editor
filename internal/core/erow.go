@@ -66,7 +66,7 @@ func NewLoadedERowOrNewBasic(info *ERowInfo, rowPos *ui.RowPos) *ERow {
 }
 
 // Used for ex. in: +messages, +sessions.
-func ExistingERowOrNewBasic(ed *Editor, name string) (_ *ERow, isNew bool) {
+func ExistingERowOrNewBasic(ed *Editor, name string) (*ERow, bool) {
 
 	info := ed.ReadERowInfo(name)
 	if erow0, ok := info.FirstERow(); ok {

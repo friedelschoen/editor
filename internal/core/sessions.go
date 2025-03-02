@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/friedelschoen/glake/internal/geometry"
+	"github.com/friedelschoen/glake/internal/mathutil"
 	"github.com/friedelschoen/glake/internal/toolbarparser"
 	"github.com/friedelschoen/glake/internal/ui"
 )
@@ -415,5 +415,5 @@ func deleteSession(ed *Editor, part *toolbarparser.Part) error {
 }
 
 func roundStartPercent(v float64) float64 {
-	return geometry.RoundFloat64(v, 8)
+	return mathutil.RoundFloat64(v, 8)
 }

@@ -5,7 +5,7 @@ import (
 	"image/draw"
 	"math"
 
-	"github.com/friedelschoen/glake/internal/geometry"
+	"github.com/friedelschoen/glake/internal/mathutil"
 	"github.com/friedelschoen/glake/internal/ui/driver"
 )
 
@@ -54,7 +54,7 @@ func (sb *ScrollBar) scrollWheel(up bool) {
 func (sb *ScrollBar) yBoundsSizePad() (int, int, int) {
 	min := 5
 	d := sb.yaxis(sb.Bounds.Size())
-	dpad := geometry.Max(d-min, 0)
+	dpad := mathutil.Max(d-min, 0)
 	return d, dpad, min
 }
 
@@ -68,7 +68,7 @@ func (sb *ScrollBar) scrollToPoint(p *image.Point) {
 func (sb *ScrollBar) scrollToPositionPercent(offsetPerc float64) {
 	size := sb.sa.scrollable.ScrollSize()
 	offset := sb.sa.scrollable.ScrollOffset()
-	offsetPerc = geometry.LimitFloat64(offsetPerc, 0, 1)
+	offsetPerc = mathutil.LimitFloat64(offsetPerc, 0, 1)
 	*sb.yaxisPtr(&offset) = int(offsetPerc*float64(sb.yaxis(size)) + 0.5)
 	sb.sa.scrollable.SetScrollOffset(offset)
 }
@@ -93,8 +93,8 @@ func (sb *ScrollBar) calcPositionAndSize() {
 		sp = vsizey / sizey
 	}
 
-	pp = geometry.LimitFloat64(pp, 0, 1)
-	sp = geometry.LimitFloat64(pp+sp, 0, 1) // add pp
+	pp = mathutil.LimitFloat64(pp, 0, 1)
+	sp = mathutil.LimitFloat64(pp+sp, 0, 1) // add pp
 
 	sb.positionPercent = pp
 	sb.sizePercent = sp
@@ -117,7 +117,7 @@ func (sb *ScrollBar) Layout() {
 
 	p := int(math.Ceil(float64(dpad) * sb.positionPercent))
 	s := int(math.Ceil(float64(d) * sb.sizePercent))
-	s = geometry.Max(s, p+min) // minimum bar size (stay visible)
+	s = mathutil.Max(s, p+min) // minimum bar size (stay visible)
 
 	*sb.yaxisPtr(&r.Min) = sb.yaxis(sb.Bounds.Min) + p
 	*sb.yaxisPtr(&r.Max) = sb.yaxis(sb.Bounds.Min) + s

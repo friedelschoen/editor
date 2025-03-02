@@ -7,8 +7,8 @@ import (
 	"unicode"
 
 	"github.com/friedelschoen/glake/internal/drawer"
-	"github.com/friedelschoen/glake/internal/geometry"
 	"github.com/friedelschoen/glake/internal/io/iorw"
+	"github.com/friedelschoen/glake/internal/mathutil"
 	"github.com/friedelschoen/glake/internal/ui"
 )
 
@@ -294,7 +294,7 @@ func longestCommonPrefix(strs []string) string {
 	prefix := strings.ToLower(strs[0])
 	for i := 1; i < len(strs); i++ {
 		str := strings.ToLower(strs[i])
-		n := geometry.Min(len(prefix), len(str))
+		n := mathutil.Min(len(prefix), len(str))
 		for str[:n] != prefix[:n] {
 			n--
 		}

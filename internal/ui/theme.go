@@ -248,7 +248,7 @@ func (uitu *uiThemeUtil) RowMinimumHeight(ff font.Face) int {
 
 func (uitu *uiThemeUtil) RowSquareSize(ff font.Face) image.Point {
 	lh := ff.Metrics().Height
-	w := lh.Mul(fixed.Int26_6(48)) // 3/4
+	w := lh.Mul(fixed.Int26_6(64 * 3 / 4)) // 3/4
 	return image.Point{w.Ceil(), lh.Ceil()}
 }
 
@@ -257,13 +257,13 @@ func (uitu *uiThemeUtil) GetScrollBarWidth(ff font.Face) int {
 		return ScrollBarWidth
 	}
 	lh := ff.Metrics().Height
-	w := lh.Mul(fixed.Int26_6(48)) // 3/4
+	w := lh.Mul(fixed.Int26_6(64 * 3 / 4)) // 3/4
 	return w.Ceil()
 }
 
 func (uitu *uiThemeUtil) ShadowHeight(ff font.Face) int {
 	lh := ff.Metrics().Height
-	w := lh.Mul(fixed.Int26_6(26)) // 2/5
+	w := lh.Mul(fixed.Int26_6(64 * 2 / 5)) // 2/5
 	return w.Ceil()
 }
 

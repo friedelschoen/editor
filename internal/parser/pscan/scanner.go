@@ -6,7 +6,7 @@ import (
 	"io"
 	"unicode/utf8"
 
-	"github.com/friedelschoen/glake/internal/geometry"
+	"github.com/friedelschoen/glake/internal/mathutil"
 )
 
 //go:generate go run ./wrapgen/wrapgen.go
@@ -38,7 +38,7 @@ func (sc *Scanner) SetSrc2(src []byte, offset int) {
 }
 
 func (sc *Scanner) ValidPos(i int) int {
-	return geometry.Max(sc.SrcMin(), geometry.Min(i, sc.SrcLen()))
+	return mathutil.Max(sc.SrcMin(), mathutil.Min(i, sc.SrcLen()))
 }
 
 func (sc *Scanner) srcAt(i int) int {
@@ -69,8 +69,8 @@ func (sc *Scanner) SrcLen() int {
 // WARNING: use with caution, using pos in resulting []byte might fail when there is offset
 
 func (sc *Scanner) srcSection0(pos int, maxLen int) string {
-	start := geometry.Max(pos-maxLen, sc.SrcMin())
-	end := geometry.Min(pos+maxLen, sc.SrcLen())
+	start := mathutil.Max(pos-maxLen, sc.SrcMin())
+	end := mathutil.Min(pos+maxLen, sc.SrcLen())
 	src := sc.SrcFromTo(start, end)
 	return SurroundingString(src, pos-start, maxLen)
 }
