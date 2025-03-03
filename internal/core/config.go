@@ -12,7 +12,7 @@ func ConfigFilename() string {
 	if err != nil {
 		return ""
 	}
-	return path.Join(cdir, "goeditor", "config.json")
+	return path.Join(cdir, "glake", "config.json")
 }
 
 func ParseConfig(opt *Options, filename string) error {
