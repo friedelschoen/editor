@@ -428,7 +428,7 @@ func (erow *ERow) setVarFontTheme(s string) error {
 		}
 	}
 
-	ff, err := ui.ThemeFontFace2(name, size)
+	ff, err := ui.ThemeFontFace(name, size)
 	if err != nil {
 		return err
 	}

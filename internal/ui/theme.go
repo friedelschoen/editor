@@ -4,10 +4,8 @@ import (
 	"fmt"
 	"image"
 	"image/color"
-	"os"
-	"strings"
 
-	"github.com/flopp/go-findfont"
+	"github.com/friedelschoen/glake/internal/findfont"
 	"github.com/friedelschoen/glake/internal/shadow"
 	"github.com/friedelschoen/glake/internal/ui/widget"
 	"golang.org/x/image/font"
@@ -149,7 +147,7 @@ var ColorThemeCycler cycler = cycler{
 var CurrentFont = ""
 
 func loadThemeFont(name string, node widget.Node) error {
-	ff, err := ThemeFontFace(name)
+	ff, err := ThemeFontFace(name, 0)
 	if err != nil {
 		return err
 	}
@@ -159,13 +157,10 @@ func loadThemeFont(name string, node widget.Node) error {
 
 var TTFontOptions opentype.FaceOptions
 
-func ThemeFontFace(name string) (font.Face, error) {
-	return ThemeFontFace2(name, 0)
-}
-func ThemeFontFace2(name string, size float64) (font.Face, error) {
-	b, err := fontBytes(name)
+func ThemeFontFace(name string, size float64) (font.Face, error) {
+	b, err := findfont.GetFontData(name)
 	if err != nil {
-		return nil, err
+		b = defaultFont
 	}
 	font, err := opentype.Parse(b)
 	if err != nil {
@@ -179,16 +174,6 @@ func ThemeFontFace2(name string, size float64) (font.Face, error) {
 }
 
 var defaultFont = gomono.TTF
-
-func fontBytes(query string) ([]byte, error) {
-	for _, name := range strings.Split(query, ",") {
-		name = strings.TrimSpace(name)
-		if path, err := findfont.Find(name); err == nil {
-			return os.ReadFile(path)
-		}
-	}
-	return defaultFont, nil
-}
 
 type cycler struct {
 	CurName string
