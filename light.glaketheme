@@ -1,0 +1,51 @@
+text_cursor_fg = #000000
+text_fg = #000000
+text_bg = #FFFFFF
+text_selection_fg =
+text_selection_bg = #EEEE9E
+text_colorize_string_fg = #8B0000
+text_colorize_comments_fg = #008B00
+text_highlightword_fg =
+text_highlightword_bg = #C6EE9E
+text_wrapline_fg = #000000
+text_wrapline_bg = #D8D8D8
+text_parenthesis_fg =
+text_parenthesis_bg = #D8D8D8
+
+toolbar_text_bg = #ECF0F1
+toolbar_text_wrapline_bg = #CCCCD8
+
+scrollbar_bg = #F2F2F2
+scrollhandle_normal = #CFCFCF  ; 20% darker than #F2F2F2
+scrollhandle_hover = #B3B3B3   ; 30% darker than #F2F2F2
+scrollhandle_select = #999999  ; 40% darker than #F2F2F2
+
+column_norows_rect = #FFFFFF
+columns_nocols_rect = #FFFFFF
+colseparator_rect = #000000
+rowseparator_rect = #000000
+shadow_sep_rect = #000000
+
+columnsquare = #CCCCD8
+rowsquare = #CCCCD8
+
+mm_text_bg = #ECF0F1
+mm_button_hover_bg = #CCCCCC
+mm_button_down_bg = #BBBBBB
+mm_button_sticky_fg = #FFFFFF
+mm_button_sticky_bg = #000000
+mm_border = #000000
+mm_content_pad = #ECF0F1
+mm_content_border = #000000
+
+contextfloatbox_border = #000000
+
+rs_active = #000000
+rs_executing = #0FAD00
+rs_edited = #0000FF
+rs_disk_changes = #FF0000
+rs_not_exist = #FF9900
+rs_duplicate = #8888CC
+rs_duplicate_highlight = #FFFF00
+rs_annotations = #D35400
+rs_annotations_edited = #F08E4F ; 45% brighter than #D35400

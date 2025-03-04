@@ -1,12 +1,18 @@
 package ui
 
 import (
+	"bufio"
+	"errors"
 	"fmt"
 	"image"
 	"image/color"
+	"os"
+	"path"
+	"regexp"
+	"strconv"
+	"strings"
 
 	"github.com/friedelschoen/glake/internal/findfont"
-	"github.com/friedelschoen/glake/internal/shadow"
 	"github.com/friedelschoen/glake/internal/ui/widget"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/gofont/gomono"
@@ -19,128 +25,180 @@ var ScrollBarWidth int = 0 // 0=based on a portion of the font size
 
 const separatorWidth = 1 // col/row separators width
 
-func lightThemeColors(node widget.Node) {
-	pal := lightThemeColorsPal()
-	pal.Merge(rowSquarePalette())
+const themeExtension = ".glaketheme"
+
+// Predefined color names mapped to hex values
+var colors = map[string]string{
+	"red":      "#FF0000",
+	"green":    "#008000",
+	"blue":     "#0000FF",
+	"black":    "#000000",
+	"white":    "#FFFFFF",
+	"yellow":   "#FFFF00",
+	"orange":   "#FFA500",
+	"cyan":     "#00FFFF",
+	"magenta":  "#FF00FF",
+	"gray":     "#808080",
+	"darkgray": "#A9A9A9",
+}
+
+// parseColor converts a color name or hex string to an RGBA color.
+func parseColor(text string) (color.Color, error) {
+	if len(text) == 0 {
+		return nil, nil
+	}
+
+	// Lookup named colors
+	if hex, found := colors[text]; found {
+		text = hex
+	}
+
+	// Validate hex format
+	if !strings.HasPrefix(text, "#") {
+		return nil, fmt.Errorf("invalid color format: expected '#' prefix or color name in `%s`", text)
+	}
+
+	text = text[1:] // Remove #
+
+	// Expand 3-digit and 4-digit hex codes
+	if len(text) == 3 || len(text) == 4 {
+		expanded := strings.Builder{}
+		for _, char := range text {
+			expanded.WriteByte(byte(char))
+			expanded.WriteByte(byte(char))
+		}
+		text = expanded.String()
+	}
+
+	// Validate hex string
+	if !regexp.MustCompile(`^[0-9A-Fa-f]+$`).MatchString(text) {
+		return nil, fmt.Errorf("invalid color format: non-hex characters found")
+	}
+
+	switch len(text) {
+	case 6: // #RRGGBB
+		c, err := strconv.ParseUint(text, 16, 32)
+		if err != nil {
+			return nil, fmt.Errorf("invalid color value: %w", err)
+		}
+		return color.RGBA{uint8(c >> 16 & 0xFF), uint8(c >> 8 & 0xFF), uint8(c & 0xFF), 255}, nil
+
+	case 8: // #RRGGBBAA
+		c, err := strconv.ParseUint(text, 16, 32)
+		if err != nil {
+			return nil, fmt.Errorf("invalid color value: %w", err)
+		}
+		return color.RGBA{uint8(c >> 24 & 0xFF), uint8(c >> 16 & 0xFF), uint8(c >> 8 & 0xFF), uint8(c & 0xFF)}, nil
+	}
+
+	return nil, fmt.Errorf("invalid color format: incorrect length")
+}
+
+// ParsePalette reads a color palette from an INI-like file.
+func parsePalette(filename string) (map[string]color.Color, error) {
+	file, err := os.Open(filename)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open palette file: %w", err)
+	}
+	defer file.Close()
+
+	palette := make(map[string]color.Color)
+	scanner := bufio.NewScanner(file)
+	var section string
+	lineNum := 0
+
+	for scanner.Scan() {
+		lineNum++
+
+		text, _, _ := strings.Cut(scanner.Text(), ";")
+		text = strings.TrimSpace(text)
+
+		// Ignore comments and empty lines
+		if text == "" {
+			continue
+		}
+
+		// Handle section headers [section]
+		if strings.HasPrefix(text, "[") && strings.HasSuffix(text, "]") {
+			section = text[1:len(text)-1] + "_"
+			continue
+		}
+
+		// Parse key-value pairs
+		key, value, found := strings.Cut(text, "=")
+		if !found {
+			return nil, fmt.Errorf("malformed line %d: missing '='", lineNum)
+		}
+
+		key = section + strings.TrimSpace(key)
+		value = strings.TrimSpace(value)
+
+		// Convert to color
+		col, err := parseColor(value)
+		if err != nil {
+			return nil, fmt.Errorf("malformed line %d (key: %s): %w", lineNum, key, err)
+		}
+
+		palette[key] = col
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("error reading file: %w", err)
+	}
+
+	return palette, nil
+}
+
+func exist(filename string) bool {
+	_, err := os.Stat(filename)
+	return !errors.Is(err, os.ErrNotExist)
+}
+
+func filepathTheme(name string) string {
+	if exist(name) {
+		return name
+	}
+	if exist(name + themeExtension) {
+		return name + themeExtension
+	}
+	cdir, err := os.UserConfigDir()
+	if err != nil {
+		cname := path.Join(cdir, "glake", "themes", name)
+		if exist(cname) {
+			return cname
+		}
+		cname = path.Join(cdir, "glake", "themes", name+themeExtension)
+		if exist(cname) {
+			return cname
+		}
+	}
+	return ""
+}
+
+// Set light theme colors
+func SetColorscheme(name string, node widget.Node) error {
+	pal, err := parsePalette(filepathTheme(name))
+	if err != nil {
+		return err
+	}
 	node.Embed().SetThemePalette(pal)
+	return nil
 }
-func lightThemeColorsPal() widget.Palette {
-	pal := widget.Palette{
-		"text_cursor_fg":            cint(0x0),
-		"text_fg":                   cint(0x0),
-		"text_bg":                   cint(0xffffff),
-		"text_selection_fg":         nil,
-		"text_selection_bg":         cint(0xeeee9e), // yellow
-		"text_colorize_string_fg":   cint(0x8b0000), // red
-		"text_colorize_comments_fg": cint(0x008b00), // green
-		"text_highlightword_fg":     nil,
-		"text_highlightword_bg":     cint(0xc6ee9e), // green
-		"text_wrapline_fg":          cint(0x0),
-		"text_wrapline_bg":          cint(0xd8d8d8),
-		"text_parenthesis_fg":       nil,
-		"text_parenthesis_bg":       cint(0xd8d8d8),
 
-		"toolbar_text_bg":          cint(0xecf0f1), // "clouds" grey
-		"toolbar_text_wrapline_bg": cint(0xccccd8),
-
-		"scrollbar_bg":        cint(0xf2f2f2),
-		"scrollhandle_normal": shadow.Shade(cint(0xf2f2f2), 0.20),
-		"scrollhandle_hover":  shadow.Shade(cint(0xf2f2f2), 0.30),
-		"scrollhandle_select": shadow.Shade(cint(0xf2f2f2), 0.40),
-
-		"column_norows_rect":  cint(0xffffff),
-		"columns_nocols_rect": cint(0xffffff),
-		"colseparator_rect":   cint(0x0),
-		"rowseparator_rect":   cint(0x0),
-		"shadow.sep_rect":     cint(0x0),
-
-		"columnsquare": cint(0xccccd8),
-		"rowsquare":    cint(0xccccd8),
-
-		"mm_text_bg":          cint(0xecf0f1),
-		"mm_button_hover_bg":  cint(0xcccccc),
-		"mm_button_down_bg":   cint(0xbbbbbb),
-		"mm_button_sticky_fg": cint(0xffffff),
-		"mm_button_sticky_bg": cint(0x0),
-		"mm_border":           cint(0x0),
-		"mm_content_pad":      cint(0xecf0f1),
-		"mm_content_border":   cint(0x0),
-
-		"contextfloatbox_border": cint(0x0),
+func settheme(name string) func(node widget.Node) {
+	return func(node widget.Node) {
+		pal, err := parsePalette(filepathTheme(name))
+		if err != nil {
+			fmt.Printf("unable to set theme: %s\n", err)
+		}
+		node.Embed().SetThemePalette(pal)
 	}
-	pal.Merge(rowSquarePalette())
-	return pal
-}
-
-func acmeThemeColors(node widget.Node) {
-	pal := acmeThemeColorsPal()
-	pal.Merge(rowSquarePalette())
-	node.Embed().SetThemePalette(pal)
-}
-func acmeThemeColorsPal() widget.Palette {
-	pal := widget.Palette{
-		"text_cursor_fg":            cint(0x0),
-		"text_fg":                   cint(0x0),
-		"text_bg":                   cint(0xffffea),
-		"text_selection_fg":         nil,
-		"text_selection_bg":         cint(0xeeee9e), // yellow
-		"text_colorize_string_fg":   cint(0x8b0000), // red
-		"text_colorize_comments_fg": cint(0x007500), // green
-		"text_highlightword_fg":     nil,
-		"text_highlightword_bg":     cint(0xc6ee9e), // green
-		"text_wrapline_fg":          cint(0x0),
-		"text_wrapline_bg":          cint(0xd8d8c6),
-
-		"toolbar_text_bg":          cint(0xeaffff),
-		"toolbar_text_wrapline_bg": cint(0xc6d8d8),
-
-		"scrollbar_bg":        cint(0xf2f2de),
-		"scrollhandle_normal": cint(0xc1c193),
-		"scrollhandle_hover":  cint(0xadad6f),
-		"scrollhandle_select": cint(0x99994c),
-
-		"column_norows_rect":  cint(0xffffea),
-		"columns_nocols_rect": cint(0xffffff),
-		"colseparator_rect":   cint(0x0),
-		"rowseparator_rect":   cint(0x0),
-		"shadow.sep_rect":     cint(0x0),
-
-		"columnsquare": cint(0xc6d8d8),
-		"rowsquare":    cint(0xc6d8d8),
-
-		"mm_text_bg":          cint(0xeaffff),
-		"mm_button_hover_bg":  shadow.Shade(cint(0xeaffff), 0.10),
-		"mm_button_down_bg":   shadow.Shade(cint(0xeaffff), 0.20),
-		"mm_button_sticky_bg": shadow.Shade(cint(0xeaffff), 0.40),
-		"mm_border":           cint(0x0),
-		"mm_content_pad":      cint(0xeaffff),
-		"mm_content_border":   cint(0x0),
-
-		"contextfloatbox_border": cint(0x0),
-	}
-	pal.Merge(rowSquarePalette())
-	return pal
-}
-
-func rowSquarePalette() widget.Palette {
-	pal := widget.Palette{
-		"rs_active":              cint(0x0),
-		"rs_executing":           cint(0x0fad00),                    // dark green
-		"rs_edited":              cint(0x0000ff),                    // blue
-		"rs_disk_changes":        cint(0xff0000),                    // red
-		"rs_not_exist":           cint(0xff9900),                    // orange
-		"rs_duplicate":           cint(0x8888cc),                    // blueish
-		"rs_duplicate_highlight": cint(0xffff00),                    // yellow
-		"rs_annotations":         cint(0xd35400),                    // pumpkin
-		"rs_annotations_edited":  shadow.Tint(cint(0xd35400), 0.45), // pumpkin (brighter)
-	}
-	return pal
 }
 
 var ColorThemeCycler cycler = cycler{
 	entries: []cycleEntry{
-		{"light", lightThemeColors},
-		{"acme", acmeThemeColors},
+		{"light", settheme("light")},
+		{"acme", settheme("acme")},
 	},
 }
 
