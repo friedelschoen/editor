@@ -8,7 +8,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/friedelschoen/glake/internal/syncqueue"
 	"github.com/friedelschoen/glake/internal/ui/driver"
 	"github.com/friedelschoen/glake/internal/ui/widget"
 	"github.com/veandco/go-sdl2/sdl"
@@ -22,7 +21,6 @@ type UI struct {
 
 	closeOnce sync.Once
 
-	eventsQ *syncqueue.SyncedQ // linked list queue (unlimited length)
 	applyEv *widget.ApplyEvent
 
 	pendingPaint   bool
@@ -51,13 +49,10 @@ func NewUI(winName string) (*UI, error) {
 		return nil, err
 	}
 
-	ui.eventsQ = syncqueue.NewSyncedQ()
 	ui.applyEv = widget.NewApplyEvent(ui)
 
 	// Embed nodes have their wrapper nodes set when they are appended to another node. The root node is not appended to any other node, therefore it needs to be set here.
 	ui.Root.Embed().SetWrapperForRoot(ui.Root)
-
-	go ui.eventLoop()
 
 	// set theme before root init
 	c1 := &ColorThemeCycler
@@ -79,21 +74,6 @@ func (ui *UI) Close() {
 	})
 }
 
-func (ui *UI) eventLoop() {
-	for {
-		// ui.eventsQ.PushBack(ui.Win.NextEvent()) // slow UI
-
-		ev, ok := ui.Win.NextEvent()
-		if !ok {
-			break
-		}
-		ui.eventsQ.PushBack(ev)
-		// ui.movef.Filter(ev) // sends events to ui.eventsQ.In()
-		// ui.clickf.Filter(ev)
-		// ui.dragf.Filter(ev)
-	}
-}
-
 // How to use NextEvent():
 //
 //	func SampleEventLoop() {
@@ -112,15 +92,15 @@ func (ui *UI) eventLoop() {
 //		}
 //	}
 func (ui *UI) NextEvent() driver.Event {
-	this := ui.eventsQ.PopFront()
+	this := ui.Win.NextEvent()
 	if this == nil {
 		return nil
 	}
 	return this.(driver.Event)
 }
 
-func (ui *UI) AppendEvent(ev any) {
-	ui.eventsQ.PushBack(ev)
+func (ui *UI) AppendEvent(ev driver.Event) {
+	ui.Win.PushEvent(ev)
 }
 
 func (ui *UI) HandleEvent(ev driver.Event) (handled bool) {
@@ -135,8 +115,6 @@ func (ui *UI) HandleEvent(ev driver.Event) (handled bool) {
 		ui.Root.Embed().MarkNeedsPaint()
 	case *UIRunFuncEvent:
 		t.Func()
-	case *UIPaintTime:
-		ui.paint()
 	default:
 		ui.handleWindowInput(t)
 	}
@@ -191,13 +169,9 @@ func (ui *UI) schedulePaint() {
 	}
 	ui.pendingPaint = true
 	// schedule
-	go func() {
-		d := ui.durationToNextPaint()
-		if d > 0 {
-			time.Sleep(d)
-		}
-		ui.AppendEvent(&UIPaintTime{})
-	}()
+	time.AfterFunc(ui.durationToNextPaint(), func() {
+		ui.AppendEvent(&UIRunFuncEvent{ui.paint})
+	})
 }
 
 func (ui *UI) durationToNextPaint() time.Duration {
@@ -227,7 +201,7 @@ func (ui *UI) paintMarked() {
 }
 
 func (ui *UI) EnqueueNoOpEvent() {
-	ui.AppendEvent(struct{}{})
+	ui.AppendEvent(&UIRunFuncEvent{})
 }
 
 func (ui *UI) Image() draw.Image {
@@ -434,10 +408,6 @@ type RowPos struct {
 func NewRowPos(col *Column, nextRow *Row) *RowPos {
 	return &RowPos{col, nextRow}
 }
-
-type UIPaintTime struct{}
-
-func (UIPaintTime) IsEvent() {}
 
 type UIRunFuncEvent struct {
 	Func func()

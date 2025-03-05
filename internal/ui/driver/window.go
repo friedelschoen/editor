@@ -103,11 +103,15 @@ func (win *Window) WindowSetName(title string) error {
 	return nil
 }
 
-func (win *Window) NextEvent() (Event, bool) {
+func (win *Window) PushEvent(ev Event) {
+	win.events <- ev
+}
+
+func (win *Window) NextEvent() Event {
 	for {
 		select {
 		case event := <-win.events:
-			return event, true
+			return event
 		default:
 			/* do nothing, continue */
 		}
@@ -122,22 +126,22 @@ func (win *Window) NextEvent() (Event, bool) {
 		case *sdl.QuitEvent:
 			win.window.Destroy()
 			sdl.Quit()
-			return WindowClose{}, false
+			return WindowClose{}
 		case *sdl.WindowEvent:
 			switch evt.Event {
 			case sdl.WINDOWEVENT_ENTER:
-				return &MouseEnter{}, true
+				return &MouseEnter{}
 			case sdl.WINDOWEVENT_LEAVE:
-				return &MouseLeave{}, true
+				return &MouseLeave{}
 			case sdl.WINDOWEVENT_RESIZED:
 				return &WindowResize{
 					Rect: image.Rect(0, 0, int(evt.Data1), int(evt.Data2)),
-				}, true
+				}
 			case sdl.WINDOWEVENT_EXPOSED:
 				w, h := win.window.GetSize()
 				return &WindowExpose{
 					Rect: image.Rect(0, 0, int(w), int(h)),
-				}, true
+				}
 			}
 		case *sdl.MouseButtonEvent:
 			pnt := image.Point{int(evt.X), int(evt.Y)}
@@ -153,18 +157,18 @@ func (win *Window) NextEvent() (Event, bool) {
 				return &MouseDown{
 					Point: pnt,
 					Key:   key,
-				}, true
+				}
 			} else {
 				return &MouseUp{
 					Point: pnt,
 					Key:   key,
-				}, true
+				}
 			}
 		case *sdl.MouseWheelEvent:
 			return &MouseWheel{
 				X: int(evt.X),
 				Y: int(evt.Y),
-			}, true
+			}
 		case *sdl.MouseMotionEvent:
 			pnt := image.Point{int(evt.X), int(evt.Y)}
 			key := NewKey(KeyMouse)
@@ -185,13 +189,13 @@ func (win *Window) NextEvent() (Event, bool) {
 							Point:  win.dragStart,
 							Point2: pnt,
 							Key:    key,
-						}, true
+						}
 					}
 				} else {
 					return &MouseDragMove{
 						Point: pnt,
 						Key:   key,
-					}, true
+					}
 				}
 			} else {
 				if win.dragging {
@@ -199,14 +203,14 @@ func (win *Window) NextEvent() (Event, bool) {
 					return &MouseDragEnd{
 						Point: pnt,
 						Key:   key,
-					}, true
+					}
 				}
 			}
 
 			return &MouseMove{
 				Point: pnt,
 				Key:   key,
-			}, true
+			}
 		case *sdl.KeyboardEvent:
 			/*
 				from SDL2:src/events/SDL_keyboard.c:1048
@@ -222,11 +226,11 @@ func (win *Window) NextEvent() (Event, bool) {
 				if evt.State == sdl.PRESSED {
 					return &KeyDown{
 						Key: win.lastkey,
-					}, true
+					}
 				} else {
 					return &KeyUp{
 						Key: win.lastkey,
-					}, true
+					}
 				}
 			}
 		case *sdl.TextInputEvent:
@@ -238,7 +242,7 @@ func (win *Window) NextEvent() (Event, bool) {
 
 			return &KeyDown{
 				Key: win.lastkey,
-			}, true
+			}
 		}
 	}
 }
