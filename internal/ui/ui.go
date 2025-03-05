@@ -74,23 +74,6 @@ func (ui *UI) Close() {
 	})
 }
 
-// How to use NextEvent():
-//
-//	func SampleEventLoop() {
-//		defer ui.Close()
-//		for {
-//			ev := ui.NextEvent()
-//			switch t := ev.(type) {
-//			case error:
-//				fmt.Println(err)
-//			case *driver.WindowClose:
-//				return
-//			default:
-//				ui.HandleEvent(ev)
-//			}
-//			ui.LayoutMarkedAndSchedulePaint()
-//		}
-//	}
 func (ui *UI) NextEvent() driver.Event {
 	this := ui.Win.NextEvent()
 	if this == nil {
@@ -243,8 +226,9 @@ func (ui *UI) GetClipboardData() (string, error) {
 
 func (ui *UI) SetClipboardData(s string) {
 	if err := ui.Win.ClipboardDataSet(s); err != nil {
-		ui.AppendEvent(fmt.Errorf("setclipboarddata: %w", err))
-		return
+		t := fmt.Errorf("setclipboarddata: %w", err)
+		log.Println(t) // in case there is no window yet (TODO: detect?)
+		ui.Error(t)
 	}
 }
 

@@ -158,7 +158,7 @@ func (ed *Editor) initPreSaveHooks(opt *Options) {
 
 func (ed *Editor) Close() {
 	ed.LSProtoMan.Close()
-	ed.UI.AppendEvent(&editorCloseEv{})
+	ed.UI.AppendEvent(&driver.WindowClose{})
 }
 
 func (ed *Editor) uiEventLoop() {
@@ -167,11 +167,6 @@ func (ed *Editor) uiEventLoop() {
 	for {
 		ev := ed.UI.NextEvent()
 		switch t := ev.(type) {
-		case error:
-			log.Println(t) // in case there is no window yet (TODO: detect?)
-			ed.Error(t)
-		case *editorCloseEv:
-			return
 		case *driver.WindowClose:
 			return
 		case *driver.DndPosition:
@@ -874,7 +869,3 @@ func (ifbw *InfoFloatBoxWrap) Cancel() {
 func (ifbw *InfoFloatBoxWrap) ui() *ui.ContextFloatBox {
 	return ifbw.ed.UI.Root.ContextFloatBox
 }
-
-type editorCloseEv struct{}
-
-func (editorCloseEv) IsEvent() {}
