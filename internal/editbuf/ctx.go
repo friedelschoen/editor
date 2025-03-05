@@ -2,7 +2,6 @@ package editbuf
 
 import (
 	"bytes"
-	"fmt"
 	"image"
 
 	"github.com/friedelschoen/glake/internal/ioutil"
@@ -17,7 +16,7 @@ type EditorBuffer struct {
 }
 
 func NewEditorBuffer() *EditorBuffer {
-	ctx := &EditorBuffer{C: &SimpleCursor{}, Fns: EmptyCtxFns()}
+	ctx := &EditorBuffer{C: &SimpleCursor{}, Fns: nil}
 	return ctx
 }
 
@@ -51,44 +50,17 @@ func (ctx *EditorBuffer) LocalReader2(min, max int) ioutil.ReaderAt {
 	return ioutil.NewLimitedReaderAtPad(ctx.RW, min, max, pad)
 }
 
-type CtxFns struct {
-	Error func(error)
+type CtxFns interface {
+	Error(error)
 
-	GetPoint         func(int) image.Point
-	GetIndex         func(image.Point) int
-	LineHeight       func() int
-	CommentLineSym   func() any
-	MakeIndexVisible func(int)
-	PageUp           func(up bool)
-	ScrollUp         func(up bool)
+	GetPoint(int) image.Point
+	GetIndex(image.Point) int
+	LineHeight() int
+	CommentLineSym() any
+	MakeIndexVisible(int)
+	PageUp(up bool)
+	ScrollUp(up bool)
 
-	SetClipboardData func(string) error
-	GetClipboardData func() (string, error)
-
-	Undo func() error
-	Redo func() error
-}
-
-func EmptyCtxFns() CtxFns {
-	u := CtxFns{}
-
-	u.Error = func(err error) { fmt.Println(err) }
-
-	u.GetPoint = func(int) image.Point { return image.Point{} }
-	u.GetIndex = func(image.Point) int { return 0 }
-	u.LineHeight = func() int { return 0 }
-	u.CommentLineSym = func() any { return nil }
-	u.MakeIndexVisible = func(int) {}
-	u.PageUp = func(bool) {}
-	u.ScrollUp = func(bool) {}
-
-	u.SetClipboardData = func(string) error { return nil }
-	u.GetClipboardData = func() (string, error) {
-		return "", nil
-	}
-
-	u.Undo = func() error { return nil }
-	u.Redo = func() error { return nil }
-
-	return u
+	Undo() error
+	Redo() error
 }

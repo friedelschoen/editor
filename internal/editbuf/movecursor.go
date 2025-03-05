@@ -6,6 +6,7 @@ import (
 	"io"
 
 	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/glake/internal/ui/driver"
 )
 
 func MoveCursorToPoint(ctx *EditorBuffer, p image.Point, sel bool) {
@@ -13,7 +14,7 @@ func MoveCursorToPoint(ctx *EditorBuffer, p image.Point, sel bool) {
 	ctx.C.UpdateSelection(sel, i)
 	// set primary copy
 	if b, ok := ctx.Selection(); ok {
-		ctx.Fns.SetClipboardData(string(b))
+		driver.SetClipboardData(string(b))
 	}
 }
 

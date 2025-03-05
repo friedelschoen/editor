@@ -1,5 +1,7 @@
 package editbuf
 
+import "github.com/friedelschoen/glake/internal/ui/driver"
+
 func Cut(ctx *EditorBuffer) error {
 	a, b, ok := ctx.C.SelectionIndexes()
 	if !ok {
@@ -10,7 +12,7 @@ func Cut(ctx *EditorBuffer) error {
 	if err != nil {
 		return err
 	}
-	ctx.Fns.SetClipboardData(string(s))
+	driver.SetClipboardData(string(s))
 
 	if err := ctx.RW.OverwriteAt(a, b-a, nil); err != nil {
 		return err

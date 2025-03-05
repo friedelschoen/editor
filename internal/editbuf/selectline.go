@@ -1,5 +1,7 @@
 package editbuf
 
+import "github.com/friedelschoen/glake/internal/ui/driver"
+
 func SelectLine(ctx *EditorBuffer) error {
 	ctx.C.SetSelectionOff()
 	a, b, _, err := ctx.CursorSelectionLinesIndexes()
@@ -9,7 +11,7 @@ func SelectLine(ctx *EditorBuffer) error {
 	ctx.C.SetSelection(a, b)
 	// set primary copy
 	if b, ok := ctx.Selection(); ok {
-		ctx.Fns.SetClipboardData(string(b))
+		driver.SetClipboardData(string(b))
 	}
 	return nil
 }

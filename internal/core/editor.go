@@ -174,15 +174,10 @@ func (ed *Editor) uiEventLoop() {
 		case *driver.DndDrop:
 			ed.dndh.OnDrop(t)
 		default:
-			// if !ed.handleGlobalShortcuts(ev) {
-			// 	if !ed.UI.HandleEvent(ev) {
-			// 		log.Printf("uievloop: unhandled event: %#v", ev)
-			// 	}
-			// }
-			h1 := ed.handleGlobalShortcuts(ev)
-			h2 := ed.UI.HandleEvent(ev)
-			if !h1 && !h2 {
-				log.Printf("uievloop: unhandled event: %#v", ev)
+			if !ed.handleGlobalShortcuts(ev) {
+				if !ed.UI.HandleEvent(ev) {
+					log.Printf("uievloop: unhandled event: %#v", ev)
+				}
 			}
 		}
 		ed.UI.LayoutMarkedAndSchedulePaint()

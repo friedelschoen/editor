@@ -11,12 +11,8 @@ type UIContext interface {
 
 	ImageContext
 	CursorContext
-	//	Image() draw.Image // TODO
-	//	SetCursor(sdl.SystemCursor) // TODO
 
 	RunOnUIGoRoutine(f func())
-	SetClipboardData(string) error
-	GetClipboardData() (string, error)
 }
 
 type ImageContext interface {

@@ -31,18 +31,21 @@ func NewTextEdit(uiCtx UIContext) *TextEdit {
 	te.ctx = editbuf.NewEditorBuffer()
 	te.ctx.RW = te.rwu
 	te.ctx.C = editbuf.NewTriggerCursor(te.onCursorChange)
-	te.ctx.Fns.Error = uiCtx.Error
-	te.ctx.Fns.GetPoint = te.GetPoint
-	te.ctx.Fns.GetIndex = te.GetIndex
-	te.ctx.Fns.LineHeight = te.LineHeight
-	te.ctx.Fns.MakeIndexVisible = te.MakeIndexVisible
-	te.ctx.Fns.Undo = te.Undo
-	te.ctx.Fns.Redo = te.Redo
-	te.ctx.Fns.SetClipboardData = te.uiCtx.SetClipboardData
-	te.ctx.Fns.GetClipboardData = te.uiCtx.GetClipboardData
+	te.ctx.Fns = te
 
 	return te
 }
+
+func (te *TextEdit) Error(err error) {
+	te.uiCtx.Error(err)
+}
+
+func (te *TextEdit) CommentLineSym() any {
+	return nil
+}
+
+func (te *TextEdit) PageUp(up bool)   {}
+func (te *TextEdit) ScrollUp(up bool) {}
 
 func (te *TextEdit) RW() ioutil.ReadWriterAt {
 	// TODO: returning rw with undo/events, differs from SetRW(), workaround is to use te.Text.RW() to get underlying rw

@@ -24,6 +24,16 @@ type Window struct {
 	dragStart  image.Point
 }
 
+// GetClipboardData implements driver.Window.
+func GetClipboardData() (string, error) {
+	return sdl.GetClipboardText()
+}
+
+// SetClipboardData implements driver.Window.
+func SetClipboardData(text string) error {
+	return sdl.SetClipboardText(text)
+}
+
 func NewWindow() (*Window, error) {
 	win := &Window{}
 
@@ -61,16 +71,6 @@ func (win *Window) Resize(rect image.Rectangle) error {
 	pnt := rect.Size()
 	win.window.SetSize(int32(pnt.X), int32(pnt.Y))
 	return nil
-}
-
-// GetClipboardData implements driver.Window.
-func (win *Window) GetClipboardData() (string, error) {
-	return sdl.GetClipboardText()
-}
-
-// SetClipboardData implements driver.Window.
-func (win *Window) SetClipboardData(text string) error {
-	return sdl.SetClipboardText(text)
 }
 
 // Close implements driver.Window.

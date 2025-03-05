@@ -2,6 +2,7 @@ package editbuf
 
 import (
 	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/glake/internal/ui/driver"
 )
 
 func SelectWord(ctx *EditorBuffer) error {
@@ -34,7 +35,7 @@ func SelectWord(ctx *EditorBuffer) error {
 
 	// set primary copy
 	if b, ok := ctx.Selection(); ok {
-		ctx.Fns.SetClipboardData(string(b))
+		driver.SetClipboardData(string(b))
 	}
 
 	return nil

@@ -2,17 +2,19 @@ package editbuf
 
 import (
 	"fmt"
+
+	"github.com/friedelschoen/glake/internal/ui/driver"
 )
 
 func Copy(ctx *EditorBuffer) error {
 	if b, ok := ctx.Selection(); ok {
-		ctx.Fns.SetClipboardData(string(b))
+		driver.SetClipboardData(string(b))
 	}
 	return nil
 }
 
 func Paste(ctx *EditorBuffer) {
-	s, err := ctx.Fns.GetClipboardData()
+	s, err := driver.GetClipboardData()
 	if err != nil {
 		ctx.Fns.Error(fmt.Errorf("rwedit.paste: %w", err))
 		return
