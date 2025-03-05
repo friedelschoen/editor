@@ -10,16 +10,16 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-const FPS = 60
-
 type Window struct {
-	window  *sdl.Window
-	events  chan Event
-	lastkey Key
-	cursor  sdl.SystemCursor
+	Events chan Event
 
-	dragging  bool
-	dragStart image.Point
+	window     *sdl.Window
+	running    bool
+	lastkey    Key
+	lastmotion time.Time
+	cursor     sdl.SystemCursor
+	dragging   bool
+	dragStart  image.Point
 }
 
 func NewWindow() (*Window, error) {
@@ -29,7 +29,7 @@ func NewWindow() (*Window, error) {
 		return nil, err
 	}
 
-	win.events = make(chan Event, 100)
+	win.Events = make(chan Event, 100)
 
 	var err error
 	win.window, err = sdl.CreateWindow("editor", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED, 800, 600, sdl.WINDOW_SHOWN)
@@ -38,12 +38,15 @@ func NewWindow() (*Window, error) {
 	}
 
 	w, h := win.window.GetSize()
-	win.events <- &WindowResize{
+	win.Events <- &WindowResize{
 		Rect: image.Rect(0, 0, int(w), int(h)),
 	}
 
 	win.window.SetResizable(true)
 	sdl.StartTextInput()
+
+	win.running = true
+	go win.eventLoop()
 
 	return win, nil
 }
@@ -70,6 +73,7 @@ func (win *Window) SetClipboardData(text string) error {
 
 // Close implements driver.Window.
 func (win *Window) Close() error {
+	win.running = false
 	win.window.Destroy()
 	sdl.Quit()
 	return nil
@@ -111,43 +115,31 @@ func (win *Window) WindowSetName(title string) error {
 	return nil
 }
 
-func (win *Window) PushEvent(ev Event) {
-	win.events <- ev
-}
-
-func (win *Window) NextEvent() Event {
-	for {
-		select {
-		case event := <-win.events:
-			return event
-		default:
-			/* do nothing, continue */
-		}
-
+func (win *Window) eventLoop() {
+	for win.running {
 		pollevent := sdl.PollEvent()
 		if pollevent == nil {
-			time.Sleep(time.Millisecond * 100)
+			time.Sleep(100 * time.Millisecond)
 			continue
 		}
-
 		switch evt := pollevent.(type) {
 		case *sdl.QuitEvent:
 			win.window.Destroy()
 			sdl.Quit()
-			return WindowClose{}
+			win.Events <- WindowClose{}
 		case *sdl.WindowEvent:
 			switch evt.Event {
 			case sdl.WINDOWEVENT_ENTER:
-				return &MouseEnter{}
+				win.Events <- &MouseEnter{}
 			case sdl.WINDOWEVENT_LEAVE:
-				return &MouseLeave{}
+				win.Events <- &MouseLeave{}
 			case sdl.WINDOWEVENT_RESIZED:
-				return &WindowResize{
+				win.Events <- &WindowResize{
 					Rect: image.Rect(0, 0, int(evt.Data1), int(evt.Data2)),
 				}
 			case sdl.WINDOWEVENT_EXPOSED:
 				w, h := win.window.GetSize()
-				return &WindowExpose{
+				win.Events <- &WindowExpose{
 					Rect: image.Rect(0, 0, int(w), int(h)),
 				}
 			}
@@ -157,23 +149,23 @@ func (win *Window) NextEvent() Event {
 			key.Mouse = 1 << (int(evt.Button) - 1)
 
 			if evt.State == sdl.PRESSED {
-				win.events <- &MouseClick{
+				win.Events <- &MouseClick{
 					Point: pnt,
 					Count: int(evt.Clicks),
 					Key:   key,
 				}
-				return &MouseDown{
+				win.Events <- &MouseDown{
 					Point: pnt,
 					Key:   key,
 				}
 			} else {
-				return &MouseUp{
+				win.Events <- &MouseUp{
 					Point: pnt,
 					Key:   key,
 				}
 			}
 		case *sdl.MouseWheelEvent:
-			return &MouseWheel{
+			win.Events <- &MouseWheel{
 				X: int(evt.X),
 				Y: int(evt.Y),
 			}
@@ -193,31 +185,36 @@ func (win *Window) NextEvent() Event {
 					} else {
 						win.dragging = true
 
-						return &MouseDragStart{
+						win.Events <- &MouseDragStart{
 							Point:  win.dragStart,
 							Point2: pnt,
 							Key:    key,
 						}
+						return
 					}
 				} else {
-					return &MouseDragMove{
+					win.Events <- &MouseDragMove{
 						Point: pnt,
 						Key:   key,
 					}
+					continue
 				}
-			} else {
-				if win.dragging {
-					win.dragging = false
-					return &MouseDragEnd{
-						Point: pnt,
-						Key:   key,
-					}
+			} else if win.dragging {
+				win.dragging = false
+				win.Events <- &MouseDragEnd{
+					Point: pnt,
+					Key:   key,
 				}
+				continue
 			}
 
-			return &MouseMove{
-				Point: pnt,
-				Key:   key,
+			now := time.Now()
+			if now.Sub(win.lastmotion) >= 500*time.Millisecond {
+				win.lastmotion = now
+				win.Events <- &MouseMove{
+					Point: pnt,
+					Key:   key,
+				}
 			}
 		case *sdl.KeyboardEvent:
 			/*
@@ -232,11 +229,11 @@ func (win *Window) NextEvent() Event {
 			char := rune(evt.Keysym.Sym)
 			if !unicode.IsPrint(char) || evt.Keysym.Mod&sdl.KMOD_CTRL != 0 {
 				if evt.State == sdl.PRESSED {
-					return &KeyDown{
+					win.Events <- &KeyDown{
 						Key: win.lastkey,
 					}
 				} else {
-					return &KeyUp{
+					win.Events <- &KeyUp{
 						Key: win.lastkey,
 					}
 				}
@@ -244,11 +241,11 @@ func (win *Window) NextEvent() Event {
 		case *sdl.TextInputEvent:
 			win.lastkey.Rune, _ = utf8.DecodeRune(evt.Text[:])
 
-			win.events <- &KeyUp{
+			win.Events <- &KeyUp{
 				Key: win.lastkey,
 			}
 
-			return &KeyDown{
+			win.Events <- &KeyDown{
 				Key: win.lastkey,
 			}
 		}

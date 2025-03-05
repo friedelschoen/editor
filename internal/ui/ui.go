@@ -127,7 +127,7 @@ func (ui *UI) schedulePaint() {
 	ui.pendingPaint = true
 	// schedule
 	time.AfterFunc(ui.durationToNextPaint(), func() {
-		ui.PushEvent(&UIRunFuncEvent{ui.paint})
+		ui.Events <- &UIRunFuncEvent{ui.paint}
 	})
 }
 
@@ -158,11 +158,11 @@ func (ui *UI) paintMarked() {
 }
 
 func (ui *UI) EnqueueNoOpEvent() {
-	ui.PushEvent(&UIRunFuncEvent{})
+	ui.Events <- &UIRunFuncEvent{}
 }
 
 func (ui *UI) RunOnUIGoRoutine(f func()) {
-	ui.PushEvent(&UIRunFuncEvent{f})
+	ui.Events <- &UIRunFuncEvent{f}
 }
 
 // Use with care to avoid UI deadlock (waiting within another wait).
@@ -182,7 +182,7 @@ func (ui *UI) QueueEmptyWindowInputEvent() {
 	if err != nil {
 		return
 	}
-	ui.PushEvent(&driver.MouseClick{Point: p})
+	ui.Events <- &driver.MouseClick{Point: p}
 }
 
 func (ui *UI) WarpPointerToRectanglePad(r image.Rectangle) {

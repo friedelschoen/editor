@@ -158,14 +158,14 @@ func (ed *Editor) initPreSaveHooks(opt *Options) {
 
 func (ed *Editor) Close() {
 	ed.LSProtoMan.Close()
-	ed.UI.PushEvent(&driver.WindowClose{})
+	ed.UI.Events <- &driver.WindowClose{}
 }
 
 func (ed *Editor) uiEventLoop() {
 	defer ed.UI.Close()
 
 	for {
-		ev := ed.UI.NextEvent()
+		ev := <-ed.UI.Events
 		switch t := ev.(type) {
 		case *driver.WindowClose:
 			return
