@@ -16,6 +16,7 @@ type Window struct {
 	window  *sdl.Window
 	events  chan Event
 	lastkey Key
+	cursor  sdl.SystemCursor
 
 	dragging  bool
 	dragStart image.Point
@@ -57,13 +58,13 @@ func (win *Window) Resize(rect image.Rectangle) error {
 	return nil
 }
 
-// ClipboardDataGet implements driver.Window.
-func (win *Window) ClipboardDataGet() (string, error) {
+// GetClipboardData implements driver.Window.
+func (win *Window) GetClipboardData() (string, error) {
 	return sdl.GetClipboardText()
 }
 
-// ClipboardDataSet implements driver.Window.
-func (win *Window) ClipboardDataSet(text string) error {
+// SetClipboardData implements driver.Window.
+func (win *Window) SetClipboardData(text string) error {
 	return sdl.SetClipboardText(text)
 }
 
@@ -74,27 +75,34 @@ func (win *Window) Close() error {
 	return nil
 }
 
-// CursorSet implements driver.Window.
-func (win *Window) CursorSet(cur sdl.SystemCursor) error {
+// SetCursor implements driver.Window.
+func (win *Window) SetCursor(cur sdl.SystemCursor) {
+	if win.cursor == cur {
+		return
+	}
+	win.cursor = cur
+
 	sdl.SetCursor(sdl.CreateSystemCursor(cur))
-	return nil
 }
 
 // Image implements driver.Window.
-func (win *Window) Image() (draw.Image, error) {
-	return win.window.GetSurface()
+func (win *Window) Image() draw.Image {
+	img, err := win.window.GetSurface()
+	if err != nil {
+		return image.NewRGBA(image.Rect(0, 0, 0, 0))
+	}
+	return img
 }
 
-// PointerQuery implements driver.Window.
-func (win *Window) PointerQuery() (image.Point, error) {
+// QueryPointer implements driver.Window.
+func (win *Window) QueryPointer() (image.Point, error) {
 	x, y, _ := sdl.GetMouseState()
 	return image.Point{int(x), int(y)}, nil
 }
 
-// PointerWarp implements driver.Window.
-func (win *Window) PointerWarp(cur image.Point) error {
+// WarpPointer implements driver.Window.
+func (win *Window) WarpPointer(cur image.Point) {
 	win.window.WarpMouseInWindow(int32(cur.X), int32(cur.Y))
-	return nil
 }
 
 // WindowSetName implements driver.Window.

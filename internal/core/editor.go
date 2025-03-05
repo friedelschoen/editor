@@ -158,7 +158,7 @@ func (ed *Editor) initPreSaveHooks(opt *Options) {
 
 func (ed *Editor) Close() {
 	ed.LSProtoMan.Close()
-	ed.UI.AppendEvent(&driver.WindowClose{})
+	ed.UI.PushEvent(&driver.WindowClose{})
 }
 
 func (ed *Editor) uiEventLoop() {

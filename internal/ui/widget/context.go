@@ -15,7 +15,7 @@ type UIContext interface {
 	//	SetCursor(sdl.SystemCursor) // TODO
 
 	RunOnUIGoRoutine(f func())
-	SetClipboardData(string)
+	SetClipboardData(string) error
 	GetClipboardData() (string, error)
 }
 

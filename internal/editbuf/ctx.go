@@ -62,7 +62,7 @@ type CtxFns struct {
 	PageUp           func(up bool)
 	ScrollUp         func(up bool)
 
-	SetClipboardData func(string)
+	SetClipboardData func(string) error
 	GetClipboardData func() (string, error)
 
 	Undo func() error
@@ -82,7 +82,7 @@ func EmptyCtxFns() CtxFns {
 	u.PageUp = func(bool) {}
 	u.ScrollUp = func(bool) {}
 
-	u.SetClipboardData = func(string) {}
+	u.SetClipboardData = func(string) error { return nil }
 	u.GetClipboardData = func() (string, error) {
 		return "", nil
 	}

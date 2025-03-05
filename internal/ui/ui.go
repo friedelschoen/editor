@@ -3,7 +3,6 @@ package ui
 import (
 	"fmt"
 	"image"
-	"image/draw"
 	"log"
 	"sync"
 	"time"
@@ -14,8 +13,9 @@ import (
 )
 
 type UI struct {
+	*driver.Window
+
 	DrawFrameRate int // frames per second
-	Win           *driver.Window
 
 	curCursor sdl.SystemCursor
 
@@ -39,13 +39,13 @@ func NewUI(winName string) (*UI, error) {
 
 	// bui, err := uiutil.NewUI(winName, ui.Root)
 
-	win, err := driver.NewWindow()
+	var err error
+	ui.Window, err = driver.NewWindow()
 	if err != nil {
 		return nil, err
 	}
-	ui.Win = win
 
-	if err := win.WindowSetName(winName); err != nil {
+	if err := ui.WindowSetName(winName); err != nil {
 		return nil, err
 	}
 
@@ -64,26 +64,6 @@ func NewUI(winName string) (*UI, error) {
 	ui.Root.Init()
 
 	return ui, nil
-}
-
-func (ui *UI) Close() {
-	ui.closeOnce.Do(func() {
-		if err := ui.Win.Close(); err != nil {
-			log.Println(err)
-		}
-	})
-}
-
-func (ui *UI) NextEvent() driver.Event {
-	this := ui.Win.NextEvent()
-	if this == nil {
-		return nil
-	}
-	return this.(driver.Event)
-}
-
-func (ui *UI) AppendEvent(ev driver.Event) {
-	ui.Win.PushEvent(ev)
 }
 
 func (ui *UI) HandleEvent(ev driver.Event) (handled bool) {
@@ -121,18 +101,12 @@ func (ui *UI) LayoutMarkedAndSchedulePaint() {
 }
 
 func (ui *UI) resizeImage(r image.Rectangle) {
-	if err := ui.Win.Resize(r); err != nil {
+	if err := ui.Resize(r); err != nil {
 		log.Println(err)
 		return
 	}
 
-	img, err := ui.Win.Image()
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	ib := img.Bounds()
+	ib := ui.Image().Bounds()
 	en := ui.Root.Embed()
 	if !en.Bounds.Eq(ib) {
 		en.Bounds = ib
@@ -153,7 +127,7 @@ func (ui *UI) schedulePaint() {
 	ui.pendingPaint = true
 	// schedule
 	time.AfterFunc(ui.durationToNextPaint(), func() {
-		ui.AppendEvent(&UIRunFuncEvent{ui.paint})
+		ui.PushEvent(&UIRunFuncEvent{ui.paint})
 	})
 }
 
@@ -179,61 +153,16 @@ func (ui *UI) paintMarked() {
 	u := ui.Root.PaintMarked()
 	r := u.Intersect(ui.Image().Bounds())
 	if !r.Empty() {
-		ui.Win.Update()
+		ui.Update()
 	}
 }
 
 func (ui *UI) EnqueueNoOpEvent() {
-	ui.AppendEvent(&UIRunFuncEvent{})
-}
-
-func (ui *UI) Image() draw.Image {
-	img, err := ui.Win.Image()
-	if err != nil {
-		// dummy img to avoid errors
-		return image.NewRGBA(image.Rect(0, 0, 1, 1))
-	}
-	return img
-}
-
-func (ui *UI) WarpPointer(p image.Point) {
-	if err := ui.Win.PointerWarp(p); err != nil {
-		log.Println(err)
-		return
-	}
-}
-
-func (ui *UI) QueryPointer() (image.Point, error) {
-	return ui.Win.PointerQuery()
-}
-
-// Implements widget.CursorContext
-func (ui *UI) SetCursor(c sdl.SystemCursor) {
-	if ui.curCursor == c {
-		return
-	}
-	ui.curCursor = c
-
-	if err := ui.Win.CursorSet(c); err != nil {
-		log.Println(err)
-		return
-	}
-}
-
-func (ui *UI) GetClipboardData() (string, error) {
-	return ui.Win.ClipboardDataGet()
-}
-
-func (ui *UI) SetClipboardData(s string) {
-	if err := ui.Win.ClipboardDataSet(s); err != nil {
-		t := fmt.Errorf("setclipboarddata: %w", err)
-		log.Println(t) // in case there is no window yet (TODO: detect?)
-		ui.Error(t)
-	}
+	ui.PushEvent(&UIRunFuncEvent{})
 }
 
 func (ui *UI) RunOnUIGoRoutine(f func()) {
-	ui.AppendEvent(&UIRunFuncEvent{f})
+	ui.PushEvent(&UIRunFuncEvent{f})
 }
 
 // Use with care to avoid UI deadlock (waiting within another wait).
@@ -253,7 +182,7 @@ func (ui *UI) QueueEmptyWindowInputEvent() {
 	if err != nil {
 		return
 	}
-	ui.AppendEvent(&driver.MouseClick{Point: p})
+	ui.PushEvent(&driver.MouseClick{Point: p})
 }
 
 func (ui *UI) WarpPointerToRectanglePad(r image.Rectangle) {
