@@ -1,8 +1,10 @@
 package driver
 
 import (
+	"fmt"
 	"image"
 	"image/draw"
+	"runtime"
 	"time"
 	"unicode"
 	"unicode/utf8"
@@ -74,8 +76,14 @@ func (win *Window) SetClipboardData(text string) error {
 // Close implements driver.Window.
 func (win *Window) Close() error {
 	win.running = false
+	close(win.Events)
 	win.window.Destroy()
 	sdl.Quit()
+	time.AfterFunc(time.Second, func() {
+		out := make([]byte, 100000)
+		n := runtime.Stack(out, true)
+		fmt.Println(string(out[:n]))
+	})
 	return nil
 }
 
@@ -124,9 +132,7 @@ func (win *Window) eventLoop() {
 		}
 		switch evt := pollevent.(type) {
 		case *sdl.QuitEvent:
-			win.window.Destroy()
-			sdl.Quit()
-			win.Events <- WindowClose{}
+			win.Events <- &WindowClose{}
 		case *sdl.WindowEvent:
 			switch evt.Event {
 			case sdl.WINDOWEVENT_ENTER:
