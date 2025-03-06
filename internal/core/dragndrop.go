@@ -41,10 +41,6 @@ func (h *DndHandler) OnDrop(ev *driver.DndDrop) {
 	go func() {
 		v := h.onDrop2(ev)
 		ev.ReplyAccept(v)
-		if v {
-			// ensure paint if needed
-			h.ed.UI.EnqueueNoOpEvent()
-		}
 	}()
 }
 func (h *DndHandler) onDrop2(ev *driver.DndDrop) bool {

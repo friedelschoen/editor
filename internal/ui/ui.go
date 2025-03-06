@@ -73,7 +73,9 @@ func (ui *UI) HandleEvent(ev driver.Event) (handled bool) {
 	case *driver.WindowExpose:
 		ui.Root.Embed().MarkNeedsPaint()
 	case *UIRunFuncEvent:
-		t.Func()
+		if t.Func != nil {
+			t.Func()
+		}
 	default:
 		ui.handleWindowInput(t)
 	}
@@ -123,7 +125,7 @@ func (ui *UI) schedulePaint() {
 	ui.pendingPaint = true
 	// schedule
 	time.AfterFunc(ui.durationToNextPaint(), func() {
-		ui.Events <- &UIRunFuncEvent{ui.paint}
+		ui.RunOnUIGoRoutine(ui.paint)
 	})
 }
 
@@ -151,10 +153,6 @@ func (ui *UI) paintMarked() {
 	if !r.Empty() {
 		ui.Update()
 	}
-}
-
-func (ui *UI) EnqueueNoOpEvent() {
-	ui.Events <- &UIRunFuncEvent{}
 }
 
 func (ui *UI) RunOnUIGoRoutine(f func()) {

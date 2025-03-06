@@ -33,7 +33,7 @@ func (rr *RuneReader) Iter() {
 		rr.d.iterStop()
 		return
 	}
-	_ = rr.iter2(ru, size)
+	rr.iter2(ru, size)
 }
 
 func (rr *RuneReader) End() {}
@@ -87,6 +87,13 @@ func (rr *RuneReader) isNormal() bool {
 }
 
 func (rr *RuneReader) glyphAdvance(ru rune) fixed.Int52_12 {
+	if ru == '\t' {
+		adv, ok := rr.d.st.runeR.fface.GlyphAdvance(' ')
+		if !ok {
+			return 0
+		}
+		return fixed.Int52_12(adv<<6) * 4
+	}
 	adv, ok := rr.d.st.runeR.fface.GlyphAdvance(ru)
 	if !ok {
 		return 0
