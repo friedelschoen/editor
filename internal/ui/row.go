@@ -69,7 +69,7 @@ func (row *Row) OnChildMarked(child widget.Node, newMarks widget.Marks) {
 
 func (row *Row) Layout() {
 	ff := row.Toolbar.TreeThemeFontFace()
-	row.ScrollArea.ScrollWidth = UIThemeUtil.GetScrollBarWidth(ff)
+	row.ScrollArea.ScrollWidth = GetScrollBarWidth(ff)
 	row.BoxLayout.Layout()
 }
 

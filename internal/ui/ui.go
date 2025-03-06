@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"fmt"
 	"image"
 	"log"
 	"sync"
@@ -55,9 +54,7 @@ func NewUI(winName string) (*UI, error) {
 	ui.Root.Embed().SetWrapperForRoot(ui.Root)
 
 	// set theme before root init
-	c1 := &ColorThemeCycler
-	c1.Set(c1.CurName, ui.Root)
-
+	SetColorscheme(ColorTheme, ui.Root)
 	loadThemeFont(CurrentFont, ui.Root)
 
 	// build ui - needs ui.UI to be set
@@ -74,7 +71,6 @@ func (ui *UI) HandleEvent(ev driver.Event) (handled bool) {
 	case *driver.WindowResize:
 		ui.resizeImage(t.Rect)
 	case *driver.WindowExpose:
-		fmt.Println("exposed!")
 		ui.Root.Embed().MarkNeedsPaint()
 	case *UIRunFuncEvent:
 		t.Func()

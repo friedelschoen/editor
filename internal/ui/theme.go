@@ -175,9 +175,7 @@ func filepathTheme(name string) string {
 }
 
 func SetColorscheme(name string, node widget.Node) {
-	path := filepathTheme(name)
-	fmt.Printf("using %s\n", path)
-	pal, err := parsePalette(path)
+	pal, err := parsePalette(filepathTheme(name))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "unable to set theme: %s\n", err)
 		os.Exit(1)
@@ -185,21 +183,6 @@ func SetColorscheme(name string, node widget.Node) {
 	}
 	node.Embed().SetThemePalette(pal)
 }
-
-func settheme(name string) func(node widget.Node) {
-	return func(node widget.Node) {
-		SetColorscheme(name, node)
-	}
-}
-
-var ColorThemeCycler cycler = cycler{
-	entries: []cycleEntry{
-		{"light", settheme("light")},
-		{"acme", settheme("acme")},
-	},
-}
-
-var CurrentFont = ""
 
 func loadThemeFont(name string, node widget.Node) error {
 	ff, err := ThemeFontFace(name, 0)
@@ -210,6 +193,8 @@ func loadThemeFont(name string, node widget.Node) error {
 	return nil
 }
 
+var ColorTheme = ""
+var CurrentFont = ""
 var TTFontOptions opentype.FaceOptions
 
 func ThemeFontFace(name string, size float64) (font.Face, error) {
@@ -230,69 +215,19 @@ func ThemeFontFace(name string, size float64) (font.Face, error) {
 
 var defaultFont = gomono.TTF
 
-type cycler struct {
-	CurName string
-	entries []cycleEntry
-}
+// var UIThemeUtil uiThemeUtil
 
-func (c *cycler) GetIndex(name string) (int, bool) {
-	for i, e := range c.entries {
-		if e.name == name {
-			return i, true
-		}
-	}
-	return -1, false
-}
-
-func (c *cycler) Cycle(node widget.Node) {
-	i := 0
-	if c.CurName != "" {
-		k, ok := c.GetIndex(c.CurName)
-		if !ok {
-			panic(fmt.Sprintf("cycle name not found: %v", c.CurName))
-		}
-		i = (k + 1) % len(c.entries)
-	}
-	c.Set(c.entries[i].name, node)
-}
-
-func (c *cycler) Set(name string, node widget.Node) {
-	i, ok := c.GetIndex(name)
-	if !ok {
-		panic(fmt.Sprintf("cycle name not found: %v", name))
-	}
-	c.CurName = name
-	c.entries[i].fn(node)
-}
-
-func (c *cycler) Names() []string {
-	w := []string{}
-	for _, e := range c.entries {
-		w = append(w, e.name)
-	}
-	return w
-}
-
-type cycleEntry struct {
-	name string
-	fn   func(widget.Node)
-}
-
-var UIThemeUtil uiThemeUtil
-
-type uiThemeUtil struct{}
-
-func (uitu *uiThemeUtil) RowMinimumHeight(ff font.Face) int {
+func RowMinimumHeight(ff font.Face) int {
 	return ff.Metrics().Height.Ceil()
 }
 
-func (uitu *uiThemeUtil) RowSquareSize(ff font.Face) image.Point {
+func RowSquareSize(ff font.Face) image.Point {
 	lh := ff.Metrics().Height
 	w := lh.Mul(fixed.Int26_6(64 * 3 / 4)) // 3/4
 	return image.Point{w.Ceil(), lh.Ceil()}
 }
 
-func (uitu *uiThemeUtil) GetScrollBarWidth(ff font.Face) int {
+func GetScrollBarWidth(ff font.Face) int {
 	if ScrollBarWidth != 0 {
 		return ScrollBarWidth
 	}
@@ -301,16 +236,8 @@ func (uitu *uiThemeUtil) GetScrollBarWidth(ff font.Face) int {
 	return w.Ceil()
 }
 
-func (uitu *uiThemeUtil) ShadowHeight(ff font.Face) int {
+func ShadowHeight(ff font.Face) int {
 	lh := ff.Metrics().Height
 	w := lh.Mul(fixed.Int26_6(64 * 2 / 5)) // 2/5
 	return w.Ceil()
-}
-
-func cint(c int) color.RGBA {
-	v := c & 0xffffff
-	r := uint8(v >> 16)
-	g := uint8(v >> 8)
-	b := uint8(v >> 0)
-	return color.RGBA{r, g, b, 255}
 }

@@ -448,11 +448,7 @@ func (ed *Editor) setupTheme(opt *Options) {
 	ui.ShadowsOn = opt.Shadows
 
 	// color theme
-	if _, ok := ui.ColorThemeCycler.GetIndex(opt.ColorTheme); !ok {
-		fmt.Fprintf(os.Stderr, "unknown color theme: %v\n", opt.ColorTheme)
-		os.Exit(2)
-	}
-	ui.ColorThemeCycler.CurName = opt.ColorTheme
+	ui.ColorTheme = opt.ColorTheme
 
 	// font options
 	ui.TTFontOptions.DPI = opt.DPI

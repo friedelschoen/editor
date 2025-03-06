@@ -44,7 +44,7 @@ type topShadow2 struct {
 
 func (s *topShadow2) OnThemeChange() {
 	ff := s.FirstChild().Embed().TreeThemeFontFace()
-	s.TopShadow.Height = UIThemeUtil.ShadowHeight(ff)
+	s.TopShadow.Height = ShadowHeight(ff)
 }
 
 type bottomShadow2 struct {
@@ -53,5 +53,5 @@ type bottomShadow2 struct {
 
 func (s *bottomShadow2) OnThemeChange() {
 	ff := s.FirstChild().Embed().TreeThemeFontFace()
-	s.BottomShadow.Height = UIThemeUtil.ShadowHeight(ff)
+	s.BottomShadow.Height = ShadowHeight(ff)
 }

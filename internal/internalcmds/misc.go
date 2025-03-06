@@ -229,7 +229,8 @@ func OpenExternal(args *core.InternalCmdArgs) error {
 }
 
 func ColorTheme(args *core.InternalCmdArgs) error {
-	ui.ColorThemeCycler.Cycle(args.Ed.UI.Root)
+	name := args.Part.Args[0].String()
+	ui.SetColorscheme(name, args.Ed.UI.Root)
 	args.Ed.UI.Root.MarkNeedsLayoutAndPaint()
 	return nil
 }

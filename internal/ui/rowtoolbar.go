@@ -30,6 +30,6 @@ func (tb *RowToolbar) Layout() {
 
 func (tb *RowToolbar) OnThemeChange() {
 	tb.Toolbar.OnThemeChange()
-	tb.Square.Size = UIThemeUtil.RowSquareSize(tb.TreeThemeFontFace())
+	tb.Square.Size = RowSquareSize(tb.TreeThemeFontFace())
 	tb.Drawer.SetFirstLineOffsetX(tb.Square.Size.X)
 }

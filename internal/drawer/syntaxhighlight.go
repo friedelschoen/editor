@@ -1,7 +1,6 @@
 package drawer
 
 import (
-	"fmt"
 	"image/color"
 
 	"github.com/alecthomas/chroma/v2"
@@ -55,7 +54,7 @@ func SyntaxHighlight(d *TextDrawer) []*ColorizeOp {
 	if lexer == nil {
 		lexer = lexers.Fallback
 	}
-	fmt.Printf("lexer: %s\n", lexer.Config().Name)
+	// fmt.Printf("lexer: %s\n", lexer.Config().Name)
 
 	style := styles.Get("xcode")
 	if style == nil {
