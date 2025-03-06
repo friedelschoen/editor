@@ -10,7 +10,7 @@ import (
 
 type TextEdit struct {
 	*Text
-	uiCtx   UIContext
+	UIContext
 	rwev    *ioutil.RWEvents
 	rwu     *historybuf.RWUndo
 	ctx     *editbuf.EditorBuffer   // ctx for rw editing utils (contains cursor)
@@ -19,7 +19,7 @@ type TextEdit struct {
 
 func NewTextEdit(uiCtx UIContext) *TextEdit {
 	t := NewText(uiCtx)
-	te := &TextEdit{Text: t, uiCtx: uiCtx}
+	te := &TextEdit{Text: t, UIContext: uiCtx}
 
 	te.rwev = ioutil.NewRWEvents(te.Text.rw)
 	te.RWEvReg = &te.rwev.EvReg
@@ -36,16 +36,9 @@ func NewTextEdit(uiCtx UIContext) *TextEdit {
 	return te
 }
 
-func (te *TextEdit) Error(err error) {
-	te.uiCtx.Error(err)
-}
-
-func (te *TextEdit) CommentLineSym() any {
-	return nil
-}
-
-func (te *TextEdit) PageUp(up bool)   {}
-func (te *TextEdit) ScrollUp(up bool) {}
+func (te *TextEdit) CommentLineSym() any { return nil }
+func (te *TextEdit) PageUp(up bool)      {}
+func (te *TextEdit) ScrollUp(up bool)    {}
 
 func (te *TextEdit) RW() ioutil.ReadWriterAt {
 	// TODO: returning rw with undo/events, differs from SetRW(), workaround is to use te.Text.RW() to get underlying rw
@@ -139,7 +132,7 @@ func (te *TextEdit) OnInputEvent(ev driver.Event) bool {
 
 	handled, err := editbuf.HandleInput(te.ctx, ev)
 	if err != nil {
-		te.uiCtx.Error(err)
+		te.Error(err)
 	}
 	return handled
 }

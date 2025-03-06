@@ -2,7 +2,6 @@ package ui
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"image"
 	"image/color"
@@ -151,7 +150,7 @@ func parsePalette(filename string) (map[string]color.Color, error) {
 
 func exist(filename string) bool {
 	_, err := os.Stat(filename)
-	return !errors.Is(err, os.ErrNotExist)
+	return err == nil /* || !errors.Is(err, os.ErrNotExist) */
 }
 
 func filepathTheme(name string) string {
@@ -162,7 +161,7 @@ func filepathTheme(name string) string {
 		return name + themeExtension
 	}
 	cdir, err := os.UserConfigDir()
-	if err != nil {
+	if err == nil {
 		cname := path.Join(cdir, "glake", "themes", name)
 		if exist(cname) {
 			return cname
@@ -175,23 +174,21 @@ func filepathTheme(name string) string {
 	return ""
 }
 
-// Set light theme colors
-func SetColorscheme(name string, node widget.Node) error {
-	pal, err := parsePalette(filepathTheme(name))
+func SetColorscheme(name string, node widget.Node) {
+	path := filepathTheme(name)
+	fmt.Printf("using %s\n", path)
+	pal, err := parsePalette(path)
 	if err != nil {
-		return err
+		fmt.Fprintf(os.Stderr, "unable to set theme: %s\n", err)
+		os.Exit(1)
+		return
 	}
 	node.Embed().SetThemePalette(pal)
-	return nil
 }
 
 func settheme(name string) func(node widget.Node) {
 	return func(node widget.Node) {
-		pal, err := parsePalette(filepathTheme(name))
-		if err != nil {
-			fmt.Printf("unable to set theme: %s\n", err)
-		}
-		node.Embed().SetThemePalette(pal)
+		SetColorscheme(name, node)
 	}
 }
 

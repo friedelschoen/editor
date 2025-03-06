@@ -93,7 +93,7 @@ func (te *TextEditX) FlashIndexLen(index int, len int) {
 
 // Safe to use concurrently. If line is true then len is calculated.
 func (te *TextEditX) startFlash(index, len int, line bool) {
-	te.uiCtx.RunOnUIGoRoutine(func() {
+	te.RunOnUIGoRoutine(func() {
 		te.flash.start = time.Now()
 		te.flash.dur = 500 * time.Millisecond
 
@@ -144,7 +144,7 @@ func (te *TextEditX) iterateFlash() {
 		te.flash.index.on = false
 		te.flash.line.on = false
 	} else {
-		te.uiCtx.RunOnUIGoRoutine(func() {
+		te.RunOnUIGoRoutine(func() {
 			te.MarkNeedsPaint()
 		})
 	}
