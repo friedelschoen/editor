@@ -1,7 +1,6 @@
 package widget
 
 import (
-	"container/list"
 	"image"
 )
 
@@ -14,12 +13,13 @@ type MultiLayer struct {
 	ContextLayer   *FloatLayer
 	MenuLayer      *FloatLayer
 
-	rects list.List
+	rects []image.Rectangle
 }
 
 func NewMultiLayer() *MultiLayer {
 	ml := &MultiLayer{}
 
+	ml.rects = make([]image.Rectangle, 0)
 	ml.BgLayer = &BgLayer{ml: ml}
 	ml.SeparatorLayer = &ENode{}
 	ml.ContextLayer = &FloatLayer{ml: ml}
@@ -53,15 +53,14 @@ func (ml *MultiLayer) PaintMarked() image.Rectangle {
 }
 
 func (ml *MultiLayer) AddMarkRect(r image.Rectangle) {
-	ml.rects.PushBack(&r)
+	ml.rects = append(ml.rects, r)
 }
 
 func (ml *MultiLayer) markAddedRects() {
-	for elem := ml.rects.Front(); elem != nil; elem = elem.Next() {
-		r := elem.Value.(*image.Rectangle)
-		ml.markRect(nil, *r)
+	for _, r := range ml.rects {
+		ml.markRect(nil, r)
 	}
-	ml.rects = list.List{}
+	ml.rects = ml.rects[:0]
 }
 
 func (ml *MultiLayer) markFloatLayers() {

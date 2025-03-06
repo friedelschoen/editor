@@ -1,8 +1,6 @@
 package historybuf
 
 import (
-	"container/list"
-
 	"github.com/friedelschoen/glake/internal/editbuf"
 	"github.com/friedelschoen/glake/internal/ioutil"
 )
@@ -10,14 +8,14 @@ import (
 ////godebug:annotatefile
 
 type Edits struct {
-	list       list.List
+	list       []*UndoRedo
 	preCursor  editbuf.SimpleCursor
 	postCursor editbuf.SimpleCursor
 }
 
 func (edits *Edits) Append(ur *UndoRedo) {
 	// set pre cursor once
-	if edits.list.Len() == 0 {
+	if len(edits.list) == 0 {
 		if len(ur.D) > 0 {
 			edits.preCursor.SetSelection(ur.Index, ur.Index+len(ur.D))
 		} else {
@@ -25,7 +23,7 @@ func (edits *Edits) Append(ur *UndoRedo) {
 		}
 	}
 
-	edits.list.PushBack(ur)
+	edits.list = append(edits.list, ur)
 
 	// renew post cursor on each append
 	if len(ur.I) > 0 {
@@ -37,12 +35,11 @@ func (edits *Edits) Append(ur *UndoRedo) {
 
 func (edits *Edits) MergeEdits(edits2 *Edits) {
 	// append list
-	for e := edits2.list.Front(); e != nil; e = e.Next() {
-		ur := e.Value.(*UndoRedo)
+	for _, ur := range edits.list {
 		edits.Append(ur)
 	}
 	// merge cursor position
-	if edits.list.Len() == 0 {
+	if len(edits.list) == 0 {
 		edits.preCursor = edits2.preCursor
 	}
 	edits.postCursor = edits2.postCursor
@@ -50,16 +47,15 @@ func (edits *Edits) MergeEdits(edits2 *Edits) {
 
 func (edits *Edits) WriteUndoRedo(redo bool, w ioutil.WriterAt) (editbuf.SimpleCursor, error) {
 	if redo {
-		for e := edits.list.Front(); e != nil; e = e.Next() {
-			ur := e.Value.(*UndoRedo)
+		for _, ur := range edits.list {
 			if err := ur.Apply(redo, w); err != nil {
 				return editbuf.SimpleCursor{}, err
 			}
 		}
 		return edits.postCursor, nil
 	} else {
-		for e := edits.list.Back(); e != nil; e = e.Prev() {
-			ur := e.Value.(*UndoRedo)
+		for i := len(edits.list) - 1; i >= 0; i-- {
+			ur := edits.list[i]
 			if err := ur.Apply(redo, w); err != nil {
 				return editbuf.SimpleCursor{}, err
 			}
@@ -69,19 +65,11 @@ func (edits *Edits) WriteUndoRedo(redo bool, w ioutil.WriterAt) (editbuf.SimpleC
 }
 
 func (edits *Edits) Entries() []*UndoRedo {
-	w := make([]*UndoRedo, edits.list.Len())
-	i := 0
-	for e := edits.list.Front(); e != nil; e = e.Next() {
-		ur := e.Value.(*UndoRedo)
-		w[i] = ur
-		i++
-	}
-	return w
+	return edits.list
 }
 
 func (edits *Edits) Empty() bool {
-	for e := edits.list.Front(); e != nil; e = e.Next() {
-		ur := e.Value.(*UndoRedo)
+	for _, ur := range edits.list {
 		if len(ur.D) > 0 || len(ur.I) > 0 {
 			return false
 		}

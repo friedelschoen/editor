@@ -1,14 +1,14 @@
 package eventregister
 
 import (
-	"container/list"
+	"slices"
 	"sync"
 )
 
 // The zero register is empty and ready for use.
 type Register struct {
 	sync.RWMutex
-	m map[int]*list.List
+	m map[int][]*Callback
 }
 
 // Remove is done via *Regist.Unregister().
@@ -20,14 +20,13 @@ func (reg *Register) AddCallback(evId int, cb *Callback) *Regist {
 	reg.Lock()
 	defer reg.Unlock()
 	if reg.m == nil {
-		reg.m = map[int]*list.List{}
+		reg.m = map[int][]*Callback{}
 	}
-	l, ok := reg.m[evId]
+	_, ok := reg.m[evId]
 	if !ok {
-		l = list.New()
-		reg.m[evId] = l
+		reg.m[evId] = make([]*Callback, 0)
 	}
-	l.PushBack(cb)
+	reg.m[evId] = append(reg.m[evId], cb)
 	return &Regist{reg, evId, cb}
 }
 
@@ -42,17 +41,11 @@ func (reg *Register) RemoveCallback(evId int, cb *Callback) {
 		return
 	}
 	// iterate to remove since the callback doesn't keep the element (allows callback to be added more then once, or at different evId's - this is probably a useless feature unless the *callback is being used to also be set in a map)
-	for e := l.Front(); e != nil; e = e.Next() {
-		cb2 := e.Value.(*Callback)
-		if cb2 == cb {
-			l.Remove(e)
-			if l.Len() == 0 {
-				delete(reg.m, evId)
-				break
-			}
-			// Commented: to continue to remove if added more then once
-			// break
-		}
+	newl := slices.DeleteFunc(l, func(cb2 *Callback) bool { return cb2 == cb })
+	if len(newl) > 0 {
+		reg.m[evId] = newl
+	} else {
+		delete(reg.m, evId)
 	}
 }
 
@@ -68,8 +61,7 @@ func (reg *Register) RunCallbacks(evId int, ev any) int {
 		return 0
 	}
 	c := 0
-	for e := l.Front(); e != nil; e = e.Next() {
-		cb := e.Value.(*Callback)
+	for _, cb := range l {
 		cb.F(ev)
 		c++
 	}
@@ -87,7 +79,7 @@ func (reg *Register) NCallbacks(evId int) int {
 	if !ok {
 		return 0
 	}
-	return l.Len()
+	return len(l)
 }
 
 type Callback struct {
