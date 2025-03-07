@@ -1,7 +1,7 @@
 package lrparser
 
 import (
-	"github.com/friedelschoen/glake/internal/parser/pscan"
+	"github.com/friedelschoen/editor/internal/parser/pscan"
 )
 
 type Rule interface {

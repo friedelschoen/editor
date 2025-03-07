@@ -5,7 +5,7 @@ import (
 	"io"
 	"unicode"
 
-	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/ioutil"
 )
 
 func AutoIndent(ctx *EditorBuffer) error {

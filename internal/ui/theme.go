@@ -11,8 +11,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/friedelschoen/glake/internal/findfont"
-	"github.com/friedelschoen/glake/internal/ui/widget"
+	"github.com/friedelschoen/editor/internal/findfont"
+	"github.com/friedelschoen/editor/internal/ui/widget"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/gofont/gomono"
 	"golang.org/x/image/font/opentype"

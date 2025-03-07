@@ -9,8 +9,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/friedelschoen/glake/internal/command"
-	"github.com/friedelschoen/glake/internal/multierror"
+	"github.com/friedelschoen/editor/internal/command"
+	"github.com/friedelschoen/editor/internal/multierror"
 )
 
 type ServerWrap struct {

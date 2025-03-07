@@ -9,12 +9,12 @@ import (
 	"runtime/pprof"
 	"strings"
 
-	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/lsproto"
+	"github.com/friedelschoen/editor/internal/core"
+	"github.com/friedelschoen/editor/internal/lsproto"
 
 	// imports that can't be imported from core (cyclic import)
-	_ "github.com/friedelschoen/glake/internal/contentcmds"
-	_ "github.com/friedelschoen/glake/internal/internalcmds"
+	_ "github.com/friedelschoen/editor/internal/contentcmds"
+	_ "github.com/friedelschoen/editor/internal/internalcmds"
 )
 
 func main() {

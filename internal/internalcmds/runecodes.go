@@ -3,7 +3,7 @@ package internalcmds
 import (
 	"fmt"
 
-	"github.com/friedelschoen/glake/internal/core"
+	"github.com/friedelschoen/editor/internal/core"
 )
 
 func RuneCodes(args *core.InternalCmdArgs) error {

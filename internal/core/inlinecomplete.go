@@ -6,10 +6,10 @@ import (
 	"sync"
 	"unicode"
 
-	"github.com/friedelschoen/glake/internal/drawer"
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/mathutil"
-	"github.com/friedelschoen/glake/internal/ui"
+	"github.com/friedelschoen/editor/internal/drawer"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/mathutil"
+	"github.com/friedelschoen/editor/internal/ui"
 )
 
 type InlineComplete struct {

@@ -7,8 +7,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/core"
+	"github.com/friedelschoen/editor/internal/ioutil"
 )
 
 func sortTextLines(args *core.InternalCmdArgs) error {

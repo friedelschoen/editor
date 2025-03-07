@@ -7,10 +7,10 @@ import (
 	"io"
 	"unicode"
 
-	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/ioutil"
 )
 
-////godebug:annotatepackage:github.com/friedelschoen/glake/internal/iout/iorw
+////godebug:annotatepackage:github.com/friedelschoen/editor/internal/iout/iorw
 
 func Comment(ctx *EditorBuffer) error {
 	sym := ctx.Fns.CommentLineSym()

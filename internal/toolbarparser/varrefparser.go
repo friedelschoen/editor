@@ -3,8 +3,8 @@ package toolbarparser
 import (
 	"fmt"
 
-	"github.com/friedelschoen/glake/internal/command"
-	"github.com/friedelschoen/glake/internal/parser/pscan"
+	"github.com/friedelschoen/editor/internal/command"
+	"github.com/friedelschoen/editor/internal/parser/pscan"
 )
 
 func parseVarRefs(src []byte) ([]*VarRef, error) {

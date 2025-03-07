@@ -3,7 +3,7 @@ package widget
 import (
 	"image"
 
-	"github.com/friedelschoen/glake/internal/drawer"
+	"github.com/friedelschoen/editor/internal/drawer"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

@@ -3,7 +3,7 @@ package toolbarparser
 import (
 	"fmt"
 
-	"github.com/friedelschoen/glake/internal/parser/pscan"
+	"github.com/friedelschoen/editor/internal/parser/pscan"
 )
 
 // scan for cmd position, update with arg, or insert new cmd

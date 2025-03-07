@@ -4,7 +4,7 @@ import (
 	"image"
 	"image/draw"
 
-	"github.com/friedelschoen/glake/internal/drawer"
+	"github.com/friedelschoen/editor/internal/drawer"
 )
 
 type Pad struct {

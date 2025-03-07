@@ -1,8 +1,8 @@
 package historybuf
 
 import (
-	"github.com/friedelschoen/glake/internal/editbuf"
-	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/editbuf"
+	"github.com/friedelschoen/editor/internal/ioutil"
 )
 
 type RWUndo struct {

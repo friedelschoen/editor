@@ -1,7 +1,7 @@
 package ui
 
 import (
-	"github.com/friedelschoen/glake/internal/ui/widget"
+	"github.com/friedelschoen/editor/internal/ui/widget"
 )
 
 var (

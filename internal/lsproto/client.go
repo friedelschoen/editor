@@ -11,9 +11,9 @@ import (
 	"sync"
 	"time"
 
-	context1 "github.com/friedelschoen/glake/internal/context"
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/multierror"
+	context1 "github.com/friedelschoen/editor/internal/context"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/multierror"
 )
 
 type Client struct {

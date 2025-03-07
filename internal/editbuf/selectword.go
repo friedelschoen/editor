@@ -1,8 +1,8 @@
 package editbuf
 
 import (
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/ui/driver"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/ui/driver"
 )
 
 func SelectWord(ctx *EditorBuffer) error {

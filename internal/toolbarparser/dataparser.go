@@ -4,8 +4,8 @@ import (
 	"log"
 	"unicode"
 
-	"github.com/friedelschoen/glake/internal/command"
-	"github.com/friedelschoen/glake/internal/parser/pscan"
+	"github.com/friedelschoen/editor/internal/command"
+	"github.com/friedelschoen/editor/internal/parser/pscan"
 )
 
 func Parse(str string) *Data {

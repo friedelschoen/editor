@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/friedelschoen/glake/internal/lsproto"
-	"github.com/friedelschoen/glake/internal/parser"
+	"github.com/friedelschoen/editor/internal/lsproto"
+	"github.com/friedelschoen/editor/internal/parser"
 )
 
 type Options struct {

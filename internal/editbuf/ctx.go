@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"image"
 
-	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/ioutil"
 )
 
 //godebug:annotatefile

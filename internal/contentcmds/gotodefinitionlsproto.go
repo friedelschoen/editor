@@ -5,10 +5,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/lsproto"
-	"github.com/friedelschoen/glake/internal/parser"
+	"github.com/friedelschoen/editor/internal/core"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/lsproto"
+	"github.com/friedelschoen/editor/internal/parser"
 )
 
 func GoToDefinitionLSProto(ctx context.Context, erow *core.ERow, index int) (error, bool) {

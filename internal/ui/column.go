@@ -3,8 +3,8 @@ package ui
 import (
 	"image"
 
-	"github.com/friedelschoen/glake/internal/eventregister"
-	"github.com/friedelschoen/glake/internal/ui/widget"
+	"github.com/friedelschoen/editor/internal/eventregister"
+	"github.com/friedelschoen/editor/internal/ui/widget"
 )
 
 type Column struct {

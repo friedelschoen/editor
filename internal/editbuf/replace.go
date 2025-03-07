@@ -1,7 +1,7 @@
 package editbuf
 
 import (
-	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/ioutil"
 )
 
 func Replace(ctx *EditorBuffer, old, new string) (bool, error) {

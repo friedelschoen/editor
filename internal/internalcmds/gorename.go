@@ -3,8 +3,8 @@ package internalcmds
 import (
 	"fmt"
 
-	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/ui"
+	"github.com/friedelschoen/editor/internal/core"
+	"github.com/friedelschoen/editor/internal/ui"
 )
 
 func GoRename(args *core.InternalCmdArgs) error {

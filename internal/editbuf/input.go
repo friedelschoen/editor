@@ -4,7 +4,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/friedelschoen/glake/internal/ui/driver"
+	"github.com/friedelschoen/editor/internal/ui/driver"
 )
 
 //godebug:annotatefile

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/friedelschoen/glake/internal/parser"
+	"github.com/friedelschoen/editor/internal/parser"
 )
 
 type Registration struct {

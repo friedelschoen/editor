@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/friedelschoen/glake/internal/core"
+	"github.com/friedelschoen/editor/internal/core"
 )
 
 func parseFlagSetHandleUsage(args *core.InternalCmdArgs, fs *flag.FlagSet) error {

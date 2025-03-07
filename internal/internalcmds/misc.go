@@ -7,10 +7,10 @@ import (
 	"os/exec"
 	"runtime"
 
-	"github.com/friedelschoen/glake/internal/context"
-	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/multierror"
-	"github.com/friedelschoen/glake/internal/ui"
+	"github.com/friedelschoen/editor/internal/context"
+	"github.com/friedelschoen/editor/internal/core"
+	"github.com/friedelschoen/editor/internal/multierror"
+	"github.com/friedelschoen/editor/internal/ui"
 )
 
 func Version(args *core.InternalCmdArgs) error {

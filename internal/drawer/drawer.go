@@ -7,8 +7,8 @@ import (
 	"image/draw"
 	"log"
 
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/mathutil"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/mathutil"
 	"golang.org/x/image/font"
 	"golang.org/x/image/math/fixed"
 )

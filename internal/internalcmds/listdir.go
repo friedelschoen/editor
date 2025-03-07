@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/friedelschoen/glake/internal/core"
+	"github.com/friedelschoen/editor/internal/core"
 )
 
 func ListDir(args *core.InternalCmdArgs) error {

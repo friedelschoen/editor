@@ -3,9 +3,9 @@ package core
 import (
 	"errors"
 
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/parser"
-	"github.com/friedelschoen/glake/internal/ui"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/parser"
+	"github.com/friedelschoen/editor/internal/ui"
 )
 
 type OpenFileERowConfig struct {

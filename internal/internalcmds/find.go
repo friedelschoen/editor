@@ -6,10 +6,10 @@ import (
 	"io"
 	"strings"
 
-	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/editbuf"
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/parser"
+	"github.com/friedelschoen/editor/internal/core"
+	"github.com/friedelschoen/editor/internal/editbuf"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/parser"
 )
 
 func Find(args *core.InternalCmdArgs) error {

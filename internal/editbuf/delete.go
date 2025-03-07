@@ -1,6 +1,6 @@
 package editbuf
 
-import "github.com/friedelschoen/glake/internal/ioutil"
+import "github.com/friedelschoen/editor/internal/ioutil"
 
 func Delete(ctx *EditorBuffer) error {
 	a, b, ok := ctx.C.SelectionIndexes()

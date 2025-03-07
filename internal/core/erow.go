@@ -9,11 +9,11 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/friedelschoen/glake/internal/drawer"
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/toolbarparser"
-	"github.com/friedelschoen/glake/internal/ui"
-	"github.com/friedelschoen/glake/internal/ui/driver"
+	"github.com/friedelschoen/editor/internal/drawer"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/toolbarparser"
+	"github.com/friedelschoen/editor/internal/ui"
+	"github.com/friedelschoen/editor/internal/ui/driver"
 )
 
 type ERow struct {

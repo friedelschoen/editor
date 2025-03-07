@@ -5,7 +5,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/ioutil"
 )
 
 func Find(cctx context.Context, ectx *EditorBuffer, str string, reverse bool, opt *ioutil.IndexOpt) (bool, error) {

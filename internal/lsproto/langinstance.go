@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	context1 "github.com/friedelschoen/glake/internal/context"
-	"github.com/friedelschoen/glake/internal/multierror"
+	context1 "github.com/friedelschoen/editor/internal/context"
+	"github.com/friedelschoen/editor/internal/multierror"
 )
 
 type LangInstance struct {

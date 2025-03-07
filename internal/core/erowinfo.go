@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/ui"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/ui"
 )
 
 // TODO: become an interface, with file/dir/special implementations.

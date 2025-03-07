@@ -5,8 +5,8 @@ import (
 	"image/draw"
 	"math"
 
-	"github.com/friedelschoen/glake/internal/mathutil"
-	"github.com/friedelschoen/glake/internal/ui/driver"
+	"github.com/friedelschoen/editor/internal/mathutil"
+	"github.com/friedelschoen/editor/internal/ui/driver"
 )
 
 // Used by ScrollArea. Parent of ScrollHandle.

@@ -3,8 +3,8 @@ package ui
 import (
 	"image"
 
-	"github.com/friedelschoen/glake/internal/ui/driver"
-	"github.com/friedelschoen/glake/internal/ui/widget"
+	"github.com/friedelschoen/editor/internal/ui/driver"
+	"github.com/friedelschoen/editor/internal/ui/widget"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

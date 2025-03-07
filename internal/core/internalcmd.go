@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/friedelschoen/glake/internal/toolbarparser"
-	"github.com/friedelschoen/glake/internal/ui"
+	"github.com/friedelschoen/editor/internal/toolbarparser"
+	"github.com/friedelschoen/editor/internal/ui"
 )
 
 // cmds added via init() from "internalcmds" pkg

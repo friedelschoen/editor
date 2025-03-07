@@ -8,7 +8,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/friedelschoen/glake/internal/parser"
+	"github.com/friedelschoen/editor/internal/parser"
 )
 
 func ListDirERow(erow *ERow, filepath string, subs, hiddens bool) {

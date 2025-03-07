@@ -3,7 +3,7 @@ package editbuf
 import (
 	"bytes"
 
-	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/ioutil"
 )
 
 func TabRight(ctx *EditorBuffer) error {

@@ -1,6 +1,6 @@
 package pscan
 
-import "github.com/friedelschoen/glake/internal/mathutil"
+import "github.com/friedelschoen/editor/internal/mathutil"
 
 func ContainsRune(rs []rune, ru rune) bool {
 	for _, ru2 := range rs {

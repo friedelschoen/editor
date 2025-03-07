@@ -5,8 +5,8 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/friedelschoen/glake/internal/ui"
-	"github.com/friedelschoen/glake/internal/ui/driver"
+	"github.com/friedelschoen/editor/internal/ui"
+	"github.com/friedelschoen/editor/internal/ui/driver"
 )
 
 type DndHandler struct {

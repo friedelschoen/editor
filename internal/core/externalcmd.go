@@ -8,10 +8,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/friedelschoen/glake/internal/command"
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/parser"
-	"github.com/friedelschoen/glake/internal/toolbarparser"
+	"github.com/friedelschoen/editor/internal/command"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/parser"
+	"github.com/friedelschoen/editor/internal/toolbarparser"
 )
 
 func ExternalCmd(erow *ERow, part *toolbarparser.Part) {

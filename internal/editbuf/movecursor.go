@@ -5,8 +5,8 @@ import (
 	"image"
 	"io"
 
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/ui/driver"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/ui/driver"
 )
 
 func MoveCursorToPoint(ctx *EditorBuffer, p image.Point, sel bool) {

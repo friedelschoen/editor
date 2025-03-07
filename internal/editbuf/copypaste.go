@@ -3,7 +3,7 @@ package editbuf
 import (
 	"fmt"
 
-	"github.com/friedelschoen/glake/internal/ui/driver"
+	"github.com/friedelschoen/editor/internal/ui/driver"
 )
 
 func Copy(ctx *EditorBuffer) error {

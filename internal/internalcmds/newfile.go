@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/friedelschoen/glake/internal/core"
+	"github.com/friedelschoen/editor/internal/core"
 )
 
 func NewFile(args *core.InternalCmdArgs) error {

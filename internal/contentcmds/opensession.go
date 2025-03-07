@@ -5,8 +5,8 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/core"
+	"github.com/friedelschoen/editor/internal/ioutil"
 )
 
 func OpenSession(ctx context.Context, erow *core.ERow, index int) (error, bool) {

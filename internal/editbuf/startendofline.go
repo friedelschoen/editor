@@ -3,7 +3,7 @@ package editbuf
 import (
 	"unicode"
 
-	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/ioutil"
 )
 
 func StartOfLine(ctx *EditorBuffer, sel bool) error {

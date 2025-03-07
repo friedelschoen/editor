@@ -1,7 +1,7 @@
 package ioutil
 
 import (
-	"github.com/friedelschoen/glake/internal/eventregister"
+	"github.com/friedelschoen/editor/internal/eventregister"
 )
 
 // Runs callbacks on operations.

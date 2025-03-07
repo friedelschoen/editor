@@ -1,6 +1,6 @@
 package editbuf
 
-import "github.com/friedelschoen/glake/internal/ui/driver"
+import "github.com/friedelschoen/editor/internal/ui/driver"
 
 func SelectLine(ctx *EditorBuffer) error {
 	ctx.C.SetSelectionOff()

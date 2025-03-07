@@ -3,8 +3,8 @@ package widget
 import (
 	"image"
 
-	"github.com/friedelschoen/glake/internal/drawer"
-	"github.com/friedelschoen/glake/internal/shadow"
+	"github.com/friedelschoen/editor/internal/drawer"
+	"github.com/friedelschoen/editor/internal/shadow"
 )
 
 type TopShadow struct {

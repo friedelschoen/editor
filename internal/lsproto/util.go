@@ -13,8 +13,8 @@ import (
 	"strings"
 	"unicode/utf16"
 
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/parser"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/parser"
 )
 
 var logger0 = log.New(os.Stdout, "", log.Lshortfile)

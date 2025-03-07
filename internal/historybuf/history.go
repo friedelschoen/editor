@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/friedelschoen/glake/internal/editbuf"
+	"github.com/friedelschoen/editor/internal/editbuf"
 )
 
 ////godebug:annotatefile

@@ -1,6 +1,6 @@
 package editbuf
 
-import "github.com/friedelschoen/glake/internal/ui/driver"
+import "github.com/friedelschoen/editor/internal/ui/driver"
 
 func Cut(ctx *EditorBuffer) error {
 	a, b, ok := ctx.C.SelectionIndexes()

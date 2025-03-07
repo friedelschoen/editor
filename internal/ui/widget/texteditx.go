@@ -4,9 +4,9 @@ import (
 	"image/color"
 	"time"
 
-	"github.com/friedelschoen/glake/internal/drawer"
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/shadow"
+	"github.com/friedelschoen/editor/internal/drawer"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/shadow"
 )
 
 // textedit with extensions

@@ -6,7 +6,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/friedelschoen/glake/internal/ui"
+	"github.com/friedelschoen/editor/internal/ui"
 )
 
 type ERowExec struct {

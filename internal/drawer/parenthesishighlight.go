@@ -3,8 +3,8 @@ package drawer
 import (
 	"strings"
 
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/parser/pscan"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/parser/pscan"
 )
 
 func updateParenthesisHighlight(d *TextDrawer) {

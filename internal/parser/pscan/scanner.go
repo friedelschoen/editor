@@ -6,7 +6,7 @@ import (
 	"io"
 	"unicode/utf8"
 
-	"github.com/friedelschoen/glake/internal/mathutil"
+	"github.com/friedelschoen/editor/internal/mathutil"
 )
 
 //go:generate go run ./wrapgen/wrapgen.go

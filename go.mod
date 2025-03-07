@@ -1,4 +1,4 @@
-module github.com/friedelschoen/glake
+module github.com/friedelschoen/editor
 
 go 1.23.4
 

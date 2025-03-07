@@ -1,7 +1,7 @@
 package core
 
 import (
-	"github.com/friedelschoen/glake/internal/ui"
+	"github.com/friedelschoen/editor/internal/ui"
 )
 
 const (
@@ -14,7 +14,7 @@ type RowReopener struct {
 }
 
 func NewRowReopener(ed *Editor) *RowReopener {
-	return &RowReopener{ed: ed, queue: make([]*RowState, 0, QueueMax+1),}
+	return &RowReopener{ed: ed, queue: make([]*RowState, 0, QueueMax+1)}
 }
 
 func (rr *RowReopener) Add(row *ui.Row) {

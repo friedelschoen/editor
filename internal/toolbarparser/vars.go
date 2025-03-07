@@ -6,8 +6,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/friedelschoen/glake/internal/command"
-	"github.com/friedelschoen/glake/internal/parser"
+	"github.com/friedelschoen/editor/internal/command"
+	"github.com/friedelschoen/editor/internal/parser"
 )
 
 type HomeVarMap struct {

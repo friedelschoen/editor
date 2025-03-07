@@ -1,7 +1,7 @@
 package contentcmds
 
 import (
-	"github.com/friedelschoen/glake/internal/core"
+	"github.com/friedelschoen/editor/internal/core"
 )
 
 func init() {

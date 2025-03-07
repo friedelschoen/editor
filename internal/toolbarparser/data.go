@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/friedelschoen/glake/internal/parser/lrparser"
+	"github.com/friedelschoen/editor/internal/parser/lrparser"
 )
 
 type Data struct {

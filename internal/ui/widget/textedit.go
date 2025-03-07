@@ -1,11 +1,11 @@
 package widget
 
 import (
-	"github.com/friedelschoen/glake/internal/editbuf"
-	"github.com/friedelschoen/glake/internal/eventregister"
-	"github.com/friedelschoen/glake/internal/historybuf"
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/ui/driver"
+	"github.com/friedelschoen/editor/internal/editbuf"
+	"github.com/friedelschoen/editor/internal/eventregister"
+	"github.com/friedelschoen/editor/internal/historybuf"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/ui/driver"
 )
 
 type TextEdit struct {

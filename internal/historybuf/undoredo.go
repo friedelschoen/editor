@@ -3,7 +3,7 @@ package historybuf
 import (
 	"bytes"
 
-	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/ioutil"
 )
 
 type UndoRedo struct {

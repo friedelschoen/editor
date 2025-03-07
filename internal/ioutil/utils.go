@@ -6,7 +6,7 @@ import (
 	"io"
 	"unicode"
 
-	"github.com/friedelschoen/glake/internal/parser/pscan"
+	"github.com/friedelschoen/editor/internal/parser/pscan"
 )
 
 func NewScanner(rd ReaderAt) *pscan.Scanner {

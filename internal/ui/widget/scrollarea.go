@@ -3,8 +3,8 @@ package widget
 import (
 	"image"
 
-	"github.com/friedelschoen/glake/internal/drawer"
-	"github.com/friedelschoen/glake/internal/ui/driver"
+	"github.com/friedelschoen/editor/internal/drawer"
+	"github.com/friedelschoen/editor/internal/ui/driver"
 )
 
 type ScrollArea struct {

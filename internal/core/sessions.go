@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/friedelschoen/glake/internal/mathutil"
-	"github.com/friedelschoen/glake/internal/toolbarparser"
-	"github.com/friedelschoen/glake/internal/ui"
+	"github.com/friedelschoen/editor/internal/mathutil"
+	"github.com/friedelschoen/editor/internal/toolbarparser"
+	"github.com/friedelschoen/editor/internal/ui"
 )
 
 type Sessions struct {

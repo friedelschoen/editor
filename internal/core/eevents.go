@@ -1,8 +1,8 @@
 package core
 
 import (
-	"github.com/friedelschoen/glake/internal/eventregister"
-	"github.com/friedelschoen/glake/internal/ui"
+	"github.com/friedelschoen/editor/internal/eventregister"
+	"github.com/friedelschoen/editor/internal/ui"
 )
 
 // Editor events.

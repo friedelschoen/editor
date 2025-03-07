@@ -5,7 +5,7 @@ import (
 	"image/color"
 	"image/draw"
 
-	"github.com/friedelschoen/glake/internal/ui/driver"
+	"github.com/friedelschoen/editor/internal/ui/driver"
 )
 
 // Used by ScrollBar.

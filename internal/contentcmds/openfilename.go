@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/ioutil"
-	"github.com/friedelschoen/glake/internal/parser"
-	"github.com/friedelschoen/glake/internal/parser/reslocparser"
+	"github.com/friedelschoen/editor/internal/core"
+	"github.com/friedelschoen/editor/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/parser"
+	"github.com/friedelschoen/editor/internal/parser/reslocparser"
 )
 
 // Detects compilers output file format <string(:int)?(:int)?>, and goes to line/column.

@@ -4,7 +4,7 @@ import (
 	"image"
 	"io"
 
-	"github.com/friedelschoen/glake/internal/ioutil"
+	"github.com/friedelschoen/editor/internal/ioutil"
 	"golang.org/x/image/math/fixed"
 )
 

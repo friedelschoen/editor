@@ -3,8 +3,8 @@ package reslocparser
 import (
 	"sync"
 
-	"github.com/friedelschoen/glake/internal/parser"
-	"github.com/friedelschoen/glake/internal/parser/pscan"
+	"github.com/friedelschoen/editor/internal/parser"
+	"github.com/friedelschoen/editor/internal/parser/pscan"
 )
 
 type MFn = pscan.MFn

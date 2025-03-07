@@ -3,8 +3,8 @@ package internalcmds
 import (
 	"fmt"
 
-	"github.com/friedelschoen/glake/internal/core"
-	"github.com/friedelschoen/glake/internal/editbuf"
+	"github.com/friedelschoen/editor/internal/core"
+	"github.com/friedelschoen/editor/internal/editbuf"
 )
 
 func Replace(args *core.InternalCmdArgs) error {

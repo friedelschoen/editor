@@ -3,7 +3,7 @@ package widget
 import (
 	"image"
 
-	"github.com/friedelschoen/glake/internal/ui/driver"
+	"github.com/friedelschoen/editor/internal/ui/driver"
 )
 
 type FloatBoxButton struct {
