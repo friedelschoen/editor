@@ -48,7 +48,7 @@ func (reg *Registration) String() string {
 }
 
 func parseRegistration(s string) (*Registration, error) {
-	fields, err := parser.ParseFields(s, ',')
+	fields, err := parser.ParseFields(s)
 	if err != nil {
 		return nil, err
 	}

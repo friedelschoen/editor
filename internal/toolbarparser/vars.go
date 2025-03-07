@@ -1,6 +1,7 @@
 package toolbarparser
 
 import (
+	"os"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -113,6 +114,26 @@ func (m *HomeVarMap) decode2(f string) string {
 	}
 
 	return f
+}
+
+func ParseToolbarVars(strs []string, caseInsensitive bool) *HomeVarMap {
+	// merge strings maps
+	m := VarMap{}
+	for _, str := range strs {
+		data := Parse(str)
+		m2 := ParseVars(data)
+		// merge
+		for k, v := range m2 {
+			m[k] = v
+		}
+	}
+	// add env home var at the end to enforce value
+	h, err := os.UserHomeDir()
+	if err != nil {
+		m["~"] = h
+	}
+
+	return NewHomeVarMap(m, caseInsensitive)
 }
 
 type VarMap map[string]string // [name]value; name includes {"~","$",...}

@@ -22,6 +22,7 @@ import (
 	"github.com/friedelschoen/glake/internal/fswatcher"
 	"github.com/friedelschoen/glake/internal/ioutil"
 	"github.com/friedelschoen/glake/internal/lsproto"
+	"github.com/friedelschoen/glake/internal/toolbarparser"
 	"github.com/friedelschoen/glake/internal/ui"
 	"github.com/friedelschoen/glake/internal/ui/driver"
 	"github.com/friedelschoen/glake/internal/ui/widget"
@@ -31,7 +32,7 @@ import (
 
 type Editor struct {
 	UI                *ui.UI
-	HomeVars          *HomeVars
+	HomeVars          *toolbarparser.HomeVarMap
 	Watcher           fswatcher.Watcher
 	RowReopener       *RowReopener
 	LSProtoMan        *lsproto.Manager
@@ -56,7 +57,7 @@ func RunEditor(opt *Options) error {
 	// TODO: osx can have a case insensitive filesystem
 	ed.FsCaseInsensitive = runtime.GOOS == "windows"
 
-	ed.HomeVars = NewHomeVars()
+	ed.HomeVars = &toolbarparser.HomeVarMap{}
 	ed.RowReopener = NewRowReopener(ed)
 	ed.dndh = NewDndHandler(ed)
 	ed.InlineComplete = NewInlineComplete(ed)
@@ -165,7 +166,14 @@ func (ed *Editor) uiEventLoop() {
 	defer ed.UI.Close()
 
 	for {
-		ev := <-ed.UI.Events
+		ed.UI.PollEvent()
+		var ev driver.Event
+		select {
+		case e := <-ed.UI.Events:
+			ev = e
+		default:
+			continue
+		}
 		switch t := ev.(type) {
 		case *driver.WindowClose:
 			return
@@ -391,7 +399,7 @@ func (ed *Editor) setupRootMenuToolbar() {
 func (ed *Editor) updateERowsToolbarsHomeVars() {
 	tb1 := ed.UI.Root.Toolbar.Str()
 	tb2 := ed.UI.Root.MainMenuButton.Toolbar.Str()
-	ed.HomeVars.ParseToolbarVars([]string{tb1, tb2}, ed.FsCaseInsensitive)
+	ed.HomeVars = toolbarparser.ParseToolbarVars([]string{tb1, tb2}, ed.FsCaseInsensitive)
 	for _, erow := range ed.ERows() {
 		erow.UpdateToolbarNameEncoding()
 	}

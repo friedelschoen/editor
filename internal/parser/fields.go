@@ -1,36 +1,51 @@
 package parser
 
-import "github.com/friedelschoen/glake/internal/parser/pscan"
+import (
+	"strings"
+)
 
-func ParseFields(s string, fieldSep rune) ([]string, error) {
-	sc := pscan.NewScanner()
-	sc.SetSrc([]byte(s))
+func ParseFields(s string) ([]string, error) {
 	esc := '\\'
-	fields := []string{}
-	if p2, err := sc.M.AndR(0,
-		sc.W.LoopSep(
-			sc.W.OnValue(
-				sc.W.StringValue(sc.W.Loop(sc.W.Or(
-					sc.W.EscapeAny(esc),
-					sc.W.QuotedString2(esc, 3000, 3000),
-					sc.W.RuneNoneOf([]rune{fieldSep}),
-				))),
-				func(v any) {
-					s := v.(string)
-					if u, err := UnquoteString(s, esc); err == nil {
-						s = u
-					}
-					s = RemoveEscapes(s, esc)
-					fields = append(fields, s)
-				},
-			),
-			// separator
-			sc.W.Rune(fieldSep),
-		),
-		sc.M.Eof,
-	); err != nil {
-		return nil, sc.SrcError(p2, err)
-	} else {
-		return fields, nil
+	fields := make([]string, 0)
+	current := strings.Builder{}
+	inQuotes := false
+	quoteChar := rune(0)
+
+	for i, r := range s {
+		switch {
+		case r == esc && i+1 < len(s): // Escape character
+			i++
+			current.WriteRune(rune(s[i]))
+
+		case inQuotes && r == quoteChar: // Closing quote
+			inQuotes = false
+
+		case !inQuotes && (r == '"' || r == '\''): // Opening quote
+			inQuotes = true
+			quoteChar = r
+
+		case !inQuotes && r == ',': // Separator
+			if current.Len() > 0 {
+				field, err := UnquoteString(current.String(), esc)
+				if err != nil {
+					field = current.String()
+				}
+				field = RemoveEscapes(field, esc)
+				fields = append(fields, field)
+				current.Reset()
+			}
+
+		default: // Regular character
+			current.WriteRune(r)
+		}
 	}
+
+	// Add the last field if non-empty
+	if current.Len() > 0 {
+		field, _ := UnquoteString(current.String(), esc)
+		field = RemoveEscapes(field, esc)
+		fields = append(fields, field)
+	}
+
+	return fields, nil
 }

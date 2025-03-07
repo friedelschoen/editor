@@ -99,7 +99,7 @@ type PreSaveHook struct {
 }
 
 func newPreSaveHook(s string) (*PreSaveHook, error) {
-	fields, err := parser.ParseFields(s, ',')
+	fields, err := parser.ParseFields(s)
 	if err != nil {
 		return nil, err
 	}

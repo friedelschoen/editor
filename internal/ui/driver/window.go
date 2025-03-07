@@ -58,7 +58,7 @@ func NewWindow() (*Window, error) {
 	sdl.StartTextInput()
 
 	win.running = true
-	go win.eventLoop()
+	// go win.eventLoop()
 
 	return win, nil
 }
@@ -123,137 +123,135 @@ func (win *Window) WindowSetName(title string) error {
 	return nil
 }
 
-func (win *Window) eventLoop() {
-	for win.running {
-		pollevent := sdl.PollEvent()
-		if pollevent == nil {
-			time.Sleep(100 * time.Millisecond)
-			continue
-		}
-		switch evt := pollevent.(type) {
-		case *sdl.QuitEvent:
-			win.Events <- &WindowClose{}
-		case *sdl.WindowEvent:
-			switch evt.Event {
-			case sdl.WINDOWEVENT_ENTER:
-				win.Events <- &MouseEnter{}
-			case sdl.WINDOWEVENT_LEAVE:
-				win.Events <- &MouseLeave{}
-			case sdl.WINDOWEVENT_RESIZED:
-				win.Events <- &WindowResize{
-					Rect: image.Rect(0, 0, int(evt.Data1), int(evt.Data2)),
-				}
-			case sdl.WINDOWEVENT_EXPOSED:
-				w, h := win.window.GetSize()
-				win.Events <- &WindowExpose{
-					Rect: image.Rect(0, 0, int(w), int(h)),
-				}
+func (win *Window) PollEvent() {
+	pollevent := sdl.PollEvent()
+	if pollevent == nil {
+		// time.Sleep(10 * time.Millisecond)
+		return
+	}
+	switch evt := pollevent.(type) {
+	case *sdl.QuitEvent:
+		win.Events <- &WindowClose{}
+	case *sdl.WindowEvent:
+		switch evt.Event {
+		case sdl.WINDOWEVENT_ENTER:
+			win.Events <- &MouseEnter{}
+		case sdl.WINDOWEVENT_LEAVE:
+			win.Events <- &MouseLeave{}
+		case sdl.WINDOWEVENT_RESIZED:
+			win.Events <- &WindowResize{
+				Rect: image.Rect(0, 0, int(evt.Data1), int(evt.Data2)),
 			}
-		case *sdl.MouseButtonEvent:
-			pnt := image.Point{int(evt.X), int(evt.Y)}
-			key := NewKey(KeyMouse)
-			key.Mouse = 1 << (int(evt.Button) - 1)
+		case sdl.WINDOWEVENT_EXPOSED:
+			w, h := win.window.GetSize()
+			win.Events <- &WindowExpose{
+				Rect: image.Rect(0, 0, int(w), int(h)),
+			}
+		}
+	case *sdl.MouseButtonEvent:
+		pnt := image.Point{int(evt.X), int(evt.Y)}
+		key := NewKey(KeyMouse)
+		key.Mouse = 1 << (int(evt.Button) - 1)
 
-			if evt.State == sdl.PRESSED {
-				win.Events <- &MouseClick{
-					Point: pnt,
-					Count: int(evt.Clicks),
-					Key:   key,
-				}
-				win.Events <- &MouseDown{
-					Point: pnt,
-					Key:   key,
+		if evt.State == sdl.PRESSED {
+			win.Events <- &MouseClick{
+				Point: pnt,
+				Count: int(evt.Clicks),
+				Key:   key,
+			}
+			win.Events <- &MouseDown{
+				Point: pnt,
+				Key:   key,
+			}
+		} else {
+			win.Events <- &MouseUp{
+				Point: pnt,
+				Key:   key,
+			}
+		}
+	case *sdl.MouseWheelEvent:
+		win.Events <- &MouseWheel{
+			X: int(evt.X),
+			Y: int(evt.Y),
+		}
+	case *sdl.MouseMotionEvent:
+		pnt := image.Point{int(evt.X), int(evt.Y)}
+		key := NewKey(KeyMouse)
+		key.Mouse = 1 << (evt.State - 1)
+
+		defer func() {
+			win.dragStart = pnt
+		}()
+
+		if evt.State != 0 {
+			if !win.dragging {
+				if win.dragStart.X == 0 && win.dragStart.Y == 0 {
+					win.dragStart = pnt
+				} else {
+					win.dragging = true
+
+					win.Events <- &MouseDragStart{
+						Point:  win.dragStart,
+						Point2: pnt,
+						Key:    key,
+					}
+					return
 				}
 			} else {
-				win.Events <- &MouseUp{
+				win.Events <- &MouseDragMove{
 					Point: pnt,
 					Key:   key,
 				}
+				return
 			}
-		case *sdl.MouseWheelEvent:
-			win.Events <- &MouseWheel{
-				X: int(evt.X),
-				Y: int(evt.Y),
+		} else if win.dragging {
+			win.dragging = false
+			win.Events <- &MouseDragEnd{
+				Point: pnt,
+				Key:   key,
 			}
-		case *sdl.MouseMotionEvent:
-			pnt := image.Point{int(evt.X), int(evt.Y)}
-			key := NewKey(KeyMouse)
-			key.Mouse = 1 << (evt.State - 1)
+			return
+		}
 
-			defer func() {
-				win.dragStart = pnt
-			}()
-
-			if evt.State != 0 {
-				if !win.dragging {
-					if win.dragStart.X == 0 && win.dragStart.Y == 0 {
-						win.dragStart = pnt
-					} else {
-						win.dragging = true
-
-						win.Events <- &MouseDragStart{
-							Point:  win.dragStart,
-							Point2: pnt,
-							Key:    key,
-						}
-						return
-					}
-				} else {
-					win.Events <- &MouseDragMove{
-						Point: pnt,
-						Key:   key,
-					}
-					continue
+		now := time.Now()
+		if now.Sub(win.lastmotion) >= 500*time.Millisecond {
+			win.lastmotion = now
+			win.Events <- &MouseMove{
+				Point: pnt,
+				Key:   key,
+			}
+		}
+	case *sdl.KeyboardEvent:
+		/*
+			from SDL2:src/events/SDL_keyboard.c:1048
+			do not send textinput when text starts with
+			->  (unsigned char)*text < ' ' || *text == 127
+			thats for sure!
+			It seems like it does not send textinput when
+			ctrl is pressed.
+		*/
+		win.lastkey = NewKeyFromKeysym(evt.Keysym)
+		char := rune(evt.Keysym.Sym)
+		if !unicode.IsPrint(char) || evt.Keysym.Mod&sdl.KMOD_CTRL != 0 {
+			if evt.State == sdl.PRESSED {
+				win.Events <- &KeyDown{
+					Key: win.lastkey,
 				}
-			} else if win.dragging {
-				win.dragging = false
-				win.Events <- &MouseDragEnd{
-					Point: pnt,
-					Key:   key,
-				}
-				continue
-			}
-
-			now := time.Now()
-			if now.Sub(win.lastmotion) >= 500*time.Millisecond {
-				win.lastmotion = now
-				win.Events <- &MouseMove{
-					Point: pnt,
-					Key:   key,
+			} else {
+				win.Events <- &KeyUp{
+					Key: win.lastkey,
 				}
 			}
-		case *sdl.KeyboardEvent:
-			/*
-				from SDL2:src/events/SDL_keyboard.c:1048
-				do not send textinput when text starts with
-				->  (unsigned char)*text < ' ' || *text == 127
-				thats for sure!
-				It seems like it does not send textinput when
-				ctrl is pressed.
-			*/
-			win.lastkey = NewKeyFromKeysym(evt.Keysym)
-			char := rune(evt.Keysym.Sym)
-			if !unicode.IsPrint(char) || evt.Keysym.Mod&sdl.KMOD_CTRL != 0 {
-				if evt.State == sdl.PRESSED {
-					win.Events <- &KeyDown{
-						Key: win.lastkey,
-					}
-				} else {
-					win.Events <- &KeyUp{
-						Key: win.lastkey,
-					}
-				}
-			}
-		case *sdl.TextInputEvent:
-			win.lastkey.Rune, _ = utf8.DecodeRune(evt.Text[:])
+		}
+	case *sdl.TextInputEvent:
+		win.lastkey.Rune, _ = utf8.DecodeRune(evt.Text[:])
 
-			win.Events <- &KeyUp{
-				Key: win.lastkey,
-			}
+		win.Events <- &KeyUp{
+			Key: win.lastkey,
+		}
 
-			win.Events <- &KeyDown{
-				Key: win.lastkey,
-			}
+		win.Events <- &KeyDown{
+			Key: win.lastkey,
 		}
 	}
 }
