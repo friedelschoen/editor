@@ -11,19 +11,28 @@ import (
 	"testing"
 
 	"github.com/jmigpin/editor/util/drawutil"
-	"github.com/jmigpin/editor/util/fontutil"
 	"github.com/jmigpin/editor/util/iout/iorw"
 	"golang.org/x/image/colornames"
+	"golang.org/x/image/font"
+	"golang.org/x/image/font/gofont/goregular"
 	"golang.org/x/image/font/opentype"
 )
 
+var face font.Face
+
 func init() {
 	useSpaceForMargin = true
+
+	font, err := opentype.Parse(goregular.TTF)
+	if err != nil {
+		panic(err)
+	}
+	face, err = opentype.NewFace(font, nil)
 }
 
 func TestEmpty(t *testing.T) {
 	d := New()
-	d.SetFontFace(fontutil.DefaultFontFace())
+	d.SetFontFace(face)
 	d.SetBounds(image.Rect(0, 0, 100, 100))
 
 	s := ""
@@ -38,7 +47,7 @@ func TestEmpty(t *testing.T) {
 
 func TestNLinesStartIndex1(t *testing.T) {
 	d := New()
-	d.SetFontFace(fontutil.DefaultFontFace())
+	d.SetFontFace(face)
 	d.SetBounds(image.Rect(0, 0, 100, 100))
 
 	s := "111\n222\n333"
@@ -400,7 +409,6 @@ func newTestDrawer() (*Drawer, draw.Image) {
 }
 
 func newTestDrawerRect(rect image.Rectangle) (*Drawer, draw.Image) {
-	face := newTestFace()
 	d := New()
 	d.SetFontFace(face)
 	d.SetBounds(rect)
@@ -413,13 +421,6 @@ func newTestDrawerRect(rect image.Rectangle) (*Drawer, draw.Image) {
 
 	img := image.NewRGBA(rect)
 	return d, img
-}
-
-func newTestFace() *fontutil.FontFace {
-	f := fontutil.DefaultFont()
-	opt := opentype.FaceOptions{DPI: 100}
-	return f.FontFace(opt)
-
 }
 
 //----------

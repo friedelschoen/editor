@@ -9,9 +9,10 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/jmigpin/editor/util/drawutil"
-	"github.com/jmigpin/editor/util/fontutil"
 	"github.com/jmigpin/editor/util/iout/iorw"
 	"github.com/jmigpin/editor/util/mathutil"
+	"golang.org/x/image/font"
+	"golang.org/x/image/font/opentype"
 )
 
 const (
@@ -22,7 +23,7 @@ const (
 type Drawer struct {
 	reader iorw.ReaderAt
 
-	fface            *fontutil.FontFace
+	fface            font.Face
 	lineHeight       mathutil.Intf
 	offset           image.Point
 	bounds           image.Rectangle
@@ -144,7 +145,8 @@ type State struct {
 		kern, advance mathutil.Intf
 		extra         int
 		startRi       int
-		fface         *fontutil.FontFace
+		fopts         *opentype.FaceOptions
+		fface         font.Face
 	}
 	measure struct {
 		penMax mathutil.PointIntf
@@ -287,13 +289,13 @@ func (d *Drawer) ContentChanged() {
 
 //----------
 
-func (d *Drawer) FontFace() *fontutil.FontFace { return d.fface }
-func (d *Drawer) SetFontFace(ff *fontutil.FontFace) {
+func (d *Drawer) FontFace() font.Face { return d.fface }
+func (d *Drawer) SetFontFace(ff font.Face) {
 	if ff == d.fface {
 		return
 	}
 	d.fface = ff
-	d.lineHeight = mathutil.Intf2(d.fface.LineHeight())
+	d.lineHeight = mathutil.Intf2(d.fface.Metrics().Height)
 
 	d.opt.measure.updated = false
 }
@@ -302,7 +304,7 @@ func (d *Drawer) LineHeight() int {
 	if d.fface == nil {
 		return 0
 	}
-	return d.fface.LineHeightInt()
+	return d.fface.Metrics().Height.Ceil()
 }
 
 func (d *Drawer) SetFg(fg color.Color) { d.fg = fg }

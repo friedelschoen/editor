@@ -7,9 +7,10 @@ import (
 	"image/color"
 	"strings"
 
-	"github.com/jmigpin/editor/util/fontutil"
+	"github.com/jmigpin/editor/util/drawutil/drawer4"
 	"github.com/jmigpin/editor/util/imageutil"
 	"github.com/jmigpin/editor/util/uiutil/event"
+	"golang.org/x/image/font"
 )
 
 type Node interface {
@@ -540,20 +541,20 @@ func (en *EmbedNode) treeThemePaletteColor2(name string) (color.Color, bool) {
 
 //----------
 
-func (en *EmbedNode) SetThemeFontFace(ff *fontutil.FontFace) {
+func (en *EmbedNode) SetThemeFontFace(ff font.Face) {
 	defer en.themeChangeCallback()
 	defer en.MarkNeedsLayout()
 
 	en.theme.SetFontFace(ff)
 }
 
-func (en *EmbedNode) TreeThemeFontFace() *fontutil.FontFace {
+func (en *EmbedNode) TreeThemeFontFace() font.Face {
 	for n := en; n != nil; n = n.Parent {
 		if n.theme.FontFace != nil {
 			return n.theme.FontFace
 		}
 	}
-	return fontutil.DefaultFontFace()
+	return drawer4.FontFace
 }
 
 //----------

@@ -26,8 +26,6 @@ func NewUI(winName string) (*UI, error) {
 	// set theme before root init
 	c1 := &ColorThemeCycler
 	c1.Set(c1.CurName, ui.Root)
-	c2 := &FontThemeCycler
-	c2.Set(c2.CurName, ui.Root)
 
 	// build ui - needs ui.BasicUI to be set
 	ui.Root.Init()

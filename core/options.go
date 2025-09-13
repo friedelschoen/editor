@@ -9,122 +9,38 @@ import (
 )
 
 type Options struct {
-	Font        string
-	FontSize    float64
-	FontHinting string
-	DPI         float64
+	Font string `json:"font"`
 
-	TabWidth           int
-	WrapLineRune       int
-	CarriageReturnRune int
+	TabWidth           int    `json:"tabwidth"`
+	WrapLineRune       string `json:"wrapline-rune"`
+	CarriageReturnRune string `json:"cr-rune"`
 
-	ColorTheme     string
-	CommentsColor  int
-	StringsColor   int
-	ScrollBarWidth int
-	ScrollBarLeft  bool
-	Shadows        bool
+	ColorTheme     string `json:"colortheme"`
+	CommentsColor  int    `json:"comment-color"`
+	StringsColor   int    `json:"string-color"`
+	ScrollBarWidth int    `json:"scrollbar-width"`
+	ScrollBarLeft  bool   `json:"scrollbar-left"`
+	Shadows        bool   `json:"shadows"`
 
 	SessionName string
 	Filenames   []string
 
-	UseMultiKey bool
+	UseMultiKey bool `json:"multikey"`
 
-	Plugins string
+	Plugins []string `json:"plugins"`
 
-	LSProtos     RegistrationsOpt
-	PreSaveHooks PreSaveHooksOpt
+	LSProtos     []lsproto.Registration
+	PreSaveHooks []PreSaveHook
 
 	ZipSessionsFile bool
 }
 
 //----------
 
-// implements flag.Value interface
-type RegistrationsOpt struct {
-	regs []*lsproto.Registration
-}
-
-func (ro *RegistrationsOpt) Set(s string) error {
-	reg, err := lsproto.NewRegistration(s)
-	if err != nil {
-		return err
-	}
-	ro.regs = append(ro.regs, reg)
-	return nil
-}
-
-func (ro *RegistrationsOpt) MustSet(s string) {
-	if err := ro.Set(s); err != nil {
-		panic(err)
-	}
-}
-
-func (ro *RegistrationsOpt) String() string {
-	u := []string{}
-	for _, reg := range ro.regs {
-		u = append(u, reg.String())
-	}
-	return fmt.Sprintf("%v", strings.Join(u, "\n"))
-}
-
-//----------
-
-// implements flag.Value interface
-type PreSaveHooksOpt struct {
-	regs []*PreSaveHook
-}
-
-func (o *PreSaveHooksOpt) Set(s string) error {
-	reg, err := newPreSaveHook(s)
-	if err != nil {
-		return err
-	}
-	o.regs = append(o.regs, reg)
-	return nil
-}
-
-func (o *PreSaveHooksOpt) MustSet(s string) {
-	if err := o.Set(s); err != nil {
-		panic(err)
-	}
-}
-
-func (o *PreSaveHooksOpt) String() string {
-	u := []string{}
-	for _, reg := range o.regs {
-		u = append(u, reg.String())
-	}
-	return fmt.Sprintf("%v", strings.Join(u, "\n"))
-}
-
-//----------
-
 type PreSaveHook struct {
-	Language string
-	Exts     []string
-	Cmd      string
-}
-
-func newPreSaveHook(s string) (*PreSaveHook, error) {
-	fields, err := parseutil.ParseFields(s, ',')
-	if err != nil {
-		return nil, err
-	}
-	minFields := 3
-	if len(fields) != minFields {
-		return nil, fmt.Errorf("expecting %v fields: %v", minFields, len(fields))
-	}
-
-	r := &PreSaveHook{}
-	r.Language = fields[0]
-	if r.Language == "" {
-		return nil, fmt.Errorf("empty language")
-	}
-	r.Exts = strings.Split(fields[1], " ")
-	r.Cmd = fields[2]
-
-	return r, nil
+	Language string   `json:"language"`
+	Exts     []string `json:"extensions"`
+	Cmd      string   `json:"command"`
 }
 
 func (h *PreSaveHook) String() string {

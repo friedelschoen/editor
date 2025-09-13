@@ -1,20 +1,29 @@
 package drawer4
 
 import (
+	"fmt"
+	"os"
 	"sync"
 
-	"github.com/jmigpin/editor/util/fontutil"
 	"github.com/jmigpin/editor/util/mathutil"
+	"golang.org/x/image/font"
+	"golang.org/x/image/font/opentype"
 )
 
 type Annotations struct {
 	d          *Drawer
-	notesFFace *fontutil.FontFace
+	notesFFace font.Face
 }
 
 func (ann *Annotations) Init() {
-	size2 := ann.d.st.runeR.fface.Size * 0.70
-	ann.notesFFace = ann.d.st.runeR.fface.Font.FontFace2(size2)
+	opts := FontOptions
+	opts.Size *= 0.70
+	var err error
+	ann.notesFFace, err = opentype.NewFace(Font, opts)
+	if err != nil {
+		fmt.Print("unable to initialize fontface: %v\n", err)
+		os.Exit(2)
+	}
 
 	if ann.d.Opt.Annotations.Entries != nil {
 		ann.d.Opt.Annotations.Entries.RLock()
@@ -177,7 +186,7 @@ func (ann *Annotations) insertAnnotationString(s string, eindex int, colorizeIfI
 	return ann.d.iters.runeR.insertExtraString(s)
 }
 
-func (ann *Annotations) insertNotesString(fface *fontutil.FontFace, s string) bool {
+func (ann *Annotations) insertNotesString(fface font.Face, s string) bool {
 	// keep/restore color state
 	keep := ann.d.st.curColors
 	defer func() { ann.d.st.curColors = keep }()

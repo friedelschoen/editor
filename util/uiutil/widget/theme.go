@@ -3,8 +3,8 @@ package widget
 import (
 	"image/color"
 
-	"github.com/jmigpin/editor/util/fontutil"
 	"github.com/jmigpin/editor/util/imageutil"
+	"golang.org/x/image/font"
 )
 
 //----------
@@ -50,7 +50,7 @@ var DefaultPalette = Palette{
 //----------
 
 type Theme struct {
-	FontFace          *fontutil.FontFace
+	FontFace          font.Face
 	Palette           Palette
 	PaletteNamePrefix string
 }
@@ -70,7 +70,7 @@ func (t *Theme) ClearIfEmpty() {
 //----------
 
 // Can be set to nil to erase.
-func (t *Theme) SetFontFace(ff *fontutil.FontFace) {
+func (t *Theme) SetFontFace(ff font.Face) {
 	t.FontFace = ff
 	t.ClearIfEmpty()
 }

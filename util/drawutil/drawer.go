@@ -5,8 +5,8 @@ import (
 	"image/color"
 	"image/draw"
 
-	"github.com/jmigpin/editor/util/fontutil"
 	"github.com/jmigpin/editor/util/iout/iorw"
+	"golang.org/x/image/font"
 )
 
 type Drawer interface {
@@ -14,8 +14,8 @@ type Drawer interface {
 	SetReader(iorw.ReaderAt)
 	ContentChanged()
 
-	FontFace() *fontutil.FontFace
-	SetFontFace(*fontutil.FontFace)
+	FontFace() font.Face
+	SetFontFace(font.Face)
 	LineHeight() int
 	SetFg(color.Color)
 

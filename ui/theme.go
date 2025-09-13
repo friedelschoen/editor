@@ -4,15 +4,10 @@ import (
 	"fmt"
 	"image"
 	"image/color"
-	"io/ioutil"
 
-	"github.com/jmigpin/editor/util/fontutil"
 	"github.com/jmigpin/editor/util/imageutil"
 	"github.com/jmigpin/editor/util/uiutil/widget"
-	"golang.org/x/image/font/gofont/gomedium"
-	"golang.org/x/image/font/gofont/gomono"
-	"golang.org/x/image/font/gofont/goregular"
-	"golang.org/x/image/font/opentype"
+	"golang.org/x/image/font"
 )
 
 var ScrollBarLeft = true
@@ -223,98 +218,6 @@ var ColorThemeCycler cycler = cycler{
 
 //----------
 
-var FontThemeCycler cycler = cycler{
-	entries: []cycleEntry{
-		{"regular", regularThemeFont},
-		{"medium", mediumThemeFont},
-		{"mono", monoThemeFont},
-	},
-}
-
-//----------
-
-func regularThemeFont(node widget.Node) {
-	loadThemeFont("regular", node)
-}
-func mediumThemeFont(node widget.Node) {
-	loadThemeFont("medium", node)
-}
-func monoThemeFont(node widget.Node) {
-	loadThemeFont("mono", node)
-}
-
-//----------
-
-func AddUserFont(filename string) error {
-	// test now if it will load when needed
-	_, err := ThemeFontFace(filename)
-	if err != nil {
-		return err
-	}
-
-	// prepare callback and add to font cycler
-	f := func(node widget.Node) {
-		_ = loadThemeFont(filename, node)
-	}
-	e := cycleEntry{filename, f}
-	FontThemeCycler.entries = append(FontThemeCycler.entries, e)
-	FontThemeCycler.CurName = filename
-	return nil
-}
-
-//----------
-
-func loadThemeFont(name string, node widget.Node) error {
-	// close previous faces
-	ff0 := node.Embed().TreeThemeFontFace()
-	ff0.Font.ClearFacesCache()
-
-	ff, err := ThemeFontFace(name)
-	if err != nil {
-		return err
-	}
-	node.Embed().SetThemeFontFace(ff)
-	return nil
-}
-
-//----------
-
-var FontFaceOptions opentype.FaceOptions
-
-func ThemeFontFace(name string) (*fontutil.FontFace, error) {
-	return ThemeFontFace2(name, 0)
-}
-func ThemeFontFace2(name string, size float64) (*fontutil.FontFace, error) {
-	b, err := fontBytes(name)
-	if err != nil {
-		return nil, err
-	}
-	f, err := fontutil.FontsMan.Font(b)
-	if err != nil {
-		return nil, err
-	}
-	opt := FontFaceOptions // copy
-	if size != 0 {
-		opt.Size = size
-	}
-	return f.FontFace(opt), nil
-}
-
-func fontBytes(name string) ([]byte, error) {
-	switch name {
-	case "regular":
-		return goregular.TTF, nil
-	case "medium":
-		return gomedium.TTF, nil
-	case "mono":
-		return gomono.TTF, nil
-	default:
-		return ioutil.ReadFile(name)
-	}
-}
-
-//----------
-
 type cycler struct {
 	CurName string
 	entries []cycleEntry
@@ -371,27 +274,26 @@ var UIThemeUtil uiThemeUtil
 
 type uiThemeUtil struct{}
 
-func (uitu *uiThemeUtil) RowMinimumHeight(ff *fontutil.FontFace) int {
-	return ff.LineHeightInt()
+func (uitu *uiThemeUtil) RowMinimumHeight(ff font.Face) int {
+	return ff.Metrics().Height.Ceil()
 }
-func (uitu *uiThemeUtil) RowSquareSize(ff *fontutil.FontFace) image.Point {
-	lh := ff.LineHeightFloat()
+func (uitu *uiThemeUtil) RowSquareSize(ff font.Face) image.Point {
+	lh := ff.Metrics().Height.Ceil()
 	w := int(lh * 3 / 4)
 	return image.Point{w, int(lh)}
 }
 
-func (uitu *uiThemeUtil) GetScrollBarWidth(ff *fontutil.FontFace) int {
+func (uitu *uiThemeUtil) GetScrollBarWidth(ff font.Face) int {
 	if ScrollBarWidth != 0 {
 		return ScrollBarWidth
 	}
-	lh := ff.LineHeightFloat()
-	w := int(lh * 3 / 4)
-	return w
+	w := ff.Metrics().Height * 3 / 4
+	return w.Ceil()
 }
 
-func (uitu *uiThemeUtil) ShadowHeight(ff *fontutil.FontFace) int {
-	lh := ff.LineHeightFloat()
-	return int(lh * 2 / 5)
+func (uitu *uiThemeUtil) ShadowHeight(ff font.Face) int {
+	w := ff.Metrics().Height * 2 / 5
+	return w.Ceil()
 }
 
 //----------

@@ -17,6 +17,7 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/jmigpin/editor/util/iout"
 	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/jmigpin/editor/util/osutil"
 	"github.com/jmigpin/editor/util/parseutil"
 	"github.com/jmigpin/editor/util/testutil"
 )
@@ -348,6 +349,79 @@ func lspCallHierarchy(st *testutil.ST, args []string, man *Manager) error {
 //----------
 //----------
 
+func goplsRegistration(tcp bool, trace bool, stderr bool) Registration {
+	cmd := osutil.ExecName("gopls")
+	if trace {
+		cmd += " -v"
+	}
+	cmd += " serve"
+	if trace {
+		cmd += " -rpc.trace"
+	}
+	net := "stdio"
+	if tcp {
+		net = "tcp"
+		cmd += " -listen={{.Addr}}"
+	}
+
+	var errOut []string
+	if stderr {
+		errOut = append(errOut, "stderr")
+		//errOut = ",stderrmanmsg" // DEBUG
+	}
+
+	return Registration{
+		Language: "go",
+		Exts:     []string{".go"},
+		Network:  net,
+		Cmd:      cmd,
+		Optional: errOut,
+	}
+	// return fmt.Sprintf("go,.go,%v,%q%s", net, cmd, errOut)
+}
+
+func cLangRegistration(alternateExe string, stderr bool) Registration {
+	ext := []string{".c", ".h", ".cpp", ".hpp", ".cc"}
+	exe := "clangd"
+	if alternateExe != "" {
+		exe = alternateExe
+	}
+	cmd := osutil.ExecName(exe)
+	var errOut []string
+	if stderr {
+		errOut = append(errOut, "stderr")
+	}
+	return Registration{
+		Language: "cpp",
+		Exts:     ext,
+		Network:  "stdio",
+		Cmd:      cmd,
+		Optional: errOut,
+	}
+}
+
+func pylspRegistration(tcp bool, stderr bool) Registration {
+	cmd := osutil.ExecName("pylsp")
+	net := "stdio"
+	if tcp {
+		net = "tcp"
+		cmd += " --tcp"
+		cmd += " --host={{.Host}}"
+		cmd += " --port={{.Port}}"
+	}
+	var errOut []string
+	if stderr {
+		errOut = append(errOut, "stderr")
+	}
+	return Registration{
+		Language: "python",
+		Exts:     []string{".py"},
+		Network:  net,
+		Cmd:      cmd,
+		Optional: errOut,
+	}
+}
+
 func newTestManager(t *testing.T) *Manager {
 	t.Helper()
 
@@ -365,11 +439,11 @@ func newTestManager(t *testing.T) *Manager {
 	man.serverWrapW = w
 
 	// lang registrations
-	u := []string{
+	u := []Registration{
 		// WARNING: can't use stdio with stderr to be able to run scripts collectlog (use tcp if available)
 
 		//GoplsRegistration(false, false,logTestVerbose()),
-		GoplsRegistration(true, false, verboseLog()),
+		goplsRegistration(true, false, verboseLog()),
 
 		//cLangRegistration("", false),
 		//cLangRegistration("", logTestVerbose()),
@@ -378,15 +452,11 @@ func newTestManager(t *testing.T) *Manager {
 		pylspRegistration(true, false),
 
 		// dummy
-		"dummy1,.dummy1,stdio,dummy_exec",
-		"dummy2,.dummy2,tcp,dummy_exec",
+		Registration{"dummy1", []string{".dummy1"}, "stdio", "dummy_exec", nil},
+		Registration{"dummy2", []string{".dummy2"}, "tcp", "dummy_exec", nil},
 	}
-	for _, s := range u {
-		reg, err := NewRegistration(s)
-		if err != nil {
-			panic(err)
-		}
-		if err := man.Register(reg); err != nil {
+	for _, reg := range u {
+		if err := man.Register(&reg); err != nil {
 			panic(err)
 		}
 	}

@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"strconv"
 	"strings"
 	"sync"
 
@@ -413,18 +412,6 @@ func (erow *ERow) ToolbarSetStrAfterNameClearHistory(s string) {
 func (erow *ERow) parseToolbarVars() {
 	vmap := toolbarparser.ParseVars(&erow.TbData)
 
-	// $font
-	clear := true
-	if v, ok := vmap["$font"]; ok {
-		err := erow.setVarFontTheme(v)
-		if err == nil {
-			clear = false
-		}
-	}
-	if clear {
-		erow.Row.TextArea.SetThemeFontFace(nil)
-	}
-
 	// $terminal
 	erow.terminalOpt = terminalOpt{}
 	if erow.Info.IsDir() {
@@ -453,29 +440,30 @@ func (erow *ERow) parseToolbarVars() {
 	}
 }
 
-func (erow *ERow) setVarFontTheme(s string) error {
-	w := strings.SplitN(s, ",", 2)
-	name := w[0]
+// func (erow *ERow) setVarFontTheme(s string) error {
 
-	// font size arg
-	size := float64(0)
-	if len(w) > 1 {
-		v, err := strconv.ParseFloat(w[1], 64)
-		if err != nil {
-			// commented: ignore error
-			//return err
-		} else {
-			size = v
-		}
-	}
+// 	w := strings.SplitN(s, ",", 2)
+// 	name := w[0]
 
-	ff, err := ui.ThemeFontFace2(name, size)
-	if err != nil {
-		return err
-	}
-	erow.Row.TextArea.SetThemeFontFace(ff)
-	return nil
-}
+// 	// font size arg
+// 	size := float64(0)
+// 	if len(w) > 1 {
+// 		v, err := strconv.ParseFloat(w[1], 64)
+// 		if err != nil {
+// 			// commented: ignore error
+// 			//return err
+// 		} else {
+// 			size = v
+// 		}
+// 	}
+
+// 	ff, err := ui.ThemeFontFace2(name, size)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	erow.Row.TextArea.SetThemeFontFace(ff)
+// 	return nil
+// }
 
 //----------
 

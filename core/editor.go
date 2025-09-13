@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/jmigpin/editor/core/fswatcher"
 	"github.com/jmigpin/editor/core/lsproto"
@@ -25,7 +26,7 @@ import (
 	"github.com/jmigpin/editor/util/osutil"
 	"github.com/jmigpin/editor/util/uiutil/event"
 	"github.com/jmigpin/editor/util/uiutil/widget"
-	"golang.org/x/image/font"
+	"golang.org/x/image/font/opentype"
 )
 
 type Editor struct {
@@ -43,7 +44,7 @@ type Editor struct {
 	dndh         *DndHandler
 	ifbw         *InfoFloatBoxWrap
 	erowInfos    map[string]*ERowInfo // use ed.ERowInfo*() to access
-	preSaveHooks []*PreSaveHook
+	preSaveHooks []PreSaveHook
 
 	zipSessionsFile bool
 }
@@ -124,40 +125,13 @@ func (ed *Editor) init(opt *Options) error {
 func (ed *Editor) initLSProto(opt *Options) {
 	// language server protocol manager
 	ed.LSProtoMan = lsproto.NewManager(ed.Message)
-	for _, reg := range opt.LSProtos.regs {
-		ed.LSProtoMan.Register(reg)
-	}
-
-	// NOTE: argument for not having auto-registration: don't auto add since the lsproto server could have issues, and auto-adding doesn't allow the user to have a choice to using directly some other option (like a plugin)
-	// NOTE: unlikely to be using a plugin for golang since gopls is fairly stable now, allow auto registration at least for ".go" if not present
-
-	// auto setup gopls if there is no handler for ".go" files
-	_, err := ed.LSProtoMan.LangManager("a.go")
-	if err != nil { // no registration exists
-		s := lsproto.GoplsRegistration(false, false, false)
-		reg, err := lsproto.NewRegistration(s)
-		if err != nil {
-			panic(err)
-		}
-		_ = ed.LSProtoMan.Register(reg)
+	for _, reg := range opt.LSProtos {
+		ed.LSProtoMan.Register(&reg)
 	}
 }
 
 func (ed *Editor) initPreSaveHooks(opt *Options) {
-	// auto register "goimports" if no entry exists for the "go" language
-	found := false
-	for _, r := range opt.PreSaveHooks.regs {
-		if r.Language == "go" {
-			found = true
-			break
-		}
-	}
-	if !found {
-		exec := osutil.ExecName("goimports")
-		opt.PreSaveHooks.MustSet("go,.go," + exec)
-	}
-
-	ed.preSaveHooks = opt.PreSaveHooks.regs
+	ed.preSaveHooks = opt.PreSaveHooks
 }
 
 //----------
@@ -484,9 +458,9 @@ func (ed *Editor) setupInitialRows(opt *Options) {
 //----------
 
 func (ed *Editor) setupTheme(opt *Options) {
-	drawer4.WrapLineRune = rune(opt.WrapLineRune)
+	drawer4.WrapLineRune, _ = utf8.DecodeRuneInString(opt.WrapLineRune)
 	fontutil.TabWidth = opt.TabWidth
-	fontutil.CarriageReturnRune = rune(opt.CarriageReturnRune)
+	fontutil.CarriageReturnRune, _ = utf8.DecodeRuneInString(opt.CarriageReturnRune)
 	ui.ScrollBarLeft = opt.ScrollBarLeft
 	ui.ScrollBarWidth = opt.ScrollBarWidth
 	ui.ShadowsOn = opt.Shadows
@@ -508,34 +482,26 @@ func (ed *Editor) setupTheme(opt *Options) {
 		ui.TextAreaStringsColor = imageutil.RgbaFromInt(opt.StringsColor)
 	}
 
-	// font options
-	ui.FontFaceOptions.DPI = opt.DPI
-	ui.FontFaceOptions.Size = opt.FontSize
-	switch opt.FontHinting {
-	case "none":
-		ui.FontFaceOptions.Hinting = font.HintingNone
-	case "vertical":
-		ui.FontFaceOptions.Hinting = font.HintingVertical
-	case "full":
-		ui.FontFaceOptions.Hinting = font.HintingFull
-	default:
-		fmt.Fprintf(os.Stderr, "unknown font hinting: %v\n", opt.FontHinting)
+	fontpath, fontopts, err := fontutil.FontMatch(opt.Font)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "invalid font-string: %v\n", err)
 		os.Exit(2)
 	}
-
-	// font theme
-	if _, ok := ui.FontThemeCycler.GetIndex(opt.Font); ok {
-		ui.FontThemeCycler.CurName = opt.Font
-	} else {
-		// font filename
-		err := ui.AddUserFont(opt.Font)
-		if err != nil {
-			// can't send error to UI since it's not created yet
-			log.Print(err)
-
-			// could fail and abort, but instead continue with a known font
-			ui.FontThemeCycler.CurName = "regular"
-		}
+	drawer4.FontOptions = fontopts
+	fontbytes, err := os.ReadFile(fontpath)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "cannot open font: %v\n", err)
+		os.Exit(2)
+	}
+	drawer4.Font, err = opentype.Parse(fontbytes)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "invalid font: %v\n", err)
+		os.Exit(2)
+	}
+	drawer4.FontFace, err = opentype.NewFace(drawer4.Font, drawer4.FontOptions)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "unable to create fontface: %v\n", err)
+		os.Exit(2)
 	}
 }
 
@@ -543,12 +509,7 @@ func (ed *Editor) setupTheme(opt *Options) {
 
 func (ed *Editor) setupPlugins(opt *Options) error {
 	ed.Plugins = NewPlugins(ed)
-	a := strings.Split(opt.Plugins, ",")
-	for _, s := range a {
-		s = strings.TrimSpace(s)
-		if s == "" {
-			continue
-		}
+	for _, s := range opt.Plugins {
 		err := ed.Plugins.AddPath(s)
 		if err != nil {
 			return err

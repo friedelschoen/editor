@@ -14,7 +14,7 @@ Source code editor in pure Go.
 
 - This is a simple but advanced source code editor
 - As the editor is being developed, the rules of how the UI interacts will become more well defined.
-- Primarily developed and tested in Linux. 
+- Primarily developed and tested in Linux.
 - Works in MS Windows (native or xserver) and MacOS (xserver).
 
 ## Features
@@ -23,7 +23,7 @@ Source code editor in pure Go.
 - No code coloring (except comments and strings).
 - Many TextArea utilities: undo/redo, replace, comment, ...
 - Handles big files.
-- Start external processes from the toolbar with a click, capturing the output to a row. 
+- Start external processes from the toolbar with a click, capturing the output to a row.
 - Drag and drop files/directories to the editor.
 - Detects if files opened are changed outside the editor.
 - Plugin support
@@ -61,7 +61,7 @@ go build -ldflags -H=windowsgui		# hides the console window, but cmds will popup
 go build -tags=xproto 			# (not native, needs an x11 server to run)
 ```
 
-### Instalation with go tooling to be used as a library 
+### Instalation with go tooling to be used as a library
 
 ```
 go get -u github.com/jmigpin/editor
@@ -69,9 +69,9 @@ go get -u github.com/jmigpin/editor
 
 Please take care to distinguish between versions and ensure "go get" is actually getting the version you want.
 
-This project is not using "vX" named directories. So version 3 is not in the directory "v3", nor is it named "*/v3" in imports. Versions are being updated using the same import path. The downside of this is that go websites (ex: pkg.go.dev) don't recognize versions tagged as 3 and above of this project. 
+This project is not using "vX" named directories. So version 3 is not in the directory "v3", nor is it named "*/v3" in imports. Versions are being updated using the same import path. The downside of this is that go websites (ex: pkg.go.dev) don't recognize versions tagged as 3 and above of this project.
 
-Currently a release will be tagged with two tags that refer to the same version (ex: 3.3.0 and 1.3.3 is the same version). 
+Currently a release will be tagged with two tags that refer to the same version (ex: 3.3.0 and 1.3.3 is the same version).
 
 Feel free to file an issue if you know of a better solution that doesn't require to use an import path of a directory that might not exist (case of using "vX" import paths).
 
@@ -172,7 +172,7 @@ The row toolbar has a square showing the state of the row.
 
 Commands in toolbars are separated by "|" (not to be confused with the shell pipe). If a shell pipe is needed it should be escaped with a backslash.
 
-All internal commands start with an **Uppercase letter**. Otherwise it tries to run an existent external program. 
+All internal commands start with an **Uppercase letter**. Otherwise it tries to run an existent external program.
 
 Examples:
 - `~/tmp/subdir/file1.txt | ls`
@@ -344,24 +344,24 @@ Usage of GoDebug run:
 		//godebug:annotatepackage
 		//godebug:annotatemodule
 		//godebug:annotateimport 	# use before an "import" line
-		
+
 		# or specify a target
 		//godebug:annotatefile:<file> 	# absolute or relative to the current
 		//godebug:annotatepackage:<pkg-path>
 		//godebug:annotatemodule:<pkg-path> 	# any pkg path inside will annotate all
-		
+
 		# example:
 		//godebug:annotatepackage:golang.org/x/tools/godoc/util
 		```
-		
-		The annotator will detect these comments and annotate accordingly. 
-		
-		Packages located in $GOROOT are not annotated. 
-		
+
+		The annotator will detect these comments and annotate accordingly.
+
+		Packages located in $GOROOT are not annotated.
+
 		Higher level `//godebug:*` comments will override lower ones.
-		
+
 		Example on how to bypass loops that would become too slow with debug messages being sent:
-		
+
 		```
 		//godebug:annotateoff	// don't annotate arg "v1"
 		func fn(v1 int){
@@ -379,9 +379,9 @@ Usage of GoDebug run:
 			println(a) // annotated, not part of the disabled block
 		}
 		```
-		
+
 		Also, to improve on the `String()` limitation:
-		
+
 		```
 		type myint int
 		func (v myint) String() string {
@@ -390,8 +390,8 @@ Usage of GoDebug run:
 		// would cause endless loop with godebug calling t.String() at arg `v`
 		// but not if it the annotations are off
 		//godebug:annotateoff
-		func fn(v myint) string { 
-			return fmt.Sprintf("%d", v) 
+		func fn(v myint) string {
+			return fmt.Sprintf("%d", v)
 		}
 		```
 - Limitations:
@@ -425,8 +425,8 @@ Usage of GoDebug run:
 
 ## Environment variables set available to external commands
 
-- `$edName`: row name. 
-- `$edDir`: row directory. 
+- `$edName`: row name.
+- `$edDir`: row directory.
 - `$edFileOffset`: filename with offset position from active row cursor. Ex: "filename:#123".
 - `$edFileLine`: index line from active row cursor (1-based). Ex: "12".
 - `$edFileWord`: word at index from active row cursor. Ex: "myvar". Usage ex: use `go doc $edFileWord` with cursor at a receiver variable.
@@ -452,7 +452,7 @@ Usage of GoDebug run:
 
 ## Plugins
 
-Plugins allow extra functionality to be added to the editor without changing the binary. 
+Plugins allow extra functionality to be added to the editor without changing the binary.
 
 A plugin can be compiled and run with (will output a `*.so`):
 ```
@@ -603,8 +603,8 @@ The measuring of space is done as follows:
 ## Notes
 
 - Notable projects that inspired many features:
-	- Oberon OS: https://www.youtube.com/watch?v=UTIJaKO0iqU 
-	- Acme editor: https://www.youtube.com/watch?v=dP1xVpMPn8M 
+	- Oberon OS: https://www.youtube.com/watch?v=UTIJaKO0iqU
+	- Acme editor: https://www.youtube.com/watch?v=dP1xVpMPn8M
 
 ## Releases
 - 2025/08/13: v3.12.0 (23 commmits)
