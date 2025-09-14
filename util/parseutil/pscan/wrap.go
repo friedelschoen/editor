@@ -324,12 +324,6 @@ func (w *Wrap) Integer() MFn {
 	}
 }
 
-func (w *Wrap) sign() MFn {
-	return func(pos int) (int, error) {
-		return w.M.sign(pos)
-	}
-}
-
 func (w *Wrap) Float() MFn {
 	return func(pos int) (int, error) {
 		return w.M.Float(pos)

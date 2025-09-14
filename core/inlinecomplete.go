@@ -145,27 +145,6 @@ func (ic *InlineComplete) insertCompletions2(comps []string, ta *ui.TextArea) (c
 
 //----------
 
-func (ic *InlineComplete) lsprotoCompletions(ctx context.Context, filename string, ta *ui.TextArea) ([]string, error) {
-	compList, err := ic.ed.LSProtoMan.TextDocumentCompletion(ctx, filename, ta.RW(), ta.CursorIndex())
-	if err != nil {
-		return nil, err
-	}
-	res := []string{}
-	for _, ci := range compList.Items {
-		// trim labels (clangd: has some entries prefixed with space)
-		label := strings.TrimSpace(ci.Label)
-
-		res = append(res, label)
-	}
-
-	//// NOTE: this loses the provided order
-	//sort.Strings(res)
-
-	return res, nil
-}
-
-//----------
-
 func (ic *InlineComplete) setAnnotationsMsg(ta *ui.TextArea, s string) {
 	entries := drawer4.NewAnnotationGroup(1)
 	entries.Anns[0].Offset = ta.CursorIndex()

@@ -262,14 +262,6 @@ func (p *print3) printCut(s string) {
 	}
 	p.print(s)
 }
-func (p *print3) printBytesCut(b []byte) {
-	if len(b) > p.avail {
-		p.printBytes(b[:p.avail])
-		p.print("...")
-		return
-	}
-	p.printBytes(b)
-}
 
 //----------
 
@@ -286,9 +278,6 @@ func (p *print3) printBytes(b []byte) {
 		return
 	}
 	p.avail -= n
-}
-func (p *print3) canPrint() bool {
-	return p.avail >= 0
 }
 func (p *print3) ToString() string {
 	return p.buf.String()

@@ -5,7 +5,6 @@ import (
 	"context"
 	"crypto/sha1"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sync"
@@ -96,7 +95,7 @@ func (info *ERowInfo) readFileInfo() {
 		info.name = info.name[:len(info.name)-len(n)] + n
 	}
 
-	// don't open devices, ioutil.readfile can hang the editor
+	// don't open devices, os.readfile can hang the editor
 	if info.fi.Mode()&os.ModeDevice > 0 {
 		info.fi = nil
 		info.fiErr = fmt.Errorf("file is a device")
@@ -335,7 +334,7 @@ func (info *ERowInfo) SaveFile() error {
 //----------
 
 func (info *ERowInfo) readFsFile() ([]byte, error) {
-	b, err := ioutil.ReadFile(info.Name())
+	b, err := os.ReadFile(info.Name())
 	if err != nil {
 		return nil, err
 	}

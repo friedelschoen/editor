@@ -76,7 +76,7 @@ func EmptyCtxFns() CtxFns {
 
 	u.Error = func(err error) { fmt.Println(err) }
 
-	u.GetPoint = func(int) image.Point { return image.ZP }
+	u.GetPoint = func(int) image.Point { return image.Point{} }
 	u.GetIndex = func(image.Point) int { return 0 }
 	u.LineHeight = func() int { return 0 }
 	u.CommentLineSym = func() any { return nil }

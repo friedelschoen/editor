@@ -215,7 +215,7 @@ func (p *ProtoServer) getPconn(ctx context.Context) (*ProtoConn, error) {
 	defer stop()
 
 	// wait for connection
-	for ; p.state.haveConn == false; p.state.Wait() {
+	for ; !p.state.haveConn; p.state.Wait() {
 		if p.state.closing {
 			return nil, p.state.closingErr
 		}
@@ -331,7 +331,7 @@ func (p *ProtoServer) monitorPConnContinueServing(fn func() (*ProtoConn, bool, e
 // - closing because there was an error that forces close/cleanup
 func (p *ProtoServer) closeWithCause(err error) error {
 	p.stateLkBcast(func() {
-		if p.state.closing == false {
+		if !p.state.closing {
 			p.state.closing = true
 			if err == nil {
 				panic("nil err")
@@ -469,7 +469,7 @@ func (p *ProtoClient) monitorPconnErr(err error) error {
 func (p *ProtoClient) closeWithCause(err error) error {
 	err1 := error(nil)
 	p.stateLkBcast(func() {
-		if p.state.closing == false {
+		if !p.state.closing {
 			p.state.closing = true
 			p.state.closingErr = err
 
@@ -545,7 +545,6 @@ func InitProtoSide(ctx context.Context, side ProtoSide, conn Conn) (*ProtoConn, 
 // 3. send request for start
 
 type ProtoEditorSide struct {
-	pconn   *ProtoConn
 	FData   *FilesDataMsg // received from exec side
 	fdataMu sync.Mutex
 
@@ -616,7 +615,6 @@ func (eds *ProtoEditorSide) readHeaders(v any) (bool, error) {
 // 3. receive request for start
 
 type ProtoExecSide struct {
-	pconn            *ProtoConn
 	FData            *FilesDataMsg // to be sent, can be discarded
 	NoWriteBuffering bool
 

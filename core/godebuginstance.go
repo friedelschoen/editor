@@ -959,16 +959,6 @@ func (di *GDDataIndex) updateFileEdited_noLock(info *ERowInfo, findex int) bool 
 	return edited
 }
 
-func (di *GDDataIndex) isFileEdited(filename string) bool {
-	di.RLock()
-	defer di.RUnlock()
-	findex, ok := di.FilesIndex(filename)
-	if !ok {
-		return false
-	}
-	return di.filesEdited[findex]
-}
-
 //----------
 
 func (di *GDDataIndex) selectedArrivalIndexFilename() (int, string, bool) {
@@ -987,12 +977,6 @@ func (di *GDDataIndex) arrivalIndexFilename(arrivalIndex int) (int, string, bool
 		}
 	}
 	return -1, "", false
-}
-func (di *GDDataIndex) filenameIsIndexed(filename string) bool {
-	di.RLock()
-	defer di.RUnlock()
-	_, ok := di.filesIndexM[filename]
-	return ok
 }
 
 //----------

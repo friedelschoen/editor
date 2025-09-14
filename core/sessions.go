@@ -94,7 +94,7 @@ func (ss *Sessions) saveToZip(zipFilename, filename string) error {
 	h := &zip.FileHeader{}
 	h.Name = filename
 	h.UncompressedSize64 = uint64(len(jsonBytes))
-	h.SetModTime(time.Now())
+	h.Modified = time.Now()
 	h.SetMode(0644)
 	h.Method = zip.Deflate
 

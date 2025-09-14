@@ -118,14 +118,6 @@ func (rd *RuleDot) String() string {
 
 type RuleDots []*RuleDot
 
-func (rds RuleDots) has(rd *RuleDot) bool {
-	for _, rd2 := range rds {
-		if *rd2 == *rd {
-			return true
-		}
-	}
-	return false
-}
 func (rds RuleDots) dotRulesSet() RuleSet {
 	rset := RuleSet{}
 	for _, rd := range rds {

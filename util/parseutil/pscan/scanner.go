@@ -109,14 +109,14 @@ func (sc *Scanner) SrcLineCol(pos int) (int, int, bool) {
 func (sc *Scanner) ReadByte(pos int) (byte, int, error) {
 	if sc.Reverse {
 		if pos <= 0 {
-			return 0, pos, SOF
+			return 0, pos, ErrSOF
 		}
 		pos -= 1
 		b := sc.SrcByte(pos)
 		return b, pos, nil
 	} else {
 		if pos >= sc.SrcMax() {
-			return 0, pos, EOF
+			return 0, pos, io.EOF
 		}
 		b := sc.SrcByte(pos)
 		pos += 1
@@ -128,14 +128,14 @@ func (sc *Scanner) ReadRune(pos int) (rune, int, error) {
 	if sc.Reverse {
 		ru, size := utf8.DecodeLastRune(sc.SrcTo(pos))
 		if size == 0 {
-			return 0, pos, SOF
+			return 0, pos, ErrSOF
 		}
 		pos -= size
 		return ru, pos, nil
 	} else {
 		ru, size := utf8.DecodeRune(sc.SrcFrom(pos))
 		if size == 0 {
-			return 0, pos, EOF
+			return 0, pos, io.EOF
 		}
 		pos += size
 		return ru, pos, nil
@@ -289,6 +289,5 @@ func (opt SpacesOpt) HasEscape() bool { return opt.Esc != 0 }
 //----------
 //----------
 
-var NoMatchErr = errors.New("no match")
-var EOF = io.EOF
-var SOF = errors.New("SOF") // start-of-file (as opposed to EOF)
+var ErrNoMatch = errors.New("no match")
+var ErrSOF = errors.New("SOF") // start-of-file (as opposed to EOF)

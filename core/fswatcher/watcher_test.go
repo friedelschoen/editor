@@ -2,7 +2,6 @@ package fswatcher
 
 import (
 	"fmt"
-	"io/ioutil"
 	"math/rand"
 	"os"
 	"testing"
@@ -12,7 +11,7 @@ import (
 //----------
 
 func tmpDir() string {
-	name, err := ioutil.TempDir("", "watcher_test")
+	name, err := os.MkdirTemp("", "watcher_test")
 	if err != nil {
 		panic(err)
 	}

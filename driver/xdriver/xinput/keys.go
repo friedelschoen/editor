@@ -396,10 +396,7 @@ func isNumLockKeypad(ks xproto.Keysym) bool {
 	dot := ks == 0xff9f //  TODO: verify/document why
 	return dot || isKeypadDigit(ks)
 }
-func isKeypad(ks xproto.Keysym) bool {
-	return (ks >= 0xff80 && ks <= 0xffbd) ||
-		(ks >= 0x11000000 && ks <= 0x1100ffff)
-}
+
 func isKeypadDigit(ks xproto.Keysym) bool {
 	return (ks >= 0xffb0 && ks <= 0xffb9)
 }

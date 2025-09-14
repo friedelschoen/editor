@@ -11,7 +11,6 @@ import (
 	"go/token"
 	"go/types"
 	"io"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -22,7 +21,6 @@ import (
 	"unicode"
 
 	"github.com/jmigpin/editor/core/godebug/debug"
-	"github.com/jmigpin/editor/util/astut"
 	"github.com/jmigpin/editor/util/goutil"
 	"github.com/jmigpin/editor/util/iout"
 	"github.com/jmigpin/editor/util/mathutil"
@@ -376,18 +374,6 @@ func (cmd *Cmd) build2(ctx context.Context) error {
 
 //------------
 
-// DEBUG
-func (cmd *Cmd) printAnnotatedFilesAsts(fa *FilesToAnnotate) {
-	for orig := range cmd.overlay {
-		astFile, ok := fa.filesAsts[orig]
-		if ok {
-			astut.PrintNode(cmd.annset.fset, astFile)
-		}
-	}
-}
-
-//------------
-
 //func (cmd *Cmd) tmpDirBasedFilename(filename string) string {
 //	// remove volume name
 //	v := filepath.VolumeName(filename)
@@ -563,7 +549,7 @@ func (cmd *Cmd) editorRootTmpDir() string {
 
 func (cmd *Cmd) setupTmpDir() error {
 	fixedDir := cmd.editorRootTmpDir()
-	dir, err := ioutil.TempDir(fixedDir, "work*")
+	dir, err := os.MkdirTemp(fixedDir, "work*")
 	if err != nil {
 		return err
 	}
@@ -864,7 +850,7 @@ func (cmd *Cmd) buildAlternativeGoWork(ctx context.Context) error {
 	}
 
 	// build based on current go.work
-	src, err := ioutil.ReadFile(gwFilename)
+	src, err := os.ReadFile(gwFilename)
 	if err != nil {
 		return fmt.Errorf("unable to read go work file: %w", err)
 	}
@@ -923,7 +909,7 @@ func (cmd *Cmd) buildAlternativeGoMod(ctx context.Context) error {
 	}
 
 	// build based on current go.mod
-	src, err := ioutil.ReadFile(filename)
+	src, err := os.ReadFile(filename)
 	if err != nil {
 		return fmt.Errorf("unable to read mod file: %w", err)
 	}
@@ -1085,22 +1071,8 @@ func (cmd *Cmd) printBuildInfo() {
 //------------
 //------------
 
-func writeFile(filename string, src []byte) error {
-	return os.WriteFile(filename, src, 0640)
-}
 func mkdirAllWriteFile(filename string, src []byte) error {
 	return iout.MkdirAllWriteFile(filename, src, 0640)
-}
-
-func mkdirAllCopyFile(src, dst string) error {
-	return iout.MkdirAllCopyFile(src, dst, 0640)
-}
-func mkdirAllCopyFileSync(src, dst string) error {
-	return iout.MkdirAllCopyFileSync(src, dst, 0640)
-}
-
-func copyFile(src, dst string) error {
-	return iout.CopyFile(src, dst, 0640)
 }
 
 //------------

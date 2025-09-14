@@ -29,9 +29,7 @@ func (c FnCloser) Close() error {
 //----------
 
 func CopyBytes(b []byte) []byte {
-	p := make([]byte, len(b), len(b))
-	copy(p, b)
-	return p
+	return append([]byte(nil), b...)
 }
 
 func CountLines(b []byte) int {

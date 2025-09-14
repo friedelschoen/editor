@@ -92,9 +92,6 @@ func (p *dataParser) parseArg(pos int) (any, int, error) {
 		return arg, p2, nil
 	}
 }
-func (p *dataParser) parseOptSpaces(pos int) (int, error) {
-	return p.sc.M.Optional(pos, p.parseSpaces)
-}
 func (p *dataParser) parseSpaces(pos int) (int, error) {
 	return p.sc.M.Spaces(pos, pscan.SpacesOpt{false, '\\'})
 }

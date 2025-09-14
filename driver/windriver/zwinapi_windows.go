@@ -105,85 +105,85 @@ var (
 	procValidateRect             = moduser32.NewProc("ValidateRect")
 )
 
-func _BitBlt(hdc windows.Handle, x int32, y int32, w int32, h int32, hdcSrc windows.Handle, x2 int32, y2 int32, rOp uint32) (ok bool) {
+func _BitBlt(hdc syscall.Handle, x int32, y int32, w int32, h int32, hdcSrc syscall.Handle, x2 int32, y2 int32, rOp uint32) (ok bool) {
 	r0, _, _ := syscall.Syscall9(procBitBlt.Addr(), 9, uintptr(hdc), uintptr(x), uintptr(y), uintptr(w), uintptr(h), uintptr(hdcSrc), uintptr(x2), uintptr(y2), uintptr(rOp))
 	ok = r0 != 0
 	return
 }
 
-func _CreateBitmap(w int32, h int32, planes uint32, bitCount uint32, bits uintptr) (bmH windows.Handle, err error) {
+func _CreateBitmap(w int32, h int32, planes uint32, bitCount uint32, bits uintptr) (bmH syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall6(procCreateBitmap.Addr(), 5, uintptr(w), uintptr(h), uintptr(planes), uintptr(bitCount), uintptr(bits), 0)
-	bmH = windows.Handle(r0)
+	bmH = syscall.Handle(r0)
 	if bmH == 0 {
 		err = errnoErr(e1)
 	}
 	return
 }
 
-func _CreateBitmapIndirect(bm *_Bitmap) (bmH windows.Handle, err error) {
+func _CreateBitmapIndirect(bm *_Bitmap) (bmH syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall(procCreateBitmapIndirect.Addr(), 1, uintptr(unsafe.Pointer(bm)), 0, 0)
-	bmH = windows.Handle(r0)
+	bmH = syscall.Handle(r0)
 	if bmH == 0 {
 		err = errnoErr(e1)
 	}
 	return
 }
 
-func _CreateCompatibleBitmap(hdc windows.Handle, w int32, h int32) (bmH windows.Handle, err error) {
+func _CreateCompatibleBitmap(hdc syscall.Handle, w int32, h int32) (bmH syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall(procCreateCompatibleBitmap.Addr(), 3, uintptr(hdc), uintptr(w), uintptr(h))
-	bmH = windows.Handle(r0)
+	bmH = syscall.Handle(r0)
 	if bmH == 0 {
 		err = errnoErr(e1)
 	}
 	return
 }
 
-func _CreateCompatibleDC(hdc windows.Handle) (dcH windows.Handle, err error) {
+func _CreateCompatibleDC(hdc syscall.Handle) (dcH syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall(procCreateCompatibleDC.Addr(), 1, uintptr(hdc), 0, 0)
-	dcH = windows.Handle(r0)
+	dcH = syscall.Handle(r0)
 	if dcH == 0 {
 		err = errnoErr(e1)
 	}
 	return
 }
 
-func _CreateDIBSection(dc windows.Handle, bmi *_BitmapInfo, usage uint32, bits **byte, section windows.Handle, offset uint32) (bmH windows.Handle, err error) {
+func _CreateDIBSection(dc syscall.Handle, bmi *_BitmapInfo, usage uint32, bits **byte, section syscall.Handle, offset uint32) (bmH syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall6(procCreateDIBSection.Addr(), 6, uintptr(dc), uintptr(unsafe.Pointer(bmi)), uintptr(usage), uintptr(unsafe.Pointer(bits)), uintptr(section), uintptr(offset))
-	bmH = windows.Handle(r0)
+	bmH = syscall.Handle(r0)
 	if bmH == 0 {
 		err = errnoErr(e1)
 	}
 	return
 }
 
-func _DeleteDC(dc windows.Handle) (ok bool) {
+func _DeleteDC(dc syscall.Handle) (ok bool) {
 	r0, _, _ := syscall.Syscall(procDeleteDC.Addr(), 1, uintptr(dc), 0, 0)
 	ok = r0 != 0
 	return
 }
 
-func _DeleteObject(obj windows.Handle) (ok bool) {
+func _DeleteObject(obj syscall.Handle) (ok bool) {
 	r0, _, _ := syscall.Syscall(procDeleteObject.Addr(), 1, uintptr(obj), 0, 0)
 	ok = r0 != 0
 	return
 }
 
-func _GetObject(h windows.Handle, c int32, v uintptr) (n int) {
+func _GetObject(h syscall.Handle, c int32, v uintptr) (n int) {
 	r0, _, _ := syscall.Syscall(procGetObject.Addr(), 3, uintptr(h), uintptr(c), uintptr(v))
 	n = int(r0)
 	return
 }
 
-func _SelectObject(hdc windows.Handle, obj windows.Handle) (prevObjH windows.Handle, err error) {
+func _SelectObject(hdc syscall.Handle, obj syscall.Handle) (prevObjH syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall(procSelectObject.Addr(), 2, uintptr(hdc), uintptr(obj), 0)
-	prevObjH = windows.Handle(r0)
+	prevObjH = syscall.Handle(r0)
 	if prevObjH == 0 {
 		err = errnoErr(e1)
 	}
 	return
 }
 
-func _SetPixel(hdc windows.Handle, x int, y int, c _ColorRef) (colorSet int32, err error) {
+func _SetPixel(hdc syscall.Handle, x int, y int, c _ColorRef) (colorSet int32, err error) {
 	r0, _, e1 := syscall.Syscall6(procSetPixel.Addr(), 4, uintptr(hdc), uintptr(x), uintptr(y), uintptr(c), 0, 0)
 	colorSet = int32(r0)
 	if colorSet == -1 {
@@ -192,9 +192,9 @@ func _SetPixel(hdc windows.Handle, x int, y int, c _ColorRef) (colorSet int32, e
 	return
 }
 
-func _GetConsoleWindow() (cH windows.Handle) {
+func _GetConsoleWindow() (cH syscall.Handle) {
 	r0, _, _ := syscall.Syscall(procGetConsoleWindow.Addr(), 0, 0, 0, 0)
-	cH = windows.Handle(r0)
+	cH = syscall.Handle(r0)
 	return
 }
 
@@ -204,25 +204,25 @@ func _GetCurrentProcessId() (pid uint32) {
 	return
 }
 
-func _GetModuleHandleW(name *uint16) (modH windows.Handle, err error) {
+func _GetModuleHandleW(name *uint16) (modH syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall(procGetModuleHandleW.Addr(), 1, uintptr(unsafe.Pointer(name)), 0, 0)
-	modH = windows.Handle(r0)
+	modH = syscall.Handle(r0)
 	if modH == 0 {
 		err = errnoErr(e1)
 	}
 	return
 }
 
-func _GlobalAlloc(uFlags uint32, dwBytes uintptr) (h windows.Handle, err error) {
+func _GlobalAlloc(uFlags uint32, dwBytes uintptr) (h syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall(procGlobalAlloc.Addr(), 2, uintptr(uFlags), uintptr(dwBytes), 0)
-	h = windows.Handle(r0)
+	h = syscall.Handle(r0)
 	if h == 0 {
 		err = errnoErr(e1)
 	}
 	return
 }
 
-func _GlobalLock(h windows.Handle) (ptr uintptr, err error) {
+func _GlobalLock(h syscall.Handle) (ptr uintptr, err error) {
 	r0, _, e1 := syscall.Syscall(procGlobalLock.Addr(), 1, uintptr(h), 0, 0)
 	ptr = uintptr(r0)
 	if ptr == 0 {
@@ -231,13 +231,13 @@ func _GlobalLock(h windows.Handle) (ptr uintptr, err error) {
 	return
 }
 
-func _GlobalUnlock(h windows.Handle) (ok bool) {
+func _GlobalUnlock(h syscall.Handle) (ok bool) {
 	r0, _, _ := syscall.Syscall(procGlobalUnlock.Addr(), 1, uintptr(h), 0, 0)
 	ok = r0 != 0
 	return
 }
 
-func _DragAcceptFiles(hwnd windows.Handle, fAccept bool) {
+func _DragAcceptFiles(hwnd syscall.Handle, fAccept bool) {
 	var _p0 uint32
 	if fAccept {
 		_p0 = 1
@@ -263,16 +263,16 @@ func _DragQueryPoint(hDrop uintptr, ppt *_Point) (res bool) {
 	return
 }
 
-func _BeginPaint(hwnd windows.Handle, paint *_Paint) (dcH windows.Handle, err error) {
+func _BeginPaint(hwnd syscall.Handle, paint *_Paint) (dcH syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall(procBeginPaint.Addr(), 2, uintptr(hwnd), uintptr(unsafe.Pointer(paint)), 0)
-	dcH = windows.Handle(r0)
+	dcH = syscall.Handle(r0)
 	if dcH == 0 {
 		err = errnoErr(e1)
 	}
 	return
 }
 
-func _ClientToScreen(hwnd windows.Handle, lpPoint *_Point) (ok bool) {
+func _ClientToScreen(hwnd syscall.Handle, lpPoint *_Point) (ok bool) {
 	r0, _, _ := syscall.Syscall(procClientToScreen.Addr(), 2, uintptr(hwnd), uintptr(unsafe.Pointer(lpPoint)), 0)
 	ok = r0 != 0
 	return
@@ -284,22 +284,22 @@ func _CloseClipboard() (ok bool) {
 	return
 }
 
-func _CreateWindowExW(dwExStyle uint32, lpClassName *uint16, lpWindowName *uint16, dwStyle int32, x int32, y int32, nWidth int32, nHeight int32, hWndParent windows.Handle, hMenu windows.Handle, hInstance windows.Handle, lpParam uintptr) (wndH windows.Handle, err error) {
+func _CreateWindowExW(dwExStyle uint32, lpClassName *uint16, lpWindowName *uint16, dwStyle int32, x int32, y int32, nWidth int32, nHeight int32, hWndParent syscall.Handle, hMenu syscall.Handle, hInstance syscall.Handle, lpParam uintptr) (wndH syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall12(procCreateWindowExW.Addr(), 12, uintptr(dwExStyle), uintptr(unsafe.Pointer(lpClassName)), uintptr(unsafe.Pointer(lpWindowName)), uintptr(dwStyle), uintptr(x), uintptr(y), uintptr(nWidth), uintptr(nHeight), uintptr(hWndParent), uintptr(hMenu), uintptr(hInstance), uintptr(lpParam))
-	wndH = windows.Handle(r0)
+	wndH = syscall.Handle(r0)
 	if wndH == 0 {
 		err = errnoErr(e1)
 	}
 	return
 }
 
-func _DefWindowProcW(hwnd windows.Handle, msg uint32, wparam uintptr, lparam uintptr) (ret uintptr) {
+func _DefWindowProcW(hwnd syscall.Handle, msg uint32, wparam uintptr, lparam uintptr) (ret uintptr) {
 	r0, _, _ := syscall.Syscall6(procDefWindowProcW.Addr(), 4, uintptr(hwnd), uintptr(msg), uintptr(wparam), uintptr(lparam), 0, 0)
 	ret = uintptr(r0)
 	return
 }
 
-func _DestroyWindow(hwnd windows.Handle) (ok bool) {
+func _DestroyWindow(hwnd syscall.Handle) (ok bool) {
 	r0, _, _ := syscall.Syscall(procDestroyWindow.Addr(), 1, uintptr(hwnd), 0, 0)
 	ok = r0 != 0
 	return
@@ -317,15 +317,15 @@ func _EmptyClipboard() (ok bool) {
 	return
 }
 
-func _EndPaint(hwnd windows.Handle, paint *_Paint) (ok bool) {
+func _EndPaint(hwnd syscall.Handle, paint *_Paint) (ok bool) {
 	r0, _, _ := syscall.Syscall(procEndPaint.Addr(), 2, uintptr(hwnd), uintptr(unsafe.Pointer(paint)), 0)
 	ok = r0 != 0
 	return
 }
 
-func _GetClipboardData(uFormat uint32) (dataH windows.Handle, err error) {
+func _GetClipboardData(uFormat uint32) (dataH syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall(procGetClipboardData.Addr(), 1, uintptr(uFormat), 0, 0)
-	dataH = windows.Handle(r0)
+	dataH = syscall.Handle(r0)
 	if dataH == 0 {
 		err = errnoErr(e1)
 	}
@@ -338,9 +338,9 @@ func _GetCursorPos(p *_Point) (ok bool) {
 	return
 }
 
-func _GetDC(hwnd windows.Handle) (dcH windows.Handle, err error) {
+func _GetDC(hwnd syscall.Handle) (dcH syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall(procGetDC.Addr(), 1, uintptr(hwnd), 0, 0)
-	dcH = windows.Handle(r0)
+	dcH = syscall.Handle(r0)
 	if dcH == 0 {
 		err = errnoErr(e1)
 	}
@@ -359,7 +359,7 @@ func _GetKeyboardState(state *[256]byte) (ok bool) {
 	return
 }
 
-func _GetMessageW(msg *_Msg, hwnd windows.Handle, msgFilterMin uint32, msgFilterMax uint32) (res int32, err error) {
+func _GetMessageW(msg *_Msg, hwnd syscall.Handle, msgFilterMin uint32, msgFilterMax uint32) (res int32, err error) {
 	r0, _, e1 := syscall.Syscall6(procGetMessageW.Addr(), 4, uintptr(unsafe.Pointer(msg)), uintptr(hwnd), uintptr(msgFilterMin), uintptr(msgFilterMax), 0, 0)
 	res = int32(r0)
 	if res == -1 {
@@ -368,19 +368,19 @@ func _GetMessageW(msg *_Msg, hwnd windows.Handle, msgFilterMin uint32, msgFilter
 	return
 }
 
-func _GetWindowRect(hwnd windows.Handle, r *_Rect) (ok bool) {
+func _GetWindowRect(hwnd syscall.Handle, r *_Rect) (ok bool) {
 	r0, _, _ := syscall.Syscall(procGetWindowRect.Addr(), 2, uintptr(hwnd), uintptr(unsafe.Pointer(r)), 0)
 	ok = r0 != 0
 	return
 }
 
-func _GetWindowThreadProcessId(hwnd windows.Handle, pid *uint32) (threadId uint32) {
+func _GetWindowThreadProcessId(hwnd syscall.Handle, pid *uint32) (threadId uint32) {
 	r0, _, _ := syscall.Syscall(procGetWindowThreadProcessId.Addr(), 2, uintptr(hwnd), uintptr(unsafe.Pointer(pid)), 0)
 	threadId = uint32(r0)
 	return
 }
 
-func _InvalidateRect(hwnd windows.Handle, r *_Rect, erase bool) (ok bool) {
+func _InvalidateRect(hwnd syscall.Handle, r *_Rect, erase bool) (ok bool) {
 	var _p0 uint32
 	if erase {
 		_p0 = 1
@@ -390,18 +390,18 @@ func _InvalidateRect(hwnd windows.Handle, r *_Rect, erase bool) (ok bool) {
 	return
 }
 
-func _LoadCursorW(hInstance windows.Handle, name uint32) (cursorH windows.Handle, err error) {
+func _LoadCursorW(hInstance syscall.Handle, name uint32) (cursorH syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall(procLoadCursorW.Addr(), 2, uintptr(hInstance), uintptr(name), 0)
-	cursorH = windows.Handle(r0)
+	cursorH = syscall.Handle(r0)
 	if cursorH == 0 {
 		err = errnoErr(e1)
 	}
 	return
 }
 
-func _LoadImageW(hInstance windows.Handle, name uintptr, typ uint32, cx int32, cy int32, fuLoad uint32) (imgH windows.Handle, err error) {
+func _LoadImageW(hInstance syscall.Handle, name uintptr, typ uint32, cx int32, cy int32, fuLoad uint32) (imgH syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall6(procLoadImageW.Addr(), 6, uintptr(hInstance), uintptr(name), uintptr(typ), uintptr(cx), uintptr(cy), uintptr(fuLoad))
-	imgH = windows.Handle(r0)
+	imgH = syscall.Handle(r0)
 	if imgH == 0 {
 		err = errnoErr(e1)
 	}
@@ -414,19 +414,19 @@ func _MapVirtualKeyW(uCode uint32, uMapType uint32) (code uint32) {
 	return
 }
 
-func _MapWindowPoints(hwndFrom windows.Handle, hwndTo windows.Handle, lpPoints *_Point, cPoints uint32) (res int32) {
+func _MapWindowPoints(hwndFrom syscall.Handle, hwndTo syscall.Handle, lpPoints *_Point, cPoints uint32) (res int32) {
 	r0, _, _ := syscall.Syscall6(procMapWindowPoints.Addr(), 4, uintptr(hwndFrom), uintptr(hwndTo), uintptr(unsafe.Pointer(lpPoints)), uintptr(cPoints), 0, 0)
 	res = int32(r0)
 	return
 }
 
-func _OpenClipboard(hWndNewOwner windows.Handle) (ok bool) {
+func _OpenClipboard(hWndNewOwner syscall.Handle) (ok bool) {
 	r0, _, _ := syscall.Syscall(procOpenClipboard.Addr(), 1, uintptr(hWndNewOwner), 0, 0)
 	ok = r0 != 0
 	return
 }
 
-func _PostMessageW(hwnd windows.Handle, msg uint32, wParam uintptr, lParam uintptr) (ok bool) {
+func _PostMessageW(hwnd syscall.Handle, msg uint32, wParam uintptr, lParam uintptr) (ok bool) {
 	r0, _, _ := syscall.Syscall6(procPostMessageW.Addr(), 4, uintptr(hwnd), uintptr(msg), uintptr(wParam), uintptr(lParam), 0, 0)
 	ok = r0 != 0
 	return
@@ -437,7 +437,7 @@ func _PostQuitMessage(exitCode int32) {
 	return
 }
 
-func _RedrawWindow(hwnd windows.Handle, r *_Rect, region windows.Handle, flags uint) (ok bool) {
+func _RedrawWindow(hwnd syscall.Handle, r *_Rect, region syscall.Handle, flags uint) (ok bool) {
 	r0, _, _ := syscall.Syscall6(procRedrawWindow.Addr(), 4, uintptr(hwnd), uintptr(unsafe.Pointer(r)), uintptr(region), uintptr(flags), 0, 0)
 	ok = r0 != 0
 	return
@@ -452,24 +452,24 @@ func _RegisterClassExW(wcx *_WndClassExW) (atom uint16, err error) {
 	return
 }
 
-func _ReleaseDC(hwnd windows.Handle, dc windows.Handle) (ok bool) {
+func _ReleaseDC(hwnd syscall.Handle, dc syscall.Handle) (ok bool) {
 	r0, _, _ := syscall.Syscall(procReleaseDC.Addr(), 2, uintptr(hwnd), uintptr(dc), 0)
 	ok = r0 != 0
 	return
 }
 
-func _SetClipboardData(uFormat uint32, h windows.Handle) (dataH windows.Handle, err error) {
+func _SetClipboardData(uFormat uint32, h syscall.Handle) (dataH syscall.Handle, err error) {
 	r0, _, e1 := syscall.Syscall(procSetClipboardData.Addr(), 2, uintptr(uFormat), uintptr(h), 0)
-	dataH = windows.Handle(r0)
+	dataH = syscall.Handle(r0)
 	if dataH == 0 {
 		err = errnoErr(e1)
 	}
 	return
 }
 
-func _SetCursor(cursorH windows.Handle) (prevCursorH windows.Handle) {
+func _SetCursor(cursorH syscall.Handle) (prevCursorH syscall.Handle) {
 	r0, _, _ := syscall.Syscall(procSetCursor.Addr(), 1, uintptr(cursorH), 0, 0)
-	prevCursorH = windows.Handle(r0)
+	prevCursorH = syscall.Handle(r0)
 	return
 }
 
@@ -479,19 +479,19 @@ func _SetCursorPos(x int32, y int32) (ok bool) {
 	return
 }
 
-func _SetWindowTextW(hwnd windows.Handle, lpString *uint16) (res bool) {
+func _SetWindowTextW(hwnd syscall.Handle, lpString *uint16) (res bool) {
 	r0, _, _ := syscall.Syscall(procSetWindowTextW.Addr(), 2, uintptr(hwnd), uintptr(unsafe.Pointer(lpString)), 0)
 	res = r0 != 0
 	return
 }
 
-func _ShowWindow(hwnd windows.Handle, nCmdShow int) (ok bool) {
+func _ShowWindow(hwnd syscall.Handle, nCmdShow int) (ok bool) {
 	r0, _, _ := syscall.Syscall(procShowWindow.Addr(), 2, uintptr(hwnd), uintptr(nCmdShow), 0)
 	ok = r0 != 0
 	return
 }
 
-func _ShowWindowAsync(hwnd windows.Handle, nCmdShow int) (ok bool) {
+func _ShowWindowAsync(hwnd syscall.Handle, nCmdShow int) (ok bool) {
 	r0, _, _ := syscall.Syscall(procShowWindowAsync.Addr(), 2, uintptr(hwnd), uintptr(nCmdShow), 0)
 	ok = r0 != 0
 	return
@@ -503,7 +503,7 @@ func _ToUnicode(wVirtKey uint32, wScanCode uint32, lpKeyState *[256]byte, pwszBu
 	return
 }
 
-func _TranslateAccelerator(hwnd windows.Handle, hAccTable windows.Handle, msg *_Msg) (ok bool) {
+func _TranslateAccelerator(hwnd syscall.Handle, hAccTable syscall.Handle, msg *_Msg) (ok bool) {
 	r0, _, _ := syscall.Syscall(procTranslateAccelerator.Addr(), 3, uintptr(hwnd), uintptr(hAccTable), uintptr(unsafe.Pointer(msg)))
 	ok = r0 != 0
 	return
@@ -515,13 +515,13 @@ func _TranslateMessage(msg *_Msg) (translated bool) {
 	return
 }
 
-func _UpdateWindow(hwnd windows.Handle) (ok bool) {
+func _UpdateWindow(hwnd syscall.Handle) (ok bool) {
 	r0, _, _ := syscall.Syscall(procUpdateWindow.Addr(), 1, uintptr(hwnd), 0, 0)
 	ok = r0 != 0
 	return
 }
 
-func _ValidateRect(hwnd windows.Handle, r *_Rect) (ok bool) {
+func _ValidateRect(hwnd syscall.Handle, r *_Rect) (ok bool) {
 	r0, _, _ := syscall.Syscall(procValidateRect.Addr(), 2, uintptr(hwnd), uintptr(unsafe.Pointer(r)), 0)
 	ok = r0 != 0
 	return

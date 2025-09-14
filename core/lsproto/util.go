@@ -309,7 +309,7 @@ func LocationsToString(locations []*Location, baseDir string) (string, error) {
 	for _, h := range res {
 		fmt.Fprintf(buf, "\t%v:%v:%v\n", h.a, h.b, h.c)
 	}
-	return string(buf.Bytes()), nil
+	return buf.String(), nil
 }
 
 //----------

@@ -429,7 +429,7 @@ func (stk cpStack) String() string {
 			}
 			s += " " + PNodePosStr(item.cpn)
 			if item.cpn.simulated {
-				s += fmt.Sprintf(" (simulated)")
+				s += " (simulated)"
 			}
 		}
 		u = append(u, s)

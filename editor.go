@@ -3,7 +3,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -45,9 +44,9 @@ func main() {
 		WrapLineRune:       "←",
 	}
 
-	if conffile, err := os.ReadFile(configPath()); err == nil {
-		json.Unmarshal(conffile, &opt)
-	}
+	// if conffile, err := os.ReadFile(configPath()); err == nil {
+	// 	json.Unmarshal(conffile, &opt)
+	// }
 
 	cpuProfileFlag := flag.String("cpuprofile", "", "profile cpu filename")
 	version := flag.Bool("version", false, "output version and exit")

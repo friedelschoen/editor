@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -300,7 +299,7 @@ func (man *Manager) TextDocumentRenameAndPatch(ctx context.Context, filename str
 	// two or more changes to the same file can give trouble (don't using concurrency for this)
 	for _, wec := range wecs {
 		filename := wec.Filename
-		b, err := ioutil.ReadFile(filename)
+		b, err := os.ReadFile(filename)
 		if err != nil {
 			return nil, err
 		}

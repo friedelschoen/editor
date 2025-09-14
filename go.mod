@@ -6,7 +6,6 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/jezek/xgb v1.1.1
-	golang.org/x/exp v0.0.0-20240325151524-a685a6edb6d8
 	golang.org/x/image v0.18.0
 	golang.org/x/mod v0.24.0
 	golang.org/x/net v0.40.0

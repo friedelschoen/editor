@@ -6,8 +6,7 @@ import (
 	"image"
 	"image/color"
 	"log"
-
-	"golang.org/x/sys/windows"
+	"syscall"
 )
 
 //----------
@@ -72,7 +71,7 @@ const (
 	_GMEM_MOVEABLE = 2
 
 	// error related
-	// https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values
+	// https://docs.microsoft.com/en-us/syscall.win32/seccrypto/common-hresult-values
 	_S_OK          = 0x0
 	_E_OUTOFMEMORY = 0x8007000e
 	_E_NOINTERFACE = 0x80004002 // No such interface supported
@@ -95,8 +94,8 @@ const (
 	_VK_MENU    = 0x12 // alt
 	_VK_LMENU   = 0xa4 // left alt
 	_VK_RMENU   = 0xa5 // right alt
-	_VK_LWIN    = 0x5b // left windows key
-	_VK_RWIN    = 0x5c // left windows key
+	_VK_LWIN    = 0x5b // left syscall.key
+	_VK_RWIN    = 0x5c // left syscall.key
 	_VK_CAPITAL = 0x14 // caps-lock
 
 	_VK_LBUTTON  = 0x01 // mouse left button
@@ -106,7 +105,7 @@ const (
 	_VK_XBUTTON2 = 0x06
 )
 
-// https://docs.microsoft.com/en-us/windows/win32/menurc/wm-syscommand
+// https://docs.microsoft.com/en-us/syscall.win32/menurc/wm-syscommand
 const (
 	_SC_CLOSE        = 0xF060 // Closes the window.
 	_SC_CONTEXTHELP  = 0xF180
@@ -129,7 +128,7 @@ const (
 	_SC_VSCROLL      = 0xF070 // Scrolls vertically.
 )
 
-// https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapvirtualkeyw
+// https://docs.microsoft.com/en-us/syscall.win32/api/winuser/nf-winuser-mapvirtualkeyw
 const (
 	_MAPVK_VK_TO_VSC    = 0
 	_MAPVK_VSC_TO_VK    = 1
@@ -397,17 +396,17 @@ type _WndClassExW struct {
 	LpfnWndProc   uintptr
 	CbClsExtra    int32
 	CbWndExtra    int32
-	HInstance     windows.Handle
-	HIcon         windows.Handle
-	HCursor       windows.Handle
-	HbrBackground windows.Handle
+	HInstance     syscall.Handle
+	HIcon         syscall.Handle
+	HCursor       syscall.Handle
+	HbrBackground syscall.Handle
 	LpszMenuName  *uint16
 	LpszClassName *uint16
-	HIconSm       windows.Handle
+	HIconSm       syscall.Handle
 }
 
 type _Msg struct {
-	HWnd     windows.Handle
+	HWnd     syscall.Handle
 	Msg      uint32
 	WParam   uintptr
 	LParam   uintptr
@@ -418,9 +417,9 @@ type _Msg struct {
 
 type _CreateStructW struct {
 	LpCreateParams uintptr
-	HInstance      windows.Handle
-	HMenu          windows.Handle
-	HWnd           windows.Handle
+	HInstance      syscall.Handle
+	HMenu          syscall.Handle
+	HWnd           syscall.Handle
 	CY             int32 // h
 	CX             int32 // w
 	Y              int32
@@ -450,7 +449,7 @@ type _MinMaxInfo struct {
 }
 
 type _Paint struct {
-	Hdc         windows.Handle
+	Hdc         syscall.Handle
 	FErase      bool
 	RcPaint     _Rect
 	FRestore    bool
@@ -551,9 +550,9 @@ func packLowHigh(l, h uint16) uint32 {
 }
 
 func UTF16PtrFromString(s string) *uint16 {
-	ptr, err := windows.UTF16PtrFromString(s)
+	ptr, err := syscall.UTF16PtrFromString(s)
 	if err != nil {
-		log.Printf("error: windows UTF16PtrFromString: %v", err)
+		log.Printf("error: syscall.UTF16PtrFromString: %v", err)
 	}
 	return ptr
 }
@@ -571,72 +570,72 @@ func UTF16PtrFromString(s string) *uint16 {
 // dword -> uint32
 // long -> int32 // apparently not 64(?)
 
-//sys _GetModuleHandleW(name *uint16) (modH windows.Handle, err error) = kernel32.GetModuleHandleW
-//sys _GlobalLock(h windows.Handle) (ptr uintptr, err error) = kernel32.GlobalLock
-//sys _GlobalUnlock(h windows.Handle) (ok bool) = kernel32.GlobalUnlock
-//sys _GlobalAlloc(uFlags uint32, dwBytes uintptr) (h windows.Handle, err error) = kernel32.GlobalAlloc
-//sys _GetConsoleWindow() (cH windows.Handle) = kernel32.GetConsoleWindow
+//sys _GetModuleHandleW(name *uint16) (modH syscall.Handle, err error) = kernel32.GetModuleHandleW
+//sys _GlobalLock(h syscall.Handle) (ptr uintptr, err error) = kernel32.GlobalLock
+//sys _GlobalUnlock(h syscall.Handle) (ok bool) = kernel32.GlobalUnlock
+//sys _GlobalAlloc(uFlags uint32, dwBytes uintptr) (h syscall.Handle, err error) = kernel32.GlobalAlloc
+//sys _GetConsoleWindow() (cH syscall.Handle) = kernel32.GetConsoleWindow
 //sys _GetCurrentProcessId() (pid uint32)  = kernel32.GetCurrentProcessId
 
-//sys _LoadImageW(hInstance windows.Handle, name uintptr, typ uint32, cx int32, cy int32, fuLoad uint32) (imgH windows.Handle, err error) = user32.LoadImageW
-//sys _LoadCursorW(hInstance windows.Handle, name uint32) (cursorH windows.Handle, err error) = user32.LoadCursorW
+//sys _LoadImageW(hInstance syscall.Handle, name uintptr, typ uint32, cx int32, cy int32, fuLoad uint32) (imgH syscall.Handle, err error) = user32.LoadImageW
+//sys _LoadCursorW(hInstance syscall.Handle, name uint32) (cursorH syscall.Handle, err error) = user32.LoadCursorW
 //sys _RegisterClassExW(wcx *_WndClassExW) (atom uint16, err error) = user32.RegisterClassExW
-//sys _CreateWindowExW(dwExStyle uint32,lpClassName *uint16, lpWindowName *uint16, dwStyle int32, x int32, y int32, nWidth int32, nHeight int32, hWndParent windows.Handle, hMenu windows.Handle, hInstance windows.Handle, lpParam uintptr) (wndH windows.Handle, err error) = user32.CreateWindowExW
-//sys _PostMessageW(hwnd windows.Handle, msg uint32, wParam uintptr, lParam uintptr) (ok bool) =user32.PostMessageW
-//sys _GetMessageW(msg *_Msg, hwnd windows.Handle, msgFilterMin uint32, msgFilterMax uint32) (res int32, err error) [failretval==-1] = user32.GetMessageW
-//sys _TranslateAccelerator(hwnd windows.Handle, hAccTable windows.Handle, msg *_Msg) (ok bool) = user32.TranslateAccelerator
+//sys _CreateWindowExW(dwExStyle uint32,lpClassName *uint16, lpWindowName *uint16, dwStyle int32, x int32, y int32, nWidth int32, nHeight int32, hWndParent syscall.Handle, hMenu syscall.Handle, hInstance syscall.Handle, lpParam uintptr) (wndH syscall.Handle, err error) = user32.CreateWindowExW
+//sys _PostMessageW(hwnd syscall.Handle, msg uint32, wParam uintptr, lParam uintptr) (ok bool) =user32.PostMessageW
+//sys _GetMessageW(msg *_Msg, hwnd syscall.Handle, msgFilterMin uint32, msgFilterMax uint32) (res int32, err error) [failretval==-1] = user32.GetMessageW
+//sys _TranslateAccelerator(hwnd syscall.Handle, hAccTable syscall.Handle, msg *_Msg) (ok bool) = user32.TranslateAccelerator
 //sys _TranslateMessage(msg *_Msg) (translated bool) = user32.TranslateMessage
 //sys _DispatchMessageW(msg *_Msg) (res int32) = user32.DispatchMessageW
-//sys _DefWindowProcW(hwnd windows.Handle, msg uint32, wparam uintptr, lparam uintptr) (ret uintptr) = user32.DefWindowProcW
-//sys _GetWindowRect(hwnd windows.Handle, r *_Rect) (ok bool) = user32.GetWindowRect
-//sys _SetCursor(cursorH windows.Handle) (prevCursorH windows.Handle) = user32.SetCursor
-//sys _DestroyWindow(hwnd windows.Handle) (ok bool) = user32.DestroyWindow
+//sys _DefWindowProcW(hwnd syscall.Handle, msg uint32, wparam uintptr, lparam uintptr) (ret uintptr) = user32.DefWindowProcW
+//sys _GetWindowRect(hwnd syscall.Handle, r *_Rect) (ok bool) = user32.GetWindowRect
+//sys _SetCursor(cursorH syscall.Handle) (prevCursorH syscall.Handle) = user32.SetCursor
+//sys _DestroyWindow(hwnd syscall.Handle) (ok bool) = user32.DestroyWindow
 //sys _PostQuitMessage(exitCode int32) = user32.PostQuitMessage
 //sys _GetCursorPos(p *_Point) (ok bool) = user32.GetCursorPos
-//sys _ValidateRect(hwnd windows.Handle, r *_Rect) (ok bool) = user32.ValidateRect
-//sys _InvalidateRect(hwnd windows.Handle, r *_Rect, erase bool) (ok bool) = user32.InvalidateRect
-//sys _BeginPaint(hwnd windows.Handle, paint *_Paint) (dcH windows.Handle, err error) = user32.BeginPaint
-//sys _EndPaint(hwnd windows.Handle, paint *_Paint) (ok bool) = user32.EndPaint
-//sys _UpdateWindow(hwnd windows.Handle) (ok bool) = user32.UpdateWindow
-//sys _RedrawWindow(hwnd windows.Handle, r *_Rect, region windows.Handle, flags uint) (ok bool) = user32.RedrawWindow
-//sys _ShowWindow(hwnd windows.Handle, nCmdShow int) (ok bool) = user32.ShowWindow
-//sys _ShowWindowAsync(hwnd windows.Handle, nCmdShow int) (ok bool) = user32.ShowWindowAsync
-//sys _GetDC(hwnd windows.Handle) (dcH windows.Handle, err error) = user32.GetDC
-//sys _ReleaseDC(hwnd windows.Handle, dc windows.Handle) (ok bool) = user32.ReleaseDC
+//sys _ValidateRect(hwnd syscall.Handle, r *_Rect) (ok bool) = user32.ValidateRect
+//sys _InvalidateRect(hwnd syscall.Handle, r *_Rect, erase bool) (ok bool) = user32.InvalidateRect
+//sys _BeginPaint(hwnd syscall.Handle, paint *_Paint) (dcH syscall.Handle, err error) = user32.BeginPaint
+//sys _EndPaint(hwnd syscall.Handle, paint *_Paint) (ok bool) = user32.EndPaint
+//sys _UpdateWindow(hwnd syscall.Handle) (ok bool) = user32.UpdateWindow
+//sys _RedrawWindow(hwnd syscall.Handle, r *_Rect, region syscall.Handle, flags uint) (ok bool) = user32.RedrawWindow
+//sys _ShowWindow(hwnd syscall.Handle, nCmdShow int) (ok bool) = user32.ShowWindow
+//sys _ShowWindowAsync(hwnd syscall.Handle, nCmdShow int) (ok bool) = user32.ShowWindowAsync
+//sys _GetDC(hwnd syscall.Handle) (dcH syscall.Handle, err error) = user32.GetDC
+//sys _ReleaseDC(hwnd syscall.Handle, dc syscall.Handle) (ok bool) = user32.ReleaseDC
 //sys _MapVirtualKeyW(uCode uint32, uMapType uint32) (code uint32) = user32.MapVirtualKeyW
 //sys _ToUnicode(wVirtKey uint32, wScanCode uint32, lpKeyState *[256]byte, pwszBuff *uint16, cchBuff int32, wFlags uint32) (code int32) = user32.ToUnicode
 //sys _GetKeyboardState(state *[256]byte) (ok bool) = user32.GetKeyboardState
 //sys _GetKeyState(vkey int32) (state uint16) = user32.GetKeyState
 //sys _SetCursorPos(x int32, y int32) (ok bool) = user32.SetCursorPos
-//sys _MapWindowPoints(hwndFrom windows.Handle, hwndTo windows.Handle, lpPoints *_Point, cPoints uint32) (res int32) = user32.MapWindowPoints
-//sys _ClientToScreen(hwnd windows.Handle, lpPoint *_Point) (ok bool) = user32.ClientToScreen
-//sys _OpenClipboard(hWndNewOwner windows.Handle) (ok bool) = user32.OpenClipboard
+//sys _MapWindowPoints(hwndFrom syscall.Handle, hwndTo syscall.Handle, lpPoints *_Point, cPoints uint32) (res int32) = user32.MapWindowPoints
+//sys _ClientToScreen(hwnd syscall.Handle, lpPoint *_Point) (ok bool) = user32.ClientToScreen
+//sys _OpenClipboard(hWndNewOwner syscall.Handle) (ok bool) = user32.OpenClipboard
 //sys _CloseClipboard() (ok bool) = user32.CloseClipboard
-//sys _SetClipboardData(uFormat uint32, h windows.Handle) (dataH windows.Handle, err error) = user32.SetClipboardData
-//sys _GetClipboardData(uFormat uint32) (dataH windows.Handle, err error) = user32.GetClipboardData
+//sys _SetClipboardData(uFormat uint32, h syscall.Handle) (dataH syscall.Handle, err error) = user32.SetClipboardData
+//sys _GetClipboardData(uFormat uint32) (dataH syscall.Handle, err error) = user32.GetClipboardData
 //sys _EmptyClipboard() (ok bool) = user32.EmptyClipboard
-//sys _GetWindowThreadProcessId(hwnd windows.Handle, pid *uint32) (threadId uint32) = user32.GetWindowThreadProcessId
-//sys _SetWindowTextW(hwnd windows.Handle, lpString *uint16) (res bool) = user32.SetWindowTextW
+//sys _GetWindowThreadProcessId(hwnd syscall.Handle, pid *uint32) (threadId uint32) = user32.GetWindowThreadProcessId
+//sys _SetWindowTextW(hwnd syscall.Handle, lpString *uint16) (res bool) = user32.SetWindowTextW
 
-//sys _SelectObject(hdc windows.Handle, obj windows.Handle) (prevObjH windows.Handle, err error) = gdi32.SelectObject
-//sys _CreateBitmap(w int32, h int32, planes uint32, bitCount uint32, bits uintptr) (bmH windows.Handle, err error) = gdi32.CreateBitmap
-//sys _CreateCompatibleBitmap(hdc windows.Handle, w int32, h int32) (bmH windows.Handle, err error) = gdi32.CreateCompatibleBitmap
-//sys _DeleteObject(obj windows.Handle) (ok bool) = gdi32.DeleteObject
-//sys _CreateCompatibleDC(hdc windows.Handle) (dcH windows.Handle, err error)  = gdi32.CreateCompatibleDC
-//sys _DeleteDC(dc windows.Handle) (ok bool) = gdi32.DeleteDC
-//sys _BitBlt(hdc windows.Handle, x int32, y int32, w int32, h int32, hdcSrc windows.Handle, x2 int32, y2 int32, rOp uint32) (ok bool) = gdi32.BitBlt
+//sys _SelectObject(hdc syscall.Handle, obj syscall.Handle) (prevObjH syscall.Handle, err error) = gdi32.SelectObject
+//sys _CreateBitmap(w int32, h int32, planes uint32, bitCount uint32, bits uintptr) (bmH syscall.Handle, err error) = gdi32.CreateBitmap
+//sys _CreateCompatibleBitmap(hdc syscall.Handle, w int32, h int32) (bmH syscall.Handle, err error) = gdi32.CreateCompatibleBitmap
+//sys _DeleteObject(obj syscall.Handle) (ok bool) = gdi32.DeleteObject
+//sys _CreateCompatibleDC(hdc syscall.Handle) (dcH syscall.Handle, err error)  = gdi32.CreateCompatibleDC
+//sys _DeleteDC(dc syscall.Handle) (ok bool) = gdi32.DeleteDC
+//sys _BitBlt(hdc syscall.Handle, x int32, y int32, w int32, h int32, hdcSrc syscall.Handle, x2 int32, y2 int32, rOp uint32) (ok bool) = gdi32.BitBlt
 // colorSet should be ColorRef(uint32), but the docs say it can return -1!
-//sys _SetPixel(hdc windows.Handle, x int, y int, c _ColorRef) (colorSet int32, err error) [failretval==-1] = gdi32.SetPixel
-//sys _CreateBitmapIndirect(bm *_Bitmap) (bmH windows.Handle, err error) = gdi32.CreateBitmapIndirect
-//sys _GetObject(h windows.Handle, c int32, v uintptr) (n int) = gdi32.GetObject
-//sys	_CreateDIBSection(dc windows.Handle, bmi *_BitmapInfo, usage uint32, bits **byte, section windows.Handle, offset uint32) (bmH windows.Handle, err error) = gdi32.CreateDIBSection
+//sys _SetPixel(hdc syscall.Handle, x int, y int, c _ColorRef) (colorSet int32, err error) [failretval==-1] = gdi32.SetPixel
+//sys _CreateBitmapIndirect(bm *_Bitmap) (bmH syscall.Handle, err error) = gdi32.CreateBitmapIndirect
+//sys _GetObject(h syscall.Handle, c int32, v uintptr) (n int) = gdi32.GetObject
+//sys	_CreateDIBSection(dc syscall.Handle, bmi *_BitmapInfo, usage uint32, bits **byte, section syscall.Handle, offset uint32) (bmH syscall.Handle, err error) = gdi32.CreateDIBSection
 
-//sys _DragAcceptFiles(hwnd windows.Handle, fAccept bool) = shell32.DragAcceptFiles
+//sys _DragAcceptFiles(hwnd syscall.Handle, fAccept bool) = shell32.DragAcceptFiles
 //sys _DragQueryPoint(hDrop uintptr, ppt *_Point) (res bool) = shell32.DragQueryPoint
 //sys _DragQueryFileW(hDrop uintptr, iFile uint32, lpszFile *uint16, cch uint32)(res uint32) = shell32.DragQueryFileW
 //sys _DragFinish(hDrop uintptr) = shell32.DragFinish
 
 // NOT USED
 ////sys _OleInitialize(pvReserved uintptr) (hRes uintptr) = ole32.OleInitialize
-////sys _RegisterDragDrop(hwnd windows.Handle, pDropTarget **_IDropTarget) (resH uintptr) = ole32.RegisterDragDrop
+////sys _RegisterDragDrop(hwnd syscall.Handle, pDropTarget **_IDropTarget) (resH uintptr) = ole32.RegisterDragDrop
 ////sys _CoLockObjectExternal(pUnk uintptr, fLock bool, fLastUnlockReleases bool) (hres uintptr) = ole32.CoLockObjectExternal

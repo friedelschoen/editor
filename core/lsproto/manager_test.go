@@ -6,7 +6,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -18,7 +17,6 @@ import (
 	"github.com/jmigpin/editor/util/iout"
 	"github.com/jmigpin/editor/util/iout/iorw"
 	"github.com/jmigpin/editor/util/osutil"
-	"github.com/jmigpin/editor/util/parseutil"
 	"github.com/jmigpin/editor/util/testutil"
 )
 
@@ -245,7 +243,7 @@ func lspRename(st *testutil.ST, args []string, man *Manager) error {
 		return err
 	}
 	for _, wec := range wecs {
-		b, err := ioutil.ReadFile(wec.Filename)
+		b, err := os.ReadFile(wec.Filename)
 		if err != nil {
 			return err
 		}
@@ -484,17 +482,4 @@ func sourceCursor(t *testing.T, src string, nth int) (int, string) {
 		t.Fatal(err)
 	}
 	return index, src2
-}
-
-func readBytesOffset(t *testing.T, filename string, line, col int) (iorw.ReadWriterAt, int) {
-	b, err := ioutil.ReadFile(filename)
-	if err != nil {
-		t.Fatal(err)
-	}
-	rw := iorw.NewBytesReadWriterAt(b)
-	offset, err := parseutil.LineColumnIndex(rw, line, col)
-	if err != nil {
-		t.Fatal(err)
-	}
-	return rw, offset
 }

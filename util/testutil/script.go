@@ -12,7 +12,6 @@ import (
 	"strconv"
 	"strings"
 	"testing"
-	"unicode"
 
 	"github.com/jmigpin/editor/util/iout"
 	"github.com/jmigpin/editor/util/osutil"
@@ -254,29 +253,6 @@ func (st *ST) lastCmdContent(name string) ([]byte, bool) {
 
 //----------
 
-func (st *ST) collectOutput(t *testing.T, fn func() error) error {
-	logf := func(f string, args ...any) {
-		if st.scr.NoFilepathsFix {
-			t.Logf(f, args...)
-		} else {
-			u := fmt.Sprintf(f, args...)
-			u = string(fixFilepathsForCurDir([]byte(u), st.Dir))
-			t.Log(u)
-		}
-	}
-	//stdout, stderr, err := CollectLog(t, fn)
-	stdout, stderr, err := CollectLog2(t, logf, fn)
-
-	st.lastCmd.stdout = stdout
-	st.lastCmd.stderr = stderr
-	st.lastCmd.err = nil
-	if err != nil {
-		st.lastCmd.err = []byte(err.Error())
-	}
-
-	return err
-}
-
 func (st *ST) writeFile(filename string, data []byte) error {
 	return iout.MkdirAllWriteFile(filename, data, 0o644)
 }
@@ -302,7 +278,7 @@ func (st *ST) Println(args ...any) {
 
 func (st *ST) Logf(f string, args ...any) {
 	st.T.Helper()
-	st.T.Log(fmt.Sprintf(f, args...))
+	st.T.Logf(f, args...)
 }
 func (st *ST) Log(s string) {
 	st.T.Helper()
@@ -529,97 +505,3 @@ func icChangeDir(st *ST, args []string) error {
 	}
 	return nil
 }
-
-//----------
-//----------
-//----------
-
-func fixFilepathsForCurDir(b []byte, curDir string) []byte {
-	// NOTE: when there is a compilation problem on the annotated files, the filepaths error are relative to the tmp running dir, which is not the script call dir
-
-	scanPath := func(data []byte, atEOF bool) (advance int, token []byte, err error) {
-		// consume spaces (optional)
-		u := 0
-		for i, ru := range string(data) {
-			if unicode.IsSpace(ru) {
-				u = i
-				continue
-			}
-			break
-		}
-
-		// consume path
-		k := 0
-		accept := false
-		for i, ru := range string(data) {
-			k = i
-			if unicode.IsLetter(ru) ||
-				unicode.IsDigit(ru) ||
-				strings.ContainsRune("._", ru) {
-				continue
-			}
-			if strings.ContainsRune("/", ru) {
-				accept = true
-				continue
-			}
-			break
-		}
-		if accept {
-			tok := data[u:k]
-			return len(data), tok, nil // done, only deal with first match
-		}
-
-		return len(data), nil, nil // done
-	}
-
-	// replace map
-	m := map[string]string{}
-
-	rd := bytes.NewReader(b)
-	sc := bufio.NewScanner(rd)
-	for sc.Scan() { // scanlines
-		sc2 := bufio.NewScanner(bytes.NewBuffer(sc.Bytes()))
-		sc2.Split(scanPath)
-		for i := 0; sc2.Scan(); i++ {
-			fp := sc2.Text()
-			if !filepath.IsAbs(fp) {
-				fp2 := filepath.Join(curDir, fp)
-
-				// must exist
-				_, err := os.Stat(fp2)
-				if err == nil {
-					m[fp] = fp2
-				}
-
-				//fmt.Printf("**%s\n", fp2)
-			}
-			//if s, err := filepath.Rel(originDir, fp); err == nil {
-			//	fp = s
-			//}
-		}
-	}
-	//fmt.Printf("***%s", b)
-
-	// make replacements
-	for k, v := range m {
-		_, _ = k, v
-
-		////for{ // failing: inf loop
-		//if i := bytes.Index(b, []byte(k)); i >= 0 {
-		//	h := fmt.Sprintf("[FULLDIR: %s]", v)
-		//	b = slices.Insert(b, i, []byte(h)...)
-		//	continue
-		//}
-		////break
-		////}
-
-		v = fmt.Sprintf("SCRIPT_FIXPATH: %s", v)
-		b = bytes.Replace(b, []byte(k), []byte(v), 1)
-	}
-
-	return b
-}
-
-//----------
-//----------
-//----------

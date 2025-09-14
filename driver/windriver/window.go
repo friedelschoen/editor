@@ -9,23 +9,23 @@ import (
 	"reflect"
 	"runtime"
 	"sync"
+	"syscall"
 	"time"
 	"unsafe"
 
 	"github.com/jmigpin/editor/util/imageutil"
 	"github.com/jmigpin/editor/util/syncutil"
 	"github.com/jmigpin/editor/util/uiutil/event"
-	"golang.org/x/sys/windows"
 )
 
 // Functions preceded by "ost" run in the "operating-system-thread".
 type Window struct {
 	className *uint16
-	hwnd      windows.Handle
-	instance  windows.Handle
+	hwnd      syscall.Handle
+	instance  syscall.Handle
 
 	img draw.Image
-	bmH windows.Handle // bitmap handle
+	bmH syscall.Handle // bitmap handle
 
 	events chan any
 	dndMan *DndMan
@@ -37,7 +37,7 @@ type Window struct {
 	}
 	cursors struct {
 		currentId int
-		cache     map[int]windows.Handle
+		cache     map[int]syscall.Handle
 	}
 }
 
@@ -45,7 +45,7 @@ func NewWindow() (*Window, error) {
 	win := &Window{
 		events: make(chan any, 8),
 	}
-	win.cursors.cache = map[int]windows.Handle{}
+	win.cursors.cache = map[int]syscall.Handle{}
 	win.postM.m = map[int]any{}
 	win.dndMan = NewDndMan()
 
@@ -96,7 +96,7 @@ func (win *Window) ostInitialize() error {
 	win.className = UTF16PtrFromString("editorClass")
 	wce := _WndClassExW{
 		LpszClassName: win.className,
-		LpfnWndProc:   windows.NewCallback(win.wndProcCallback),
+		LpfnWndProc:   syscall.NewCallback(win.wndProcCallback),
 		HInstance:     win.instance,
 		HbrBackground: _COLOR_WINDOW + 1,
 		Style:         _CS_HREDRAW | _CS_VREDRAW,
@@ -163,7 +163,7 @@ func (win *Window) nextMsg(msg *_Msg) (ok bool, _ error) {
 	res, err := _GetMessageW(msg, win.hwnd, 0, 0) // wait for next msg
 	if err != nil {
 		// improve error
-		if err2 := windows.GetLastError(); err2 != nil {
+		if err2 := syscall.GetLastError(); err2 != nil {
 			err = fmt.Errorf("%v: %v", err, err2)
 		}
 		return false, err
@@ -193,7 +193,7 @@ func (win *Window) handleMsg(msg *_Msg) {
 }
 
 // Called by _DispatchMessageW() and via WndClassExW.
-func (win *Window) wndProcCallback(hwnd windows.Handle, msg uint32, wParam, lParam uintptr) uintptr {
+func (win *Window) wndProcCallback(hwnd syscall.Handle, msg uint32, wParam, lParam uintptr) uintptr {
 	m := &_Msg{
 		HWnd:   hwnd,
 		Msg:    msg,
@@ -562,7 +562,7 @@ func (win *Window) paintImgWithBitmap(r image.Rectangle) error {
 
 //----------
 
-func (win *Window) buildBitmap(size image.Point) (bmH windows.Handle, bits *byte, _ error) {
+func (win *Window) buildBitmap(size image.Point) (bmH syscall.Handle, bits *byte, _ error) {
 	bmi := _BitmapInfo{
 		BmiHeader: _BitmapInfoHeader{
 			BiSize:        uint32(unsafe.Sizeof(_BitmapInfoHeader{})),
@@ -582,7 +582,7 @@ func (win *Window) buildBitmap(size image.Point) (bmH windows.Handle, bits *byte
 	return bmH, bits, nil
 }
 
-//func (win *Window) buildBitmap_() (bm windows.Handle, _ error) {
+//func (win *Window) buildBitmap_() (bm syscall.Handle, _ error) {
 //	// image data
 //	r := win.img.Bounds()
 //	size := r.Size()
@@ -615,7 +615,7 @@ func (win *Window) buildBitmap(size image.Point) (bmH windows.Handle, bits *byte
 
 //	// improve error
 //	if err != nil {
-//		err2 := windows.GetLastError()
+//		err2 := syscall.GetLastError()
 //		err = fmt.Errorf("buildbitmap: fail: %v, %v", err, err2)
 //	}
 //	return bm, err
@@ -687,7 +687,7 @@ func (win *Window) loadAndSetCursor(cursorId int) error {
 	return nil
 }
 
-func (win *Window) loadCursor(cursorId int) (windows.Handle, error) {
+func (win *Window) loadCursor(cursorId int) (syscall.Handle, error) {
 	cursorHandle, ok := win.cursors.cache[cursorId]
 	if !ok {
 		ch, err := win.loadCursor2(cursorId)
@@ -700,7 +700,7 @@ func (win *Window) loadCursor(cursorId int) (windows.Handle, error) {
 	return cursorHandle, nil
 }
 
-func (win *Window) loadCursor2(c int) (windows.Handle, error) {
+func (win *Window) loadCursor2(c int) (syscall.Handle, error) {
 	cursorId := packLowHigh(uint16(c), 0)
 
 	// TODO: failing on windows 10 with instance=0
@@ -728,7 +728,7 @@ func (win *Window) loadCursor2(c int) (windows.Handle, error) {
 func (win *Window) ostQueryPointer() (image.Point, error) {
 	csp, err := win.cursorScreenPos()
 	if err != nil {
-		return image.ZP, err
+		return image.Point{}, err
 	}
 	return win.screenToWindowPoint(csp)
 }
@@ -776,7 +776,7 @@ func (win *Window) ostGetClipboardData() (string, error) {
 		}
 	}
 
-	s := windows.UTF16ToString(buf)
+	s := syscall.UTF16ToString(buf)
 	return s, nil
 }
 
@@ -789,7 +789,7 @@ func (win *Window) ostSetClipboardData(s string) error {
 	defer _CloseClipboard()
 
 	// translate string to utf16 (will include nil termination)
-	sl, err := windows.UTF16FromString(s)
+	sl, err := syscall.UTF16FromString(s)
 	if err != nil {
 		return err
 	}
@@ -824,7 +824,7 @@ func (win *Window) ostSetClipboardData(s string) error {
 func (win *Window) cursorScreenPos() (image.Point, error) {
 	cp := _Point{}
 	if !_GetCursorPos(&cp) {
-		return image.ZP, fmt.Errorf("getcursorpos: false")
+		return image.Point{}, fmt.Errorf("getcursorpos: false")
 	}
 	return cp.ToImagePoint(), nil
 }
@@ -832,7 +832,7 @@ func (win *Window) cursorScreenPos() (image.Point, error) {
 func (win *Window) screenToWindowPoint(sp image.Point) (image.Point, error) {
 	wsp, err := win.windowScreenPos()
 	if err != nil {
-		return image.ZP, err
+		return image.Point{}, err
 	}
 	return sp.Sub(wsp), nil
 }
@@ -841,14 +841,14 @@ func (win *Window) windowScreenPos() (image.Point, error) {
 	// NOTE: returns window area (need client area)
 	//wr := _Rect{}
 	//if !_GetWindowRect(win.hwnd, &wr) {
-	//	return image.ZP, fmt.Errorf("getwindowrect: false")
+	//	return image.Point{}, fmt.Errorf("getwindowrect: false")
 	//}
 	//return wr.ToImageRectangle().Min, nil
 
 	// NOTE: works, but apparently has issues on right-to-left systems...
 	//p := _Point{0, 0}
 	//if !_ClientToScreen(win.hwnd, &p) {
-	//	return image.ZP, fmt.Errorf("clienttoscreen: false")
+	//	return image.Point{}, fmt.Errorf("clienttoscreen: false")
 	//}
 	//return p.ToImagePoint(), nil
 

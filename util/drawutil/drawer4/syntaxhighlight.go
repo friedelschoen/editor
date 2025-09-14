@@ -92,7 +92,7 @@ func (sh *SyntaxHighlight) parseComment(pos int) (int, error) {
 			return p2, nil
 		}
 	}
-	return pos, pscan.NoMatchErr
+	return pos, pscan.ErrNoMatch
 }
 func (sh *SyntaxHighlight) parseComment2(pos int, c *drawutil.SyntaxComment) (int, error) {
 	if p2, err := sh.sc.M.And(pos,

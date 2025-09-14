@@ -44,7 +44,7 @@ func (args *InternalCmdArgs) ERow() (*ERow, bool) {
 func (args *InternalCmdArgs) ERowOrErr() (*ERow, error) {
 	erow, ok := args.ERow()
 	if !ok {
-		return nil, noERowErr
+		return nil, ErrNoERow
 	}
 	return erow, nil
 }
@@ -171,7 +171,7 @@ func internalOrExternalCmd2(ed *Editor, part *toolbarparser.Part, optERow *ERow)
 	// run external cmd (needs erow)
 	erow := optERow
 	if erow == nil {
-		return noERowErr
+		return ErrNoERow
 	}
 	ExternalCmd(erow, part)
 	return nil
@@ -194,7 +194,7 @@ func internalCmd(ed *Editor, part *toolbarparser.Part, optERow *ERow) (error, bo
 
 //----------
 
-var noERowErr = fmt.Errorf("no active row")
+var ErrNoERow = fmt.Errorf("no active row")
 
 //----------
 

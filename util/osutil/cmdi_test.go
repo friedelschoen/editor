@@ -141,7 +141,7 @@ func TestCmdIWrite1(t *testing.T) {
 		t.Fatalf("cmd did not wait for stdout")
 	}
 
-	s := string(h.buf.Bytes())
+	s := h.buf.String()
 	if s != "aaa\n" {
 		t.Fatalf("bad output: %v", s)
 	}

@@ -411,7 +411,6 @@ func (fa *FilesToAnnotate) loadPackages(ctx context.Context) ([]*packages.Packag
 	loadMode := 0 |
 		//packages.NeedExportFile | // TODO
 		//packages.NeedTypesSizes | // TODO
-
 		packages.NeedCompiledGoFiles |
 		packages.NeedDeps |
 		packages.NeedFiles |
@@ -420,8 +419,7 @@ func (fa *FilesToAnnotate) loadPackages(ctx context.Context) ([]*packages.Packag
 		packages.NeedName | // name and pkgpath
 		packages.NeedSyntax |
 		packages.NeedTypes |
-		packages.NeedTypesInfo | // access to pkg.TypesInfo.*
-		0
+		packages.NeedTypesInfo // access to pkg.TypesInfo.*
 
 	cfg := &packages.Config{
 		Context:    ctx,

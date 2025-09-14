@@ -167,8 +167,7 @@ type IfRule struct {
 	CmnRule
 }
 
-func (r *IfRule) selfSequence() []Rule { return []Rule{r} }
-func (r *IfRule) isTerminal() bool     { return false }
+func (r *IfRule) isTerminal() bool { return false }
 func (r *IfRule) id() string {
 	return fmt.Sprintf("{if %v ? %v : %v}", r.childs2[0], r.childs2[1], r.childs2[2])
 }
@@ -527,11 +526,6 @@ func (rs RuleSet) has(r Rule) bool {
 func (rs RuleSet) add(rs2 RuleSet) {
 	for r := range rs2 {
 		rs.set(r)
-	}
-}
-func (rs RuleSet) remove(rs2 RuleSet) {
-	for r := range rs2 {
-		rs.unset(r)
 	}
 }
 func (rs RuleSet) toSlice() []Rule {

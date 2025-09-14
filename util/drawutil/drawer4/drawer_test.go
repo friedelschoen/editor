@@ -29,6 +29,10 @@ func init() {
 		panic(err)
 	}
 	fface, err := opentype.NewFace(font, nil)
+	if err != nil {
+		/* goregular should not contain errors */
+		panic(err)
+	}
 
 	face = fontutil.NewFaceRunes(fface)
 }

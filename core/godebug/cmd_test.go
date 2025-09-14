@@ -137,7 +137,7 @@ func TestCmd2CtxCancel(t *testing.T) {
 	if err == nil {
 		t.Fatal("got no error")
 	}
-	if strings.Index(err.Error(), "context canceled") < 0 {
+	if !strings.Contains(err.Error(), "context canceled") {
 		t.Fatal(err)
 	}
 	t.Log(err)

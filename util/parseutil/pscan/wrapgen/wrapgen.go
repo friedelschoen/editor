@@ -7,7 +7,7 @@ import (
 	"go/parser"
 	"go/printer"
 	"go/token"
-	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -32,7 +32,7 @@ func main2() error {
 		return err
 	}
 
-	if err := ioutil.WriteFile(output, b, 0o644); err != nil {
+	if err := os.WriteFile(output, b, 0o644); err != nil {
 		return err
 	}
 	return nil
@@ -258,5 +258,5 @@ func SprintNode2(fset *token.FileSet, node any) (string, error) {
 	if err := cfg.Fprint(buf, fset, node); err != nil {
 		return "", err
 	}
-	return string(buf.Bytes()), nil
+	return buf.String(), nil
 }

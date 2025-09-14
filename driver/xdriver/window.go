@@ -102,9 +102,9 @@ func (win *Window) initialize() error {
 		xproto.EventMaskButtonPress |
 		xproto.EventMaskButtonRelease |
 		xproto.EventMaskKeyPress |
-		xproto.EventMaskKeyRelease |
-		0
-	// mask/values order is defined by the protocol
+		xproto.EventMaskKeyRelease
+
+		// mask/values order is defined by the protocol
 	mask := uint32(xproto.CwEventMask)
 	values := []uint32{evMask}
 
@@ -398,7 +398,7 @@ func (win *Window) PointerQuery() (image.Point, error) {
 	cookie := xproto.QueryPointer(win.Conn, win.Window)
 	r, err := cookie.Reply()
 	if err != nil {
-		return image.ZP, err
+		return image.Point{}, err
 	}
 	p := image.Point{int(r.WinX), int(r.WinY)}
 	return p, nil

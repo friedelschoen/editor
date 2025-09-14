@@ -111,7 +111,6 @@ type Decoder struct {
 	r              io.Reader
 	reg            *EncDecRegistry
 	firstInterface bool
-	firstPointer   bool
 
 	Logger
 }
@@ -438,15 +437,6 @@ func (dec *Decoder) readBinary(v any) error {
 
 //----------
 //----------
-//----------
-
-func wrapErrorWithType(err error, v any) error {
-	if err != nil {
-		return fmt.Errorf("%w (%T)", err, v)
-	}
-	return nil
-}
-
 //----------
 
 func concreteType(v reflect.Value) reflect.Type {

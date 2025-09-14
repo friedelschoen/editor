@@ -31,7 +31,7 @@ func NewERowExec(erow *ERow) *ERowExec {
 
 func (ee *ERowExec) RunAsync(fn func(context.Context, io.ReadWriter) error) {
 	// Note: textarea w.close() (textareawriter) could deadlock if runasync() is not on own goroutine. If w.close waits for UI goroutine to finish and runasync() is currently occupying it (w.close called after a runasync(), just that the UI goroutine is not getting released). Launching in a goroutine allows RunAsync() itself to be called from a uigoroutine since this func will return immediately
-	go ee.runAsync2(nil, nil, fn)
+	go ee.runAsync2(context.TODO(), nil, fn)
 }
 func (ee *ERowExec) RunAsyncWithCancel(fn func(context.Context, io.ReadWriter) error) (context.Context, context.CancelFunc) {
 	ctx, cancel := context.WithCancel(ee.erow.ctx)
@@ -57,13 +57,7 @@ func (ee *ERowExec) runAsync2(optCtx context.Context, optCancel context.CancelFu
 	}
 
 	// new context
-	ctx := (context.Context)(nil)
-	cancel := (context.CancelFunc)(nil)
-	if optCtx != nil {
-		ctx, cancel = optCtx, optCancel
-	} else {
-		ctx, cancel = context.WithCancel(ee.erow.ctx)
-	}
+	ctx, cancel := context.WithCancel(ee.erow.ctx)
 	ee.c.cancel = cancel
 
 	rwc := ee.erow.TextAreaReadWriteCloser()
@@ -90,7 +84,9 @@ func (ee *ERowExec) runAsync2(optCtx context.Context, optCancel context.CancelFu
 		}
 
 		// clear cancel resources
-		cancel()
+		if cancel != nil {
+			cancel()
+		}
 
 		if err := rwc.Close(); err != nil {
 			ee.erow.Ed.Error(err)

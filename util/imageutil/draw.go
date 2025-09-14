@@ -39,18 +39,18 @@ func DrawUniformMask(
 	}
 
 	src := image.NewUniform(c)
-	srcp := image.ZP
+	srcp := image.Point{}
 	DrawMask(dst, r, src, srcp, mask, maskp, op)
 }
 
 func DrawUniform(dst draw.Image, r image.Rectangle, c color.Color, op draw.Op) {
-	DrawUniformMask(dst, r, c, nil, image.ZP, op)
+	DrawUniformMask(dst, r, c, nil, image.Point{}, op)
 }
 
 //----------
 
 func DrawCopy(dst draw.Image, r image.Rectangle, src image.Image) {
-	DrawMask(dst, r, src, image.ZP, nil, image.ZP, draw.Src)
+	DrawMask(dst, r, src, image.Point{}, nil, image.Point{}, draw.Src)
 }
 
 //----------

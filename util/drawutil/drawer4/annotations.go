@@ -21,7 +21,7 @@ func (ann *Annotations) Init() {
 	opts.Size *= 0.70
 	fface, err := opentype.NewFace(Font, opts)
 	if err != nil {
-		fmt.Print("unable to initialize fontface: %v\n", err)
+		fmt.Printf("unable to initialize fontface: %v\n", err)
 		os.Exit(2)
 	}
 	ann.notesFFace = fontutil.NewFaceRunes(fface)

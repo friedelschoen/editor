@@ -40,10 +40,6 @@ func (rr *RuneReader) End() {}
 
 //----------
 
-func (rr *RuneReader) eof() bool {
-	return rr.isNormal() && rr.d.st.runeR.ru == 0
-}
-
 func (rr *RuneReader) iter2(ru rune, size int) bool {
 	st := &rr.d.st.runeR
 	st.ru = ru
@@ -158,14 +154,3 @@ func (rr *RuneReader) startingPen() mathutil.PointIntf {
 func (rr *RuneReader) maxX() mathutil.Intf {
 	return mathutil.Intf1(rr.d.bounds.Max.X)
 }
-
-//----------
-
-type runeType int
-
-const (
-	rtNormal runeType = iota
-	rtBackground
-	rtInserted
-	//rtAnnotation
-)

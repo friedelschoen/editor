@@ -40,8 +40,7 @@ func TestStableOffsetScroll1(t *testing.T) {
 
 func TestStableOffsetScroll2(t *testing.T) {
 	// 0123456789
-	var o int
-	o = StableOffsetScroll(4, 4, 1, 0)
+	o := StableOffsetScroll(4, 4, 1, 0)
 	if o != 4 {
 		t.Fatal(o)
 	}

@@ -61,9 +61,6 @@ func (ri *RuleIndex) get(name string) (Rule, bool) {
 	}
 	return nil, false
 }
-func (ri *RuleIndex) delete(name string) {
-	delete(ri.m, name)
-}
 
 //----------
 

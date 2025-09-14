@@ -2,7 +2,6 @@ package goutil
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -102,7 +101,7 @@ func GetGoVersion(env []string) (string, error) {
 	// get from file located in go root
 	d := GetGoRoot(env)
 	fp := filepath.Join(d, "VERSION")
-	if b, err := ioutil.ReadFile(fp); err == nil {
+	if b, err := os.ReadFile(fp); err == nil {
 		v := strings.TrimSpace(string(b))
 		return trim(v), nil
 	}

@@ -149,10 +149,6 @@ func (tt *TType) isBuiltinWithName(name string) bool {
 	id, ok := tt.node.(*ast.Ident)
 	return ok && id.Name == name
 }
-func (tt *TType) isBasic() bool {
-	_, ok := tt.Type.(*types.Basic)
-	return ok
-}
 func (tt *TType) isBasicInfo(bi types.BasicInfo) bool { // ex: types.IsBoolean
 	tb, ok := tt.Type.(*types.Basic)
 	return ok && tb.Info()&bi != 0

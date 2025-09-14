@@ -9,7 +9,7 @@ func BasicUnquote(s string) (string, bool) {
 	lq := len(string(q))
 
 	ok := false
-	quotes := []rune("\"'`") // allowed quotes
+	quotes := "\"'`" // allowed quotes
 	for _, u := range quotes {
 		if u == q {
 			ok = true

@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"os/exec"
 	"syscall"
-
-	"golang.org/x/sys/windows"
 )
 
 //----------
@@ -17,7 +15,7 @@ const EscapeRune = '^'
 //----------
 
 func SetupExecCmdSysProcAttr(cmd *exec.Cmd) {
-	cmd.SysProcAttr = &windows.SysProcAttr{
+	cmd.SysProcAttr = &syscall.SysProcAttr{
 		HideWindow:    true,
 		CreationFlags: 0x08000000, // CREATE_NO_WINDOW
 	}

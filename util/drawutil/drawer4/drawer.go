@@ -25,7 +25,6 @@ type Drawer struct {
 
 	fface            font.Face
 	lineHeight       mathutil.Intf
-	offset           image.Point
 	bounds           image.Rectangle
 	firstLineOffsetX int
 	fg               color.Color
@@ -183,7 +182,6 @@ type State struct {
 		fg, bg color.Color
 		lineBg color.Color
 	}
-	bgFill struct{}
 	cursor struct {
 		delay *CursorDelay
 	}
@@ -361,7 +359,7 @@ func (d *Drawer) SetCursorOffset(v int) {
 //----------
 
 func (d *Drawer) ready() bool {
-	return !(d.fface == nil || d.reader == nil || d.bounds == image.ZR)
+	return !(d.fface == nil || d.reader == nil || d.bounds == image.Rectangle{})
 }
 
 //----------

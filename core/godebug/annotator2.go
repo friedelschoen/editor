@@ -509,7 +509,7 @@ func (ann *Annotator) newFuncLitWithType(resultsTypes []ast.Expr) *ast.FuncLit {
 	fl.Type.Results.List = resultsFields
 
 	resultsTuple := types.NewTuple(resultsVars...)
-	sig := types.NewSignature(nil, nil, resultsTuple, variadic)
+	sig := types.NewSignatureType(nil, nil, nil, nil, resultsTuple, variadic)
 	ann.typesInfo.Types[fl] = types.TypeAndValue{Type: sig}
 
 	return fl
@@ -939,19 +939,6 @@ type tupleExpr struct {
 	w []ast.Expr
 }
 
-func isTupleExpr(e ast.Expr) bool {
-	_, ok := e.(*tupleExpr)
-	return ok
-}
-func mustNotBeTupleExpr(e ast.Expr) {
-	if isTupleExpr(e) {
-		//s, _ := astut.SprintNode3(&token.FileSet{}, e.(*tupleExpr).w)
-		//s := fmt.Sprintf("%v", e.(*tupleExpr).w)
-		//panic(fmt.Sprintf("not expecting tuple expr: %s", s))
-		panic("not expecting tuple expr")
-	}
-}
-
 //----------
 //----------
 //----------
@@ -1002,18 +989,6 @@ func newFuncLitRetType(typeName string) *ast.FuncLit {
 
 //----------
 
-func isTypesBasicInfo(tb *types.Basic, bi types.BasicInfo) bool {
-	return tb.Info()&bi != 0
-}
-
-//----------
-
-func isEmptyFieldList(fl *ast.FieldList) bool {
-	return fl == nil || len(fl.List) == 0
-}
-
-//----------
-
 func nilIdent(pos token.Pos) *ast.Ident {
 	return &ast.Ident{Name: "nil", NamePos: pos}
 }
@@ -1026,13 +1001,6 @@ func anonIdent(pos token.Pos) *ast.Ident {
 }
 func isAnonIdent(e ast.Expr) bool {
 	return isIdentWithName(e, "_")
-}
-
-func afterPanicIdent() *ast.Ident {
-	return &ast.Ident{Name: "after panic"}
-}
-func isAfterPanicIdent(e ast.Expr) bool {
-	return isIdentWithName(e, "after panic")
 }
 
 func isIdentWithName(e ast.Expr, name string) bool {
@@ -1103,18 +1071,3 @@ func hasChanRecvOp(ue *ast.UnaryExpr) bool {
 func hasAddressOp(ue *ast.UnaryExpr) bool {
 	return ue.Op == token.AND
 }
-
-func isChanRecvExpr(expr ast.Expr) (*ast.UnaryExpr, bool) {
-	if ue, ok := expr.(*ast.UnaryExpr); ok {
-		return ue, hasChanRecvOp(ue)
-	}
-	return nil, false
-}
-func isAddressOfExpr(expr ast.Expr) (*ast.UnaryExpr, bool) {
-	if ue, ok := expr.(*ast.UnaryExpr); ok {
-		return ue, hasAddressOp(ue)
-	}
-	return nil, false
-}
-
-//----------

@@ -2,7 +2,6 @@ package wimage
 
 import (
 	"image"
-	"reflect"
 	"unsafe"
 
 	"github.com/jmigpin/editor/util/imageutil"
@@ -22,8 +21,7 @@ func NewShmImgWrap(r image.Rectangle) (*ShmImgWrap, error) {
 	}
 
 	// mask shared mem into a slice
-	h := reflect.SliceHeader{Data: addr, Len: size, Cap: size}
-	buf := *(*[]byte)(unsafe.Pointer(&h))
+	buf := unsafe.Slice((*byte)(unsafe.Pointer(addr)), size) // FIXME: warning: possible misuse of unsafe.Pointer?
 
 	img := imageutil.NewBGRAFromBuffer(buf, &r)
 	imgWrap := &ShmImgWrap{Img: img, shmId: shmId, addr: addr}

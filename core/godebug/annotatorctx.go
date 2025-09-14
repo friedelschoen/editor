@@ -50,13 +50,6 @@ func (ctx *Ctx) value(id ctxId) (any, *Ctx, bool) {
 	}
 	return nil, nil, false
 }
-func (ctx *Ctx) value2(id ctxId) (any, *Ctx) {
-	v, ctx2, ok := ctx.value(id)
-	if !ok {
-		return nil, nil
-	}
-	return v, ctx2
-}
 func (ctx *Ctx) setValue(v any) {
 	ctx.v = v
 }

@@ -29,11 +29,10 @@ func updateParenthesisHighlight(d *Drawer) {
 //----------
 
 type ParenthesisHighlight struct {
-	d     *Drawer
-	sc    *pscan.Scanner
-	ops   []*ColorizeOp
-	pad   int
-	pairs []rune
+	d   *Drawer
+	sc  *pscan.Scanner
+	ops []*ColorizeOp
+	pad int
 }
 
 func (ph *ParenthesisHighlight) do() []*ColorizeOp {
@@ -119,7 +118,7 @@ func (ph *ParenthesisHighlight) do() []*ColorizeOp {
 
 	// sort points
 	points := []int{openPos}
-	hasClosePos := done == true
+	hasClosePos := done
 	if hasClosePos {
 		points = append(points, closePos)
 		if reverse {

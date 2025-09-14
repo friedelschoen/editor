@@ -74,7 +74,7 @@ func (p *ResLocParser) Init() {
 			)
 		} else {
 			return func(pos int) (int, error) {
-				return pos, pscan.NoMatchErr
+				return pos, pscan.ErrNoMatch
 			}
 		}
 	}

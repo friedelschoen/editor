@@ -148,7 +148,7 @@ func (m *Match) Byte(pos int, b byte) (int, error) {
 		return p2, err
 	}
 	if b2 != b {
-		return pos, NoMatchErr // position before reading
+		return pos, ErrNoMatch // position before reading
 	}
 	return p2, nil
 }
@@ -158,7 +158,7 @@ func (m *Match) ByteFn(pos int, fn func(byte) bool) (int, error) {
 		return p2, err
 	}
 	if !fn(b) {
-		return pos, NoMatchErr // position before reading
+		return pos, ErrNoMatch // position before reading
 	}
 	return p2, nil
 }
@@ -206,7 +206,7 @@ func (m *Match) Rune(pos int, ru rune) (int, error) {
 		return p2, err
 	}
 	if ru2 != ru {
-		return pos, NoMatchErr // position before reading
+		return pos, ErrNoMatch // position before reading
 	}
 	return p2, nil
 }
@@ -217,7 +217,7 @@ func (m *Match) RuneFn(pos int, fn func(rune) bool) (int, error) {
 		return p2, err
 	}
 	if !fn(ru) {
-		return pos, NoMatchErr // position before reading
+		return pos, ErrNoMatch // position before reading
 	}
 	return p2, nil
 }
@@ -267,7 +267,7 @@ func (m *Match) RuneSequenceMid(pos int, rs []rune) (int, error) {
 			return p2, nil // match
 		}
 		if k+1 >= len(rs) { // OK in reverse
-			return p0, NoMatchErr
+			return p0, ErrNoMatch
 		}
 		// backup to previous rune to try to match again
 		rev0 := m.sc.Reverse
@@ -315,7 +315,7 @@ func (m *Match) RuneRanges(pos int, rrs ...RuneRange) (int, error) {
 				return p2, nil
 			}
 		}
-		return pos, NoMatchErr
+		return pos, ErrNoMatch
 	}
 }
 
@@ -520,7 +520,7 @@ func (m *Match) EmptyRestOfLine(p int) (int, error) {
 
 func (m *Match) EscapeAny(pos int, escape rune) (int, error) {
 	if escape == 0 {
-		return pos, NoMatchErr
+		return pos, ErrNoMatch
 	}
 	return m.And(pos,
 		m.W.Rune(escape),
@@ -730,7 +730,7 @@ func (m *Match) RegexpFromStart(pos int, res string, cache bool, maxLen int) (in
 
 	locs := re.FindIndex(src)
 	if len(locs) == 0 {
-		return pos, NoMatchErr
+		return pos, ErrNoMatch
 	}
 	pos += locs[1]
 	return pos, nil
@@ -746,31 +746,31 @@ func (m *Match) MustErr(pos int, fn MFn) (int, error) {
 	if _, err := fn(pos); err != nil {
 		return pos, nil
 	}
-	return pos, NoMatchErr
+	return pos, ErrNoMatch
 }
 
 func (m *Match) PtrTrue(pos int, v *bool) (int, error) {
 	if *v {
 		return pos, nil
 	}
-	return pos, NoMatchErr
+	return pos, ErrNoMatch
 }
 func (m *Match) PtrFalse(pos int, v *bool) (int, error) {
 	if !*v {
 		return pos, nil
 	}
-	return pos, NoMatchErr
+	return pos, ErrNoMatch
 }
 
 func (m *Match) StaticCondFn(pos int, v bool, tfn, ffn MFn) (int, error) {
 	if v {
 		if tfn == nil {
-			return pos, NoMatchErr
+			return pos, ErrNoMatch
 		}
 		return tfn(pos)
 	} else {
 		if ffn == nil {
-			return pos, NoMatchErr
+			return pos, ErrNoMatch
 		}
 		return ffn(pos)
 	}
@@ -779,16 +779,16 @@ func (m *Match) StaticCondFn(pos int, v bool, tfn, ffn MFn) (int, error) {
 func (m *Match) Eof(pos int) (int, error) {
 	if _, _, err := m.sc.ReadRune(pos); err != nil {
 		if m.sc.Reverse {
-			if err == SOF {
+			if err == ErrSOF {
 				return pos, nil
 			}
 		} else {
-			if err == EOF {
+			if err == io.EOF {
 				return pos, nil
 			}
 		}
 	}
-	return pos, NoMatchErr
+	return pos, ErrNoMatch
 }
 func (m *Match) NotEof(p int) (int, error) {
 	return m.MustErr(p, m.Eof)

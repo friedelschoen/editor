@@ -27,7 +27,6 @@ import (
 // Keyboard mapping
 type KMap struct {
 	conn  *xgb.Conn
-	si    *xproto.SetupInfo
 	kbm   [256][]xproto.Keysym // keyboard map
 	mmask struct {             // modifiers masks
 		shift     uint16

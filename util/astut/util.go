@@ -44,5 +44,5 @@ func SprintNode2(fset *token.FileSet, node any) (string, error) {
 	if err := cfg.Fprint(buf, fset, node); err != nil {
 		return "", err
 	}
-	return string(buf.Bytes()), nil
+	return buf.String(), nil
 }

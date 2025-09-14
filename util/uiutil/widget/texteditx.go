@@ -15,8 +15,6 @@ import (
 type TextEditX struct {
 	*TextEdit
 
-	commentLineStr string // Used in comment/uncomment lines
-
 	flash struct {
 		start time.Time
 		now   time.Time
