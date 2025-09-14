@@ -2,7 +2,6 @@ package rwedit
 
 import (
 	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 func SelectWord(ctx *Ctx) error {
@@ -35,7 +34,7 @@ func SelectWord(ctx *Ctx) error {
 
 	// set primary copy
 	if b, ok := ctx.Selection(); ok {
-		ctx.Fns.SetClipboardData(event.CIPrimary, string(b))
+		ctx.Fns.SetClipboardData(string(b))
 	}
 
 	return nil

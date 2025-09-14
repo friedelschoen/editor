@@ -1,7 +1,6 @@
 package xdriver
 
 import (
-	"errors"
 	"fmt"
 	"image"
 	"image/draw"
@@ -321,51 +320,22 @@ func (win *Window) nextEvent2() any {
 
 //----------
 
-func (win *Window) Request(req event.Request) error {
-	// requests that need write lock
-	switch req.(type) {
-	case *event.ReqClose:
-		return win.Close()
-	}
-
-	win.close.RLock()
-	defer win.close.RUnlock()
-	if win.close.closing || win.close.closed {
-		return errors.New("window closing/closed")
-	}
-
-	switch r := req.(type) {
-	case *event.ReqWindowSetName:
-		return win.setWindowName(r.Name)
-	case *event.ReqImage:
-		r.ReplyImg = win.image()
-		return nil
-	case *event.ReqImagePut:
-		return win.WImg.PutImage(r.Rect)
-	case *event.ReqImageResize:
-		return win.resizeImage(r.Rect)
-	case *event.ReqCursorSet:
-		return win.setCursor(r.Cursor)
-	case *event.ReqPointerQuery:
-		p, err := win.queryPointer()
-		r.ReplyP = p
-		return err
-	case *event.ReqPointerWarp:
-		return win.warpPointer(r.P)
-	case *event.ReqClipboardDataGet:
-		s, err := win.Paste.Get(r.Index)
-		r.ReplyS = s
-		return err
-	case *event.ReqClipboardDataSet:
-		return win.Copy.Set(r.Index, r.Str)
-	default:
-		return fmt.Errorf("todo: %T", r)
-	}
+func (win *Window) Image() (draw.Image, error) {
+	return win.image(), nil
+}
+func (win *Window) ImagePut(Rect image.Rectangle) error {
+	return win.WImg.PutImage(Rect)
+}
+func (win *Window) ClipboardDataGet() (string, error) {
+	return win.Paste.Get()
+}
+func (win *Window) ClipboardDataSet(str string) error {
+	return win.Copy.Set(str)
 }
 
 //----------
 
-func (win *Window) setWindowName(str string) error {
+func (win *Window) WindowSetName(str string) error {
 	c1 := xproto.ChangePropertyChecked(
 		win.Conn,
 		xproto.PropModeReplace,
@@ -392,7 +362,7 @@ func (win *Window) image() draw.Image {
 	return win.WImg.Image()
 }
 
-func (win *Window) resizeImage(r image.Rectangle) error {
+func (win *Window) ImageResize(r image.Rectangle) error {
 	ib := win.image().Bounds()
 	if !r.Eq(ib) {
 		err := win.WImg.Resize(r)
@@ -405,7 +375,7 @@ func (win *Window) resizeImage(r image.Rectangle) error {
 
 //----------
 
-func (win *Window) warpPointer(p image.Point) error {
+func (win *Window) PointerWarp(p image.Point) error {
 	// warp pointer only if the window has input focus
 	cookie := xproto.GetInputFocus(win.Conn)
 	reply, err := cookie.Reply()
@@ -424,7 +394,7 @@ func (win *Window) warpPointer(p image.Point) error {
 	return c2.Check()
 }
 
-func (win *Window) queryPointer() (image.Point, error) {
+func (win *Window) PointerQuery() (image.Point, error) {
 	cookie := xproto.QueryPointer(win.Conn, win.Window)
 	r, err := cookie.Reply()
 	if err != nil {
@@ -436,7 +406,7 @@ func (win *Window) queryPointer() (image.Point, error) {
 
 //----------
 
-func (win *Window) setCursor(c event.Cursor) (rerr error) {
+func (win *Window) CursorSet(c event.Cursor) (rerr error) {
 	sc := func(c2 xcursors.Cursor) {
 		rerr = win.Cursors.SetCursor(c2)
 	}

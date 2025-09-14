@@ -12,11 +12,10 @@ import (
 	"time"
 	"unsafe"
 
-	"golang.org/x/sys/windows"
-
 	"github.com/jmigpin/editor/util/imageutil"
 	"github.com/jmigpin/editor/util/syncutil"
 	"github.com/jmigpin/editor/util/uiutil/event"
+	"golang.org/x/sys/windows"
 )
 
 // Functions preceded by "ost" run in the "operating-system-thread".
@@ -318,40 +317,34 @@ func (win *Window) handleAppMsg(id int, msg *_Msg) {
 	_ = appData.ReqErr.Set(err)
 }
 
-func (win *Window) handleRequest(req event.Request, msg *_Msg) error {
+func (win *Window) handleRequest(req Request, msg *_Msg) error {
 	switch r := req.(type) {
-	case *event.ReqClose:
+	case *ReqClose:
 		return win.ostClose()
-	case *event.ReqWindowSetName:
+	case *ReqWindowSetName:
 		return win.ostSetWindowName(r.Name)
 	// Disabled: handled at Request() without roundtrip
-	//case *event.ReqImage:
+	//case *ReqImage:
 	//	r.ReplyImg = win.img
 	//	return nil
-	case *event.ReqImagePut:
+	case *ReqImagePut:
 		return win.ostPaintImg(r.Rect)
-	case *event.ReqImageResize:
+	case *ReqImageResize:
 		return win.ostResizeImage(r.Rect)
-	case *event.ReqCursorSet:
+	case *ReqCursorSet:
 		return win.ostSetCursor(r.Cursor)
-	case *event.ReqPointerQuery:
+	case *ReqPointerQuery:
 		p, err := win.ostQueryPointer()
 		r.ReplyP = p
 		return err
-	case *event.ReqPointerWarp:
+	case *ReqPointerWarp:
 		return win.ostWarpPointer(r.P)
-	case *event.ReqClipboardDataGet:
-		if r.Index == event.CIClipboard {
-			s, err := win.ostGetClipboardData()
-			r.ReplyS = s
-			return err
-		}
-		return nil
-	case *event.ReqClipboardDataSet:
-		if r.Index == event.CIClipboard {
-			return win.ostSetClipboardData(r.Str)
-		}
-		return nil
+	case *ReqClipboardDataGet:
+		s, err := win.ostGetClipboardData()
+		r.ReplyS = s
+		return err
+	case *ReqClipboardDataSet:
+		return win.ostSetClipboardData(r.Str)
 	default:
 		panic(fmt.Sprintf("todo: %T", req))
 	}
@@ -359,18 +352,51 @@ func (win *Window) handleRequest(req event.Request, msg *_Msg) error {
 
 //----------
 
-func (win *Window) Request(req event.Request) error {
-	// handle now without the appmsg roundtrip (performance)
-	switch r := req.(type) {
-	case *event.ReqImage:
-		r.ReplyImg = win.img
-		return nil
-	}
-
-	return win.runAppMsgReq(req)
+func (win *Window) Close() error {
+	return win.runAppMsgReq(&ReqClose{})
 }
 
-func (win *Window) runAppMsgReq(req event.Request) error {
+func (win *Window) WindowSetName(Name string) error {
+	return win.runAppMsgReq(&ReqWindowSetName{Name: Name})
+}
+
+func (win *Window) Image() (draw.Image, error) {
+	return win.img, nil
+}
+
+func (win *Window) ImagePut(Rect image.Rectangle) error {
+	return win.runAppMsgReq(&ReqImagePut{Rect: Rect})
+}
+
+func (win *Window) ImageResize(Rect image.Rectangle) error {
+	return win.runAppMsgReq(&ReqImageResize{Rect: Rect})
+}
+
+func (win *Window) CursorSet(Cursor event.Cursor) error {
+	return win.runAppMsgReq(&ReqCursorSet{Cursor: Cursor})
+}
+
+func (win *Window) PointerQuery() (image.Point, error) {
+	r := ReqPointerQuery{}
+	err := win.runAppMsgReq(&r)
+	return r.ReplyP, err
+}
+
+func (win *Window) PointerWarp(P image.Point) error {
+	return win.runAppMsgReq(&ReqPointerWarp{P: P})
+}
+
+func (win *Window) ClipboardDataGet() (string, error) {
+	r := ReqClipboardDataGet{}
+	err := win.runAppMsgReq(&r)
+	return r.ReplyS, err
+}
+
+func (win *Window) ClipboardDataSet(str string) error {
+	return win.runAppMsgReq(&ReqClipboardDataSet{Str: str})
+}
+
+func (win *Window) runAppMsgReq(req Request) error {
 	appData := NewAppData(req)
 	appData.ReqErr.Start(3 * time.Second)
 	if err := win.postAppMsg(appData); err != nil {
@@ -389,13 +415,13 @@ func (win *Window) runAppMsgReq(req event.Request) error {
 	return nil
 }
 
-func (win *Window) readAppMsgReq(id int) (event.Request, *AppData, error) {
+func (win *Window) readAppMsgReq(id int) (Request, *AppData, error) {
 	data, err := win.getAppMsgData(id)
 	if err != nil {
 		return nil, nil, err
 	}
 	appData := data.(*AppData)
-	return appData.Value.(event.Request), appData, nil
+	return appData.Value.(Request), appData, nil
 }
 
 //----------

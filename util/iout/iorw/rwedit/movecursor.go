@@ -6,7 +6,6 @@ import (
 	"io"
 
 	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 func MoveCursorToPoint(ctx *Ctx, p image.Point, sel bool) {
@@ -14,7 +13,7 @@ func MoveCursorToPoint(ctx *Ctx, p image.Point, sel bool) {
 	ctx.C.UpdateSelection(sel, i)
 	// set primary copy
 	if b, ok := ctx.Selection(); ok {
-		ctx.Fns.SetClipboardData(event.CIPrimary, string(b))
+		ctx.Fns.SetClipboardData(string(b))
 	}
 }
 

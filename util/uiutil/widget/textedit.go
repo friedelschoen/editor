@@ -41,13 +41,7 @@ func NewTextEdit(uiCtx UIContext) *TextEdit {
 	te.ctx.Fns.Undo = te.Undo
 	te.ctx.Fns.Redo = te.Redo
 	te.ctx.Fns.SetClipboardData = te.uiCtx.SetClipboardData
-	te.ctx.Fns.GetClipboardData = func(i event.ClipboardIndex, fn func(string, error)) {
-		te.uiCtx.GetClipboardData(i, func(s string, err error) {
-			te.uiCtx.RunOnUIGoRoutine(func() {
-				fn(s, err)
-			})
-		})
-	}
+	te.ctx.Fns.GetClipboardData = te.uiCtx.GetClipboardData
 
 	return te
 }

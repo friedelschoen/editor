@@ -11,7 +11,6 @@ import (
 	"github.com/jezek/xgb/xproto"
 	"github.com/jmigpin/editor/driver/xdriver/xutil"
 	"github.com/jmigpin/editor/util/syncutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 type Paste struct {
@@ -36,15 +35,8 @@ func NewPaste(conn *xgb.Conn, win xproto.Window) (*Paste, error) {
 
 //----------
 
-func (p *Paste) Get(index event.ClipboardIndex) (string, error) {
-	switch index {
-	case event.CIPrimary:
-		return p.request(PasteAtoms.Primary)
-	case event.CIClipboard:
-		return p.request(PasteAtoms.Clipboard)
-	default:
-		return "", fmt.Errorf("unhandled index")
-	}
+func (p *Paste) Get() (string, error) {
+	return p.request(PasteAtoms.Clipboard)
 }
 
 //----------

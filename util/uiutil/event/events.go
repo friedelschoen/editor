@@ -130,21 +130,4 @@ const (
 
 //----------
 
-type ClipboardIndex int
-
-const (
-	CIPrimary ClipboardIndex = iota
-	CIClipboard
-)
-
-// Deprecated: in favor of ClipboardIndex
-type CopyPasteIndex int
-
-const (
-	CPIPrimary   = CopyPasteIndex(CIPrimary)
-	CPIClipboard = CopyPasteIndex(CIClipboard)
-)
-
-//----------
-
 type Handled bool

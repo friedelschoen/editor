@@ -85,7 +85,7 @@ func (in *Input) onMouseClick(ev *event.MouseClick) (event.Handled, error) {
 	switch ev.Button {
 	case event.ButtonMiddle:
 		MoveCursorToPoint(in.ctx, ev.Point, false)
-		Paste(in.ctx, event.CIPrimary)
+		Paste(in.ctx)
 		return true, nil
 	}
 	return false, nil
@@ -275,7 +275,7 @@ func (in *Input) onKeyDown(ev *event.KeyDown) (_ event.Handled, err error) {
 				err = Cut(in.ctx)
 				return true, err
 			case event.KSymV:
-				Paste(in.ctx, event.CIClipboard)
+				Paste(in.ctx)
 				return true, nil
 			case event.KSymK:
 				err = RemoveLines(in.ctx)

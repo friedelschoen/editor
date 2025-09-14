@@ -15,8 +15,8 @@ type UIContext interface {
 	//	SetCursor(event.Cursor) // TODO
 
 	RunOnUIGoRoutine(f func())
-	SetClipboardData(event.ClipboardIndex, string)
-	GetClipboardData(event.ClipboardIndex, func(string, error))
+	SetClipboardData(string)
+	GetClipboardData() string
 }
 
 type ImageContext interface {

@@ -6,7 +6,6 @@ import (
 
 	"github.com/jmigpin/editor/util/iout"
 	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 //godebug:annotatefile
@@ -65,8 +64,8 @@ type CtxFns struct {
 	PageUp           func(up bool)
 	ScrollUp         func(up bool)
 
-	SetClipboardData func(event.ClipboardIndex, string)
-	GetClipboardData func(event.ClipboardIndex, func(string, error)) // setter should wrap fn to run on ui goroutine
+	SetClipboardData func(string)
+	GetClipboardData func() string // setter should wrap fn to run on ui goroutine
 
 	Undo func() error
 	Redo func() error
@@ -85,8 +84,8 @@ func EmptyCtxFns() CtxFns {
 	u.PageUp = func(bool) {}
 	u.ScrollUp = func(bool) {}
 
-	u.SetClipboardData = func(event.ClipboardIndex, string) {}
-	u.GetClipboardData = func(event.ClipboardIndex, func(string, error)) {}
+	u.SetClipboardData = func(string) {}
+	u.GetClipboardData = func() string { return "" }
 
 	u.Undo = func() error { return nil }
 	u.Redo = func() error { return nil }

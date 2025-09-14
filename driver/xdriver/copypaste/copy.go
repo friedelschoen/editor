@@ -5,13 +5,11 @@ package copypaste
 import (
 	"bytes"
 	"encoding/binary"
-	"fmt"
 	"log"
 
 	"github.com/jezek/xgb"
 	"github.com/jezek/xgb/xproto"
 	"github.com/jmigpin/editor/driver/xdriver/xutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 type Copy struct {
@@ -21,7 +19,6 @@ type Copy struct {
 
 	// Data to transfer
 	clipboardStr string
-	primaryStr   string
 }
 
 func NewCopy(conn *xgb.Conn, win xproto.Window) (*Copy, error) {
@@ -34,16 +31,9 @@ func NewCopy(conn *xgb.Conn, win xproto.Window) (*Copy, error) {
 
 //----------
 
-func (c *Copy) Set(i event.ClipboardIndex, str string) error {
-	switch i {
-	case event.CIPrimary:
-		c.primaryStr = str
-		return c.set(CopyAtoms.Primary)
-	case event.CIClipboard:
-		c.clipboardStr = str
-		return c.set(CopyAtoms.Clipboard)
-	}
-	panic("unhandled index")
+func (c *Copy) Set(str string) error {
+	c.clipboardStr = str
+	return c.set(CopyAtoms.Clipboard)
 }
 func (c *Copy) set(selection xproto.Atom) error {
 	t := xproto.Timestamp(xproto.TimeCurrentTime)
@@ -113,15 +103,7 @@ func (c *Copy) debugRequest(ev *xproto.SelectionRequestEvent) {
 //----------
 
 func (c *Copy) transferBytes(ev *xproto.SelectionRequestEvent) error {
-	var b []byte
-	switch ev.Selection {
-	case CopyAtoms.Primary:
-		b = []byte(c.primaryStr)
-	case CopyAtoms.Clipboard:
-		b = []byte(c.clipboardStr)
-	default:
-		return fmt.Errorf("unhandled selection: %v", ev.Selection)
-	}
+	b := []byte(c.clipboardStr)
 
 	// change property on the requestor
 	c1 := xproto.ChangePropertyChecked(
@@ -208,12 +190,7 @@ func (c *Copy) transferTargets(ev *xproto.SelectionRequestEvent) error {
 
 // Another application now owns the selection.
 func (c *Copy) OnSelectionClear(ev *xproto.SelectionClearEvent) {
-	switch ev.Selection {
-	case CopyAtoms.Primary:
-		c.primaryStr = ""
-	case CopyAtoms.Clipboard:
-		c.clipboardStr = ""
-	}
+	c.clipboardStr = ""
 }
 
 //----------
