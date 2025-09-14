@@ -5,6 +5,7 @@ import (
 	"os"
 	"sync"
 
+	"github.com/jmigpin/editor/util/fontutil"
 	"github.com/jmigpin/editor/util/mathutil"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/opentype"
@@ -18,12 +19,12 @@ type Annotations struct {
 func (ann *Annotations) Init() {
 	opts := FontOptions
 	opts.Size *= 0.70
-	var err error
-	ann.notesFFace, err = opentype.NewFace(Font, opts)
+	fface, err := opentype.NewFace(Font, opts)
 	if err != nil {
 		fmt.Print("unable to initialize fontface: %v\n", err)
 		os.Exit(2)
 	}
+	ann.notesFFace = fontutil.NewFaceRunes(fface)
 
 	if ann.d.Opt.Annotations.Entries != nil {
 		ann.d.Opt.Annotations.Entries.RLock()

@@ -498,11 +498,12 @@ func (ed *Editor) setupTheme(opt *Options) {
 		fmt.Fprintf(os.Stderr, "invalid font: %v\n", err)
 		os.Exit(2)
 	}
-	drawer4.FontFace, err = opentype.NewFace(drawer4.Font, drawer4.FontOptions)
+	fface, err := opentype.NewFace(drawer4.Font, drawer4.FontOptions)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "unable to create fontface: %v\n", err)
 		os.Exit(2)
 	}
+	drawer4.FontFace = fontutil.NewFaceRunes(fface)
 }
 
 //----------

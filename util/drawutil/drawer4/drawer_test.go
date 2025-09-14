@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/jmigpin/editor/util/drawutil"
+	"github.com/jmigpin/editor/util/fontutil"
 	"github.com/jmigpin/editor/util/iout/iorw"
 	"golang.org/x/image/colornames"
 	"golang.org/x/image/font"
@@ -27,7 +28,9 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	face, err = opentype.NewFace(font, nil)
+	fface, err := opentype.NewFace(font, nil)
+
+	face = fontutil.NewFaceRunes(fface)
 }
 
 func TestEmpty(t *testing.T) {
