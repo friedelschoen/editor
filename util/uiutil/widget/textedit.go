@@ -3,11 +3,11 @@ package widget
 import (
 	"image"
 
-	"github.com/jmigpin/editor/util/evreg"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/iout/iorw/rwedit"
-	"github.com/jmigpin/editor/util/iout/iorw/rwundo"
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/friedelschoen/editor/util/evreg"
+	"github.com/friedelschoen/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/iout/iorw/rwedit"
+	"github.com/friedelschoen/editor/util/iout/iorw/rwundo"
+	"github.com/friedelschoen/editor/util/uiutil/event"
 )
 
 type TextEdit struct {

@@ -6,8 +6,8 @@ import (
 	"io"
 	"time"
 
-	"github.com/jmigpin/editor/util/ctxutil"
-	"github.com/jmigpin/editor/util/iout"
+	"github.com/friedelschoen/editor/util/ctxutil"
+	"github.com/friedelschoen/editor/util/iout"
 )
 
 type LangInstance struct {

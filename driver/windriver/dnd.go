@@ -7,7 +7,7 @@ import (
 	"image"
 	"strings"
 
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/friedelschoen/editor/util/uiutil/event"
 	"golang.org/x/sys/windows"
 )
 

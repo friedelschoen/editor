@@ -6,8 +6,8 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/jmigpin/editor/util/goutil"
-	"github.com/jmigpin/editor/util/parseutil/pscan"
+	"github.com/friedelschoen/editor/util/goutil"
+	"github.com/friedelschoen/editor/util/parseutil/pscan"
 )
 
 type Rule interface {

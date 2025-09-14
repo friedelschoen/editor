@@ -1,8 +1,8 @@
 package core
 
 import (
-	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/util/evreg"
+	"github.com/friedelschoen/editor/ui"
+	"github.com/friedelschoen/editor/util/evreg"
 )
 
 // Editor events.

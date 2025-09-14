@@ -4,8 +4,8 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/jmigpin/editor/util/imageutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/friedelschoen/editor/util/imageutil"
+	"github.com/friedelschoen/editor/util/uiutil/event"
 )
 
 // Used by ScrollBar.

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jmigpin/editor/core/lsproto"
-	"github.com/jmigpin/editor/util/parseutil"
+	"github.com/friedelschoen/editor/core/lsproto"
+	"github.com/friedelschoen/editor/util/parseutil"
 )
 
 type Options struct {

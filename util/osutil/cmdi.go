@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jmigpin/editor/util/iout"
+	"github.com/friedelschoen/editor/util/iout"
 )
 
 type CmdI interface {

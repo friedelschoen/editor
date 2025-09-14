@@ -6,9 +6,9 @@ import (
 	"io"
 	"path/filepath"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/core/lsproto"
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/core"
+	"github.com/friedelschoen/editor/core/lsproto"
+	"github.com/friedelschoen/editor/util/iout/iorw"
 )
 
 func LSProtoCallHierarchyIncomingCalls(args *core.InternalCmdArgs) error {

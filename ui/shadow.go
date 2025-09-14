@@ -1,7 +1,7 @@
 package ui
 
 import (
-	"github.com/jmigpin/editor/util/uiutil/widget"
+	"github.com/friedelschoen/editor/util/uiutil/widget"
 )
 
 var (

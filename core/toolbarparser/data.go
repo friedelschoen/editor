@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/jmigpin/editor/util/parseutil/lrparser"
+	"github.com/friedelschoen/editor/util/parseutil/lrparser"
 )
 
 type Data struct {

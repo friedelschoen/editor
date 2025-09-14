@@ -4,7 +4,7 @@ import (
 	"image"
 	"time"
 
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/friedelschoen/editor/util/uiutil/event"
 )
 
 // produce click/doubleclick/tripleclick events

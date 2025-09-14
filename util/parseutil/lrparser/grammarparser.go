@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/jmigpin/editor/util/parseutil/pscan"
+	"github.com/friedelschoen/editor/util/parseutil/pscan"
 )
 
 type grammarParser struct {

@@ -3,8 +3,8 @@ package widget
 import (
 	"image"
 
-	"github.com/jmigpin/editor/util/uiutil/event"
-	"github.com/jmigpin/editor/util/uiutil/mousefilter"
+	"github.com/friedelschoen/editor/util/uiutil/event"
+	"github.com/friedelschoen/editor/util/uiutil/mousefilter"
 )
 
 // A transparent widget added to a top layer (usually multilayer) to facilitate dragging.

@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/iout/iorw"
 )
 
 ////godebug:annotatepackage

@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/util/ctxutil"
-	"github.com/jmigpin/editor/util/iout"
-	"github.com/jmigpin/editor/util/osutil"
+	"github.com/friedelschoen/editor/core"
+	"github.com/friedelschoen/editor/ui"
+	"github.com/friedelschoen/editor/util/ctxutil"
+	"github.com/friedelschoen/editor/util/iout"
+	"github.com/friedelschoen/editor/util/osutil"
 )
 
 //----------

@@ -3,8 +3,8 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/util/uiutil/event"
-	"github.com/jmigpin/editor/util/uiutil/widget"
+	"github.com/friedelschoen/editor/util/uiutil/event"
+	"github.com/friedelschoen/editor/util/uiutil/widget"
 )
 
 type ColSeparator struct {

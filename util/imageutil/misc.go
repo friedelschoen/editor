@@ -7,7 +7,7 @@ import (
 	"math"
 	"sort"
 
-	"github.com/jmigpin/editor/util/mathutil"
+	"github.com/friedelschoen/editor/util/mathutil"
 )
 
 //----------

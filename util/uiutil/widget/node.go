@@ -7,9 +7,9 @@ import (
 	"image/color"
 	"strings"
 
-	"github.com/jmigpin/editor/util/drawutil/drawer4"
-	"github.com/jmigpin/editor/util/imageutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/friedelschoen/editor/util/drawutil/drawer4"
+	"github.com/friedelschoen/editor/util/imageutil"
+	"github.com/friedelschoen/editor/util/uiutil/event"
 	"golang.org/x/image/font"
 )
 

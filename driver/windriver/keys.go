@@ -3,7 +3,7 @@
 package windriver
 
 import (
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/friedelschoen/editor/util/uiutil/event"
 )
 
 func translateVKeyToEventKeySym(vkey uint32, ru rune) event.KeySym {

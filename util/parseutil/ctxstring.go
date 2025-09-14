@@ -3,8 +3,8 @@ package parseutil
 import (
 	"fmt"
 
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/mathutil"
+	"github.com/friedelschoen/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/mathutil"
 )
 
 func CtxErrorStr(rd iorw.ReaderAt, filename string, pos int, msg string, contextSize int) string {

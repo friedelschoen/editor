@@ -9,17 +9,17 @@ import (
 	"runtime"
 	"sync"
 
+	"github.com/friedelschoen/editor/driver/xdriver/copypaste"
+	"github.com/friedelschoen/editor/driver/xdriver/dragndrop"
+	"github.com/friedelschoen/editor/driver/xdriver/wimage"
+	"github.com/friedelschoen/editor/driver/xdriver/wmprotocols"
+	"github.com/friedelschoen/editor/driver/xdriver/xcursors"
+	"github.com/friedelschoen/editor/driver/xdriver/xinput"
+	"github.com/friedelschoen/editor/driver/xdriver/xutil"
+	"github.com/friedelschoen/editor/util/uiutil/event"
 	"github.com/jezek/xgb"
 	"github.com/jezek/xgb/shm"
 	"github.com/jezek/xgb/xproto"
-	"github.com/jmigpin/editor/driver/xdriver/copypaste"
-	"github.com/jmigpin/editor/driver/xdriver/dragndrop"
-	"github.com/jmigpin/editor/driver/xdriver/wimage"
-	"github.com/jmigpin/editor/driver/xdriver/wmprotocols"
-	"github.com/jmigpin/editor/driver/xdriver/xcursors"
-	"github.com/jmigpin/editor/driver/xdriver/xinput"
-	"github.com/jmigpin/editor/driver/xdriver/xutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 type Window struct {

@@ -1,8 +1,8 @@
 package ui
 
 import (
-	"github.com/jmigpin/editor/util/drawutil/drawer4"
-	"github.com/jmigpin/editor/util/uiutil/widget"
+	"github.com/friedelschoen/editor/util/drawutil/drawer4"
+	"github.com/friedelschoen/editor/util/uiutil/widget"
 )
 
 type MainMenuButton struct {

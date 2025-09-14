@@ -8,9 +8,9 @@ import (
 	"log"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/jmigpin/editor/util/drawutil"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/mathutil"
+	"github.com/friedelschoen/editor/util/drawutil"
+	"github.com/friedelschoen/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/mathutil"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/opentype"
 )

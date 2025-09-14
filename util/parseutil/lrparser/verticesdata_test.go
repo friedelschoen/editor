@@ -3,7 +3,7 @@ package lrparser
 import (
 	"testing"
 
-	"github.com/jmigpin/editor/util/testutil"
+	"github.com/friedelschoen/editor/util/testutil"
 )
 
 func TestVerticesData1(t *testing.T) {
@@ -187,7 +187,7 @@ func TestVerticesData2(t *testing.T) {
 	testRulesToVerticesMode1(t, grammar, expect)
 }
 func TestVerticesData3(t *testing.T) {
-	grammar := `		
+	grammar := `
 		^id = id "a" | "a";
 	`
 	expect := `
@@ -209,7 +209,7 @@ func TestVerticesData3(t *testing.T) {
 	testRulesToVerticesMode1(t, grammar, expect)
 }
 func TestVerticesData4(t *testing.T) {
-	grammar := `		
+	grammar := `
 		^id = id "b" "a" | "a";
 	`
 	expect := `
@@ -234,8 +234,8 @@ func TestVerticesData4(t *testing.T) {
 	testRulesToVerticesMode1(t, grammar, expect)
 }
 func TestVerticesData5(t *testing.T) {
-	grammar := `		
-		^id = "a" id | "a";		
+	grammar := `
+		^id = "a" id | "a";
 	`
 	expect := `
 		vertex0:

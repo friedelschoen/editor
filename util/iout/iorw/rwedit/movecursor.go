@@ -5,7 +5,7 @@ import (
 	"image"
 	"io"
 
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/iout/iorw"
 )
 
 func MoveCursorToPoint(ctx *Ctx, p image.Point, sel bool) {

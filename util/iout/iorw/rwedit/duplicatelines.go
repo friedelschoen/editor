@@ -1,6 +1,6 @@
 package rwedit
 
-import "github.com/jmigpin/editor/util/iout"
+import "github.com/friedelschoen/editor/util/iout"
 
 func DuplicateLines(ctx *Ctx) error {
 	a, b, newline, err := ctx.CursorSelectionLinesIndexes()

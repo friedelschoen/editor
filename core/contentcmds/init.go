@@ -1,7 +1,7 @@
 package contentcmds
 
 import (
-	"github.com/jmigpin/editor/core"
+	"github.com/friedelschoen/editor/core"
 )
 
 func init() {

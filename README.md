@@ -46,7 +46,7 @@ Source code editor in pure Go.
 
 Get with `git` the latest from the default master branch:
 ```
-git clone https://github.com/jmigpin/editor
+git clone https://github.com/friedelschoen/editor
 ```
 Build and run:
 ```
@@ -64,7 +64,7 @@ go build -tags=xproto 			# (not native, needs an x11 server to run)
 ### Instalation with go tooling to be used as a library
 
 ```
-go get -u github.com/jmigpin/editor
+go get -u github.com/friedelschoen/editor
 ```
 
 Please take care to distinguish between versions and ensure "go get" is actually getting the version you want.

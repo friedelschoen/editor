@@ -5,7 +5,7 @@ import (
 	"io"
 	"unicode"
 
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/friedelschoen/editor/util/uiutil/event"
 )
 
 //godebug:annotatefile

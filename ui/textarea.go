@@ -3,11 +3,11 @@ package ui
 import (
 	"image"
 
-	"github.com/jmigpin/editor/util/drawutil/drawer4"
-	"github.com/jmigpin/editor/util/evreg"
-	"github.com/jmigpin/editor/util/iout/iorw/rwedit"
-	"github.com/jmigpin/editor/util/uiutil/event"
-	"github.com/jmigpin/editor/util/uiutil/widget"
+	"github.com/friedelschoen/editor/util/drawutil/drawer4"
+	"github.com/friedelschoen/editor/util/evreg"
+	"github.com/friedelschoen/editor/util/iout/iorw/rwedit"
+	"github.com/friedelschoen/editor/util/uiutil/event"
+	"github.com/friedelschoen/editor/util/uiutil/widget"
 )
 
 type TextArea struct {

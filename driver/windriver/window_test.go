@@ -5,7 +5,7 @@ package windriver
 import (
 	"testing"
 
-	"github.com/jmigpin/editor/util/uiutil/event"
+	"github.com/friedelschoen/editor/util/uiutil/event"
 )
 
 func TestVirtualKeyLookup(t *testing.T) {

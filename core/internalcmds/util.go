@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/jmigpin/editor/core"
+	"github.com/friedelschoen/editor/core"
 )
 
 func parseFlagSetHandleUsage(args *core.InternalCmdArgs, fs *flag.FlagSet) error {

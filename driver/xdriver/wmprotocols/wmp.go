@@ -4,9 +4,9 @@ import (
 	"encoding/binary"
 	"log"
 
+	"github.com/friedelschoen/editor/driver/xdriver/xutil"
 	"github.com/jezek/xgb"
 	"github.com/jezek/xgb/xproto"
-	"github.com/jmigpin/editor/driver/xdriver/xutil"
 )
 
 // https://tronche.com/gui/x/icccm/sec-4.html#s-4.2.8.1

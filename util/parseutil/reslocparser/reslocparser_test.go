@@ -3,7 +3,7 @@ package reslocparser
 import (
 	"testing"
 
-	"github.com/jmigpin/editor/util/testutil"
+	"github.com/friedelschoen/editor/util/testutil"
 )
 
 func TestResLocParser1(t *testing.T) {

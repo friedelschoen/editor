@@ -6,9 +6,9 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/friedelschoen/editor/util/uiutil/event"
 	"github.com/jezek/xgb"
 	"github.com/jezek/xgb/xproto"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 // $ man keymaps

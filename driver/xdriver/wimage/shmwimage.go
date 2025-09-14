@@ -7,10 +7,10 @@ import (
 	"log"
 	"time"
 
+	"github.com/friedelschoen/editor/util/syncutil"
 	"github.com/jezek/xgb"
 	"github.com/jezek/xgb/shm"
 	"github.com/jezek/xgb/xproto"
-	"github.com/jmigpin/editor/util/syncutil"
 )
 
 type ShmWImage struct {

@@ -6,9 +6,9 @@ import (
 	"bytes"
 	"encoding/binary"
 
+	"github.com/friedelschoen/editor/driver/xdriver/xutil"
 	"github.com/jezek/xgb"
 	"github.com/jezek/xgb/xproto"
-	"github.com/jmigpin/editor/driver/xdriver/xutil"
 )
 
 type Copy struct {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/jmigpin/editor/util/goutil"
+	"github.com/friedelschoen/editor/util/goutil"
 )
 
 func dereferenceRules(ri *RuleIndex) error {

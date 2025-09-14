@@ -3,8 +3,8 @@ package internalcmds
 import (
 	"fmt"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/util/parseutil"
+	"github.com/friedelschoen/editor/core"
+	"github.com/friedelschoen/editor/util/parseutil"
 )
 
 func CopyFilePosition(args *core.InternalCmdArgs) error {

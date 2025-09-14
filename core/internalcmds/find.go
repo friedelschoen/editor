@@ -6,10 +6,10 @@ import (
 	"io"
 	"strings"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/iout/iorw/rwedit"
-	"github.com/jmigpin/editor/util/parseutil"
+	"github.com/friedelschoen/editor/core"
+	"github.com/friedelschoen/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/iout/iorw/rwedit"
+	"github.com/friedelschoen/editor/util/parseutil"
 )
 
 func Find(args *core.InternalCmdArgs) error {

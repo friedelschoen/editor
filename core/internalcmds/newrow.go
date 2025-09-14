@@ -4,7 +4,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/jmigpin/editor/core"
+	"github.com/friedelschoen/editor/core"
 )
 
 func NewRow(args *core.InternalCmdArgs) error {

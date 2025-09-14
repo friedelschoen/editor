@@ -1,8 +1,8 @@
 package xinput
 
 import (
+	"github.com/friedelschoen/editor/util/uiutil/event"
 	"github.com/jezek/xgb/xproto"
-	"github.com/jmigpin/editor/util/uiutil/event"
 )
 
 // Constants from /usr/include/X11/keysymdef.h

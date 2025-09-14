@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jmigpin/editor/core/toolbarparser"
-	"github.com/jmigpin/editor/ui"
+	"github.com/friedelschoen/editor/core/toolbarparser"
+	"github.com/friedelschoen/editor/ui"
 )
 
 // cmds added via init() from "internalcmds" pkg

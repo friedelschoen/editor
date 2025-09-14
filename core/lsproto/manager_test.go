@@ -14,10 +14,10 @@ import (
 	"testing"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/jmigpin/editor/util/iout"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/osutil"
-	"github.com/jmigpin/editor/util/testutil"
+	"github.com/friedelschoen/editor/util/iout"
+	"github.com/friedelschoen/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/osutil"
+	"github.com/friedelschoen/editor/util/testutil"
 )
 
 func TestStruct1(t *testing.T) {

@@ -6,11 +6,11 @@ import (
 	"sync"
 	"unicode"
 
-	"github.com/jmigpin/editor/core/lsproto"
-	"github.com/jmigpin/editor/ui"
-	"github.com/jmigpin/editor/util/drawutil/drawer4"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/mathutil"
+	"github.com/friedelschoen/editor/core/lsproto"
+	"github.com/friedelschoen/editor/ui"
+	"github.com/friedelschoen/editor/util/drawutil/drawer4"
+	"github.com/friedelschoen/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/mathutil"
 )
 
 type InlineComplete struct {

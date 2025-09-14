@@ -4,7 +4,7 @@ import (
 	"image"
 	"unsafe"
 
-	"github.com/jmigpin/editor/util/imageutil"
+	"github.com/friedelschoen/editor/util/imageutil"
 )
 
 type ShmImgWrap struct {

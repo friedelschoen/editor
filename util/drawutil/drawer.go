@@ -5,7 +5,7 @@ import (
 	"image/color"
 	"image/draw"
 
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/iout/iorw"
 	"golang.org/x/image/font"
 )
 

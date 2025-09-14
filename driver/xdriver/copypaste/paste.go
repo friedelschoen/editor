@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/friedelschoen/editor/driver/xdriver/xutil"
+	"github.com/friedelschoen/editor/util/syncutil"
 	"github.com/jezek/xgb"
 	"github.com/jezek/xgb/xproto"
-	"github.com/jmigpin/editor/driver/xdriver/xutil"
-	"github.com/jmigpin/editor/util/syncutil"
 )
 
 type Paste struct {

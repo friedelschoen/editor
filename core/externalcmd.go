@@ -8,10 +8,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jmigpin/editor/core/toolbarparser"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/osutil"
-	"github.com/jmigpin/editor/util/parseutil"
+	"github.com/friedelschoen/editor/core/toolbarparser"
+	"github.com/friedelschoen/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/osutil"
+	"github.com/friedelschoen/editor/util/parseutil"
 )
 
 func ExternalCmd(erow *ERow, part *toolbarparser.Part) {

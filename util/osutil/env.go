@@ -7,7 +7,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/jmigpin/editor/util/strconvutil"
+	"github.com/friedelschoen/editor/util/strconvutil"
 )
 
 // environ map

@@ -1,6 +1,6 @@
 package rwedit
 
-import "github.com/jmigpin/editor/util/iout/iorw"
+import "github.com/friedelschoen/editor/util/iout/iorw"
 
 func Backspace(ctx *Ctx) error {
 	a, b, ok := ctx.C.SelectionIndexes()

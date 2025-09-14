@@ -8,7 +8,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/jmigpin/editor/util/osutil"
+	"github.com/friedelschoen/editor/util/osutil"
 )
 
 func OsAndGoEnv(dir string) []string {

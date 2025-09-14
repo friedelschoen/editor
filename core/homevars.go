@@ -1,8 +1,8 @@
 package core
 
 import (
-	"github.com/jmigpin/editor/core/toolbarparser"
-	"github.com/jmigpin/editor/util/osutil"
+	"github.com/friedelschoen/editor/core/toolbarparser"
+	"github.com/friedelschoen/editor/util/osutil"
 )
 
 type HomeVars struct {

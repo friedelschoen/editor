@@ -1,8 +1,8 @@
 package rwundo
 
 import (
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/iout/iorw/rwedit"
+	"github.com/friedelschoen/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/iout/iorw/rwedit"
 )
 
 type RWUndo struct {

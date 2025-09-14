@@ -4,8 +4,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/core/toolbarparser"
+	"github.com/friedelschoen/editor/core"
+	"github.com/friedelschoen/editor/core/toolbarparser"
 )
 
 func ToolbarCmd(ed *core.Editor, erow *core.ERow, part *toolbarparser.Part) bool {

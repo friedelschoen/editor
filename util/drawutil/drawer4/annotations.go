@@ -5,8 +5,8 @@ import (
 	"os"
 	"sync"
 
-	"github.com/jmigpin/editor/util/fontutil"
-	"github.com/jmigpin/editor/util/mathutil"
+	"github.com/friedelschoen/editor/util/fontutil"
+	"github.com/friedelschoen/editor/util/mathutil"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/opentype"
 )

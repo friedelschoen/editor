@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jmigpin/editor/util/parseutil"
+	"github.com/friedelschoen/editor/util/parseutil"
 )
 
 type Registration struct {

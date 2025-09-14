@@ -10,9 +10,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/jmigpin/editor/util/drawutil"
-	"github.com/jmigpin/editor/util/fontutil"
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/drawutil"
+	"github.com/friedelschoen/editor/util/fontutil"
+	"github.com/friedelschoen/editor/util/iout/iorw"
 	"golang.org/x/image/colornames"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/gofont/goregular"

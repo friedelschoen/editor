@@ -8,11 +8,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jmigpin/editor/driver"
-	"github.com/jmigpin/editor/util/syncutil"
-	"github.com/jmigpin/editor/util/uiutil/event"
-	"github.com/jmigpin/editor/util/uiutil/mousefilter"
-	"github.com/jmigpin/editor/util/uiutil/widget"
+	"github.com/friedelschoen/editor/driver"
+	"github.com/friedelschoen/editor/util/syncutil"
+	"github.com/friedelschoen/editor/util/uiutil/event"
+	"github.com/friedelschoen/editor/util/uiutil/mousefilter"
+	"github.com/friedelschoen/editor/util/uiutil/widget"
 )
 
 type BasicUI struct {

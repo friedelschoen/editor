@@ -3,8 +3,8 @@ package toolbarparser
 import (
 	"unicode"
 
-	"github.com/jmigpin/editor/util/osutil"
-	"github.com/jmigpin/editor/util/parseutil/pscan"
+	"github.com/friedelschoen/editor/util/osutil"
+	"github.com/friedelschoen/editor/util/parseutil/pscan"
 )
 
 func parseVarDecl(src string) (*VarDecl, error) {

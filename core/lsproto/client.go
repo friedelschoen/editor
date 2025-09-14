@@ -11,9 +11,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jmigpin/editor/util/ctxutil"
-	"github.com/jmigpin/editor/util/iout"
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/ctxutil"
+	"github.com/friedelschoen/editor/util/iout"
+	"github.com/friedelschoen/editor/util/iout/iorw"
 )
 
 type Client struct {

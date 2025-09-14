@@ -6,8 +6,8 @@ import (
 	"image/draw"
 	"sync"
 
+	"github.com/friedelschoen/editor/util/imageutil"
 	"github.com/jezek/xgb/xproto"
-	"github.com/jmigpin/editor/util/imageutil"
 )
 
 type PixmapWImage struct {

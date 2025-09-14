@@ -3,7 +3,7 @@ package widget
 import (
 	"image"
 
-	"github.com/jmigpin/editor/util/imageutil"
+	"github.com/friedelschoen/editor/util/imageutil"
 )
 
 type Rectangle struct {

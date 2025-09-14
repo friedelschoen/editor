@@ -3,9 +3,9 @@ package xcursors
 import (
 	"image/color"
 
+	"github.com/friedelschoen/editor/util/imageutil"
 	"github.com/jezek/xgb"
 	"github.com/jezek/xgb/xproto"
-	"github.com/jmigpin/editor/util/imageutil"
 )
 
 // https://tronche.com/gui/x/xlib/appendix/b/

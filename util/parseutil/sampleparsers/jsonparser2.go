@@ -1,7 +1,7 @@
 package sampleparsers
 
 import (
-	"github.com/jmigpin/editor/util/parseutil/pscan"
+	"github.com/friedelschoen/editor/util/parseutil/pscan"
 )
 
 func ParseJson2(src []byte) (any, error) {

@@ -5,8 +5,8 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/jmigpin/editor/util/imageutil"
-	"github.com/jmigpin/editor/util/uiutil/widget"
+	"github.com/friedelschoen/editor/util/imageutil"
+	"github.com/friedelschoen/editor/util/uiutil/widget"
 	"golang.org/x/image/font"
 )
 

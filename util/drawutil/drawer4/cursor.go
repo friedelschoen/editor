@@ -4,7 +4,7 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/jmigpin/editor/util/imageutil"
+	"github.com/friedelschoen/editor/util/imageutil"
 )
 
 type Cursor struct {

@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/parseutil"
-	"github.com/jmigpin/editor/util/parseutil/reslocparser"
+	"github.com/friedelschoen/editor/core"
+	"github.com/friedelschoen/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/parseutil"
+	"github.com/friedelschoen/editor/util/parseutil/reslocparser"
 )
 
 // Detects compilers output file format <string(:int)?(:int)?>, and goes to line/column.

@@ -6,8 +6,8 @@ import (
 	"io"
 	"unicode"
 
-	"github.com/jmigpin/editor/util/iout"
-	"github.com/jmigpin/editor/util/parseutil/pscan"
+	"github.com/friedelschoen/editor/util/iout"
+	"github.com/friedelschoen/editor/util/parseutil/pscan"
 )
 
 func NewScanner(rd ReaderAt, index int) (*pscan.Scanner, int) {

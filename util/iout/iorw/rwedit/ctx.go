@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"image"
 
-	"github.com/jmigpin/editor/util/iout"
-	"github.com/jmigpin/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/iout"
+	"github.com/friedelschoen/editor/util/iout/iorw"
 )
 
 //godebug:annotatefile

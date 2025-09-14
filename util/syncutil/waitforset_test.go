@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jmigpin/editor/util/chanutil"
+	"github.com/friedelschoen/editor/util/chanutil"
 )
 
 func BenchmarkWaitForSet(b *testing.B) {

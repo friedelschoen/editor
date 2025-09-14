@@ -5,9 +5,9 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/util/iout/iorw"
-	"github.com/jmigpin/editor/util/parseutil/pscan"
+	"github.com/friedelschoen/editor/core"
+	"github.com/friedelschoen/editor/util/iout/iorw"
+	"github.com/friedelschoen/editor/util/parseutil/pscan"
 )
 
 func OpenSession(ctx context.Context, erow *core.ERow, index int) (error, bool) {

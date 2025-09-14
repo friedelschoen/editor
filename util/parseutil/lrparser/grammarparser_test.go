@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/jmigpin/editor/util/testutil"
+	"github.com/friedelschoen/editor/util/testutil"
 )
 
 func TestGrammarParser1(t *testing.T) {
@@ -21,7 +21,7 @@ func TestGrammarParser1(t *testing.T) {
 	testGrammarParserMode1(t, in, out)
 }
 func TestGrammarParser2(t *testing.T) {
-	in := `	
+	in := `
 		^S = (a|b|("cd")%)?;
 	`
 	out := `

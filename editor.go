@@ -10,11 +10,11 @@ import (
 	"path"
 	"runtime/pprof"
 
-	"github.com/jmigpin/editor/core"
+	"github.com/friedelschoen/editor/core"
 
 	// imports that can't be imported from core (cyclic import)
-	_ "github.com/jmigpin/editor/core/contentcmds"
-	_ "github.com/jmigpin/editor/core/internalcmds"
+	_ "github.com/friedelschoen/editor/core/contentcmds"
+	_ "github.com/friedelschoen/editor/core/internalcmds"
 )
 
 func configPath() string {
