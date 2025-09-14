@@ -55,10 +55,6 @@ func init() {
 
 	cmd(GoRename, "GoRename") // TODO: deprecate
 
-	cmd(GoDebug, "GoDebug")
-	cmd(GoDebugFind, "GoDebugFind")
-	cmd(GoDebugTrace, "GoDebugTrace")
-
 	cmd(LSProtoCloseAll, "LsprotoCloseAll", "LSProtoCloseAll") // TODO: deprecate LSProtoCloseAll
 	cmd(LSProtoRename, "LsprotoRename")
 	cmd(LSProtoReferences, "LsprotoReferences")

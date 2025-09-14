@@ -2,7 +2,7 @@
 package main
 
 import (
-	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -11,7 +11,6 @@ import (
 	"runtime/pprof"
 
 	"github.com/jmigpin/editor/core"
-	"github.com/jmigpin/editor/core/godebug"
 
 	// imports that can't be imported from core (cyclic import)
 	_ "github.com/jmigpin/editor/core/contentcmds"
@@ -31,11 +30,6 @@ func configPath() string {
 }
 
 func main() {
-	// allow direct access to godebug on the cmd line
-	if godebugMain() {
-		return
-	}
-
 	opt := core.Options{
 		Font:               "monospace",
 		ColorTheme:         "light",
@@ -44,9 +38,9 @@ func main() {
 		WrapLineRune:       "←",
 	}
 
-	// if conffile, err := os.ReadFile(configPath()); err == nil {
-	// 	json.Unmarshal(conffile, &opt)
-	// }
+	if conffile, err := os.ReadFile(configPath()); err == nil {
+		json.Unmarshal(conffile, &opt)
+	}
 
 	cpuProfileFlag := flag.String("cpuprofile", "", "profile cpu filename")
 	version := flag.Bool("version", false, "output version and exit")
@@ -75,40 +69,4 @@ func main() {
 		log.Println(err) // fatal
 		os.Exit(1)
 	}
-}
-
-//----------
-
-func godebugMain() bool {
-	args := make([]string, len(os.Args))
-	copy(args, os.Args)
-
-	if len(args) <= 1 {
-		return false
-	}
-	if args[1] == "--" {
-		args = append(args[:1], args[2:]...)
-	}
-	if args[1] != "godebug" {
-		return false
-	}
-	args = args[2:]
-	if err := godebugMain2(args); err != nil {
-		fmt.Fprintf(os.Stderr, "godebug error: %s\n", err)
-		os.Exit(1)
-	}
-	return true
-}
-func godebugMain2(args []string) error {
-	cmd := godebug.NewCmd()
-	cmd.CmdLineMode = true
-	ctx := context.Background()
-	done, err := cmd.Start(ctx, args)
-	if err != nil {
-		return err
-	}
-	if done {
-		return nil
-	}
-	return cmd.Wait()
 }

@@ -34,7 +34,6 @@ type Editor struct {
 	HomeVars          *HomeVars
 	Watcher           fswatcher.Watcher
 	RowReopener       *RowReopener
-	GoDebug           *GoDebugManager
 	LSProtoMan        *lsproto.Manager
 	InlineComplete    *InlineComplete
 	Plugins           *Plugins
@@ -60,7 +59,6 @@ func RunEditor(opt *Options) error {
 	ed.HomeVars = NewHomeVars()
 	ed.RowReopener = NewRowReopener(ed)
 	ed.dndh = NewDndHandler(ed)
-	ed.GoDebug = NewGoDebugManager(ed)
 	ed.InlineComplete = NewInlineComplete(ed)
 	ed.EEvents = NewEEvents()
 
@@ -324,12 +322,12 @@ func (ed *Editor) setupUIRoot() {
 	ed.setupRootToolbar()
 	ed.setupRootMenuToolbar()
 
-	// ui.root select annotation
-	ed.UI.Root.EvReg.Add(ui.RootSelectAnnotationEventId, func(ev any) {
-		rowPos := ed.GoodRowPos()
-		ev2 := ev.(*ui.RootSelectAnnotationEvent)
-		ed.GoDebug.SelectAnnotation(rowPos, ev2)
-	})
+	// // ui.root select annotation
+	// ed.UI.Root.EvReg.Add(ui.RootSelectAnnotationEventId, func(ev any) {
+	// 	rowPos := ed.GoodRowPos()
+	// 	ev2 := ev.(*ui.RootSelectAnnotationEvent)
+	// 	ed.GoDebug.SelectAnnotation(rowPos, ev2)
+	// })
 }
 
 func (ed *Editor) setupRootToolbar() {
@@ -542,7 +540,6 @@ func (ed *Editor) handleGlobalShortcuts(ev any) (handled bool) {
 			case m.IsEmpty():
 				switch t2.KeySym {
 				case event.KSymEscape:
-					ed.GoDebug.CancelAndClear()
 					ed.InlineComplete.CancelAndClear()
 					ed.cancelERowInfosCmds()
 					ed.cancelERowsContentCmds()
@@ -753,16 +750,6 @@ func (ed *Editor) SetAnnotations(annotator Annotator, ta *ui.TextArea, selIndex 
 	})
 }
 func (ed *Editor) setAnnotations2(annotator Annotator, ta *ui.TextArea, selIndex int, entries *drawer4.AnnotationGroup) {
-
-	restoreGoDebugAnnotations := func() {
-		// find erow info from textarea
-		for _, erow := range ed.ERows() {
-			if erow.Row.TextArea == ta {
-				ed.GoDebug.UpdateInfoAnnotations(erow.Info)
-			}
-		}
-	}
-
 	annotation := &Annotation{ta, selIndex, entries}
 
 	switch annotator {
@@ -776,9 +763,6 @@ func (ed *Editor) setAnnotations2(annotator Annotator, ta *ui.TextArea, selIndex
 		annotation.set()
 	case AnnotatorInlineComplete:
 		annotation.set()
-		if !annotation.entries.On() {
-			restoreGoDebugAnnotations()
-		}
 	default:
 		panic("todo")
 	}
