@@ -2,9 +2,8 @@ package lrparser
 
 import (
 	"fmt"
+	"strings"
 	"testing"
-
-	"github.com/friedelschoen/editor/util/testutil"
 )
 
 func TestGrammarParser1(t *testing.T) {
@@ -57,8 +56,8 @@ func testGrammarParserMode1(t *testing.T, in, out string) {
 	//t.Logf("\n%v\n", ri)
 
 	res := fmt.Sprintf("%v", ri)
-	res2 := testutil.TrimLineSpaces(res)
-	expect2 := testutil.TrimLineSpaces(out)
+	res2 := strings.TrimSpace(res)
+	expect2 := strings.TrimSpace(out)
 	if res2 != expect2 {
 		t.Fatal("\n" + res)
 	}

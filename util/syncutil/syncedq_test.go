@@ -2,8 +2,6 @@ package syncutil
 
 import (
 	"testing"
-
-	"github.com/friedelschoen/editor/util/chanutil"
 )
 
 func BenchmarkSyncedQ(b *testing.B) {
@@ -18,23 +16,5 @@ func bSyncedQ() {
 	}
 	for i := 0; i < 1000; i++ {
 		sq.PopFront()
-	}
-}
-
-//----------
-
-func BenchmarkChanQ(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		bChanQ()
-	}
-}
-func bChanQ() {
-	q := chanutil.NewChanQ(16, 16)
-	in, out := q.In(), q.Out()
-	for i := 0; i < 1000; i++ {
-		in <- i
-	}
-	for i := 0; i < 1000; i++ {
-		<-out
 	}
 }

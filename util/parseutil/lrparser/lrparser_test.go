@@ -11,7 +11,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/friedelschoen/editor/util/astut"
 	"github.com/friedelschoen/editor/util/testutil"
 	"golang.org/x/tools/go/ast/astutil"
 )
@@ -915,8 +914,8 @@ func testLrparserMode3(t *testing.T, gram, in, out string, reverse, earlyStop, s
 		fmt.Printf("%v\n", sprintTaggedOut(res))
 	}
 
-	res2 := testutil.TrimLineSpaces(res)
-	expect2 := testutil.TrimLineSpaces(out)
+	res2 := strings.TrimSpace(res)
+	expect2 := strings.TrimSpace(out)
 	if res2 != expect2 {
 		_ = cpr
 		return nil, fmt.Errorf("%v\n%s", res, cpr.Debug(cp))
@@ -1058,10 +1057,7 @@ func updateOutput(tt *testing.T) error {
 
 	node := astutil.Apply(astFile, vis, nil)
 
-	src2, err := astut.SprintNode2(fset, node)
-	if err != nil {
-		return err
-	}
+	src2 := fmt.Sprintf("%v - %+v\n", fset, node)
 	//fmt.Println(src2)
 	//filename += "AA" // TESTING
 	if err := os.WriteFile(filename, []byte(src2), 0o644); err != nil {

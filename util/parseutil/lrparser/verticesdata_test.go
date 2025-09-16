@@ -1,9 +1,8 @@
 package lrparser
 
 import (
+	"strings"
 	"testing"
-
-	"github.com/friedelschoen/editor/util/testutil"
 )
 
 func TestVerticesData1(t *testing.T) {
@@ -433,8 +432,8 @@ func testRulesToVerticesMode1(t *testing.T, grammar, expect string) {
 
 	res := vd.String()
 
-	res2 := testutil.TrimLineSpaces(res)
-	expect2 := testutil.TrimLineSpaces(expect)
+	res2 := strings.TrimSpace(res)
+	expect2 := strings.TrimSpace(expect)
 	if res2 != expect2 {
 		t.Fatal(res)
 	}

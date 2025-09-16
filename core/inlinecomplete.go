@@ -8,7 +8,7 @@ import (
 
 	"github.com/friedelschoen/editor/core/lsproto"
 	"github.com/friedelschoen/editor/ui"
-	"github.com/friedelschoen/editor/util/drawutil/drawer4"
+	"github.com/friedelschoen/editor/util/drawutil"
 	"github.com/friedelschoen/editor/util/iout/iorw"
 	"github.com/friedelschoen/editor/util/mathutil"
 )
@@ -114,9 +114,9 @@ func (ic *InlineComplete) insertCompletions(ta *ui.TextArea, ev *ui.TextAreaInli
 		}
 	default:
 		// show completions
-		entries := drawer4.NewAnnotationGroup(len(comps))
+		entries := drawutil.NewAnnotationGroup(len(comps))
 		for i, v := range comps {
-			u := &drawer4.Annotation{Offset: ev.Offset, Bytes: []byte(v)}
+			u := &drawutil.Annotation{Offset: ev.Offset, Bytes: []byte(v)}
 			entries.Anns[i] = u
 		}
 		ic.setAnnotations(ta, entries)
@@ -146,13 +146,13 @@ func (ic *InlineComplete) insertCompletions2(comps []string, ta *ui.TextArea) (c
 //----------
 
 func (ic *InlineComplete) setAnnotationsMsg(ta *ui.TextArea, s string) {
-	entries := drawer4.NewAnnotationGroup(1)
+	entries := drawutil.NewAnnotationGroup(1)
 	entries.Anns[0].Offset = ta.CursorIndex()
 	entries.Anns[0].Bytes = []byte(s)
 	ic.setAnnotations(ta, entries)
 }
 
-func (ic *InlineComplete) setAnnotations(ta *ui.TextArea, entries *drawer4.AnnotationGroup) {
+func (ic *InlineComplete) setAnnotations(ta *ui.TextArea, entries *drawutil.AnnotationGroup) {
 	if !entries.On() {
 		ic.setOff(ta)
 	}

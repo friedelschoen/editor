@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/friedelschoen/editor/util/pathutil"
 	"golang.org/x/tools/txtar"
 )
 
@@ -52,6 +51,12 @@ func RunArchive2(t *testing.T, ar *Archive,
 	)
 }
 
+func replaceExt(filename, ext string) string {
+	ext2 := filepath.Ext(filename)
+	tmp := filename[:len(filename)-len(ext2)] // remove ext
+	return tmp + ext                          // add ext
+}
+
 // Expects n files named in filesExts args
 func RunArchive(t *testing.T, ar *Archive, filesExts []string,
 	fn func(t2 *testing.T, name string, datas [][]byte) error,
@@ -70,7 +75,7 @@ func RunArchive(t *testing.T, ar *Archive, filesExts []string,
 		datas := [][]byte{}
 		for i := 0; i < len(filesExts); i++ {
 			ext := filesExts[i]
-			fname := pathutil.ReplaceExt(file.Name, ext)
+			fname := replaceExt(file.Name, ext)
 
 			// run only files that match the first ext
 			if i == 0 {

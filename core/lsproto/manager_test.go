@@ -13,7 +13,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/friedelschoen/editor/util/iout"
 	"github.com/friedelschoen/editor/util/iout/iorw"
 	"github.com/friedelschoen/editor/util/osutil"
@@ -28,7 +27,7 @@ func TestStruct1(t *testing.T) {
 			t.Fatal(err)
 		}
 		if doc.str == nil || *doc.str != "abc" {
-			spew.Dump(doc)
+			fmt.Printf("%+v\n", doc)
 			t.Fail()
 		}
 	}
@@ -39,7 +38,7 @@ func TestStruct1(t *testing.T) {
 			t.Fatal(err)
 		}
 		if doc.mc == nil || doc.mc.Value != "abc" {
-			spew.Dump(doc)
+			fmt.Printf("%+v\n", doc)
 			t.Fail()
 		}
 	}

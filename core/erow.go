@@ -11,7 +11,6 @@ import (
 	"github.com/friedelschoen/editor/core/toolbarparser"
 	"github.com/friedelschoen/editor/ui"
 	"github.com/friedelschoen/editor/util/drawutil"
-	"github.com/friedelschoen/editor/util/drawutil/drawer4"
 	"github.com/friedelschoen/editor/util/iout"
 	"github.com/friedelschoen/editor/util/iout/iorw"
 	"github.com/friedelschoen/editor/util/uiutil/event"
@@ -611,11 +610,9 @@ func (erow *ERow) SaveFileBusyCursor() {
 
 func (erow *ERow) SyntaxComments() []*drawutil.SyntaxComment {
 	ta := erow.Row.TextArea
-	if d, ok := ta.Drawer.(*drawer4.Drawer); ok {
-		opt := &d.Opt.SyntaxHighlight
-		return opt.Comment.SCs
-	}
-	return nil
+	d := ta.Drawer
+	opt := &d.Opt.SyntaxHighlight
+	return opt.Comment.SCs
 }
 
 //----------

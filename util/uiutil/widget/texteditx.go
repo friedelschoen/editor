@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/friedelschoen/editor/util/drawutil"
-	"github.com/friedelschoen/editor/util/drawutil/drawer4"
 	"github.com/friedelschoen/editor/util/imageutil"
 	"github.com/friedelschoen/editor/util/iout/iorw"
 )
@@ -35,18 +34,17 @@ func NewTextEditX(uiCtx UIContext) *TextEditX {
 		TextEdit: NewTextEdit(uiCtx),
 	}
 
-	if d, ok := te.Text.Drawer.(*drawer4.Drawer); ok {
-		d.Opt.Cursor.On = true
+	d := te.Text.Drawer
+	d.Opt.Cursor.On = true
 
-		// setup colorize order
-		d.Opt.Colorize.Groups = []*drawer4.ColorizeGroup{
-			&d.Opt.SyntaxHighlight.Group,
-			&d.Opt.WordHighlight.Group,
-			&d.Opt.ParenthesisHighlight.Group,
-			{}, // 3=terminal
-			{}, // 4=selection
-			{}, // 5=flash
-		}
+	// setup colorize order
+	d.Opt.Colorize.Groups = []*drawutil.ColorizeGroup{
+		&d.Opt.SyntaxHighlight.Group,
+		&d.Opt.WordHighlight.Group,
+		&d.Opt.ParenthesisHighlight.Group,
+		{}, // 3=terminal
+		{}, // 4=selection
+		{}, // 5=flash
 	}
 
 	return te
@@ -68,28 +66,27 @@ func (te *TextEditX) Paint() {
 //----------
 
 func (te *TextEditX) updateSelectionOpt() {
-	if d, ok := te.Drawer.(*drawer4.Drawer); ok {
-		g := d.Opt.Colorize.Groups[4]
-		c := te.Cursor()
-		if s, e, ok := c.SelectionIndexes(); ok {
-			// colors
-			pcol := te.TreeThemePaletteColor
-			fg := pcol("text_selection_fg")
-			bg := pcol("text_selection_bg")
-			// colorize ops
-			g.Ops = []*drawer4.ColorizeOp{
-				{Offset: s, Fg: fg, Bg: bg},
-				{Offset: e},
-			}
-			// don't draw other colorizations
-			d.Opt.WordHighlight.Group.Off = true
-			d.Opt.ParenthesisHighlight.Group.Off = true
-		} else {
-			g.Ops = nil
-			// draw other colorizations
-			d.Opt.WordHighlight.Group.Off = false
-			d.Opt.ParenthesisHighlight.Group.Off = false
+	d := te.Drawer
+	g := d.Opt.Colorize.Groups[4]
+	c := te.Cursor()
+	if s, e, ok := c.SelectionIndexes(); ok {
+		// colors
+		pcol := te.TreeThemePaletteColor
+		fg := pcol("text_selection_fg")
+		bg := pcol("text_selection_bg")
+		// colorize ops
+		g.Ops = []*drawutil.ColorizeOp{
+			{Offset: s, Fg: fg, Bg: bg},
+			{Offset: e},
 		}
+		// don't draw other colorizations
+		d.Opt.WordHighlight.Group.Off = true
+		d.Opt.ParenthesisHighlight.Group.Off = true
+	} else {
+		g.Ops = nil
+		// draw other colorizations
+		d.Opt.WordHighlight.Group.Off = false
+		d.Opt.ParenthesisHighlight.Group.Off = false
 	}
 }
 
@@ -165,12 +162,11 @@ func (te *TextEditX) iterateFlash() {
 }
 
 func (te *TextEditX) updateFlashOpt() {
-	if d, ok := te.Drawer.(*drawer4.Drawer); ok {
-		te.updateFlashOpt4(d)
-	}
+	d := te.Drawer
+	te.updateFlashOpt4(d)
 }
 
-func (te *TextEditX) updateFlashOpt4(d *drawer4.Drawer) {
+func (te *TextEditX) updateFlashOpt4(d *drawutil.Drawer) {
 	g := d.Opt.Colorize.Groups[5]
 	if !te.flash.index.on {
 		g.Ops = nil
@@ -195,7 +191,7 @@ func (te *TextEditX) updateFlashOpt4(d *drawer4.Drawer) {
 	s := te.flash.index.index
 	e := s + te.flash.index.len
 	line := te.flash.line.on
-	g.Ops = []*drawer4.ColorizeOp{
+	g.Ops = []*drawutil.ColorizeOp{
 		{Offset: s, ProcColor: pc, Line: line},
 		{Offset: e},
 	}
@@ -204,25 +200,22 @@ func (te *TextEditX) updateFlashOpt4(d *drawer4.Drawer) {
 //----------
 
 func (te *TextEditX) EnableParenthesisMatch(v bool) {
-	if d, ok := te.Drawer.(*drawer4.Drawer); ok {
-		d.Opt.ParenthesisHighlight.On = v
-	}
+	d := te.Drawer
+	d.Opt.ParenthesisHighlight.On = v
 }
 
 //----------
 
 func (te *TextEditX) EnableSyntaxHighlight(v bool) {
-	if d, ok := te.Drawer.(*drawer4.Drawer); ok {
-		d.Opt.SyntaxHighlight.On = v
-	}
+	d := te.Drawer
+	d.Opt.SyntaxHighlight.On = v
 }
 
 //----------
 
 func (te *TextEditX) EnableCursorWordHighlight(v bool) {
-	if d, ok := te.Drawer.(*drawer4.Drawer); ok {
-		d.Opt.WordHighlight.On = v
-	}
+	d := te.Drawer
+	d.Opt.WordHighlight.On = v
 }
 
 //----------
@@ -250,10 +243,9 @@ func (te *TextEditX) SetCommentStrings(a ...any) {
 		}
 	}
 
-	if d, ok := te.Drawer.(*drawer4.Drawer); ok {
-		opt := &d.Opt.SyntaxHighlight
-		opt.Comment.SCs = cs
-	}
+	d := te.Drawer
+	opt := &d.Opt.SyntaxHighlight
+	opt.Comment.SCs = cs
 }
 
 //----------
@@ -263,30 +255,29 @@ func (te *TextEditX) OnThemeChange() {
 
 	pcol := te.TreeThemePaletteColor
 
-	if d, ok := te.Drawer.(*drawer4.Drawer); ok {
-		d.Opt.Cursor.Fg = pcol("text_cursor_fg")
-		d.Opt.LineWrap.Fg = pcol("text_wrapline_fg")
-		d.Opt.LineWrap.Bg = pcol("text_wrapline_bg")
+	d := te.Drawer
+	d.Opt.Cursor.Fg = pcol("text_cursor_fg")
+	d.Opt.LineWrap.Fg = pcol("text_wrapline_fg")
+	d.Opt.LineWrap.Bg = pcol("text_wrapline_bg")
 
-		// annotations
-		d.Opt.Annotations.Fg = pcol("text_annotations_fg")
-		d.Opt.Annotations.Bg = pcol("text_annotations_bg")
-		d.Opt.Annotations.Selected.Fg = pcol("text_annotations_select_fg")
-		d.Opt.Annotations.Selected.Bg = pcol("text_annotations_select_bg")
+	// annotations
+	d.Opt.Annotations.Fg = pcol("text_annotations_fg")
+	d.Opt.Annotations.Bg = pcol("text_annotations_bg")
+	d.Opt.Annotations.Selected.Fg = pcol("text_annotations_select_fg")
+	d.Opt.Annotations.Selected.Bg = pcol("text_annotations_select_bg")
 
-		// word highlight
-		d.Opt.WordHighlight.Fg = pcol("text_highlightword_fg")
-		d.Opt.WordHighlight.Bg = pcol("text_highlightword_bg")
+	// word highlight
+	d.Opt.WordHighlight.Fg = pcol("text_highlightword_fg")
+	d.Opt.WordHighlight.Bg = pcol("text_highlightword_bg")
 
-		// parenthesis highlight
-		d.Opt.ParenthesisHighlight.Fg = pcol("text_parenthesis_fg")
-		d.Opt.ParenthesisHighlight.Bg = pcol("text_parenthesis_bg")
+	// parenthesis highlight
+	d.Opt.ParenthesisHighlight.Fg = pcol("text_parenthesis_fg")
+	d.Opt.ParenthesisHighlight.Bg = pcol("text_parenthesis_bg")
 
-		// syntax highlight
-		opt := &d.Opt.SyntaxHighlight
-		opt.Comment.Fg = pcol("text_colorize_comments_fg")
-		opt.Comment.Bg = pcol("text_colorize_comments_bg")
-		opt.String.Fg = pcol("text_colorize_string_fg")
-		opt.String.Bg = pcol("text_colorize_string_bg")
-	}
+	// syntax highlight
+	opt := &d.Opt.SyntaxHighlight
+	opt.Comment.Fg = pcol("text_colorize_comments_fg")
+	opt.Comment.Bg = pcol("text_colorize_comments_bg")
+	opt.String.Fg = pcol("text_colorize_string_fg")
+	opt.String.Bg = pcol("text_colorize_string_bg")
 }

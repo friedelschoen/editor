@@ -7,7 +7,7 @@ import (
 	"image/color"
 	"strings"
 
-	"github.com/friedelschoen/editor/util/drawutil/drawer4"
+	"github.com/friedelschoen/editor/util/drawutil"
 	"github.com/friedelschoen/editor/util/imageutil"
 	"github.com/friedelschoen/editor/util/uiutil/event"
 	"golang.org/x/image/font"
@@ -554,7 +554,7 @@ func (en *EmbedNode) TreeThemeFontFace() font.Face {
 			return n.theme.FontFace
 		}
 	}
-	return drawer4.FontFace
+	return drawutil.FontFace
 }
 
 //----------

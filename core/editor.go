@@ -19,7 +19,7 @@ import (
 	"github.com/friedelschoen/editor/core/fswatcher"
 	"github.com/friedelschoen/editor/core/lsproto"
 	"github.com/friedelschoen/editor/ui"
-	"github.com/friedelschoen/editor/util/drawutil/drawer4"
+	"github.com/friedelschoen/editor/util/drawutil"
 	"github.com/friedelschoen/editor/util/fontutil"
 	"github.com/friedelschoen/editor/util/imageutil"
 	"github.com/friedelschoen/editor/util/iout/iorw"
@@ -448,7 +448,7 @@ func (ed *Editor) setupInitialRows(opt *Options) {
 //----------
 
 func (ed *Editor) setupTheme(opt *Options) {
-	drawer4.WrapLineRune, _ = utf8.DecodeRuneInString(opt.WrapLineRune)
+	drawutil.WrapLineRune, _ = utf8.DecodeRuneInString(opt.WrapLineRune)
 	fontutil.TabWidth = opt.TabWidth
 	fontutil.CarriageReturnRune, _ = utf8.DecodeRuneInString(opt.CarriageReturnRune)
 	ui.ScrollBarLeft = opt.ScrollBarLeft
@@ -477,23 +477,23 @@ func (ed *Editor) setupTheme(opt *Options) {
 		fmt.Fprintf(os.Stderr, "invalid font-string: %v\n", err)
 		os.Exit(2)
 	}
-	drawer4.FontOptions = fontopts
+	drawutil.FontOptions = fontopts
 	fontbytes, err := os.ReadFile(fontpath)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "cannot open font: %v\n", err)
 		os.Exit(2)
 	}
-	drawer4.Font, err = opentype.Parse(fontbytes)
+	drawutil.Font, err = opentype.Parse(fontbytes)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "invalid font: %v\n", err)
 		os.Exit(2)
 	}
-	fface, err := opentype.NewFace(drawer4.Font, drawer4.FontOptions)
+	fface, err := opentype.NewFace(drawutil.Font, drawutil.FontOptions)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "unable to create fontface: %v\n", err)
 		os.Exit(2)
 	}
-	drawer4.FontFace = fontutil.NewFaceRunes(fface)
+	drawutil.FontFace = fontutil.NewFaceRunes(fface)
 }
 
 //----------
@@ -742,14 +742,14 @@ func (ed *Editor) RunAsyncBusyCursor2(node widget.Node, fn func(done func())) {
 //----------
 
 // setting entries to nil/empty clears the annotations
-func (ed *Editor) SetAnnotations(annotator Annotator, ta *ui.TextArea, selIndex int, entries *drawer4.AnnotationGroup) {
+func (ed *Editor) SetAnnotations(annotator Annotator, ta *ui.TextArea, selIndex int, entries *drawutil.AnnotationGroup) {
 	// avoid lockup:
 	// godebugstart->inlinecomplete.clear->godebugrestoreannotations
 	ed.UI.RunOnUIGoRoutine(func() {
 		ed.setAnnotations2(annotator, ta, selIndex, entries)
 	})
 }
-func (ed *Editor) setAnnotations2(annotator Annotator, ta *ui.TextArea, selIndex int, entries *drawer4.AnnotationGroup) {
+func (ed *Editor) setAnnotations2(annotator Annotator, ta *ui.TextArea, selIndex int, entries *drawutil.AnnotationGroup) {
 	annotation := &Annotation{ta, selIndex, entries}
 
 	switch annotator {
@@ -886,17 +886,16 @@ const (
 type Annotation struct {
 	ta      *ui.TextArea
 	index   int
-	entries *drawer4.AnnotationGroup
+	entries *drawutil.AnnotationGroup
 }
 
 func (anno *Annotation) set() {
 	// set annotations (including clear)
-	if d, ok := anno.ta.Drawer.(*drawer4.Drawer); ok {
-		d.Opt.Annotations.On = anno.entries.On()
-		d.Opt.Annotations.Selected.EntryIndex = anno.index
-		d.Opt.Annotations.Entries = anno.entries
-		anno.ta.MarkNeedsLayoutAndPaint()
-	}
+	d := anno.ta.Drawer
+	d.Opt.Annotations.On = anno.entries.On()
+	d.Opt.Annotations.Selected.EntryIndex = anno.index
+	d.Opt.Annotations.Entries = anno.entries
+	anno.ta.MarkNeedsLayoutAndPaint()
 }
 
 //----------

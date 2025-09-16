@@ -5,7 +5,6 @@ import (
 	"image/color"
 
 	"github.com/friedelschoen/editor/util/drawutil"
-	"github.com/friedelschoen/editor/util/drawutil/drawer4"
 	"github.com/friedelschoen/editor/util/imageutil"
 	"github.com/friedelschoen/editor/util/iout/iorw"
 )
@@ -14,7 +13,7 @@ type Text struct {
 	ENode
 	TextScroll
 
-	Drawer drawutil.Drawer
+	Drawer *drawutil.Drawer
 
 	scrollable struct{ x, y bool }
 	ctx        ImageContext
@@ -26,7 +25,7 @@ type Text struct {
 func NewText(ctx ImageContext) *Text {
 	t := &Text{ctx: ctx}
 
-	t.Drawer = drawer4.New()
+	t.Drawer = drawutil.New()
 
 	t.TextScroll.Text = t
 	t.TextScroll.Drawer = t.Drawer

@@ -1,6 +1,7 @@
 package reslocparser
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/friedelschoen/editor/util/testutil"
@@ -263,8 +264,8 @@ func testMode2(t *testing.T, in, out string, esc, psep rune, parseVolume bool) {
 	t.Helper()
 	rl := testMode3(t, in, out, esc, psep, parseVolume)
 	res := rl.Stringify1()
-	res2 := testutil.TrimLineSpaces(res)
-	expect2 := testutil.TrimLineSpaces(out)
+	res2 := strings.TrimSpace(res)
+	expect2 := strings.TrimSpace(out)
 	if res2 != expect2 {
 		//t.Fatalf("res=%v\n%v\n", res, rl.Bnd.SprintRuleTree(5))
 		t.Fatalf("res=%v", res)
@@ -274,8 +275,8 @@ func testMode2b(t *testing.T, in, out string, esc, psep rune, parseVolume bool) 
 	t.Helper()
 	rl := testMode3(t, in, out, esc, psep, parseVolume)
 	res := rl.ToOffsetString()
-	res2 := testutil.TrimLineSpaces(res)
-	expect2 := testutil.TrimLineSpaces(out)
+	res2 := strings.TrimSpace(res)
+	expect2 := strings.TrimSpace(out)
 	if res2 != expect2 {
 		t.Fatalf("res=%v", res)
 	}

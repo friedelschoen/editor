@@ -4,8 +4,8 @@ import (
 	"image"
 	"math"
 
-	"github.com/friedelschoen/editor/util/imageutil"
 	"github.com/friedelschoen/editor/util/mathutil"
+	"github.com/friedelschoen/editor/util/imageutil"
 	"github.com/friedelschoen/editor/util/uiutil/event"
 )
 

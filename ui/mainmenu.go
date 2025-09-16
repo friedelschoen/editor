@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"github.com/friedelschoen/editor/util/drawutil/drawer4"
 	"github.com/friedelschoen/editor/util/uiutil/widget"
 )
 
@@ -27,9 +26,8 @@ func NewMainMenuButton(root *Root) *MainMenuButton {
 
 	// float content
 	mmb.Toolbar = NewToolbar(root.UI)
-	if d, ok := mmb.Toolbar.Drawer.(*drawer4.Drawer); ok {
-		d.Opt.EarlyExitMeasure = false // full measure to avoid flicker (want the menu size stable)
-	}
+	d := mmb.Toolbar.Drawer
+	d.Opt.EarlyExitMeasure = false // full measure to avoid flicker (want the menu size stable)
 	mmb.sa = widget.NewScrollArea(root.UI, mmb.Toolbar, false, true)
 	mmb.sa.LeftScroll = ScrollBarLeft
 	border := widget.NewBorder(root.UI, mmb.sa)

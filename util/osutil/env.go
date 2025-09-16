@@ -6,8 +6,6 @@ import (
 	"os"
 	"slices"
 	"strings"
-
-	"github.com/friedelschoen/editor/util/strconvutil"
 )
 
 // environ map
@@ -87,7 +85,7 @@ func UnquoteEnvValues(env []string) []string {
 			continue
 		}
 		// NOTE: strconv.Unquote() fails on singlequotes with len>6 runes
-		if v2, ok := strconvutil.BasicUnquote(v); ok {
+		if v2, ok := BasicUnquote(v); ok {
 			w = append(w, keyValStr(k, v2))
 		} else {
 			w = append(w, s)

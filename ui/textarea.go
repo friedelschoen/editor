@@ -3,7 +3,6 @@ package ui
 import (
 	"image"
 
-	"github.com/friedelschoen/editor/util/drawutil/drawer4"
 	"github.com/friedelschoen/editor/util/evreg"
 	"github.com/friedelschoen/editor/util/iout/iorw/rwedit"
 	"github.com/friedelschoen/editor/util/uiutil/event"
@@ -133,34 +132,33 @@ func (ta *TextArea) handleInputEvent2(ev0 any, p image.Point) event.Handled {
 //----------
 
 func (ta *TextArea) selAnnCurEv(p image.Point, typ TASelAnnType) bool {
-	if d, ok := ta.Drawer.(*drawer4.Drawer); ok {
-		if d.Opt.Annotations.On {
-			//i, o, ok := d.AnnotationsIndexOf(p)
-			//if ok {
-			//	ev2 := &TextAreaSelectAnnotationEvent{ta, i, o, typ}
-			//	ta.EvReg.RunCallbacks(TextAreaSelectAnnotationEventId, ev2)
-			//	return true
-			//}
+	d := ta.Drawer
+	if d.Opt.Annotations.On {
+		//i, o, ok := d.AnnotationsIndexOf(p)
+		//if ok {
+		//	ev2 := &TextAreaSelectAnnotationEvent{ta, i, o, typ}
+		//	ta.EvReg.RunCallbacks(TextAreaSelectAnnotationEventId, ev2)
+		//	return true
+		//}
 
-			ev2 := &TextAreaSelectAnnotationEvent{ta, 0, 0, typ}
-			i, o, ok := d.AnnotationsIndexOf(p)
-			if ok {
-				ev2.AnnotationIndex = i
-				ev2.Offset = o
-			} else {
-				// not in an annotation, switch the general prev/next
-				switch typ {
-				case TasatMsgPrev:
-					ev2.Type = TasatPrev
-				case TasatMsgNext:
-					ev2.Type = TasatNext
-				default:
-					return false
-				}
+		ev2 := &TextAreaSelectAnnotationEvent{ta, 0, 0, typ}
+		i, o, ok := d.AnnotationsIndexOf(p)
+		if ok {
+			ev2.AnnotationIndex = i
+			ev2.Offset = o
+		} else {
+			// not in an annotation, switch the general prev/next
+			switch typ {
+			case TasatMsgPrev:
+				ev2.Type = TasatPrev
+			case TasatMsgNext:
+				ev2.Type = TasatNext
+			default:
+				return false
 			}
-			ta.EvReg.RunCallbacks(TextAreaSelectAnnotationEventId, ev2)
-			return true
 		}
+		ta.EvReg.RunCallbacks(TextAreaSelectAnnotationEventId, ev2)
+		return true
 	}
 	return false
 }
@@ -205,19 +203,18 @@ func (ta *TextArea) Layout() {
 }
 
 func (ta *TextArea) setDrawer4Opts() {
-	if d, ok := ta.Drawer.(*drawer4.Drawer); ok {
-		// scale cursor based on lineheight
-		w := 1
-		u := d.LineHeight()
-		u2 := int(float64(u) * 0.08)
-		if u2 > 1 {
-			w = u2
-		}
-		d.Opt.Cursor.AddedWidth = w
-
-		// set startoffsetx based on cursor
-		d.Opt.RuneReader.StartOffsetX = d.Opt.Cursor.AddedWidth * 2
+	d := ta.Drawer
+	// scale cursor based on lineheight
+	w := 1
+	u := d.LineHeight()
+	u2 := int(float64(u) * 0.08)
+	if u2 > 1 {
+		w = u2
 	}
+	d.Opt.Cursor.AddedWidth = w
+
+	// set startoffsetx based on cursor
+	d.Opt.RuneReader.StartOffsetX = d.Opt.Cursor.AddedWidth * 2
 }
 
 //----------

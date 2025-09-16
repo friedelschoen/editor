@@ -3,7 +3,6 @@ package ui
 import (
 	"image"
 
-	"github.com/friedelschoen/editor/util/drawutil/drawer4"
 	"github.com/friedelschoen/editor/util/evreg"
 	"github.com/friedelschoen/editor/util/uiutil/event"
 	"github.com/friedelschoen/editor/util/uiutil/widget"
@@ -42,9 +41,8 @@ func NewRow(col *Column) *Row {
 		row.TextArea.SupportClickInsideSelection = true
 		row.TextArea.EnableCursorWordHighlight(true)
 		row.TextArea.EnableParenthesisMatch(true)
-		if d, ok := row.TextArea.Drawer.(*drawer4.Drawer); ok {
-			d.Opt.QuickMeasure = true // performance
-		}
+		d := row.TextArea.Drawer
+		d.Opt.QuickMeasure = true // performance
 
 		row.ScrollArea = widget.NewScrollArea(row.ui, row.TextArea, false, true)
 		row.ScrollArea.LeftScroll = ScrollBarLeft
