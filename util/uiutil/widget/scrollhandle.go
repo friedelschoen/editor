@@ -3,8 +3,8 @@ package widget
 import (
 	"image"
 	"image/color"
+	"image/draw"
 
-	"github.com/friedelschoen/editor/util/imageutil"
 	"github.com/friedelschoen/editor/util/uiutil/event"
 )
 
@@ -34,7 +34,7 @@ func (sh *ScrollHandle) Paint() {
 	} else {
 		c = sh.TreeThemePaletteColor("scrollhandle_normal")
 	}
-	imageutil.FillRectangle(sh.ctx.Image(), sh.Bounds, c)
+	draw.Draw(sh.ctx.Image(), sh.Bounds, image.NewUniform(c), image.Point{}, draw.Src)
 }
 
 func (sh *ScrollHandle) OnInputEvent(ev any, p image.Point) event.Handled {

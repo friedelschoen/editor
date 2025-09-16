@@ -3,6 +3,7 @@ package widget
 import (
 	"image"
 	"image/color"
+	"image/draw"
 
 	"github.com/friedelschoen/editor/util/drawutil"
 	"github.com/friedelschoen/editor/util/imageutil"
@@ -161,7 +162,7 @@ func (t *Text) Layout() {
 //----------
 
 func (t *Text) PaintBase() {
-	imageutil.FillRectangle(t.ctx.Image(), t.Bounds, t.bg)
+	draw.Draw(t.ctx.Image(), t.Bounds, image.NewUniform(t.bg), image.Point{}, draw.Src)
 }
 func (t *Text) Paint() {
 	t.Drawer.Draw(t.ctx.Image())

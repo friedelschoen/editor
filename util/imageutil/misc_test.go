@@ -10,7 +10,7 @@ import (
 var drawRect = image.Rect(0, 0, 400, 400)
 
 func BenchmarkDrawBGRA(b *testing.B) {
-	img := NewBGRA(&drawRect)
+	img := NewBGRA(drawRect)
 	bounds := img.Bounds()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {

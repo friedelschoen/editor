@@ -70,7 +70,7 @@ func (wi *PixmapWImage) Resize(r image.Rectangle) error {
 	wi.pixCreated = true
 
 	// new image
-	wi.img = imageutil.NewBGRA(&r)
+	wi.img = imageutil.NewBGRA(r)
 	return nil
 }
 

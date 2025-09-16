@@ -2,6 +2,7 @@ package ui
 
 import (
 	"image"
+	"image/draw"
 
 	"github.com/friedelschoen/editor/util/imageutil"
 	"github.com/friedelschoen/editor/util/uiutil/event"
@@ -38,38 +39,38 @@ func (sq *RowSquare) Paint() {
 	if sq.state.hasAny(RowStateExecuting) {
 		bg = sq.TreeThemePaletteColor("rs_executing")
 	}
-	imageutil.FillRectangle(img, sq.Bounds, bg)
+	draw.Draw(img, sq.Bounds, image.NewUniform(bg), image.Point{}, draw.Src)
 
 	// mini-squares
 	if sq.state.hasAny(RowStateActive) {
 		r := sq.miniSq(0)
 		c := sq.TreeThemePaletteColor("rs_active")
-		imageutil.FillRectangle(img, r, c)
+		draw.Draw(img, r, image.NewUniform(c), image.Point{}, draw.Src)
 	}
 	if sq.state.hasAny(RowStateFsDiffer) {
 		r := sq.miniSq(1)
 		c := sq.TreeThemePaletteColor("rs_disk_changes")
-		imageutil.FillRectangle(img, r, c)
+		draw.Draw(img, r, image.NewUniform(c), image.Point{}, draw.Src)
 	}
 	if sq.state.hasAny(RowStateDuplicate) {
 		r := sq.miniSq(2)
 		c := sq.TreeThemePaletteColor("rs_duplicate")
-		imageutil.FillRectangle(img, r, c)
+		draw.Draw(img, r, image.NewUniform(c), image.Point{}, draw.Src)
 	}
 	if sq.state.hasAny(RowStateDuplicateHighlight) {
 		r := sq.miniSq(2)
 		c := sq.TreeThemePaletteColor("rs_duplicate_highlight")
-		imageutil.FillRectangle(img, r, c)
+		draw.Draw(img, r, image.NewUniform(c), image.Point{}, draw.Src)
 	}
 	if sq.state.hasAny(RowStateAnnotations) {
 		r := sq.miniSq(3)
 		c := sq.TreeThemePaletteColor("rs_annotations")
-		imageutil.FillRectangle(img, r, c)
+		draw.Draw(img, r, image.NewUniform(c), image.Point{}, draw.Src)
 	}
 	if sq.state.hasAny(RowStateAnnotationsEdited) {
 		r := sq.miniSq(3)
 		c := sq.TreeThemePaletteColor("rs_annotations_edited")
-		imageutil.FillRectangle(img, r, c)
+		draw.Draw(img, r, image.NewUniform(c), image.Point{}, draw.Src)
 	}
 }
 func (sq *RowSquare) miniSq(i int) image.Rectangle {

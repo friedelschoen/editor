@@ -14,7 +14,7 @@ type ShmImgWrap struct {
 }
 
 func NewShmImgWrap(r image.Rectangle) (*ShmImgWrap, error) {
-	size := imageutil.BGRASize(&r)
+	size := 4 * r.Dx() * r.Dy()
 	shmId, addr, err := ShmOpen(size)
 	if err != nil {
 		return nil, err
@@ -23,7 +23,7 @@ func NewShmImgWrap(r image.Rectangle) (*ShmImgWrap, error) {
 	// mask shared mem into a slice
 	buf := unsafe.Slice((*byte)(unsafe.Pointer(addr)), size) // FIXME: warning: possible misuse of unsafe.Pointer?
 
-	img := imageutil.NewBGRAFromBuffer(buf, &r)
+	img := imageutil.NewBGRAFromBuffer(buf, r)
 	imgWrap := &ShmImgWrap{Img: img, shmId: shmId, addr: addr}
 	return imgWrap, nil
 }

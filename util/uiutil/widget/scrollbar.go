@@ -2,10 +2,10 @@ package widget
 
 import (
 	"image"
+	"image/draw"
 	"math"
 
 	"github.com/friedelschoen/editor/util/mathutil"
-	"github.com/friedelschoen/editor/util/imageutil"
 	"github.com/friedelschoen/editor/util/uiutil/event"
 )
 
@@ -140,7 +140,7 @@ func (sb *ScrollBar) Layout() {
 
 func (sb *ScrollBar) Paint() {
 	c := sb.TreeThemePaletteColor("scrollbar_bg")
-	imageutil.FillRectangle(sb.ctx.Image(), sb.Bounds, c)
+	draw.Draw(sb.ctx.Image(), sb.Bounds, image.NewUniform(c), image.Point{}, draw.Src)
 }
 
 //----------

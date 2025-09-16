@@ -2,8 +2,7 @@ package widget
 
 import (
 	"image"
-
-	"github.com/friedelschoen/editor/util/imageutil"
+	"image/draw"
 )
 
 type Rectangle struct {
@@ -21,5 +20,5 @@ func (r *Rectangle) Measure(hint image.Point) image.Point {
 }
 func (r *Rectangle) Paint() {
 	bg := r.TreeThemePaletteColor("rect")
-	imageutil.FillRectangle(r.ctx.Image(), r.Bounds, bg)
+	draw.Draw(r.ctx.Image(), r.Bounds, image.NewUniform(bg), image.Point{}, draw.Src)
 }
